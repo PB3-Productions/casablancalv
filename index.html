@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Grand Speakeasy Estate | CASABLANCA LAS VEGAS | Luxury Private Resort Near the Strip</title>
+    <meta name="description" content="Welcome to The Grand Speakeasy Estate by CASABLANCA LAS VEGAS. A private 7-bedroom resort-style retreat with heated pool, hot tub, game room, and chef's kitchen — just minutes from the Las Vegas Strip." />
+    <meta property="og:title" content="The Grand Speakeasy Estate | CASABLANCA LAS VEGAS" />
+    <meta property="og:description" content="Private Las Vegas resort with heated pool, hot tub, game spaces, chef-style kitchens, and room for groups — minutes from the Strip." />
+    <meta property="og:image" content="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_1_6.jpg" />
+    <meta property="og:type" content="website" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" type="image/svg+xml" href="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a00f4430f3ad81fbd093a5c.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-primary: 'Manrope', sans-serif;
+            --font-display: 'Playfair Display', serif;
+            --color-gold: #C8A96E;
+            --color-gold-light: #D4BC8B;
+            --color-dark: #1A1A1A;
+            --color-darker: #0D0D0D;
+            --color-light: #F5F3EF;
+            --color-white: #FFFFFF;
+            --color-gray: #8A8A8A;
+            --color-border: #2A2A2A;
+            --transition-smooth: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--color-darker);
+            color: var(--color-light);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: transparent;
+            transition: background 0.4s ease, padding 0.4s ease;
+            padding: 20px 0;
+        }
+        .main-header.scrolled {
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(200, 169, 110, 0.15);
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        .header-logo {
+            flex-shrink: 0;
+            z-index: 1001;
+        }
+        .header-logo img {
+            height: 50px;
+            width: auto;
+            transition: height 0.4s ease;
+        }
+        .main-header.scrolled .header-logo img {
+            height: 40px;
+        }
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+        .header-nav a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color var(--transition-smooth);
+            position: relative;
+        }
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-gold);
+            transition: width var(--transition-smooth);
+        }
+        .header-nav a:hover {
+            color: var(--color-gold);
+        }
+        .header-nav a:hover::after {
+            width: 100%;
+        }
+        .header-cta {
+            background: var(--color-gold);
+            color: var(--color-darker) !important;
+            padding: 10px 22px;
+            border-radius: 2px;
+            font-weight: 600 !important;
+            letter-spacing: 0.05em;
+            transition: all var(--transition-smooth) !important;
+            text-decoration: none;
+            font-size: 0.8rem !important;
+            text-transform: uppercase;
+        }
+        .header-cta:hover {
+            background: var(--color-gold-light) !important;
+            color: var(--color-darker) !important;
+        }
+        .header-cta::after {
+            display: none !important;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+        .hamburger span {
+            display: block;
+            width: 26px;
+            height: 2px;
+            background: var(--color-white);
+            transition: all 0.3s ease;
+            border-radius: 1px;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Nav */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            height: 100vh;
+            background: rgba(13, 13, 13, 0.98);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 1000;
+            padding: 100px 40px 40px;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .mobile-nav.active {
+            right: 0;
+        }
+        .mobile-nav a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+        .mobile-nav a:hover {
+            color: var(--color-gold);
+        }
+        .mobile-nav .mobile-cta {
+            background: var(--color-gold);
+            color: var(--color-darker) !important;
+            padding: 14px 28px;
+            border-radius: 2px;
+            font-weight: 600 !important;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .mobile-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Hero */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(13, 13, 13, 0.5) 0%, rgba(13, 13, 13, 0.35) 40%, rgba(13, 13, 13, 0.7) 100%);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 30px;
+        }
+        .hero-eyebrow {
+            font-family: var(--font-primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            margin-bottom: 20px;
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--color-white);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+        .hero-subtitle {
+            font-family: var(--font-primary);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 36px;
+            letter-spacing: 0.04em;
+            line-height: 1.6;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn-primary {
+            background: var(--color-gold);
+            color: var(--color-darker);
+            padding: 16px 36px;
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all var(--transition-smooth);
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-primary);
+        }
+        .btn-primary:hover {
+            background: var(--color-gold-light);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--color-white);
+            padding: 16px 36px;
+            border-radius: 2px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all var(--transition-smooth);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-family: var(--font-primary);
+        }
+        .btn-outline:hover {
+            border-color: var(--color-gold);
+            color: var(--color-gold);
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            animation: bounceDown 2s infinite;
+            text-decoration: none;
+        }
+        .hero-scroll span {
+            display: block;
+            width: 1px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        @keyframes bounceDown {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 100px 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .section-label {
+            font-family: var(--font-primary);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--color-gold);
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--color-white);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+        .section-text {
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.8;
+            max-width: 800px;
+        }
+        .section-text p {
+            margin-bottom: 18px;
+        }
+
+        /* Gallery */
+        .gallery-section {
+            background: var(--color-dark);
+            padding: 80px 0;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 4px;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(13, 13, 13, 0.15);
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+        .gallery-item:hover::after {
+            opacity: 0;
+        }
+        .gallery-item.featured {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        .view-all-overlay {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(13, 13, 13, 0.8);
+            color: var(--color-white);
+            padding: 8px 16px;
+            border-radius: 2px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 2px;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 2001;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+        .lightbox-close:hover {
+            color: var(--color-gold);
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2001;
+        }
+        .lightbox-nav:hover {
+            background: var(--color-gold);
+            color: var(--color-darker);
+        }
+        .lightbox-prev {
+            left: 30px;
+        }
+        .lightbox-next {
+            right: 30px;
+        }
+        .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            z-index: 2001;
+        }
+        body.lightbox-open {
+            overflow: hidden;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--color-border);
+        }
+        .feature-card {
+            background: var(--color-dark);
+            padding: 50px 36px;
+            text-align: center;
+            transition: background 0.4s ease;
+        }
+        .feature-card:hover {
+            background: #1F1F1F;
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 18px;
+            display: block;
+        }
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--color-white);
+            margin-bottom: 10px;
+        }
+        .feature-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Specs Bar */
+        .specs-bar {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            padding: 40px 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            margin: 40px 0;
+        }
+        .spec-item {
+            text-align: center;
+        }
+        .spec-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--color-gold);
+            line-height: 1;
+        }
+        .spec-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 6px;
+        }
+
+        /* Two Column */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .two-col-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        .two-col-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: var(--color-white);
+            margin-bottom: 16px;
+        }
+        .two-col-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        .two-col-content ul li {
+            padding: 8px 0;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .two-col-content ul li::before {
+            content: '◆';
+            color: var(--color-gold);
+            font-size: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Amenities List */
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .amenity-category {
+            background: var(--color-dark);
+            padding: 30px;
+            border-radius: 2px;
+        }
+        .amenity-category h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--color-gold);
+            margin-bottom: 16px;
+            letter-spacing: 0.03em;
+        }
+        .amenity-category ul {
+            list-style: none;
+            padding: 0;
+        }
+        .amenity-category ul li {
+            padding: 5px 0;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.5;
+        }
+
+        /* Rules */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .rule-item {
+            background: var(--color-dark);
+            padding: 24px 28px;
+            border-radius: 2px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .rule-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .rule-item p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--color-dark);
+            padding: 100px 40px;
+        }
+        .contact-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .contact-form {
+            display: grid;
+            gap: 16px;
+            text-align: left;
+            margin-top: 40px;
+        }
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form select {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--color-darker);
+            border: 1px solid var(--color-border);
+            color: var(--color-white);
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            border-radius: 2px;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus,
+        .contact-form select:focus {
+            border-color: var(--color-gold);
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .contact-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .contact-form button {
+            background: var(--color-gold);
+            color: var(--color-darker);
+            padding: 16px 36px;
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            font-family: var(--font-primary);
+            justify-self: start;
+        }
+        .contact-form button:hover {
+            background: var(--color-gold-light);
+        }
+
+        /* Footer */
+        .site-footer {
+            background: var(--color-darker);
+            padding: 60px 40px 30px;
+            text-align: center;
+            border-top: 1px solid var(--color-border);
+        }
+        .footer-logo {
+            margin-bottom: 24px;
+        }
+        .footer-logo img {
+            height: 40px;
+            width: auto;
+        }
+        .footer-nav {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        .footer-nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: var(--color-gold);
+        }
+        .footer-text {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .header-nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .amenities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 60px 24px;
+            }
+            .specs-bar {
+                gap: 30px;
+            }
+            .contact-form .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 640px) {
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2px;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .amenities-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .header-inner {
+                padding: 0 20px;
+            }
+            .specs-bar {
+                gap: 20px;
+            }
+            .spec-number {
+                font-size: 1.8rem;
+            }
+            .lightbox-nav {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            .lightbox-prev {
+                left: 10px;
+            }
+            .lightbox-next {
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header" id="mainHeader">
+        <div class="header-inner">
+            <a href="#" class="header-logo" aria-label="CASABLANCA LAS VEGAS Home">
+                <img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a00f4430f3ad81fbd093a5c.svg" alt="CASABLANCA LAS VEGAS Logo" />
+            </a>
+            <nav>
+                <ul class="header-nav" id="headerNav">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#spaces">Spaces</a></li>
+                    <li><a href="#amenities">Amenities</a></li>
+                    <li><a href="#rules">House Rules</a></li>
+                    <li><a href="#location">Location</a></li>
+                    <li><a href="#contact" class="header-cta">Book Now</a></li>
+                </ul>
+            </nav>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE NAV -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#about">About</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#spaces">Spaces</a>
+        <a href="#amenities">Amenities</a>
+        <a href="#rules">House Rules</a>
+        <a href="#location">Location</a>
+        <a href="#contact" class="mobile-cta">Book Now</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero-section" id="hero">
+        <video class="hero-video" autoplay loop muted playsinline preload="auto" poster="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_1_6.jpg">
+            <source src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a01166ba3dd25aa2a0e8e49.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">CASABLANCA LAS VEGAS Presents</p>
+            <h1 class="hero-title">The Grand Speakeasy Estate</h1>
+            <p class="hero-subtitle">A private Las Vegas resort with heated pool, hot tub, game spaces, chef-style kitchens &amp; room for the whole group — just minutes from the Strip.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn-primary">Book Your Stay</a>
+                <a href="#about" class="btn-outline">Explore the Estate</a>
+            </div>
+        </div>
+        <a href="#about" class="hero-scroll">Scroll<span></span></a>
+    </section>
+
+    <!-- SPECS BAR -->
+    <section class="section" style="padding-top:0;padding-bottom:0;">
+        <div class="specs-bar">
+            <div class="spec-item"><div class="spec-number">7</div><div class="spec-label">Bedrooms</div></div>
+            <div class="spec-item"><div class="spec-number">5+</div><div class="spec-label">Bathrooms</div></div>
+            <div class="spec-item"><div class="spec-number">16+</div><div class="spec-label">Guests</div></div>
+            <div class="spec-item"><div class="spec-number">3</div><div class="spec-label">Miles to Strip</div></div>
+            <div class="spec-item"><div class="spec-number">Pool</div><div class="spec-label">Heated Private</div></div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+        <p class="section-label">About This Space</p>
+        <h2 class="section-title">A Private Las Vegas Estate Built for Unforgettable Stays</h2>
+        <div class="two-col" style="margin-top:40px;">
+            <div>
+                <img class="two-col-image" src="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_1_6.jpg" alt="Grand Speakeasy Estate exterior" loading="lazy" />
+            </div>
+            <div class="two-col-content">
+                <p class="section-text">Step inside a private Las Vegas estate built for unforgettable stays. This spacious 7-bedroom retreat blends the feel of a boutique resort with the privacy of an entire home. The layout is ideal for groups who want to stay together without feeling crowded, with multiple gathering areas, comfortable sleeping arrangements, game spaces, outdoor dining, and a resort-style backyard.</p>
+                <p class="section-text">Spend the day by the pool, unwind in the hot tub, cook for the group in one of the kitchen areas, enjoy poker, pool, shuffleboard, Xbox, cornhole, or oversized games, then settle in for a relaxed night just minutes from Las Vegas entertainment.</p>
+                <p class="section-text">The home offers the best of both worlds: close access to the Strip, airport, dining, nightlife, and attractions — with a private estate setting where your group can recharge between adventures.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT GUESTS LOVE -->
+    <section class="section" style="padding-top:0;">
+        <p class="section-label">What Guests Love</p>
+        <div class="features-grid">
+            <div class="feature-card"><span class="feature-icon">🏊</span><h3>Resort-Style Backyard</h3><p>Heated private pool, hot tub, diving board, and lush landscaping</p></div>
+            <div class="feature-card"><span class="feature-icon">🎱</span><h3>Game Room</h3><p>Poker, pool table, shuffleboard, Xbox, cornhole &amp; board games</p></div>
+            <div class="feature-card"><span class="feature-icon">👨‍🍳</span><h3>Chef-Style Kitchen</h3><p>Multiple cooking areas, BBQ, teppanyaki grill &amp; outdoor dining</p></div>
+            <div class="feature-card"><span class="feature-icon">🛏️</span><h3>Group Comfort</h3><p>7 spacious bedrooms with flexible sleeping for 16+ guests</p></div>
+            <div class="feature-card"><span class="feature-icon">📍</span><h3>Prime Location</h3><p>~3 miles to the Strip, ~2 miles to Harry Reid Airport</p></div>
+            <div class="feature-card"><span class="feature-icon">🔑</span><h3>Easy Access</h3><p>Digital keypad entry &amp; private driveway parking</p></div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery-section" id="gallery">
+        <div style="max-width:1400px;margin:0 auto;padding:0 40px 40px;">
+            <p class="section-label">Photo Gallery</p>
+            <h2 class="section-title">See the Estate</h2>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Images will be injected by JS -->
+        </div>
+    </section>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">◂</button>
+        <img src="" alt="Gallery image" id="lightboxImg" />
+        <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">▸</button>
+        <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+
+    <!-- SLEEPING ARRANGEMENTS -->
+    <section class="section" id="spaces">
+        <p class="section-label">The Space</p>
+        <h2 class="section-title">Sleeping Arrangements</h2>
+        <p class="section-text">This home was designed for indoor/outdoor living. The open-concept layout connects the main living spaces to the backyard, giving guests easy flow between the kitchen, lounge areas, games, pool, spa, and outdoor seating.</p>
+        <div class="two-col" style="margin-top:40px;">
+            <div class="two-col-content">
+                <h3>Bedrooms</h3>
+                <ul>
+                    <li><strong>Bedroom 1:</strong> King bed with private en-suite bathroom</li>
+                    <li><strong>Bedroom 2:</strong> King bed + twin air mattress with private en-suite</li>
+                    <li><strong>Bedroom 3:</strong> King bed</li>
+                    <li><strong>Bedroom 4:</strong> King bed</li>
+                    <li><strong>Bedroom 5:</strong> King bed</li>
+                    <li><strong>Bedroom 6:</strong> Two queen beds</li>
+                    <li><strong>Bedroom 7:</strong> Queen pullout couch</li>
+                    <li><strong>Flex Space:</strong> Futon in video game room (outdoor-access only)</li>
+                </ul>
+            </div>
+            <div>
+                <img class="two-col-image" src="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_14_6.jpg" alt="Bedroom at Grand Speakeasy Estate" loading="lazy" />
+            </div>
+        </div>
+    </section>
+
+    <!-- KITCHEN & DINING -->
+    <section class="section" style="padding-top:0;">
+        <div class="two-col">
+            <div>
+                <img class="two-col-image" src="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_16_6.jpg" alt="Kitchen at Grand Speakeasy Estate" loading="lazy" />
+            </div>
+            <div class="two-col-content">
+                <h3>Kitchen &amp; Dining</h3>
+                <p class="section-text">The estate includes multiple kitchen and food-prep areas, including a main kitchen, outdoor cooking setup, and kitchenette-style convenience for group stays.</p>
+                <ul>
+                    <li>Main chef-style kitchen</li>
+                    <li>Outdoor BBQ grill</li>
+                    <li>Teppanyaki-style flat-top cooking area</li>
+                    <li>Outdoor dining &amp; bar seating</li>
+                    <li>Group-friendly dining space</li>
+                    <li>Refrigerator, microwave, oven, stovetop &amp; cooking basics</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ENTERTAINMENT -->
+    <section class="section" style="padding-top:0;">
+        <div class="two-col">
+            <div class="two-col-content">
+                <h3>Entertainment</h3>
+                <p class="section-text">This home is made for groups that want more than just a place to sleep. Enjoy entertainment options throughout the property.</p>
+                <ul>
+                    <li>Pool table &amp; poker table</li>
+                    <li>Shuffleboard</li>
+                    <li>Xbox game room</li>
+                    <li>Oversized TVs &amp; outdoor TV area</li>
+                    <li>Cornhole &amp; oversized board games</li>
+                    <li>Basketball / pickleball court</li>
+                    <li>Golf driving net</li>
+                </ul>
+            </div>
+            <div>
+                <img class="two-col-image" src="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_24_6.jpg" alt="Game room at Grand Speakeasy Estate" loading="lazy" />
+            </div>
+        </div>
+    </section>
+
+    <!-- OUTDOOR SPACE -->
+    <section class="section" style="padding-top:0;">
+        <h2 class="section-title">Outdoor Space</h2>
+        <p class="section-text">The backyard is the heart of the property. Guests can enjoy a private pool, hot tub, outdoor seating, dining areas, BBQ space, and multiple zones for relaxing or hanging out.</p>
+        <div class="two-col" style="margin-top:30px;">
+            <div>
+                <img class="two-col-image" src="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_5_6.jpg" alt="Pool and backyard at Grand Speakeasy Estate" loading="lazy" />
+            </div>
+            <div class="two-col-content">
+                <ul>
+                    <li>Heated private pool with diving board</li>
+                    <li>Hot tub</li>
+                    <li>Poolside loungers &amp; outdoor sofa seating</li>
+                    <li>Fire pit seating</li>
+                    <li>Outdoor dining table &amp; bar seating</li>
+                    <li>BBQ grill &amp; teppanyaki-style flat-top grill</li>
+                    <li>Cornhole &amp; outdoor games</li>
+                    <li>Basketball / pickleball area</li>
+                    <li>Golf driving net</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- AMENITIES -->
+    <section class="section" id="amenities">
+        <p class="section-label">Amenities</p>
+        <h2 class="section-title">Amenities Checklist</h2>
+        <div class="amenities-grid" style="margin-top:30px;">
+            <div class="amenity-category">
+                <h4>🏠 Core Amenities</h4>
+                <ul>
+                    <li>Heated Pool &amp; Hot Tub</li>
+                    <li>Full Kitchen</li>
+                    <li>Washer &amp; Dryer</li>
+                    <li>High-Speed WiFi</li>
+                    <li>Air Conditioning &amp; Heating</li>
+                    <li>Oversized TVs</li>
+                    <li>Private Entrance</li>
+                    <li>Digital Keypad Entry</li>
+                    <li>Onsite Parking</li>
+                    <li>Pet-Friendly (by approval)</li>
+                </ul>
+            </div>
+            <div class="amenity-category">
+                <h4>🍳 Kitchen &amp; Dining</h4>
+                <ul>
+                    <li>Refrigerator &amp; Microwave</li>
+                    <li>Oven &amp; Stovetop</li>
+                    <li>Cooking Basics</li>
+                    <li>Dining Table</li>
+                    <li>Outdoor Dining</li>
+                    <li>BBQ Grill</li>
+                    <li>Teppanyaki-Style Grill</li>
+                    <li>Coffee Setup</li>
+                    <li>Bar Seating</li>
+                </ul>
+            </div>
+            <div class="amenity-category">
+                <h4>🎮 Entertainment</h4>
+                <ul>
+                    <li>Pool Table</li>
+                    <li>Poker Table</li>
+                    <li>Shuffleboard</li>
+                    <li>Xbox / Game Room</li>
+                    <li>Board Games</li>
+                    <li>Cornhole &amp; Outdoor Games</li>
+                    <li>Oversized TVs</li>
+                    <li>Outdoor TV Area</li>
+                </ul>
+            </div>
+            <div class="amenity-category">
+                <h4>🌴 Outdoor</h4>
+                <ul>
+                    <li>Heated Pool &amp; Diving Board</li>
+                    <li>Hot Tub</li>
+                    <li>Pool Loungers</li>
+                    <li>Fire Pit Seating</li>
+                    <li>Outdoor Sofa Seating</li>
+                    <li>Patio &amp; Backyard</li>
+                    <li>Basketball / Pickleball Court</li>
+                    <li>Golf Driving Net</li>
+                </ul>
+            </div>
+            <div class="amenity-category">
+                <h4>🛏️ Comfort</h4>
+                <ul>
+                    <li>7 Bedrooms</li>
+                    <li>5+ Bathrooms</li>
+                    <li>En-Suite Options</li>
+                    <li>Premium Bedding</li>
+                    <li>Flex Sleeping Spaces</li>
+                    <li>Multiple Lounge Areas</li>
+                    <li>Indoor/Outdoor Flow</li>
+                </ul>
+            </div>
+            <div class="amenity-category">
+                <h4>📍 Convenience</h4>
+                <ul>
+                    <li>~3 Miles to Strip</li>
+                    <li>~2 Miles to Airport</li>
+                    <li>Private Driveway Parking</li>
+                    <li>Rideshare-Friendly</li>
+                    <li>Near UNLV &amp; Convention Center</li>
+                    <li>Close to Dining &amp; Casinos</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- GUEST ACCESS & LOCATION -->
+    <section class="section" id="location">
+        <div class="two-col">
+            <div class="two-col-content">
+                <p class="section-label">Guest Access &amp; Location</p>
+                <h3>Prime Las Vegas Location</h3>
+                <p class="section-text">Guests have access to the entire home, front yard, backyard, and driveway, excluding locked owner/cleaning supply closets. Entry is handled through a digital keypad for easy group access.</p>
+                <p class="section-text">Stay close to the best of Las Vegas while enjoying the privacy of a spacious estate setting. The property is positioned near the Strip, airport, UNLV area, casinos, dining, nightlife, and entertainment.</p>
+                <p class="section-text"><strong>Nearby:</strong> Las Vegas Strip · Harry Reid International Airport · MGM Grand · Bellagio · Fremont Street · Las Vegas Convention Center · UNLV / Thomas &amp; Mack Center</p>
+                <p class="section-text">A vehicle or rideshare is recommended. The home includes onsite/private parking, and guests can easily use Uber, Lyft, taxis, or private transportation.</p>
+            </div>
+            <div>
+                <img class="two-col-image" src="https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_4_6.jpg" alt="Grand Speakeasy Estate living area" loading="lazy" />
+            </div>
+        </div>
+    </section>
+
+    <!-- HOUSE RULES -->
+    <section class="section" id="rules">
+        <p class="section-label">Important Information</p>
+        <h2 class="section-title">House Rules &amp; Policies</h2>
+        <p class="section-text" style="margin-bottom:30px;">This is a high-end private home in a residential area, not a party venue. Please be respectful of neighbors, noise rules, parking rules, and all local ordinances.</p>
+        <div class="rules-grid">
+            <div class="rule-item"><span class="rule-icon">🕓</span><p><strong>Check-in:</strong> 4:00 PM &nbsp;|&nbsp; <strong>Check-out:</strong> 10:00 AM</p></div>
+            <div class="rule-item"><span class="rule-icon">🚫</span><p><strong>No parties</strong> or unauthorized events</p></div>
+            <div class="rule-item"><span class="rule-icon">🔇</span><p><strong>Quiet hours</strong> after 10:00 PM — no loud outdoor music or excessive noise</p></div>
+            <div class="rule-item"><span class="rule-icon">👥</span><p>All overnight guests must be included on the reservation</p></div>
+            <div class="rule-item"><span class="rule-icon">🅿️</span><p>Parking must remain onsite/in driveway — do not block neighboring driveways or mailboxes</p></div>
+            <div class="rule-item"><span class="rule-icon">🐾</span><p><strong>Pets allowed only if approved</strong> and added to the reservation</p></div>
+            <div class="rule-item"><span class="rule-icon">⚠️</span><p>Follow all posted pool, spa, fire, and property safety rules</p></div>
+            <div class="rule-item"><span class="rule-icon">🤝</span><p>Respect the home, neighbors, and community at all times</p></div>
+        </div>
+        <div style="margin-top:30px;padding:24px;background:var(--color-dark);border-radius:2px;">
+            <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);margin:0;">
+                <strong>Additional Notes:</strong> Early check-in and late check-out may be available by request, subject to cleaning schedule and booking calendar. Pool towels and basic starter supplies are provided. Longer-stay discounts may be available by request. Optional concierge-style add-ons may be available, such as fridge stocking, decorating, in-stay cleaning, restaurant bookings, massage, or private chef coordination.
+            </p>
+        </div>
+    </section>
+
+    <!-- HOST MESSAGE -->
+    <section class="section" style="padding-top:0;">
+        <div style="background:var(--color-dark);padding:40px;border-radius:2px;text-align:center;">
+            <p class="section-label">A Note From Your Host</p>
+            <p class="section-text" style="max-width:700px;margin:0 auto;">Thanks for considering The Grand Speakeasy Estate for your Las Vegas stay. This home is designed for guests who want the privacy of an entire estate with the comfort, space, and entertainment of a resort-style retreat. Before booking, please confirm your total guest count, whether you'll be bringing pets, and the purpose of your stay so we can make sure the home is the right fit. We're happy to answer questions about the layout, sleeping arrangements, parking, pool/spa use, and optional add-on services.</p>
+        </div>
+    </section>
+
+    <!-- CONTACT / BOOKING -->
+    <section class="contact-section" id="contact">
+        <div class="contact-inner">
+            <p class="section-label">Book Your Stay</p>
+            <h2 class="section-title">Inquire About The Grand Speakeasy Estate</h2>
+            <p class="section-text" style="margin:0 auto;text-align:center;">Ready to experience the ultimate Las Vegas group retreat? Fill out the form below and we'll get back to you promptly with availability and pricing.</p>
+            <form class="contact-form" id="bookingForm">
+                <div class="form-row">
+                    <input type="text" name="first_name" placeholder="First Name*" required aria-label="First Name">
+                    <input type="text" name="last_name" placeholder="Last Name*" required aria-label="Last Name">
+                </div>
+                <div class="form-row">
+                    <input type="email" name="email" placeholder="Email Address*" required aria-label="Email">
+                    <input type="tel" name="phone" placeholder="Phone Number" aria-label="Phone">
+                </div>
+                <div class="form-row">
+                    <input type="date" name="check_in" placeholder="Check-In Date" aria-label="Check-In Date">
+                    <input type="date" name="check_out" placeholder="Check-Out Date" aria-label="Check-Out Date">
+                </div>
+                <div class="form-row">
+                    <input type="number" name="guests" placeholder="Number of Guests*" min="1" max="30" required aria-label="Number of Guests">
+                    <select name="pets" aria-label="Bringing Pets">
+                        <option value="">Bringing Pets?</option>
+                        <option value="no">No Pets</option>
+                        <option value="yes_approved">Yes (approval required)</option>
+                    </select>
+                </div>
+                <textarea name="message" placeholder="Tell us about your stay — purpose of visit, any special requests, or questions..." aria-label="Message"></textarea>
+                <button type="submit">Send Inquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-logo">
+            <img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a00f4430f3ad81fbd093a5c.svg" alt="CASABLANCA LAS VEGAS" />
+        </div>
+        <ul class="footer-nav">
+            <li><a href="#about">About</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#spaces">Spaces</a></li>
+            <li><a href="#amenities">Amenities</a></li>
+            <li><a href="#rules">House Rules</a></li>
+            <li><a href="#location">Location</a></li>
+            <li><a href="#contact">Book Now</a></li>
+        </ul>
+        <p class="footer-text">&copy; 2026 CASABLANCA LAS VEGAS. All rights reserved.<br>The Grand Speakeasy Estate — A Private Luxury Resort Near the Las Vegas Strip.</p>
+    </footer>
+
+    <script>
+        // Image gallery data
+        const galleryImages = [
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_1_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_3_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_4_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_5_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_6_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_7_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_8_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_9_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_10_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_11_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_12_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_13_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_14_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_15_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_16_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_17_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_18_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_19_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_20_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_21_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_22_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_23_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_24_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_25_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_26_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_27_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_28_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_29_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_30_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_31_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_32_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_34_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_35_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_36_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_37_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_38_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_39_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_40_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_41_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_42_6.jpg',
+            'https://ssl.cdn-redfin.com/photo/95/bigphoto/623/2087623_43_4.jpg',
+        ];
+
+        // Build gallery grid
+        const galleryGrid = document.getElementById('galleryGrid');
+        galleryImages.forEach((src, index) => {
+            const div = document.createElement('div');
+            div.className = 'gallery-item' + (index === 0 ? ' featured' : '');
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'The Grand Speakeasy Estate - Photo ' + (index + 1);
+            img.loading = 'lazy';
+            img.setAttribute('data-index', index);
+            div.appendChild(img);
+            if (index === 0) {
+                const overlay = document.createElement('div');
+                overlay.className = 'view-all-overlay';
+                overlay.textContent = 'View All ' + galleryImages.length + ' Photos';
+                div.appendChild(overlay);
+            }
+            div.addEventListener('click', () => openLightbox(index));
+            galleryGrid.appendChild(div);
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCounter = document.getElementById('lightboxCounter');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        let currentLightboxIndex = 0;
+
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            updateLightbox();
+            lightbox.classList.add('active');
+            document.body.classList.add('lightbox-open');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.classList.remove('lightbox-open');
+        }
+
+        function updateLightbox() {
+            lightboxImg.src = galleryImages[currentLightboxIndex];
+            lightboxCounter.textContent = (currentLightboxIndex + 1) + ' / ' + galleryImages.length;
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+        lightboxPrev.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateLightbox();
+        });
+        lightboxNext.addEventListener('click', function(e) {
+            e.stopPropagation();
+            currentLightboxIndex = (currentLightboxIndex + 1) % galleryImages.length;
+            updateLightbox();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') {
+                currentLightboxIndex = (currentLightboxIndex - 1 + galleryImages.length) % galleryImages
+                    .length;
+                updateLightbox();
+            }
+            if (e.key === 'ArrowRight') {
+                currentLightboxIndex = (currentLightboxIndex + 1) % galleryImages.length;
+                updateLightbox();
+            }
+        });
+
+        // Header scroll effect
+        const mainHeader = document.getElementById('mainHeader');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 80) {
+                mainHeader.classList.add('scrolled');
+            } else {
+                mainHeader.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile nav
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function openMobileNav() {
+            hamburger.classList.add('active');
+            mobileNav.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileNav() {
+            hamburger.classList.remove('active');
+            mobileNav.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', function() {
+            if (mobileNav.classList.contains('active')) {
+                closeMobileNav();
+            } else {
+                openMobileNav();
+            }
+        });
+        mobileOverlay.addEventListener('click', closeMobileNav);
+
+        // Close mobile nav on link click
+        const mobileNavLinks = mobileNav.querySelectorAll('a');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                closeMobileNav();
+            });
+        });
+
+        // Booking form submission
+        const bookingForm = document.getElementById('bookingForm');
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(bookingForm);
+            const data = {};
+            formData.forEach((value, key) => { data[key] = value; });
+            alert(
+                'Thank you for your inquiry, ' + data.first_name +
+                '! We have received your request for The Grand Speakeasy Estate and will get back to you shortly. For immediate assistance, please check your preferred booking platform for availability.'
+                );
+            bookingForm.reset();
+        });
+
+        // Smooth scroll offset for fixed header
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    const headerHeight = mainHeader.offsetHeight + 20;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset -
+                        headerHeight;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
