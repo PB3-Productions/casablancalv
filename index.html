@@ -1,23 +1,4 @@
 <!DOCTYPE html>
-<!--
-  =========================================================
-  CASABLANCA / THE 2810 HACIENDA-STYLE LUXURY ESTATE PAGE
-  Built as a single-page frontend with:
-  - Tailwind CDN
-  - Custom CSS
-  - GSAP + ScrollTrigger wrought-iron parallax
-  - Flatpickr date range calendar
-  - Serverless Google Calendar API integration
-
-  IMPORTANT:
-  1. If this file is hosted on the SAME Vercel project as /api/bookings,
-     leave API_BASE_URL as an empty string.
-  2. If this file is hosted somewhere else, like GitHub Pages, change:
-     const API_BASE_URL = "";
-     to:
-     const API_BASE_URL = "https://YOUR-VERCEL-PROJECT.vercel.app";
-  =========================================================
--->
 <html lang="en" class="scroll-smooth">
 <head>
   <!-- =========================================================
@@ -25,11 +6,11 @@
        ========================================================= -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>The Grand Hacienda Estate | Private Las Vegas Mansion Resort</title>
-  <meta name="description" content="A private Las Vegas mansion resort with gated privacy, luxury event spaces, resort-style pool, chef-style kitchen, game room, VIP booking calendar, and group-ready estate amenities." />
+  <title>Casablanca Las Vegas | Private Luxury Mansion Resort</title>
+  <meta name="description" content="Casablanca Las Vegas is a private luxury mansion resort and gated hacienda-style estate for VIP stays, productions, retreats, celebrations, and private events." />
   <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="The Grand Hacienda Estate | Private Las Vegas Mansion Resort" />
-  <meta property="og:description" content="A private Las Vegas resort estate with gated privacy, pool, jacuzzi, game room, luxury outdoor spaces, and VIP booking inquiry calendar." />
+  <meta property="og:title" content="Casablanca Las Vegas | Private Luxury Mansion Resort" />
+  <meta property="og:description" content="A private Las Vegas resort estate with gated privacy, pool, jacuzzi, game spaces, luxury outdoor areas, and VIP booking inquiry calendar." />
   <meta property="og:image" content="https://media.eventective.com/4096897_lg.jpg" />
   <meta property="og:type" content="website" />
   <!-- =========================================================
@@ -37,31 +18,22 @@
        ========================================================= -->
 
   <!-- =========================================================
-       BLOCK 2 START: FONT + LIBRARY CDN LINKS
+       BLOCK 2 START: LIBRARIES
        ========================================================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Flatpickr calendar CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- GSAP + ScrollTrigger -->
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-
-  <!-- Flatpickr calendar JS -->
   <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <!-- =========================================================
-       BLOCK 2 END: FONT + LIBRARY CDN LINKS
+       BLOCK 2 END: LIBRARIES
        ========================================================= -->
 
   <!-- =========================================================
        BLOCK 3 START: TAILWIND CONFIG
-       NOTE: Tailwind CDN config must be placed AFTER Tailwind loads.
        ========================================================= -->
   <script>
     tailwind.config = {
@@ -75,7 +47,6 @@
               sand: "#D8C9AA",
               iron: "#111111",
               charcoal: "#222222",
-              smoke: "#3A3935",
               ember: "#A05A2C",
               gold: "#B9965A"
             }
@@ -83,10 +54,6 @@
           fontFamily: {
             display: ["Cinzel", "serif"],
             body: ["Inter", "sans-serif"]
-          },
-          boxShadow: {
-            iron: "0 24px 70px rgba(17,17,17,.25)",
-            gate: "0 0 0 1px rgba(17,17,17,.18), 0 30px 90px rgba(17,17,17,.32)"
           }
         }
       }
@@ -108,38 +75,30 @@
       --charcoal: #222222;
       --gold: #B9965A;
       --ember: #A05A2C;
-      --radius-xl: clamp(1.25rem, 2vw, 2.25rem);
       --container: min(1180px, calc(100% - clamp(1.25rem, 5vw, 4.5rem)));
+      --radius-xl: clamp(1.25rem, 2vw, 2.25rem);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--cream);
-      color: var(--iron);
-    }
-
+    * { box-sizing: border-box; }
+    html { background: var(--cream); color: var(--iron); }
     body {
       margin: 0;
       font-family: Inter, system-ui, sans-serif;
-      background:
-        radial-gradient(circle at 18% 0%, rgba(160, 90, 44, .12), transparent 26rem),
-        radial-gradient(circle at 80% 14%, rgba(185, 150, 90, .16), transparent 30rem),
-        linear-gradient(180deg, #FAF9F6 0%, #F5F5DC 42%, #EEE6D4 100%);
       color: var(--iron);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(160,90,44,.12), transparent 26rem),
+        radial-gradient(circle at 82% 14%, rgba(185,150,90,.16), transparent 30rem),
+        linear-gradient(180deg, #FAF9F6 0%, #F5F5DC 42%, #EEE6D4 100%);
       overflow-x: hidden;
     }
 
-    /* Stucco texture overlay */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: .32;
+      opacity: .28;
       background-image:
         radial-gradient(circle at 22% 18%, rgba(0,0,0,.06) 0 1px, transparent 1px),
         radial-gradient(circle at 75% 42%, rgba(255,255,255,.65) 0 1px, transparent 1px),
@@ -148,47 +107,10 @@
       mix-blend-mode: multiply;
     }
 
-    body > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .site-shell {
-      width: var(--container);
-      margin-inline: auto;
-    }
-
-    .font-display {
-      letter-spacing: -0.025em;
-    }
-
-    .section-pad {
-      padding-block: clamp(4rem, 8vw, 8rem);
-    }
-
-    .iron-border {
-      border: 1px solid rgba(17,17,17,.18);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.32);
-    }
-
-    .hacienda-card {
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.62), rgba(245,245,220,.76)),
-        radial-gradient(circle at top left, rgba(185,150,90,.16), transparent 18rem);
-      border: 1px solid rgba(17,17,17,.16);
-      box-shadow: 0 24px 70px rgba(17,17,17,.13);
-      border-radius: var(--radius-xl);
-    }
-
-    .dark-card {
-      background:
-        linear-gradient(135deg, rgba(17,17,17,.98), rgba(34,34,34,.94)),
-        radial-gradient(circle at top right, rgba(185,150,90,.18), transparent 16rem);
-      color: var(--cream);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow-gate);
-      border-radius: var(--radius-xl);
-    }
+    body > * { position: relative; z-index: 1; }
+    .site-shell { width: var(--container); margin-inline: auto; }
+    .section-pad { padding-block: clamp(4rem, 8vw, 8rem); }
+    .font-display { letter-spacing: -.025em; }
 
     .eyebrow {
       display: inline-flex;
@@ -200,13 +122,11 @@
       font-weight: 800;
       color: var(--ember);
     }
-
     .eyebrow::before {
       content: "";
       width: 2.2rem;
       height: 1px;
       background: currentColor;
-      display: inline-block;
     }
 
     .btn {
@@ -223,31 +143,27 @@
       transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
       white-space: nowrap;
     }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--iron); color: var(--cream); border: 1px solid var(--iron); }
+    .btn-outline { color: var(--iron); border: 1px solid rgba(17,17,17,.35); background: rgba(250,249,246,.42); backdrop-filter: blur(12px); }
 
-    .btn:hover {
-      transform: translateY(-2px);
+    .hacienda-card {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.62), rgba(245,245,220,.76)),
+        radial-gradient(circle at top left, rgba(185,150,90,.16), transparent 18rem);
+      border: 1px solid rgba(17,17,17,.16);
+      box-shadow: 0 24px 70px rgba(17,17,17,.13);
+      border-radius: var(--radius-xl);
     }
 
-    .btn-primary {
-      background: var(--iron);
+    .dark-card {
+      background:
+        linear-gradient(135deg, rgba(17,17,17,.98), rgba(34,34,34,.94)),
+        radial-gradient(circle at top right, rgba(185,150,90,.18), transparent 16rem);
       color: var(--cream);
-      border: 1px solid var(--iron);
-    }
-
-    .btn-primary:hover {
-      background: #000;
-    }
-
-    .btn-outline {
-      color: var(--iron);
-      border: 1px solid rgba(17,17,17,.35);
-      background: rgba(250,249,246,.42);
-      backdrop-filter: blur(12px);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--iron);
-      background: rgba(17,17,17,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 30px 90px rgba(17,17,17,.32);
+      border-radius: var(--radius-xl);
     }
 
     .hero-media::after {
@@ -264,46 +180,15 @@
       position: fixed;
       z-index: 3;
       pointer-events: none;
-      opacity: .17;
+      opacity: .16;
       filter: contrast(1.15);
       mix-blend-mode: multiply;
       will-change: transform;
     }
-
-    .iron-layer img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .iron-left {
-      left: -6rem;
-      top: 10vh;
-      width: clamp(14rem, 24vw, 28rem);
-      transform: rotate(-8deg);
-    }
-
-    .iron-right {
-      right: -7rem;
-      top: 38vh;
-      width: clamp(16rem, 28vw, 34rem);
-      transform: rotate(7deg);
-    }
-
-    .iron-center {
-      left: 50%;
-      bottom: -7rem;
-      width: clamp(22rem, 52vw, 62rem);
-      transform: translateX(-50%);
-      opacity: .12;
-    }
-
-    .iron-divider {
-      width: min(740px, 92vw);
-      opacity: .64;
-      filter: contrast(1.25);
-      margin-inline: auto;
-    }
+    .iron-layer img { width: 100%; height: auto; display: block; }
+    .iron-left { left: -6rem; top: 10vh; width: clamp(14rem, 24vw, 28rem); transform: rotate(-8deg); }
+    .iron-right { right: -7rem; top: 38vh; width: clamp(16rem, 28vw, 34rem); transform: rotate(7deg); }
+    .iron-center { left: 50%; bottom: -7rem; width: clamp(22rem, 52vw, 62rem); transform: translateX(-50%); opacity: .1; }
 
     .gallery-img {
       aspect-ratio: 4 / 3;
@@ -311,39 +196,24 @@
       transition: transform .55s ease, filter .55s ease;
       filter: saturate(.92) contrast(1.04);
     }
-
-    .gallery-tile:hover .gallery-img {
-      transform: scale(1.055);
-      filter: saturate(1.05) contrast(1.08);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(26px);
-    }
+    .gallery-tile:hover .gallery-img { transform: scale(1.055); filter: saturate(1.05) contrast(1.08); }
+    .reveal { opacity: 0; transform: translateY(26px); }
 
     .feature-list li {
       display: flex;
       gap: .75rem;
       padding-block: .72rem;
-      border-bottom: 1px solid rgba(17,17,17,.1);
+      border-bottom: 1px solid rgba(255,255,255,.1);
     }
-
     .feature-list li::before {
       content: "◆";
-      color: var(--ember);
+      color: var(--gold);
       flex: 0 0 auto;
       font-size: .7rem;
       margin-top: .25rem;
     }
 
-    .dark-card .feature-list li {
-      border-bottom-color: rgba(255,255,255,.1);
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
+    .form-input, .form-select, .form-textarea {
       width: 100%;
       background: rgba(250,249,246,.92);
       color: var(--iron);
@@ -353,21 +223,17 @@
       outline: none;
       transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
     }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
       border-color: var(--iron);
       box-shadow: 0 0 0 4px rgba(17,17,17,.08);
       background: #fff;
     }
+    .form-textarea { min-height: 9rem; resize: vertical; }
+    .status-note { min-height: 1.35rem; font-size: .86rem; font-weight: 700; }
+    .status-ok { color: #7ce09b; }
+    .status-warn { color: #f3bd74; }
+    .status-error { color: #ff9a9a; }
 
-    .form-textarea {
-      min-height: 9rem;
-      resize: vertical;
-    }
-
-    /* Flatpickr styling */
     .flatpickr-calendar {
       font-family: Inter, system-ui, sans-serif;
       border-radius: 1.25rem !important;
@@ -375,58 +241,31 @@
       box-shadow: 0 28px 80px rgba(17,17,17,.22) !important;
       overflow: hidden;
     }
-
-    .flatpickr-day.selected,
-    .flatpickr-day.startRange,
-    .flatpickr-day.endRange {
+    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
       background: var(--iron) !important;
       border-color: var(--iron) !important;
       color: var(--cream) !important;
     }
-
     .flatpickr-day.inRange {
       background: rgba(17,17,17,.12) !important;
       border-color: transparent !important;
       color: var(--iron) !important;
       box-shadow: -5px 0 0 rgba(17,17,17,.12), 5px 0 0 rgba(17,17,17,.12) !important;
     }
-
-    .flatpickr-day.flatpickr-disabled,
-    .flatpickr-day.flatpickr-disabled:hover {
+    .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover {
       background: rgba(17,17,17,.12) !important;
       color: rgba(17,17,17,.32) !important;
       text-decoration: line-through;
       cursor: not-allowed;
     }
 
-    .status-note {
-      min-height: 1.35rem;
-      font-size: .86rem;
-      font-weight: 700;
-    }
-
-    .status-ok { color: #255d38; }
-    .status-warn { color: #8a4f16; }
-    .status-error { color: #9e1d1d; }
-
     @media (max-width: 768px) {
-      .iron-layer {
-        opacity: .08;
-      }
-
-      .btn {
-        width: 100%;
-      }
+      .iron-layer { opacity: .08; }
+      .btn { width: 100%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .reveal,
-      .iron-layer,
-      .gallery-img {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-      }
+      .reveal, .iron-layer, .gallery-img { opacity: 1 !important; transform: none !important; transition: none !important; }
     }
   </style>
   <!-- =========================================================
@@ -437,49 +276,31 @@
 <body>
   <!-- =========================================================
        BLOCK 5 START: WROUGHT IRON PARALLAX LAYERS
-       These SVGs are intentionally dark and semi-transparent.
-       GSAP moves them at different speeds on scroll.
        ========================================================= -->
-  <div class="iron-layer iron-left" data-iron-speed="-18" aria-hidden="true">
-    <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8d6cc0eead5ca87216.svg" alt="" />
-  </div>
-  <div class="iron-layer iron-right" data-iron-speed="22" aria-hidden="true">
-    <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8db656b3edc44af24f.svg" alt="" />
-  </div>
-  <div class="iron-layer iron-center" data-iron-speed="-10" aria-hidden="true">
-    <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8d5a1d97a92fea7ce0.svg" alt="" />
-  </div>
+  <div class="iron-layer iron-left" data-iron-speed="-18" aria-hidden="true"><img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8d6cc0eead5ca87216.svg" alt="" /></div>
+  <div class="iron-layer iron-right" data-iron-speed="22" aria-hidden="true"><img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8db656b3edc44af24f.svg" alt="" /></div>
+  <div class="iron-layer iron-center" data-iron-speed="-10" aria-hidden="true"><img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8d5a1d97a92fea7ce0.svg" alt="" /></div>
   <!-- =========================================================
        BLOCK 5 END: WROUGHT IRON PARALLAX LAYERS
        ========================================================= -->
 
   <!-- =========================================================
-       BLOCK 6 START: HEADER / NAV
+       BLOCK 6 START: HEADER
        ========================================================= -->
-  <header id="siteHeader" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+  <header class="fixed inset-x-0 top-0 z-50">
     <div class="site-shell py-4">
-      <div class="flex items-center justify-between rounded-full border border-white/20 bg-black/20 px-4 py-3 text-hacienda-cream backdrop-blur-xl shadow-gate">
-        <a href="#top" class="font-display text-sm font-extrabold uppercase tracking-[.22em] md:text-base">
-          Grand Hacienda Estate
-        </a>
-
+      <div class="flex items-center justify-between rounded-full border border-white/20 bg-black/25 px-4 py-3 text-hacienda-cream backdrop-blur-xl shadow-2xl">
+        <a href="#top" class="font-display text-sm font-extrabold uppercase tracking-[.22em] md:text-base">Casablanca LV</a>
         <nav class="hidden items-center gap-6 text-xs font-extrabold uppercase tracking-[.18em] md:flex">
           <a class="hover:text-hacienda-gold" href="#estate">Estate</a>
           <a class="hover:text-hacienda-gold" href="#features">Amenities</a>
           <a class="hover:text-hacienda-gold" href="#gallery">Gallery</a>
           <a class="hover:text-hacienda-gold" href="#booking">Booking</a>
         </nav>
-
-        <a href="#booking" class="hidden rounded-full bg-hacienda-cream px-5 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-hacienda-iron transition hover:bg-white md:inline-flex">
-          VIP Inquiry
-        </a>
-
-        <button id="mobileMenuButton" class="md:hidden rounded-full border border-white/25 px-4 py-2 text-xs font-extrabold uppercase tracking-[.18em]">
-          Menu
-        </button>
+        <a href="#booking" class="hidden rounded-full bg-hacienda-cream px-5 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-hacienda-iron transition hover:bg-white md:inline-flex">VIP Inquiry</a>
+        <button id="mobileMenuButton" class="rounded-full border border-white/25 px-4 py-2 text-xs font-extrabold uppercase tracking-[.18em] md:hidden">Menu</button>
       </div>
-
-      <nav id="mobileMenu" class="hidden mt-3 rounded-[1.5rem] border border-black/10 bg-hacienda-cream/95 p-4 text-sm font-extrabold uppercase tracking-[.14em] shadow-iron md:hidden">
+      <nav id="mobileMenu" class="hidden mt-3 rounded-[1.5rem] border border-black/10 bg-hacienda-cream/95 p-4 text-sm font-extrabold uppercase tracking-[.14em] shadow-2xl md:hidden">
         <a class="block py-3" href="#estate">Estate</a>
         <a class="block py-3" href="#features">Amenities</a>
         <a class="block py-3" href="#gallery">Gallery</a>
@@ -488,7 +309,7 @@
     </div>
   </header>
   <!-- =========================================================
-       BLOCK 6 END: HEADER / NAV
+       BLOCK 6 END: HEADER
        ========================================================= -->
 
   <main id="top">
@@ -497,47 +318,23 @@
          ========================================================= -->
     <section class="relative min-h-[100svh] overflow-hidden bg-hacienda-iron text-hacienda-cream">
       <div class="hero-media absolute inset-0">
-        <img
-          class="h-full w-full object-cover"
-          src="https://media.eventective.com/4096897_lg.jpg"
-          alt="Private Las Vegas estate with resort-style pool and hacienda compound atmosphere"
-          fetchpriority="high"
-        />
+        <img class="h-full w-full object-cover" src="https://media.eventective.com/4096897_lg.jpg" alt="Private Las Vegas mansion resort estate with pool" fetchpriority="high" />
       </div>
-
       <div class="relative z-10 flex min-h-[100svh] items-center">
         <div class="site-shell pt-28">
           <div class="max-w-4xl">
             <p class="eyebrow text-hacienda-gold reveal">Private Las Vegas Resort Estate</p>
-            <h1 class="font-display mt-6 max-w-5xl text-[clamp(3rem,8vw,7.6rem)] font-extrabold leading-[.9] tracking-[-.06em] reveal">
-              Behind the Gates, Everything Changes.
-            </h1>
-            <p class="mt-7 max-w-2xl text-[clamp(1rem,1.5vw,1.25rem)] leading-8 text-white/82 reveal">
-              A high-privacy luxury hacienda compound in Las Vegas with resort-style outdoor spaces, a sparkling pool, jacuzzi, game-ready interiors, and VIP booking for private stays, retreats, productions, and elevated events.
-            </p>
-
+            <h1 class="font-display mt-6 max-w-5xl text-[clamp(3rem,8vw,7.6rem)] font-extrabold leading-[.9] tracking-[-.06em] reveal">Behind the Gates, Everything Changes.</h1>
+            <p class="mt-7 max-w-2xl text-[clamp(1rem,1.5vw,1.25rem)] leading-8 text-white/82 reveal">A high-privacy luxury hacienda compound in Las Vegas with resort-style outdoor spaces, a sparkling pool, jacuzzi, game-ready interiors, and VIP booking for private stays, retreats, productions, and elevated events.</p>
             <div class="mt-9 flex flex-col gap-3 sm:flex-row reveal">
-              <a href="#booking" class="btn btn-primary bg-hacienda-cream text-hacienda-iron hover:bg-white">Check Availability</a>
+              <a href="#booking" class="btn bg-hacienda-cream text-hacienda-iron hover:bg-white">Check Availability</a>
               <a href="#estate" class="btn border border-white/35 bg-white/10 text-white backdrop-blur-md hover:border-white">Explore the Estate</a>
             </div>
-
             <div class="mt-12 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4 reveal">
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">10</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bedrooms</div>
-              </div>
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">6</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bathrooms</div>
-              </div>
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">100</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Event Capacity</div>
-              </div>
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">1.5</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Acres</div>
-              </div>
+              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">10</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bedrooms</div></div>
+              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">6</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bathrooms</div></div>
+              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">100</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Event Capacity</div></div>
+              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">1.5</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Acres</div></div>
             </div>
           </div>
         </div>
@@ -548,183 +345,81 @@
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 8 START: INTRO STRIP
+         BLOCK 8 START: ESTATE INTRO
          ========================================================= -->
-    <section class="section-pad">
+    <section id="estate" class="section-pad">
       <div class="site-shell">
-        <div class="iron-divider reveal">
-          <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8ddf1cb25b0626a432.svg" alt="" class="w-full" />
-        </div>
-
-        <div class="mt-12 grid gap-8 md:grid-cols-[.85fr_1.15fr] md:items-end">
+        <div class="grid gap-8 md:grid-cols-[.9fr_1.1fr] md:items-end">
           <div>
             <p class="eyebrow reveal">The Estate</p>
-            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none text-hacienda-iron reveal">
-              Not a house. Not a venue. A private resort under your control.
-            </h2>
+            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none text-hacienda-iron reveal">Not a house. Not a venue. A private resort under your control.</h2>
           </div>
-          <p class="max-w-2xl text-lg leading-9 text-black/70 reveal">
-            This page combines the Casablanca group-stay story with The 2810’s private resort positioning: a fully gated Las Vegas estate with high-end indoor/outdoor amenities, event-ready spaces, poolside atmosphere, and the kind of privacy that makes guests feel like they entered a different world.
-          </p>
+          <p class="max-w-2xl text-lg leading-9 text-black/70 reveal">Casablanca Las Vegas blends the group-stay comfort of a private mansion with the posture of an exclusive resort estate: gated arrival, dramatic poolside visuals, indoor/outdoor entertaining space, and a guest experience built around privacy.</p>
         </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 8 END: INTRO STRIP
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 9 START: ESTATE / ABOUT
-         ========================================================= -->
-    <section id="estate" class="section-pad pt-0">
-      <div class="site-shell">
-        <div class="grid gap-6 lg:grid-cols-2 lg:items-stretch">
-          <div class="hacienda-card overflow-hidden reveal">
-            <img
-              src="https://media.eventective.com/4096883_lg.jpg"
-              alt="Luxury Las Vegas mansion estate exterior and resort pool area"
-              class="h-full min-h-[28rem] w-full object-cover"
-              loading="lazy"
-            />
-          </div>
-
+        <div class="mt-12 grid gap-6 lg:grid-cols-2 lg:items-stretch">
+          <div class="hacienda-card overflow-hidden reveal"><img src="https://media.eventective.com/4096883_lg.jpg" alt="Luxury Las Vegas mansion estate exterior" class="h-full min-h-[28rem] w-full object-cover" loading="lazy" /></div>
           <div class="dark-card p-[clamp(1.5rem,4vw,3rem)] reveal">
             <p class="eyebrow text-hacienda-gold">Private Compound Energy</p>
-            <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4.25rem)] font-extrabold leading-none">
-              Stucco warmth. Ironwork edge. Total privacy.
-            </h2>
-            <p class="mt-6 text-lg leading-9 text-white/72">
-              The design direction is intentionally exclusive: cream stucco, matte-black iron, carved shadows, gated-entry energy, and a polished resort narrative. Guests should feel like they are moving deeper through a private estate as the wrought-iron parallax layers slide past them.
-            </p>
-
+            <h3 class="font-display mt-5 text-[clamp(2rem,4vw,4.25rem)] font-extrabold leading-none">Stucco warmth. Ironwork edge. Total privacy.</h3>
+            <p class="mt-6 text-lg leading-9 text-white/72">The page is styled as an ultra-exclusive hacienda compound: cream stucco textures, matte-black ironwork, carved shadows, gated-entry tension, and polished resort hospitality.</p>
             <ul class="feature-list mt-7 text-white/78">
               <li>Modern open-concept interiors built for luxury group stays and private entertaining.</li>
-              <li>Resort-style outdoor sanctuary with pool, jacuzzi, cabana energy, beach-like details, and lush gardens.</li>
-              <li>Multiple event/function areas with a private estate feel, ideal for productions, networking events, retreats, weddings, and high-touch hospitality.</li>
-              <li>Fully gated property with privacy-forward positioning and strong “arrive behind the gates” storytelling.</li>
+              <li>Resort-style outdoor sanctuary with pool, jacuzzi, cabana energy, and lush garden atmosphere.</li>
+              <li>Flexible estate use for productions, networking events, retreats, weddings, and VIP hospitality.</li>
+              <li>Privacy-forward positioning with strong “arrive behind the gates” storytelling.</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 9 END: ESTATE / ABOUT
+         BLOCK 8 END: ESTATE INTRO
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 10 START: AMENITIES / FEATURES
+         BLOCK 9 START: AMENITIES
          ========================================================= -->
-    <section id="features" class="section-pad">
+    <section id="features" class="section-pad pt-0">
       <div class="site-shell">
         <div class="max-w-3xl">
           <p class="eyebrow reveal">Amenities & Features</p>
-          <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none reveal">
-            Built for rare moments, not ordinary stays.
-          </h2>
+          <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none reveal">Built for rare moments, not ordinary stays.</h2>
         </div>
-
         <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Resort Pool & Jacuzzi</h3>
-            <p class="mt-4 leading-7 text-black/68">Sparkling pool atmosphere, private jacuzzi relaxation, poolside seating, and a dramatic outdoor resort impression.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Gated Privacy</h3>
-            <p class="mt-4 leading-7 text-black/68">The property story leans into full privacy, gated compound energy, and exclusive estate access.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Event-Ready Layout</h3>
-            <p class="mt-4 leading-7 text-black/68">Multiple event/function spaces, indoor-outdoor flow, patios, verandas, bars, and flexible hospitality zones.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Chef-Style Kitchen</h3>
-            <p class="mt-4 leading-7 text-black/68">Fully equipped kitchen, group dining, outdoor food service potential, and luxury-hosting utility.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Game & Lounge Energy</h3>
-            <p class="mt-4 leading-7 text-black/68">Game-ready social spaces inspired by the Casablanca listing: pool, poker, shuffleboard, video games, and oversized TVs.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Production / Retreat Friendly</h3>
-            <p class="mt-4 leading-7 text-black/68">Strong fit for photo shoots, video production, networking events, retreats, and private overnight packages.</p>
-          </article>
+          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Resort Pool & Jacuzzi</h3><p class="mt-4 leading-7 text-black/68">Sparkling pool atmosphere, private jacuzzi relaxation, poolside seating, and a dramatic outdoor resort impression.</p></article>
+          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Gated Privacy</h3><p class="mt-4 leading-7 text-black/68">The property story leans into full privacy, gated compound energy, and exclusive estate access.</p></article>
+          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Event-Ready Layout</h3><p class="mt-4 leading-7 text-black/68">Multiple function spaces, indoor-outdoor flow, patios, verandas, bars, and flexible hospitality zones.</p></article>
+          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Chef-Style Kitchen</h3><p class="mt-4 leading-7 text-black/68">Fully equipped kitchen, group dining, outdoor food service potential, and luxury-hosting utility.</p></article>
+          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Game & Lounge Energy</h3><p class="mt-4 leading-7 text-black/68">Game-ready social spaces with pool, poker, shuffleboard, video games, and oversized TVs.</p></article>
+          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Production Friendly</h3><p class="mt-4 leading-7 text-black/68">Strong fit for photo shoots, video production, retreats, and private overnight packages.</p></article>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 10 END: AMENITIES / FEATURES
+         BLOCK 9 END: AMENITIES
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 11 START: GALLERY
-         Images are generated by JavaScript from the galleryImages array.
+         BLOCK 10 START: GALLERY
          ========================================================= -->
     <section id="gallery" class="section-pad bg-hacienda-iron text-hacienda-cream">
       <div class="site-shell">
         <div class="grid gap-8 md:grid-cols-[.85fr_1.15fr] md:items-end">
           <div>
             <p class="eyebrow text-hacienda-gold reveal">Gallery</p>
-            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none reveal">
-              Visual Proof of the Compound.
-            </h2>
+            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none reveal">Visual Proof of the Compound.</h2>
           </div>
-          <p class="max-w-2xl text-lg leading-9 text-white/70 reveal">
-            The gallery uses Eventective mansion images supplied in the build request, with lazy loading and responsive CSS so the page stays clean, fast, and high-impact.
-          </p>
+          <p class="max-w-2xl text-lg leading-9 text-white/70 reveal">A fast, responsive gallery using the provided mansion imagery and lazy loading for a polished first impression.</p>
         </div>
-
         <div id="galleryGrid" class="mt-12 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"></div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 11 END: GALLERY
+         BLOCK 10 END: GALLERY
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 12 START: EVENT / PRICING POSITIONING
-         ========================================================= -->
-    <section class="section-pad">
-      <div class="site-shell">
-        <div class="grid gap-6 lg:grid-cols-3">
-          <div class="lg:col-span-1">
-            <p class="eyebrow reveal">Private Event Uses</p>
-            <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4.2rem)] font-extrabold leading-none reveal">
-              From retreats to productions.
-            </h2>
-          </div>
-
-          <div class="lg:col-span-2 grid gap-4 md:grid-cols-2">
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Photo / Video Production</h3>
-              <p class="mt-3 text-black/68 leading-7">Use the exterior, pool, patio, lounges, and estate details for high-end production days.</p>
-            </div>
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Networking Events</h3>
-              <p class="mt-3 text-black/68 leading-7">A strong alternative to stale venues, built for impressive arrivals and premium guest flow.</p>
-            </div>
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Overnight Packages</h3>
-              <p class="mt-3 text-black/68 leading-7">Positioned for private stays, couples retreats, group retreats, and premium-date packages.</p>
-            </div>
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Weddings & Day Events</h3>
-              <p class="mt-3 text-black/68 leading-7">Luxury estate environment with outdoor function areas and high-capacity event positioning.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 12 END: EVENT / PRICING POSITIONING
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 13 START: VIP BOOKING / INQUIRY
+         BLOCK 11 START: VIP BOOKING
          ========================================================= -->
     <section id="booking" class="section-pad bg-hacienda-stucco">
       <div class="site-shell">
@@ -735,15 +430,10 @@
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20"></div>
               <div class="absolute inset-x-0 bottom-0 p-[clamp(1.5rem,4vw,3rem)]">
                 <p class="eyebrow text-hacienda-gold">VIP Booking</p>
-                <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4rem)] font-extrabold leading-none">
-                  Request the dates. Lock the gates.
-                </h2>
-                <p class="mt-5 max-w-lg leading-8 text-white/72">
-                  Select your desired stay or event window. Unavailable calendar dates are pulled from the connected Google Calendar and grayed out automatically.
-                </p>
+                <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4rem)] font-extrabold leading-none">Request the dates. Lock the gates.</h2>
+                <p class="mt-5 max-w-lg leading-8 text-white/72">Select your desired stay or event window. Unavailable calendar dates are pulled from Google Calendar and grayed out automatically once credentials are connected.</p>
               </div>
             </div>
-
             <div class="p-[clamp(1.25rem,4vw,3rem)]">
               <form id="bookingForm" class="grid gap-4" novalidate>
                 <div>
@@ -753,29 +443,14 @@
                   <input id="checkOut" name="checkOut" type="hidden" />
                   <p id="calendarStatus" class="status-note status-warn mt-2">Loading booking calendar...</p>
                 </div>
-
                 <div class="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="name">Name</label>
-                    <input id="name" name="name" class="form-input" type="text" autocomplete="name" placeholder="Your name" required />
-                  </div>
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="email">Email</label>
-                    <input id="email" name="email" class="form-input" type="email" autocomplete="email" placeholder="you@example.com" required />
-                  </div>
+                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="name">Name</label><input id="name" name="name" class="form-input" type="text" autocomplete="name" placeholder="Your name" required /></div>
+                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="email">Email</label><input id="email" name="email" class="form-input" type="email" autocomplete="email" placeholder="you@example.com" required /></div>
                 </div>
-
                 <div class="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="phone">Phone</label>
-                    <input id="phone" name="phone" class="form-input" type="tel" autocomplete="tel" placeholder="Phone number" />
-                  </div>
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="guestCount">Guest Count</label>
-                    <input id="guestCount" name="guestCount" class="form-input" type="number" min="1" max="120" placeholder="Estimated guests" required />
-                  </div>
+                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="phone">Phone</label><input id="phone" name="phone" class="form-input" type="tel" autocomplete="tel" placeholder="Phone number" /></div>
+                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="guestCount">Guest Count</label><input id="guestCount" name="guestCount" class="form-input" type="number" min="1" max="120" placeholder="Estimated guests" required /></div>
                 </div>
-
                 <div class="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="eventType">Inquiry Type</label>
@@ -801,21 +476,9 @@
                     </select>
                   </div>
                 </div>
-
-                <div>
-                  <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="message">Details</label>
-                  <textarea id="message" name="message" class="form-textarea" placeholder="Tell us what you are planning, ideal arrival/departure times, event purpose, pets, catering, production needs, or VIP add-ons."></textarea>
-                </div>
-
-                <button id="submitBooking" class="btn btn-primary bg-hacienda-cream text-hacienda-iron hover:bg-white" type="submit">
-                  Submit VIP Inquiry
-                </button>
-
+                <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="message">Details</label><textarea id="message" name="message" class="form-textarea" placeholder="Tell us what you are planning, ideal arrival/departure times, event purpose, production needs, or VIP add-ons."></textarea></div>
+                <button id="submitBooking" class="btn bg-hacienda-cream text-hacienda-iron hover:bg-white" type="submit">Submit VIP Inquiry</button>
                 <p id="formStatus" class="status-note text-white/70"></p>
-
-                <p class="text-xs leading-6 text-white/48">
-                  Demo note: The frontend posts to <strong>/api/bookings</strong>. The backend can either create a real Google Calendar hold immediately or be modified to create a tentative request/pending approval workflow.
-                </p>
               </form>
             </div>
           </div>
@@ -823,51 +486,32 @@
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 13 END: VIP BOOKING / INQUIRY
+         BLOCK 11 END: VIP BOOKING
          ========================================================= -->
   </main>
 
   <!-- =========================================================
-       BLOCK 14 START: FOOTER
+       BLOCK 12 START: FOOTER
        ========================================================= -->
   <footer class="bg-hacienda-iron py-12 text-hacienda-cream">
     <div class="site-shell flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
       <div>
-        <div class="font-display text-xl font-extrabold uppercase tracking-[.18em]">Grand Hacienda Estate</div>
+        <div class="font-display text-xl font-extrabold uppercase tracking-[.18em]">Casablanca Las Vegas</div>
         <p class="mt-2 text-sm text-white/55">Private Las Vegas luxury estate, event venue, and VIP retreat experience.</p>
       </div>
       <a href="#booking" class="btn border border-white/25 bg-white/10 text-white hover:border-white">Request Availability</a>
     </div>
   </footer>
   <!-- =========================================================
-       BLOCK 14 END: FOOTER
+       BLOCK 12 END: FOOTER
        ========================================================= -->
 
   <!-- =========================================================
-       BLOCK 15 START: FRONTEND JAVASCRIPT
+       BLOCK 13 START: FRONTEND JAVASCRIPT
        ========================================================= -->
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      /* =========================================================
-         BLOCK 15A START: SETTINGS
-         ========================================================= */
-
-      /*
-        If this index.html is hosted in the SAME Vercel project as the API,
-        leave this blank.
-
-        If you host the page on GitHub Pages or another domain, paste the
-        Vercel backend URL here, WITHOUT a trailing slash.
-
-        Example:
-        const API_BASE_URL = "https://casablanca-booking-api.vercel.app";
-      */
       const API_BASE_URL = "";
-
-      /*
-        These are the Eventective image URLs supplied in the build request.
-        Keep the first 24 for speed, or add more from your supplied list.
-      */
       const galleryImages = [
         "https://media.eventective.com/4096897_lg.jpg",
         "https://media.eventective.com/4096883_lg.jpg",
@@ -880,2351 +524,78 @@
         "https://media.eventective.com/4096671_lg.jpg",
         "https://media.eventective.com/4096680_lg.jpg",
         "https://media.eventective.com/4096673_lg.jpg",
-        "https://media.eventective.com/4096682_lg.jpg",
-        "https://media.eventective.com/4096698_lg.jpg",
-        "https://media.eventective.com/4096699_lg.jpg",
-        "https://media.eventective.com/4096702_lg.jpg",
-        "https://media.eventective.com/4096701_lg.jpg",
-        "https://media.eventective.com/4096686_lg.jpg",
-        "https://media.eventective.com/4096689_lg.jpg",
-        "https://media.eventective.com/4096694_lg.jpg",
-        "https://media.eventective.com/4096695_lg.jpg",
-        "https://media.eventective.com/4096754_lg.jpg",
-        "https://media.eventective.com/4096758_lg.jpg",
-        "https://media.eventective.com/4096717_lg.jpg",
-        "https://media.eventective.com/4096724_lg.jpg"
+        "https://media.eventective.com/4096682_lg.jpg"
       ];
 
-      /* =========================================================
-         BLOCK 15A END: SETTINGS
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15B START: MOBILE MENU
-         ========================================================= */
       const menuButton = document.getElementById("mobileMenuButton");
       const mobileMenu = document.getElementById("mobileMenu");
+      menuButton?.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
+      mobileMenu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => mobileMenu.classList.add("hidden")));
 
-      menuButton?.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-      });
-
-      mobileMenu?.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
-      });
-      /* =========================================================
-         BLOCK 15B END: MOBILE MENU
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15C START: GALLERY RENDER
-         ========================================================= */
       const galleryGrid = document.getElementById("galleryGrid");
-
       if (galleryGrid) {
         galleryGrid.innerHTML = galleryImages.map((src, index) => `
           <button class="gallery-tile reveal group relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/5 text-left ${index === 0 ? "md:col-span-2 md:row-span-2" : ""}" type="button" aria-label="View estate gallery image ${index + 1}">
-            <img
-              src="${src}"
-              alt="The Grand Hacienda Estate gallery image ${index + 1}"
-              class="gallery-img h-full w-full ${index === 0 ? "md:min-h-[34rem]" : ""}"
-              loading="${index < 4 ? "eager" : "lazy"}"
-            />
-            <span class="absolute inset-x-0 bottom-0 translate-y-full bg-black/70 px-4 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-white transition group-hover:translate-y-0">
-              View Image ${index + 1}
-            </span>
+            <img src="${src}" alt="Casablanca Las Vegas estate gallery image ${index + 1}" class="gallery-img h-full w-full ${index === 0 ? "md:min-h-[34rem]" : ""}" loading="${index < 4 ? "eager" : "lazy"}" />
+            <span class="absolute inset-x-0 bottom-0 translate-y-full bg-black/70 px-4 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-white transition group-hover:translate-y-0">View Image ${index + 1}</span>
           </button>
         `).join("");
       }
-      /* =========================================================
-         BLOCK 15C END: GALLERY RENDER
-         ========================================================= */
 
-
-      /* =========================================================
-         BLOCK 15D START: GSAP / SCROLLTRIGGER ANIMATIONS
-         ========================================================= */
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
       if (!prefersReducedMotion && window.gsap && window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
-
-        // Soft reveal animation for content blocks.
         gsap.utils.toArray(".reveal").forEach((element, index) => {
           gsap.to(element, {
             opacity: 1,
             y: 0,
-            duration: 0.85,
+            duration: .85,
             ease: "power3.out",
-            delay: Math.min(index * 0.02, 0.18),
-            scrollTrigger: {
-              trigger: element,
-              start: "top 88%",
-              once: true
-            }
+            delay: Math.min(index * .02, .18),
+            scrollTrigger: { trigger: element, start: "top 88%", once: true }
           });
         });
-
-        // Signature wrought-iron parallax.
         gsap.utils.toArray(".iron-layer").forEach((layer) => {
           const speed = Number(layer.dataset.ironSpeed || 12);
-
-          gsap.to(layer, {
-            yPercent: speed,
-            ease: "none",
-            scrollTrigger: {
-              trigger: document.body,
-              start: "top top",
-              end: "bottom bottom",
-              scrub: 1.2
-            }
-          });
+          gsap.to(layer, { yPercent: speed, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1.2 } });
         });
-
-        // Hero image slow cinematic drift.
-        gsap.to(".hero-media img", {
-          scale: 1.08,
-          yPercent: 6,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "#top",
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-          }
-        });
+        gsap.to(".hero-media img", { scale: 1.08, yPercent: 6, ease: "none", scrollTrigger: { trigger: "#top", start: "top top", end: "bottom top", scrub: true } });
       } else {
-        document.querySelectorAll(".reveal").forEach((el) => {
-          el.style.opacity = 1;
-          el.style.transform = "none";
-        });
+        document.querySelectorAll(".reveal").forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; });
       }
-      /* =========================================================
-         BLOCK 15D END: GSAP / SCROLLTRIGGER ANIMATIONS
-         ========================================================= */
 
-
-      /* =========================================================
-         BLOCK 15E START: DATE HELPERS
-         ========================================================= */
       const pad = (num) => String(num).padStart(2, "0");
-
-      function toISODate(date) {
-        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-      }
-
-      function addDays(date, days) {
-        const copy = new Date(date);
-        copy.setDate(copy.getDate() + days);
-        return copy;
-      }
-
-      function formatRangePayload(selectedDates) {
-        if (!selectedDates || selectedDates.length < 2) return null;
-
-        const checkIn = toISODate(selectedDates[0]);
-        const checkOut = toISODate(selectedDates[1]);
-
-        if (checkIn === checkOut) return null;
-
-        return { checkIn, checkOut };
-      }
-
-      function setStatus(elementId, message, tone = "") {
+      const toISODate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+      const addDays = (date, days) => { const copy = new Date(date); copy.setDate(copy.getDate() + days); return copy; };
+      const setStatus = (elementId, message, tone = "") => {
         const el = document.getElementById(elementId);
         if (!el) return;
-
         el.textContent = message;
         el.classList.remove("status-ok", "status-warn", "status-error");
-
-        if (tone) {
-          el.classList.add(`status-${tone}`);
-        }
-      }
-      /* =========================================================
-         BLOCK 15E END: DATE HELPERS
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15F START: FETCH GOOGLE CALENDAR BLOCKED DATES
-         ========================================================= */
-      let flatpickrInstance = null;
-      let unavailableRanges = [];
-
-      async function loadUnavailableDates() {
-        const today = new Date();
-        const oneYearFromNow = addDays(today, 365);
-
-        const start = toISODate(today);
-        const end = toISODate(oneYearFromNow);
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/bookings?start=${start}&end=${end}`, {
-            method: "GET",
-            headers: { "Accept": "application/json" }
-          });
-
-          if (!response.ok) {
-            throw new Error(`Calendar endpoint returned ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          unavailableRanges = Array.isArray(data.unavailable)
-            ? data.unavailable.map((range) => ({ from: range.start, to: range.end }))
-            : [];
-
-          setStatus("calendarStatus", unavailableRanges.length
-            ? `${unavailableRanges.length} unavailable date block(s) loaded.`
-            : "Calendar loaded. No blocked dates found.",
-            "ok"
-          );
-
-          return unavailableRanges;
-        } catch (error) {
-          console.error("Calendar load failed:", error);
-
-          /*
-            Fail-open behavior:
-            If the API is not configured yet, the page still works, but no dates are blocked.
-            This is intentional while you are setting up credentials.
-          */
-          setStatus("calendarStatus", "Calendar API not connected yet. Dates are selectable for testing.", "warn");
-          return [];
-        }
-      }
-
-      async function initBookingCalendar() {
-        const disabledRanges = await loadUnavailableDates();
-
-        flatpickrInstance = flatpickr("#stayRange", {
-          mode: "range",
-          minDate: "today",
-          dateFormat: "Y-m-d",
-          disable: disabledRanges,
-          showMonths: window.innerWidth >= 768 ? 2 : 1,
-          onChange: (selectedDates) => {
-            const payload = formatRangePayload(selectedDates);
-
-            if (!payload) {
-              document.getElementById("checkIn").value = "";
-              document.getElementById("checkOut").value = "";
-              return;
-            }
-
-            document.getElementById("checkIn").value = payload.checkIn;
-            document.getElementById("checkOut").value = payload.checkOut;
-          }
-        });
-      }
-
-      initBookingCalendar();
-      /* =========================================================
-         BLOCK 15F END: FETCH GOOGLE CALENDAR BLOCKED DATES
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15G START: POST BOOKING FORM TO SERVERLESS ENDPOINT
-         ========================================================= */
-      const bookingForm = document.getElementById("bookingForm");
-      const submitButton = document.getElementById("submitBooking");
-
-      bookingForm?.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(bookingForm);
-        const payload = Object.fromEntries(formData.entries());
-
-        if (!payload.checkIn || !payload.checkOut) {
-          setStatus("formStatus", "Please select a valid check-in and check-out range.", "error");
-          return;
-        }
-
-        if (!payload.name || !payload.email || !payload.guestCount || !payload.eventType) {
-          setStatus("formStatus", "Please complete the required fields before submitting.", "error");
-          return;
-        }
-
-        submitButton.disabled = true;
-        submitButton.textContent = "Submitting...";
-        setStatus("formStatus", "Sending your VIP inquiry and calendar hold...", "warn");
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/bookings`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(payload)
-          });
-
-          const data = await response.json().catch(() => ({}));
-
-          if (!response.ok) {
-            throw new Error(data.error || `Booking endpoint returned ${response.status}`);
-          }
-
-          setStatus("formStatus", "Success. Your inquiry was submitted and the requested dates were sent to the calendar.", "ok");
-          bookingForm.reset();
-
-          if (flatpickrInstance) {
-            flatpickrInstance.clear();
-          }
-
-          await initBookingCalendar();
-        } catch (error) {
-          console.error("Booking submit failed:", error);
-          setStatus("formStatus", error.message || "Something went wrong. Please try again.", "error");
-        } finally {
-          submitButton.disabled = false;
-          submitButton.textContent = "Submit VIP Inquiry";
-        }
-      });
-      /* =========================================================
-         BLOCK 15G END: POST BOOKING FORM TO SERVERLESS ENDPOINT
-         ========================================================= */
-    });
-  </script>
-  <!-- =========================================================
-       BLOCK 15 END: FRONTEND JAVASCRIPT
-       ========================================================= -->
-</body>
-</html>
-'''
-
-api_js = r'''/*
-  =========================================================
-  VERCEL SERVERLESS FUNCTION: /api/bookings
-  =========================================================
-
-  WHAT THIS FILE DOES:
-  1. GET /api/bookings?start=YYYY-MM-DD&end=YYYY-MM-DD
-     - Reads your Google Calendar.
-     - Returns unavailable date ranges.
-     - The frontend uses these ranges to gray out dates.
-
-  2. POST /api/bookings
-     - Receives the booking/inquiry form.
-     - Checks for calendar conflicts.
-     - Creates an all-day Google Calendar event to block the requested dates.
-
-  IMPORTANT GOOGLE CALENDAR RULE:
-  All-day events use an EXCLUSIVE end date.
-  Example:
-  start.date = 2026-07-01
-  end.date   = 2026-07-04
-  This blocks the nights of July 1, July 2, and July 3.
-  July 4 is the checkout day.
-
-  REQUIRED ENVIRONMENT VARIABLES:
-  - GOOGLE_CALENDAR_ID
-  - GOOGLE_SERVICE_ACCOUNT_JSON
-    OR
-  - GOOGLE_CLIENT_EMAIL
-  - GOOGLE_PRIVATE_KEY
-
-  OPTIONAL ENVIRONMENT VARIABLES:
-  - ALLOWED_ORIGINS
-  - GOOGLE_CALENDAR_TIMEZONE
-*/
-
-const { google } = require("googleapis");
-
-/* =========================================================
-   BLOCK 1 START: CORS HELPER
-   ========================================================= */
-function setCorsHeaders(req, res) {
-  const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-
-  const requestOrigin = req.headers.origin;
-
-  /*
-    If ALLOWED_ORIGINS is empty, we allow all origins for simple testing.
-    For production, set ALLOWED_ORIGINS to your real frontend URL(s).
-
-    Example:
-    ALLOWED_ORIGINS=https://yourdomain.com,https://pb3-productions.github.io
-  */
-  const allowOrigin =
-    allowedOrigins.length === 0
-      ? "*"
-      : allowedOrigins.includes(requestOrigin)
-        ? requestOrigin
-        : allowedOrigins[0];
-
-  res.setHeader("Access-Control-Allow-Origin", allowOrigin);
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-}
-/* =========================================================
-   BLOCK 1 END: CORS HELPER
-   ========================================================= */
-
-
-/* =========================================================
-   BLOCK 2 START: DATE HELPERS
-   ========================================================= */
-function isValidISODate(value) {
-  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
-}
-
-function addDaysToISODate(isoDate, days) {
-  const date = new Date(`${isoDate}T00:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + days);
-  return date.toISOString().slice(0, 10);
-}
-
-function normalizeGoogleEventDate(eventDate) {
-  /*
-    Google events may return:
-    - event.start.date      for all-day events
-    - event.start.dateTime  for timed events
-
-    We only need the YYYY-MM-DD part for the frontend calendar.
-  */
-  if (!eventDate) return null;
-  if (eventDate.date) return eventDate.date;
-  if (eventDate.dateTime) return eventDate.dateTime.slice(0, 10);
-  return null;
-}
-/* =========================================================
-   BLOCK 2 END: DATE HELPERS
-   ========================================================= */
-
-
-/* =========================================================
-   BLOCK 3 START: GOOGLE AUTH
-   ========================================================= */
-function getGoogleAuth() {
-  /*
-    OPTION A - EASIEST:
-    Use ONE env variable:
-    GOOGLE_SERVICE_ACCOUNT_JSON
-
-    Paste the ENTIRE service account JSON into Vercel as one line.
-    It looks like:
-    {"type":"service_account","project_id":"...","private_key_id":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...","client_email":"...","client_id":"..."}
-
-    OPTION B:
-    Use two env variables:
-    GOOGLE_CLIENT_EMAIL
-    GOOGLE_PRIVATE_KEY
-
-    For GOOGLE_PRIVATE_KEY, paste the private key and keep the \n line breaks.
-    This code fixes escaped newlines automatically.
-  */
-
-  let clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
-
-  if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-    try {
-      const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-      clientEmail = serviceAccount.client_email;
-      privateKey = serviceAccount.private_key;
-    } catch (error) {
-      throw new Error("GOOGLE_SERVICE_ACCOUNT_JSON is not valid JSON.");
-    }
-  }
-
-  if (!clientEmail || !privateKey) {
-    throw new Error("Missing Google service account credentials. Add GOOGLE_SERVICE_ACCOUNT_JSON or GOOGLE_CLIENT_EMAIL + GOOGLE_PRIVATE_KEY.");
-  }
-
-  privateKey = privateKey.replace(/\\n/g, "\n");
-
-  return new google.auth.JWT({
-    email: clientEmail,
-    key: privateKey,
-    scopes: ["https://www.googleapis.com/auth/calendar"]
-  });
-}
-/* =========================================================
-   BLOCK 3 END: GOOGLE AUTH
-   ========================================================= */
-
-
-/* =========================================================
-   BLOCK 4 START: GOOGLE CALENDAR CLIENT
-   ========================================================= */
-function getCalendarClient() {
-  const auth = getGoogleAuth();
-  return google.calendar({ version: "v3", auth });
-}
-/* =========================================================
-   BLOCK 4 END: GOOGLE CALENDAR CLIENT
-   ========================================================= */
-
-
-/* =========================================================
-   BLOCK 5 START: READ UNAVAILABLE DATES
-   ========================================================= */
-async function getUnavailableDates(req, res) {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  const timezone = process.env.GOOGLE_CALENDAR_TIMEZONE || "America/Los_Angeles";
-
-  if (!calendarId) {
-    return res.status(500).json({ error: "Missing GOOGLE_CALENDAR_ID." });
-  }
-
-  const start = isValidISODate(req.query.start) ? req.query.start : new Date().toISOString().slice(0, 10);
-  const end = isValidISODate(req.query.end) ? req.query.end : addDaysToISODate(start, 365);
-
-  const calendar = getCalendarClient();
-
-  const result = await calendar.events.list({
-    calendarId,
-    timeMin: `${start}T00:00:00-08:00`,
-    timeMax: `${end}T23:59:59-08:00`,
-    singleEvents: true,
-    orderBy: "startTime",
-    timeZone: timezone
-  });
-
-  const events = result.data.items || [];
-
-  const unavailable = events
-    .filter((event) => event.status !== "cancelled")
-    .map((event) => {
-      const eventStart = normalizeGoogleEventDate(event.start);
-      const rawEnd = normalizeGoogleEventDate(event.end);
-
-      /*
-        Google all-day event end dates are exclusive.
-        To gray out occupied nights in Flatpickr, we show the end as one day earlier.
-        Example:
-        start 2026-07-01, end 2026-07-04 means blocked visible dates:
-        2026-07-01 through 2026-07-03.
-      */
-      const eventEnd = rawEnd ? addDaysToISODate(rawEnd, -1) : eventStart;
-
-      return {
-        id: event.id,
-        summary: event.summary || "Unavailable",
-        start: eventStart,
-        end: eventEnd
+        if (tone) el.classList.add(`status-${tone}`);
       };
-    })
-    .filter((range) => range.start && range.end);
-
-  return res.status(200).json({ unavailable });
-}
-/* =========================================================
-   BLOCK 5 END: READ UNAVAILABLE DATES
-   ========================================================= */
-
-
-/* =========================================================
-   BLOCK 6 START: CREATE BOOKING HOLD
-   ========================================================= */
-async function createBookingHold(req, res) {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  const timezone = process.env.GOOGLE_CALENDAR_TIMEZONE || "America/Los_Angeles";
-
-  if (!calendarId) {
-    return res.status(500).json({ error: "Missing GOOGLE_CALENDAR_ID." });
-  }
-
-  const {
-    checkIn,
-    checkOut,
-    name,
-    email,
-    phone,
-    guestCount,
-    eventType,
-    budget,
-    message
-  } = req.body || {};
-
-  if (!isValidISODate(checkIn) || !isValidISODate(checkOut)) {
-    return res.status(400).json({ error: "Check-in and check-out must be valid YYYY-MM-DD dates." });
-  }
-
-  if (checkOut <= checkIn) {
-    return res.status(400).json({ error: "Check-out must be after check-in." });
-  }
-
-  if (!name || !email || !guestCount || !eventType) {
-    return res.status(400).json({ error: "Missing required booking fields." });
-  }
-
-  const calendar = getCalendarClient();
-
-  /*
-    Conflict check:
-    Before creating the hold, look for any existing events that overlap.
-  */
-  const conflictResult = await calendar.events.list({
-    calendarId,
-    timeMin: `${checkIn}T00:00:00-08:00`,
-    timeMax: `${checkOut}T23:59:59-08:00`,
-    singleEvents: true,
-    orderBy: "startTime",
-    timeZone: timezone
-  });
-
-  const conflicts = (conflictResult.data.items || []).filter((event) => event.status !== "cancelled");
-
-  if (conflicts.length > 0) {
-    return res.status(409).json({
-      error: "Those dates appear to conflict with an existing calendar hold. Please choose different dates or contact us directly."
-    });
-  }
-
-  const description = [
-    "VIP booking inquiry created from the Grand Hacienda Estate website.",
-    "",
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Phone: ${phone || "Not provided"}`,
-    `Guest Count: ${guestCount}`,
-    `Inquiry Type: ${eventType}`,
-    `Budget Range: ${budget || "Not provided"}`,
-    "",
-    "Message:",
-    message || "No message provided.",
-    "",
-    "Important:",
-    "This event blocks the requested dates on Google Calendar. Modify this function if you want inquiries to stay pending instead of automatically holding dates."
-  ].join("\n");
-
-  const event = {
-    summary: `HOLD: ${name} - ${eventType}`,
-    description,
-    start: {
-      date: checkIn,
-      timeZone: timezone
-    },
-    end: {
-      date: checkOut,
-      timeZone: timezone
-    },
-    extendedProperties: {
-      private: {
-        source: "grand-hacienda-estate-website",
-        guestCount: String(guestCount),
-        inquiryType: String(eventType)
-      }
-    }
-  };
-
-  const created = await calendar.events.insert({
-    calendarId,
-    requestBody: event
-  });
-
-  return res.status(201).json({
-    ok: true,
-    eventId: created.data.id,
-    htmlLink: created.data.htmlLink || null
-  });
-}
-/* =========================================================
-   BLOCK 6 END: CREATE BOOKING HOLD
-   ========================================================= */
-
-
-/* =========================================================
-   BLOCK 7 START: MAIN HANDLER
-   ========================================================= */
-module.exports = async function handler(req, res) {
-  setCorsHeaders(req, res);
-
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
-  }
-
-  try {
-    if (req.method === "GET") {
-      return await getUnavailableDates(req, res);
-    }
-
-    if (req.method === "POST") {
-      return await createBookingHold(req, res);
-    }
-
-    res.setHeader("Allow", "GET,POST,OPTIONS");
-    return res.status(405).json({ error: "Method not allowed." });
-  } catch (error) {
-    console.error("Bookings API error:", error);
-    return res.status(500).json({
-      error: error.message || "Unexpected server error."
-    });
-  }
-};
-/* =========================================================
-   BLOCK 7 END: MAIN HANDLER
-   ========================================================= */
-'''
-
-package_json = {
-  "name": "casablanca-hacienda-booking-site",
-  "version": "1.0.0",
-  "private": True,
-  "description": "Single-page luxury estate website with Vercel serverless Google Calendar booking integration.",
-  "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel --prod"
-  },
-  "dependencies": {
-    "googleapis": "^144.0.0"
-  },
-  "devDependencies": {
-    "vercel": "^37.0.0"
-  }
-}
-
-env_example = r'''# =========================================================
-# ENVIRONMENT VARIABLES FOR /api/bookings.js
-# Add these in Vercel:
-# Project Settings > Environment Variables
-# =========================================================
-
-# REQUIRED:
-# The Google Calendar ID you want to read/write.
-# For a normal Google Calendar, this may be your Gmail address.
-# For a shared calendar, use the calendar's long ID from Calendar Settings.
-GOOGLE_CALENDAR_ID=your-calendar-id@group.calendar.google.com
-
-# REQUIRED OPTION A:
-# Easiest: paste your entire Service Account JSON as one line.
-GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account","project_id":"YOUR_PROJECT","private_key_id":"YOUR_KEY_ID","private_key":"-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n","client_email":"your-service-account@your-project.iam.gserviceaccount.com","client_id":"YOUR_CLIENT_ID"}
-
-# REQUIRED OPTION B:
-# Use this instead of GOOGLE_SERVICE_ACCOUNT_JSON if you prefer separate fields.
-# GOOGLE_CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
-# GOOGLE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n
-
-# OPTIONAL:
-# Comma-separated frontend domains allowed to call this API.
-# For testing, you can leave this blank.
-# For production, set it.
-ALLOWED_ORIGINS=https://yourdomain.com,https://pb3-productions.github.io
-
-# OPTIONAL:
-GOOGLE_CALENDAR_TIMEZONE=America/Los_Angeles
-'''
-
-readme = r'''# Grand Hacienda Estate Website + Google Calendar Booking API
-
-This mini-project gives you:
-
-1. A high-end single-page luxury estate website.
-2. A wrought-iron GSAP ScrollTrigger parallax effect.
-3. A Flatpickr VIP booking calendar.
-4. A Vercel serverless API endpoint that reads and writes to Google Calendar.
-5. A copy-paste-friendly deployment flow.
-
----
-
-## Data Sources Used
-
-This build synthesized content from:
-
-- The Casablanca / Grand Speakeasy Estate page you provided in the prompt/code.
-- The Eventective listing for “The 2810” in Las Vegas.
-- The Eventective image URLs and wrought-iron SVG URLs pasted in your prompt.
-
-The page intentionally blends the Casablanca group-stay features with The 2810 luxury private resort / event venue positioning.
-
----
-
-## File Map
-
-```txt
-casablanca-hacienda-build/
-├── index.html
-├── api/
-│   └── bookings.js
-├── package.json
-├── .env.example
-└── README_DEPLOY.md
-
-Step 1: Setup & Tailwind Config
-
-The index.html file already includes:
-
-    Google Fonts
-
-    Tailwind CDN
-
-    Tailwind custom config
-
-    GSAP
-
-    ScrollTrigger
-
-    Flatpickr CSS/JS
-
-    Custom CSS
-
-    Frontend JavaScript
-
-You can open index.html directly in a browser for design preview.
-
-Important:
-
-    Calendar API calls will not work by double-clicking the file unless the backend is deployed.
-
-    The design, gallery, animations, and form UI will still preview locally.
-
-Step 2: Synthesized Content Map
-Casablanca / Grand Speakeasy Estate Source
-
-Used for:
-
-    Private Las Vegas resort narrative
-
-    Heated pool / hot tub positioning
-
-    Game room story
-
-    Chef-style kitchen / group dining copy
-
-    7-bedroom / 5+ bathroom / 16+ guest reference
-
-    Group-stay comfort
-
-    Las Vegas Strip / airport proximity
-
-    House rules tone and booking inquiry style
-
-Eventective / The 2810 Source
-
-Used for:
-
-    “Private resort” and “multi-million-dollar oasis” positioning
-
-    10 bedrooms / 6 bathrooms
-
-    100-person event capacity
-
-    1.5-acre Las Vegas estate framing
-
-    Gated privacy
-
-    Resort-style pool
-
-    Lazy river / sand beach / patio / verandas / bars
-
-    Production, networking, day event, overnight package, wedding/event use cases
-
-    High-end event pricing context
-
-Design Blend
-
-The new site is intentionally more dramatic:
-
-    Warm cream stucco background
-
-    Matte black ironwork
-
-    Deep charcoal contrast
-
-    Hacienda / estate compound tone
-
-    Wrought-iron parallax layers
-
-    VIP booking calendar
-
-Step 3: Structural HTML Updates
-
-The entire frontend lives in:
-
-index.html
-
-Main sections:
-
-    Header / Navigation
-
-    Hero
-
-    Estate Intro
-
-    About / Private Compound Story
-
-    Amenities / Features
-
-    Gallery
-
-    Event Use Cases
-
-    VIP Booking / Inquiry
-
-    Footer
-
-The code uses a BLOCK 1, BLOCK 2, BLOCK 3 naming system so you can search, edit, and maintain it easily.
-Step 4: Frontend Logic: GSAP + API Fetch
-
-Inside index.html, search:
-
-BLOCK 15 START: FRONTEND JAVASCRIPT
-
-That block handles:
-
-    Mobile menu
-
-    Gallery rendering
-
-    GSAP reveals
-
-    Wrought-iron parallax
-
-    Hero image drift
-
-    Fetching unavailable Google Calendar dates
-
-    Initializing Flatpickr
-
-    Posting booking form submissions to /api/bookings
-
-Important Frontend Setting
-
-Search inside index.html for:
-
-const API_BASE_URL = "";
-
-Use this rule:
-If frontend and backend are on the same Vercel project
-
-Leave it blank:
-
-const API_BASE_URL = "";
-
-If frontend is on GitHub Pages and backend is on Vercel
-
-Set it to your Vercel backend:
-
-const API_BASE_URL = "https://your-vercel-project.vercel.app";
-
-No trailing slash.
-Step 5: Serverless Backend Code: Google Calendar API
-
-The backend lives here:
-
-api/bookings.js
-
-It supports:
-
-GET /api/bookings?start=YYYY-MM-DD&end=YYYY-MM-DD
-POST /api/bookings
-
-What GET Does
-
-It reads your Google Calendar and returns blocked/unavailable date ranges.
-
-The frontend calendar uses those ranges to gray out dates.
-What POST Does
-
-It receives the booking form, checks for calendar conflicts, then creates an all-day calendar event to block the requested dates.
-Step 6: Google Cloud Setup for Dummies
-1. Create or Open a Google Cloud Project
-
-Go to Google Cloud Console.
-
-Create a project like:
-
-Grand Hacienda Booking Calendar
-
-2. Enable Google Calendar API
-
-Inside Google Cloud:
-
-APIs & Services > Library > Google Calendar API > Enable
-
-3. Create a Service Account
-
-Go to:
-
-IAM & Admin > Service Accounts > Create Service Account
-
-Name it something like:
-
-hacienda-calendar-bot
-
-Create it.
-4. Create a JSON Key
-
-Inside the service account:
-
-Keys > Add Key > Create New Key > JSON
-
-Download the JSON file.
-
-This file contains:
-
-    client_email
-
-    private_key
-
-    project_id
-
-    other credentials
-
-Do not upload this file publicly.
-
-Do not put this file in GitHub.
-5. Share the Google Calendar With the Service Account
-
-Open Google Calendar.
-
-Go to the calendar you want the website to control:
-
-Settings and sharing > Share with specific people or groups
-
-Add the service account email.
-
-It looks like:
-
-hacienda-calendar-bot@your-project.iam.gserviceaccount.com
-
-Set permission to:
-
-Make changes to events
-
-This step is required. Without it, the API can authenticate but cannot modify your calendar.
-6. Get Your Calendar ID
-
-In Google Calendar:
-
-Settings and sharing > Integrate calendar > Calendar ID
-
-Copy it.
-
-It may look like:
-
-yourname@gmail.com
-
-or:
-
-abc123@group.calendar.google.com
-
-Step 7: Vercel Deployment
-1. Create a Folder
-
-Put these files in one folder:
-
-index.html
-api/bookings.js
-package.json
-
-2. Install Vercel
-
-In your terminal:
-
-npm install -g vercel
-
-3. Install Dependencies
-
-Inside the project folder:
-
-npm install
-
-4. Test Locally
-
-vercel dev
-
-Then visit the local URL Vercel gives you.
-
-Usually:
-
-http://localhost:3000
-
-5. Add Environment Variables in Vercel
-
-In your Vercel project:
-
-Settings > Environment Variables
-
-Add:
-
-GOOGLE_CALENDAR_ID
-GOOGLE_SERVICE_ACCOUNT_JSON
-ALLOWED_ORIGINS
-GOOGLE_CALENDAR_TIMEZONE
-
-Use .env.example as your template.
-6. Deploy
-
-vercel --prod
-
-Step 8: Recommended Production Adjustment
-
-Right now, the POST /api/bookings endpoint creates a calendar hold immediately.
-
-That is what you requested.
-
-However, for real production, I recommend changing the workflow to:
-
-    Submit inquiry.
-
-    Create a “PENDING REQUEST” calendar event.
-
-    Manually approve the booking.
-
-    Then change the event title to “CONFIRMED.”
-
-This avoids accidental hard-blocking from spam, test submissions, or unqualified inquiries.
-Step 9: Common Troubleshooting
-Calendar dates are not graying out
-
-Check:
-
-    Did you deploy the backend?
-
-    Did you set API_BASE_URL correctly in index.html?
-
-    Did you share your Google Calendar with the service account email?
-
-    Did you set GOOGLE_CALENDAR_ID correctly?
-
-    Did you set ALLOWED_ORIGINS to include your frontend domain?
-
-POST submission fails
-
-Check:
-
-    Vercel function logs.
-
-    Google Calendar permissions.
-
-    Service account JSON formatting.
-
-    Calendar conflict errors.
-
-    Required fields in the form.
-
-Private key error
-
-If using GOOGLE_PRIVATE_KEY, make sure line breaks are preserved as:
-
-\n
-
-The code automatically converts \n into real line breaks.
-CORS error
-
-Set:
-
-ALLOWED_ORIGINS=https://yourdomain.com,https://your-github-username.github.io
-
-No trailing slash.
-Step 10: Where to Edit
-Change images
-
-Search in index.html:
-
-const galleryImages = [
-
-Add or remove URLs.
-Change booking backend URL
-
-Search:
-
-const API_BASE_URL = "";
-
-Change colors
-
-Search:
-
-:root {
-
-Change hero copy
-
-Search:
-
-Behind the Gates, Everything Changes.
-
-Change form fields
-
-Search:
-
-BLOCK 13 START: VIP BOOKING / INQUIRY
-
-Change API behavior
-
-Open:
-
-api/bookings.js
-
-Search:
-
-BLOCK 6 START: CREATE BOOKING HOLD
-
-'''
-Write files
-
-(base / "index.html").write_text(index_html, encoding="utf-8")
-(api_dir / "bookings.js").write_text(api_js, encoding="utf-8")
-(base / "package.json").write_text(json.dumps(package_json, indent=2), encoding="utf-8")
-(base / ".env.example").write_text(env_example, encoding="utf-8")
-(base / "README_DEPLOY.md").write_text(readme, encoding="utf-8")
-Zip files
-
-zip_path = Path("/mnt/data/casablanca-hacienda-build.zip")
-if zip_path.exists():
-zip_path.unlink()
-
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-for file in base.rglob("*"):
-z.write(file, file.relative_to(base.parent))
-Also create direct copies at /mnt/data for easier download
-
-for src in [base / "index.html", api_dir / "bookings.js", base / "README_DEPLOY.md", base / ".env.example", base / "package.json"]:
-dest = Path("/mnt/data") / f"casablanca_{src.name}" if src.name != ".env.example" else Path("/mnt/data/casablanca_env.example")
-dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
-
-print("Created deployable project files:")
-for file in base.rglob("*"):
-print(f"- {file.relative_to(base)}")
-print(f"\nZIP: {zip_path}")
-
-STDOUT/STDERR
-
-Created deployable project files:
-- api
-- index.html
-- package.json
-- .env.example
-- README_DEPLOY.md
-- api/bookings.js
-
-ZIP: /mnt/data/casablanca-hacienda-build.zip
-
-Done — I built the deployable mini-project package.
-
-Data was pulled from your uploaded build brief/code requirements, the live Casablanca page, and the Eventective “The 2810” listing. The Casablanca source supplies the private resort narrative, 7-bedroom/5+ bath/16+ guest structure, heated pool, hot tub, chef-style kitchen, game room, Strip/airport proximity, and house-rule tone. The Eventective listing adds the 10-bedroom/6-bath luxury resort positioning, 100-person event capacity, 1.5-acre estate language, gated/privacy framing, resort pool, sand beach, bars/verandas, event pricing, and function-space details.
-Download the full build
-
-Individual files
-
-What’s included
-
-The package includes:
-
-    A full single-page luxury estate website.
-
-    Warm cream / stucco hacienda design system.
-
-    Matte-black wrought-iron visual language.
-
-    GSAP ScrollTrigger wrought-iron parallax layers.
-
-    Flatpickr VIP date-range calendar.
-
-    Calendar unavailable-date fetching.
-
-    Booking form POST logic.
-
-    Vercel Node serverless function using Google Calendar API.
-
-    Conflict checking before creating a calendar hold.
-
-    Heavy “for dummies” comments inside the backend file.
-
-    Step-by-step Google Calendar / service account / Vercel setup guide.
-
-One important note: I did not connect to a real Google Calendar because you haven’t provided service account credentials or a calendar ID. The backend is ready for those values through Vercel environment variables.
-
-<!DOCTYPE html>
-<!--
-  =========================================================
-  CASABLANCA / THE 2810 HACIENDA-STYLE LUXURY ESTATE PAGE
-  Built as a single-page frontend with:
-  - Tailwind CDN
-  - Custom CSS
-  - GSAP + ScrollTrigger wrought-iron parallax
-  - Flatpickr date range calendar
-  - Serverless Google Calendar API integration
-
-  IMPORTANT:
-  1. If this file is hosted on the SAME Vercel project as /api/bookings,
-     leave API_BASE_URL as an empty string.
-  2. If this file is hosted somewhere else, like GitHub Pages, change:
-     const API_BASE_URL = "";
-     to:
-     const API_BASE_URL = "https://YOUR-VERCEL-PROJECT.vercel.app";
-  =========================================================
--->
-<html lang="en" class="scroll-smooth">
-<head>
-  <!-- =========================================================
-       BLOCK 1 START: BASIC META + SEO
-       ========================================================= -->
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>The Grand Hacienda Estate | Private Las Vegas Mansion Resort</title>
-  <meta name="description" content="A private Las Vegas mansion resort with gated privacy, luxury event spaces, resort-style pool, chef-style kitchen, game room, VIP booking calendar, and group-ready estate amenities." />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="The Grand Hacienda Estate | Private Las Vegas Mansion Resort" />
-  <meta property="og:description" content="A private Las Vegas resort estate with gated privacy, pool, jacuzzi, game room, luxury outdoor spaces, and VIP booking inquiry calendar." />
-  <meta property="og:image" content="https://media.eventective.com/4096897_lg.jpg" />
-  <meta property="og:type" content="website" />
-  <!-- =========================================================
-       BLOCK 1 END: BASIC META + SEO
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 2 START: FONT + LIBRARY CDN LINKS
-       ========================================================= -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Flatpickr calendar CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- GSAP + ScrollTrigger -->
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-
-  <!-- Flatpickr calendar JS -->
-  <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <!-- =========================================================
-       BLOCK 2 END: FONT + LIBRARY CDN LINKS
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 3 START: TAILWIND CONFIG
-       NOTE: Tailwind CDN config must be placed AFTER Tailwind loads.
-       ========================================================= -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            hacienda: {
-              cream: "#FAF9F6",
-              parchment: "#F5F5DC",
-              stucco: "#EEE6D4",
-              sand: "#D8C9AA",
-              iron: "#111111",
-              charcoal: "#222222",
-              smoke: "#3A3935",
-              ember: "#A05A2C",
-              gold: "#B9965A"
-            }
-          },
-          fontFamily: {
-            display: ["Cinzel", "serif"],
-            body: ["Inter", "sans-serif"]
-          },
-          boxShadow: {
-            iron: "0 24px 70px rgba(17,17,17,.25)",
-            gate: "0 0 0 1px rgba(17,17,17,.18), 0 30px 90px rgba(17,17,17,.32)"
-          }
-        }
-      }
-    };
-  </script>
-  <!-- =========================================================
-       BLOCK 3 END: TAILWIND CONFIG
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 4 START: CUSTOM CSS
-       ========================================================= -->
-  <style>
-    :root {
-      --cream: #FAF9F6;
-      --parchment: #F5F5DC;
-      --stucco: #EEE6D4;
-      --iron: #111111;
-      --charcoal: #222222;
-      --gold: #B9965A;
-      --ember: #A05A2C;
-      --radius-xl: clamp(1.25rem, 2vw, 2.25rem);
-      --container: min(1180px, calc(100% - clamp(1.25rem, 5vw, 4.5rem)));
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background: var(--cream);
-      color: var(--iron);
-    }
-
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      background:
-        radial-gradient(circle at 18% 0%, rgba(160, 90, 44, .12), transparent 26rem),
-        radial-gradient(circle at 80% 14%, rgba(185, 150, 90, .16), transparent 30rem),
-        linear-gradient(180deg, #FAF9F6 0%, #F5F5DC 42%, #EEE6D4 100%);
-      color: var(--iron);
-      overflow-x: hidden;
-    }
-
-    /* Stucco texture overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: .32;
-      background-image:
-        radial-gradient(circle at 22% 18%, rgba(0,0,0,.06) 0 1px, transparent 1px),
-        radial-gradient(circle at 75% 42%, rgba(255,255,255,.65) 0 1px, transparent 1px),
-        radial-gradient(circle at 50% 88%, rgba(0,0,0,.045) 0 1px, transparent 1px);
-      background-size: 19px 19px, 31px 31px, 43px 43px;
-      mix-blend-mode: multiply;
-    }
-
-    body > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .site-shell {
-      width: var(--container);
-      margin-inline: auto;
-    }
-
-    .font-display {
-      letter-spacing: -0.025em;
-    }
-
-    .section-pad {
-      padding-block: clamp(4rem, 8vw, 8rem);
-    }
-
-    .iron-border {
-      border: 1px solid rgba(17,17,17,.18);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.32);
-    }
-
-    .hacienda-card {
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.62), rgba(245,245,220,.76)),
-        radial-gradient(circle at top left, rgba(185,150,90,.16), transparent 18rem);
-      border: 1px solid rgba(17,17,17,.16);
-      box-shadow: 0 24px 70px rgba(17,17,17,.13);
-      border-radius: var(--radius-xl);
-    }
-
-    .dark-card {
-      background:
-        linear-gradient(135deg, rgba(17,17,17,.98), rgba(34,34,34,.94)),
-        radial-gradient(circle at top right, rgba(185,150,90,.18), transparent 16rem);
-      color: var(--cream);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow-gate);
-      border-radius: var(--radius-xl);
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .65rem;
-      text-transform: uppercase;
-      letter-spacing: .22em;
-      font-size: .72rem;
-      font-weight: 800;
-      color: var(--ember);
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 2.2rem;
-      height: 1px;
-      background: currentColor;
-      display: inline-block;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 3.1rem;
-      padding: .95rem 1.4rem;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: .8rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-primary {
-      background: var(--iron);
-      color: var(--cream);
-      border: 1px solid var(--iron);
-    }
-
-    .btn-primary:hover {
-      background: #000;
-    }
-
-    .btn-outline {
-      color: var(--iron);
-      border: 1px solid rgba(17,17,17,.35);
-      background: rgba(250,249,246,.42);
-      backdrop-filter: blur(12px);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--iron);
-      background: rgba(17,17,17,.06);
-    }
-
-    .hero-media::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(17,17,17,.78), rgba(17,17,17,.28) 42%, rgba(17,17,17,.68)),
-        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.62));
-      pointer-events: none;
-    }
-
-    .iron-layer {
-      position: fixed;
-      z-index: 3;
-      pointer-events: none;
-      opacity: .17;
-      filter: contrast(1.15);
-      mix-blend-mode: multiply;
-      will-change: transform;
-    }
-
-    .iron-layer img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .iron-left {
-      left: -6rem;
-      top: 10vh;
-      width: clamp(14rem, 24vw, 28rem);
-      transform: rotate(-8deg);
-    }
-
-    .iron-right {
-      right: -7rem;
-      top: 38vh;
-      width: clamp(16rem, 28vw, 34rem);
-      transform: rotate(7deg);
-    }
-
-    .iron-center {
-      left: 50%;
-      bottom: -7rem;
-      width: clamp(22rem, 52vw, 62rem);
-      transform: translateX(-50%);
-      opacity: .12;
-    }
-
-    .iron-divider {
-      width: min(740px, 92vw);
-      opacity: .64;
-      filter: contrast(1.25);
-      margin-inline: auto;
-    }
-
-    .gallery-img {
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      transition: transform .55s ease, filter .55s ease;
-      filter: saturate(.92) contrast(1.04);
-    }
-
-    .gallery-tile:hover .gallery-img {
-      transform: scale(1.055);
-      filter: saturate(1.05) contrast(1.08);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(26px);
-    }
-
-    .feature-list li {
-      display: flex;
-      gap: .75rem;
-      padding-block: .72rem;
-      border-bottom: 1px solid rgba(17,17,17,.1);
-    }
-
-    .feature-list li::before {
-      content: "◆";
-      color: var(--ember);
-      flex: 0 0 auto;
-      font-size: .7rem;
-      margin-top: .25rem;
-    }
-
-    .dark-card .feature-list li {
-      border-bottom-color: rgba(255,255,255,.1);
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      background: rgba(250,249,246,.92);
-      color: var(--iron);
-      border: 1px solid rgba(17,17,17,.22);
-      border-radius: 1rem;
-      padding: 1rem 1.05rem;
-      outline: none;
-      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
-    }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      border-color: var(--iron);
-      box-shadow: 0 0 0 4px rgba(17,17,17,.08);
-      background: #fff;
-    }
-
-    .form-textarea {
-      min-height: 9rem;
-      resize: vertical;
-    }
-
-    /* Flatpickr styling */
-    .flatpickr-calendar {
-      font-family: Inter, system-ui, sans-serif;
-      border-radius: 1.25rem !important;
-      border: 1px solid rgba(17,17,17,.18) !important;
-      box-shadow: 0 28px 80px rgba(17,17,17,.22) !important;
-      overflow: hidden;
-    }
-
-    .flatpickr-day.selected,
-    .flatpickr-day.startRange,
-    .flatpickr-day.endRange {
-      background: var(--iron) !important;
-      border-color: var(--iron) !important;
-      color: var(--cream) !important;
-    }
-
-    .flatpickr-day.inRange {
-      background: rgba(17,17,17,.12) !important;
-      border-color: transparent !important;
-      color: var(--iron) !important;
-      box-shadow: -5px 0 0 rgba(17,17,17,.12), 5px 0 0 rgba(17,17,17,.12) !important;
-    }
-
-    .flatpickr-day.flatpickr-disabled,
-    .flatpickr-day.flatpickr-disabled:hover {
-      background: rgba(17,17,17,.12) !important;
-      color: rgba(17,17,17,.32) !important;
-      text-decoration: line-through;
-      cursor: not-allowed;
-    }
-
-    .status-note {
-      min-height: 1.35rem;
-      font-size: .86rem;
-      font-weight: 700;
-    }
-
-    .status-ok { color: #255d38; }
-    .status-warn { color: #8a4f16; }
-    .status-error { color: #9e1d1d; }
-
-    @media (max-width: 768px) {
-      .iron-layer {
-        opacity: .08;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal,
-      .iron-layer,
-      .gallery-img {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
-  <!-- =========================================================
-       BLOCK 4 END: CUSTOM CSS
-       ========================================================= -->
-</head>
-
-<body>
-  <!-- =========================================================
-       BLOCK 5 START: WROUGHT IRON PARALLAX LAYERS
-       These SVGs are intentionally dark and semi-transparent.
-       GSAP moves them at different speeds on scroll.
-       ========================================================= -->
-  <div class="iron-layer iron-left" data-iron-speed="-18" aria-hidden="true">
-    <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8d6cc0eead5ca87216.svg" alt="" />
-  </div>
-  <div class="iron-layer iron-right" data-iron-speed="22" aria-hidden="true">
-    <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8db656b3edc44af24f.svg" alt="" />
-  </div>
-  <div class="iron-layer iron-center" data-iron-speed="-10" aria-hidden="true">
-    <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8d5a1d97a92fea7ce0.svg" alt="" />
-  </div>
-  <!-- =========================================================
-       BLOCK 5 END: WROUGHT IRON PARALLAX LAYERS
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 6 START: HEADER / NAV
-       ========================================================= -->
-  <header id="siteHeader" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
-    <div class="site-shell py-4">
-      <div class="flex items-center justify-between rounded-full border border-white/20 bg-black/20 px-4 py-3 text-hacienda-cream backdrop-blur-xl shadow-gate">
-        <a href="#top" class="font-display text-sm font-extrabold uppercase tracking-[.22em] md:text-base">
-          Grand Hacienda Estate
-        </a>
-
-        <nav class="hidden items-center gap-6 text-xs font-extrabold uppercase tracking-[.18em] md:flex">
-          <a class="hover:text-hacienda-gold" href="#estate">Estate</a>
-          <a class="hover:text-hacienda-gold" href="#features">Amenities</a>
-          <a class="hover:text-hacienda-gold" href="#gallery">Gallery</a>
-          <a class="hover:text-hacienda-gold" href="#booking">Booking</a>
-        </nav>
-
-        <a href="#booking" class="hidden rounded-full bg-hacienda-cream px-5 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-hacienda-iron transition hover:bg-white md:inline-flex">
-          VIP Inquiry
-        </a>
-
-        <button id="mobileMenuButton" class="md:hidden rounded-full border border-white/25 px-4 py-2 text-xs font-extrabold uppercase tracking-[.18em]">
-          Menu
-        </button>
-      </div>
-
-      <nav id="mobileMenu" class="hidden mt-3 rounded-[1.5rem] border border-black/10 bg-hacienda-cream/95 p-4 text-sm font-extrabold uppercase tracking-[.14em] shadow-iron md:hidden">
-        <a class="block py-3" href="#estate">Estate</a>
-        <a class="block py-3" href="#features">Amenities</a>
-        <a class="block py-3" href="#gallery">Gallery</a>
-        <a class="block py-3" href="#booking">Booking</a>
-      </nav>
-    </div>
-  </header>
-  <!-- =========================================================
-       BLOCK 6 END: HEADER / NAV
-       ========================================================= -->
-
-  <main id="top">
-    <!-- =========================================================
-         BLOCK 7 START: HERO
-         ========================================================= -->
-    <section class="relative min-h-[100svh] overflow-hidden bg-hacienda-iron text-hacienda-cream">
-      <div class="hero-media absolute inset-0">
-        <img
-          class="h-full w-full object-cover"
-          src="https://media.eventective.com/4096897_lg.jpg"
-          alt="Private Las Vegas estate with resort-style pool and hacienda compound atmosphere"
-          fetchpriority="high"
-        />
-      </div>
-
-      <div class="relative z-10 flex min-h-[100svh] items-center">
-        <div class="site-shell pt-28">
-          <div class="max-w-4xl">
-            <p class="eyebrow text-hacienda-gold reveal">Private Las Vegas Resort Estate</p>
-            <h1 class="font-display mt-6 max-w-5xl text-[clamp(3rem,8vw,7.6rem)] font-extrabold leading-[.9] tracking-[-.06em] reveal">
-              Behind the Gates, Everything Changes.
-            </h1>
-            <p class="mt-7 max-w-2xl text-[clamp(1rem,1.5vw,1.25rem)] leading-8 text-white/82 reveal">
-              A high-privacy luxury hacienda compound in Las Vegas with resort-style outdoor spaces, a sparkling pool, jacuzzi, game-ready interiors, and VIP booking for private stays, retreats, productions, and elevated events.
-            </p>
-
-            <div class="mt-9 flex flex-col gap-3 sm:flex-row reveal">
-              <a href="#booking" class="btn btn-primary bg-hacienda-cream text-hacienda-iron hover:bg-white">Check Availability</a>
-              <a href="#estate" class="btn border border-white/35 bg-white/10 text-white backdrop-blur-md hover:border-white">Explore the Estate</a>
-            </div>
-
-            <div class="mt-12 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4 reveal">
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">10</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bedrooms</div>
-              </div>
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">6</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bathrooms</div>
-              </div>
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">100</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Event Capacity</div>
-              </div>
-              <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md">
-                <div class="font-display text-3xl font-extrabold">1.5</div>
-                <div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Acres</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 7 END: HERO
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 8 START: INTRO STRIP
-         ========================================================= -->
-    <section class="section-pad">
-      <div class="site-shell">
-        <div class="iron-divider reveal">
-          <img src="https://assets.cdn.filesafe.space/YzjwmP6zpvDUp28hrM1o/media/6a10fb8ddf1cb25b0626a432.svg" alt="" class="w-full" />
-        </div>
-
-        <div class="mt-12 grid gap-8 md:grid-cols-[.85fr_1.15fr] md:items-end">
-          <div>
-            <p class="eyebrow reveal">The Estate</p>
-            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none text-hacienda-iron reveal">
-              Not a house. Not a venue. A private resort under your control.
-            </h2>
-          </div>
-          <p class="max-w-2xl text-lg leading-9 text-black/70 reveal">
-            This page combines the Casablanca group-stay story with The 2810’s private resort positioning: a fully gated Las Vegas estate with high-end indoor/outdoor amenities, event-ready spaces, poolside atmosphere, and the kind of privacy that makes guests feel like they entered a different world.
-          </p>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 8 END: INTRO STRIP
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 9 START: ESTATE / ABOUT
-         ========================================================= -->
-    <section id="estate" class="section-pad pt-0">
-      <div class="site-shell">
-        <div class="grid gap-6 lg:grid-cols-2 lg:items-stretch">
-          <div class="hacienda-card overflow-hidden reveal">
-            <img
-              src="https://media.eventective.com/4096883_lg.jpg"
-              alt="Luxury Las Vegas mansion estate exterior and resort pool area"
-              class="h-full min-h-[28rem] w-full object-cover"
-              loading="lazy"
-            />
-          </div>
-
-          <div class="dark-card p-[clamp(1.5rem,4vw,3rem)] reveal">
-            <p class="eyebrow text-hacienda-gold">Private Compound Energy</p>
-            <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4.25rem)] font-extrabold leading-none">
-              Stucco warmth. Ironwork edge. Total privacy.
-            </h2>
-            <p class="mt-6 text-lg leading-9 text-white/72">
-              The design direction is intentionally exclusive: cream stucco, matte-black iron, carved shadows, gated-entry energy, and a polished resort narrative. Guests should feel like they are moving deeper through a private estate as the wrought-iron parallax layers slide past them.
-            </p>
-
-            <ul class="feature-list mt-7 text-white/78">
-              <li>Modern open-concept interiors built for luxury group stays and private entertaining.</li>
-              <li>Resort-style outdoor sanctuary with pool, jacuzzi, cabana energy, beach-like details, and lush gardens.</li>
-              <li>Multiple event/function areas with a private estate feel, ideal for productions, networking events, retreats, weddings, and high-touch hospitality.</li>
-              <li>Fully gated property with privacy-forward positioning and strong “arrive behind the gates” storytelling.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 9 END: ESTATE / ABOUT
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 10 START: AMENITIES / FEATURES
-         ========================================================= -->
-    <section id="features" class="section-pad">
-      <div class="site-shell">
-        <div class="max-w-3xl">
-          <p class="eyebrow reveal">Amenities & Features</p>
-          <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none reveal">
-            Built for rare moments, not ordinary stays.
-          </h2>
-        </div>
-
-        <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Resort Pool & Jacuzzi</h3>
-            <p class="mt-4 leading-7 text-black/68">Sparkling pool atmosphere, private jacuzzi relaxation, poolside seating, and a dramatic outdoor resort impression.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Gated Privacy</h3>
-            <p class="mt-4 leading-7 text-black/68">The property story leans into full privacy, gated compound energy, and exclusive estate access.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Event-Ready Layout</h3>
-            <p class="mt-4 leading-7 text-black/68">Multiple event/function spaces, indoor-outdoor flow, patios, verandas, bars, and flexible hospitality zones.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Chef-Style Kitchen</h3>
-            <p class="mt-4 leading-7 text-black/68">Fully equipped kitchen, group dining, outdoor food service potential, and luxury-hosting utility.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Game & Lounge Energy</h3>
-            <p class="mt-4 leading-7 text-black/68">Game-ready social spaces inspired by the Casablanca listing: pool, poker, shuffleboard, video games, and oversized TVs.</p>
-          </article>
-
-          <article class="hacienda-card p-7 reveal">
-            <h3 class="font-display text-2xl font-extrabold">Production / Retreat Friendly</h3>
-            <p class="mt-4 leading-7 text-black/68">Strong fit for photo shoots, video production, networking events, retreats, and private overnight packages.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 10 END: AMENITIES / FEATURES
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 11 START: GALLERY
-         Images are generated by JavaScript from the galleryImages array.
-         ========================================================= -->
-    <section id="gallery" class="section-pad bg-hacienda-iron text-hacienda-cream">
-      <div class="site-shell">
-        <div class="grid gap-8 md:grid-cols-[.85fr_1.15fr] md:items-end">
-          <div>
-            <p class="eyebrow text-hacienda-gold reveal">Gallery</p>
-            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none reveal">
-              Visual Proof of the Compound.
-            </h2>
-          </div>
-          <p class="max-w-2xl text-lg leading-9 text-white/70 reveal">
-            The gallery uses Eventective mansion images supplied in the build request, with lazy loading and responsive CSS so the page stays clean, fast, and high-impact.
-          </p>
-        </div>
-
-        <div id="galleryGrid" class="mt-12 grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"></div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 11 END: GALLERY
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 12 START: EVENT / PRICING POSITIONING
-         ========================================================= -->
-    <section class="section-pad">
-      <div class="site-shell">
-        <div class="grid gap-6 lg:grid-cols-3">
-          <div class="lg:col-span-1">
-            <p class="eyebrow reveal">Private Event Uses</p>
-            <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4.2rem)] font-extrabold leading-none reveal">
-              From retreats to productions.
-            </h2>
-          </div>
-
-          <div class="lg:col-span-2 grid gap-4 md:grid-cols-2">
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Photo / Video Production</h3>
-              <p class="mt-3 text-black/68 leading-7">Use the exterior, pool, patio, lounges, and estate details for high-end production days.</p>
-            </div>
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Networking Events</h3>
-              <p class="mt-3 text-black/68 leading-7">A strong alternative to stale venues, built for impressive arrivals and premium guest flow.</p>
-            </div>
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Overnight Packages</h3>
-              <p class="mt-3 text-black/68 leading-7">Positioned for private stays, couples retreats, group retreats, and premium-date packages.</p>
-            </div>
-            <div class="hacienda-card p-7 reveal">
-              <h3 class="font-display text-2xl font-extrabold">Weddings & Day Events</h3>
-              <p class="mt-3 text-black/68 leading-7">Luxury estate environment with outdoor function areas and high-capacity event positioning.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 12 END: EVENT / PRICING POSITIONING
-         ========================================================= -->
-
-    <!-- =========================================================
-         BLOCK 13 START: VIP BOOKING / INQUIRY
-         ========================================================= -->
-    <section id="booking" class="section-pad bg-hacienda-stucco">
-      <div class="site-shell">
-        <div class="dark-card overflow-hidden">
-          <div class="grid lg:grid-cols-[.9fr_1.1fr]">
-            <div class="relative min-h-[28rem]">
-              <img src="https://media.eventective.com/4096902_lg.jpg" alt="Luxury resort pool and private estate booking experience" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20"></div>
-              <div class="absolute inset-x-0 bottom-0 p-[clamp(1.5rem,4vw,3rem)]">
-                <p class="eyebrow text-hacienda-gold">VIP Booking</p>
-                <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4rem)] font-extrabold leading-none">
-                  Request the dates. Lock the gates.
-                </h2>
-                <p class="mt-5 max-w-lg leading-8 text-white/72">
-                  Select your desired stay or event window. Unavailable calendar dates are pulled from the connected Google Calendar and grayed out automatically.
-                </p>
-              </div>
-            </div>
-
-            <div class="p-[clamp(1.25rem,4vw,3rem)]">
-              <form id="bookingForm" class="grid gap-4" novalidate>
-                <div>
-                  <label for="stayRange" class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70">Check-In / Check-Out</label>
-                  <input id="stayRange" class="form-input" type="text" placeholder="Select your date range" readonly required />
-                  <input id="checkIn" name="checkIn" type="hidden" />
-                  <input id="checkOut" name="checkOut" type="hidden" />
-                  <p id="calendarStatus" class="status-note status-warn mt-2">Loading booking calendar...</p>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="name">Name</label>
-                    <input id="name" name="name" class="form-input" type="text" autocomplete="name" placeholder="Your name" required />
-                  </div>
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="email">Email</label>
-                    <input id="email" name="email" class="form-input" type="email" autocomplete="email" placeholder="you@example.com" required />
-                  </div>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="phone">Phone</label>
-                    <input id="phone" name="phone" class="form-input" type="tel" autocomplete="tel" placeholder="Phone number" />
-                  </div>
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="guestCount">Guest Count</label>
-                    <input id="guestCount" name="guestCount" class="form-input" type="number" min="1" max="120" placeholder="Estimated guests" required />
-                  </div>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="eventType">Inquiry Type</label>
-                    <select id="eventType" name="eventType" class="form-select" required>
-                      <option value="">Select one</option>
-                      <option>Private Overnight Stay</option>
-                      <option>Photo / Video Production</option>
-                      <option>Professional Networking Event</option>
-                      <option>Wedding / Celebration</option>
-                      <option>Retreat / VIP Hospitality</option>
-                      <option>Other Private Event</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="budget">Budget Range</label>
-                    <select id="budget" name="budget" class="form-select">
-                      <option value="">Select range</option>
-                      <option>$4,500 - $6,500</option>
-                      <option>$6,500 - $10,000</option>
-                      <option>$10,000 - $18,000</option>
-                      <option>$18,000+</option>
-                      <option>Not sure yet</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="message">Details</label>
-                  <textarea id="message" name="message" class="form-textarea" placeholder="Tell us what you are planning, ideal arrival/departure times, event purpose, pets, catering, production needs, or VIP add-ons."></textarea>
-                </div>
-
-                <button id="submitBooking" class="btn btn-primary bg-hacienda-cream text-hacienda-iron hover:bg-white" type="submit">
-                  Submit VIP Inquiry
-                </button>
-
-                <p id="formStatus" class="status-note text-white/70"></p>
-
-                <p class="text-xs leading-6 text-white/48">
-                  Demo note: The frontend posts to <strong>/api/bookings</strong>. The backend can either create a real Google Calendar hold immediately or be modified to create a tentative request/pending approval workflow.
-                </p>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- =========================================================
-         BLOCK 13 END: VIP BOOKING / INQUIRY
-         ========================================================= -->
-  </main>
-
-  <!-- =========================================================
-       BLOCK 14 START: FOOTER
-       ========================================================= -->
-  <footer class="bg-hacienda-iron py-12 text-hacienda-cream">
-    <div class="site-shell flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-      <div>
-        <div class="font-display text-xl font-extrabold uppercase tracking-[.18em]">Grand Hacienda Estate</div>
-        <p class="mt-2 text-sm text-white/55">Private Las Vegas luxury estate, event venue, and VIP retreat experience.</p>
-      </div>
-      <a href="#booking" class="btn border border-white/25 bg-white/10 text-white hover:border-white">Request Availability</a>
-    </div>
-  </footer>
-  <!-- =========================================================
-       BLOCK 14 END: FOOTER
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 15 START: FRONTEND JAVASCRIPT
-       ========================================================= -->
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      /* =========================================================
-         BLOCK 15A START: SETTINGS
-         ========================================================= */
-
-      /*
-        If this index.html is hosted in the SAME Vercel project as the API,
-        leave this blank.
-
-        If you host the page on GitHub Pages or another domain, paste the
-        Vercel backend URL here, WITHOUT a trailing slash.
-
-        Example:
-        const API_BASE_URL = "https://casablanca-booking-api.vercel.app";
-      */
-      const API_BASE_URL = "";
-
-      /*
-        These are the Eventective image URLs supplied in the build request.
-        Keep the first 24 for speed, or add more from your supplied list.
-      */
-      const galleryImages = [
-        "https://media.eventective.com/4096897_lg.jpg",
-        "https://media.eventective.com/4096883_lg.jpg",
-        "https://media.eventective.com/4096881_lg.jpg",
-        "https://media.eventective.com/4096902_lg.jpg",
-        "https://media.eventective.com/4096903_lg.jpg",
-        "https://media.eventective.com/4096712_lg.jpg",
-        "https://media.eventective.com/4096663_lg.jpg",
-        "https://media.eventective.com/4096665_lg.jpg",
-        "https://media.eventective.com/4096671_lg.jpg",
-        "https://media.eventective.com/4096680_lg.jpg",
-        "https://media.eventective.com/4096673_lg.jpg",
-        "https://media.eventective.com/4096682_lg.jpg",
-        "https://media.eventective.com/4096698_lg.jpg",
-        "https://media.eventective.com/4096699_lg.jpg",
-        "https://media.eventective.com/4096702_lg.jpg",
-        "https://media.eventective.com/4096701_lg.jpg",
-        "https://media.eventective.com/4096686_lg.jpg",
-        "https://media.eventective.com/4096689_lg.jpg",
-        "https://media.eventective.com/4096694_lg.jpg",
-        "https://media.eventective.com/4096695_lg.jpg",
-        "https://media.eventective.com/4096754_lg.jpg",
-        "https://media.eventective.com/4096758_lg.jpg",
-        "https://media.eventective.com/4096717_lg.jpg",
-        "https://media.eventective.com/4096724_lg.jpg"
-      ];
-
-      /* =========================================================
-         BLOCK 15A END: SETTINGS
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15B START: MOBILE MENU
-         ========================================================= */
-      const menuButton = document.getElementById("mobileMenuButton");
-      const mobileMenu = document.getElementById("mobileMenu");
-
-      menuButton?.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-      });
-
-      mobileMenu?.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
-      });
-      /* =========================================================
-         BLOCK 15B END: MOBILE MENU
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15C START: GALLERY RENDER
-         ========================================================= */
-      const galleryGrid = document.getElementById("galleryGrid");
-
-      if (galleryGrid) {
-        galleryGrid.innerHTML = galleryImages.map((src, index) => `
-          <button class="gallery-tile reveal group relative overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/5 text-left ${index === 0 ? "md:col-span-2 md:row-span-2" : ""}" type="button" aria-label="View estate gallery image ${index + 1}">
-            <img
-              src="${src}"
-              alt="The Grand Hacienda Estate gallery image ${index + 1}"
-              class="gallery-img h-full w-full ${index === 0 ? "md:min-h-[34rem]" : ""}"
-              loading="${index < 4 ? "eager" : "lazy"}"
-            />
-            <span class="absolute inset-x-0 bottom-0 translate-y-full bg-black/70 px-4 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-white transition group-hover:translate-y-0">
-              View Image ${index + 1}
-            </span>
-          </button>
-        `).join("");
-      }
-      /* =========================================================
-         BLOCK 15C END: GALLERY RENDER
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15D START: GSAP / SCROLLTRIGGER ANIMATIONS
-         ========================================================= */
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      if (!prefersReducedMotion && window.gsap && window.ScrollTrigger) {
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Soft reveal animation for content blocks.
-        gsap.utils.toArray(".reveal").forEach((element, index) => {
-          gsap.to(element, {
-            opacity: 1,
-            y: 0,
-            duration: 0.85,
-            ease: "power3.out",
-            delay: Math.min(index * 0.02, 0.18),
-            scrollTrigger: {
-              trigger: element,
-              start: "top 88%",
-              once: true
-            }
-          });
-        });
-
-        // Signature wrought-iron parallax.
-        gsap.utils.toArray(".iron-layer").forEach((layer) => {
-          const speed = Number(layer.dataset.ironSpeed || 12);
-
-          gsap.to(layer, {
-            yPercent: speed,
-            ease: "none",
-            scrollTrigger: {
-              trigger: document.body,
-              start: "top top",
-              end: "bottom bottom",
-              scrub: 1.2
-            }
-          });
-        });
-
-        // Hero image slow cinematic drift.
-        gsap.to(".hero-media img", {
-          scale: 1.08,
-          yPercent: 6,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "#top",
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-          }
-        });
-      } else {
-        document.querySelectorAll(".reveal").forEach((el) => {
-          el.style.opacity = 1;
-          el.style.transform = "none";
-        });
-      }
-      /* =========================================================
-         BLOCK 15D END: GSAP / SCROLLTRIGGER ANIMATIONS
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15E START: DATE HELPERS
-         ========================================================= */
-      const pad = (num) => String(num).padStart(2, "0");
-
-      function toISODate(date) {
-        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-      }
-
-      function addDays(date, days) {
-        const copy = new Date(date);
-        copy.setDate(copy.getDate() + days);
-        return copy;
-      }
-
-      function formatRangePayload(selectedDates) {
+      const formatRangePayload = (selectedDates) => {
         if (!selectedDates || selectedDates.length < 2) return null;
-
         const checkIn = toISODate(selectedDates[0]);
         const checkOut = toISODate(selectedDates[1]);
-
         if (checkIn === checkOut) return null;
-
         return { checkIn, checkOut };
-      }
+      };
 
-      function setStatus(elementId, message, tone = "") {
-        const el = document.getElementById(elementId);
-        if (!el) return;
-
-        el.textContent = message;
-        el.classList.remove("status-ok", "status-warn", "status-error");
-
-        if (tone) {
-          el.classList.add(`status-${tone}`);
-        }
-      }
-      /* =========================================================
-         BLOCK 15E END: DATE HELPERS
-         ========================================================= */
-
-
-      /* =========================================================
-         BLOCK 15F START: FETCH GOOGLE CALENDAR BLOCKED DATES
-         ========================================================= */
       let flatpickrInstance = null;
-      let unavailableRanges = [];
-
       async function loadUnavailableDates() {
         const today = new Date();
-        const oneYearFromNow = addDays(today, 365);
-
         const start = toISODate(today);
-        const end = toISODate(oneYearFromNow);
-
+        const end = toISODate(addDays(today, 365));
         try {
-          const response = await fetch(`${API_BASE_URL}/api/bookings?start=${start}&end=${end}`, {
-            method: "GET",
-            headers: { "Accept": "application/json" }
-          });
-
-          if (!response.ok) {
-            throw new Error(`Calendar endpoint returned ${response.status}`);
-          }
-
+          const response = await fetch(`${API_BASE_URL}/api/bookings?start=${start}&end=${end}`, { method: "GET", headers: { "Accept": "application/json" } });
+          if (!response.ok) throw new Error(`Calendar endpoint returned ${response.status}`);
           const data = await response.json();
-
-          unavailableRanges = Array.isArray(data.unavailable)
-            ? data.unavailable.map((range) => ({ from: range.start, to: range.end }))
-            : [];
-
-          setStatus("calendarStatus", unavailableRanges.length
-            ? `${unavailableRanges.length} unavailable date block(s) loaded.`
-            : "Calendar loaded. No blocked dates found.",
-            "ok"
-          );
-
-          return unavailableRanges;
+          const disabled = Array.isArray(data.unavailable) ? data.unavailable.map((range) => ({ from: range.start, to: range.end })) : [];
+          setStatus("calendarStatus", disabled.length ? `${disabled.length} unavailable date block(s) loaded.` : "Calendar loaded. No blocked dates found.", "ok");
+          return disabled;
         } catch (error) {
           console.error("Calendar load failed:", error);
-
-          /*
-            Fail-open behavior:
-            If the API is not configured yet, the page still works, but no dates are blocked.
-            This is intentional while you are setting up credentials.
-          */
           setStatus("calendarStatus", "Calendar API not connected yet. Dates are selectable for testing.", "warn");
           return [];
         }
@@ -3232,7 +603,6 @@ One important note: I did not connect to a real Google Calendar because you have
 
       async function initBookingCalendar() {
         const disabledRanges = await loadUnavailableDates();
-
         flatpickrInstance = flatpickr("#stayRange", {
           mode: "range",
           minDate: "today",
@@ -3241,71 +611,34 @@ One important note: I did not connect to a real Google Calendar because you have
           showMonths: window.innerWidth >= 768 ? 2 : 1,
           onChange: (selectedDates) => {
             const payload = formatRangePayload(selectedDates);
-
-            if (!payload) {
-              document.getElementById("checkIn").value = "";
-              document.getElementById("checkOut").value = "";
-              return;
-            }
-
-            document.getElementById("checkIn").value = payload.checkIn;
-            document.getElementById("checkOut").value = payload.checkOut;
+            document.getElementById("checkIn").value = payload ? payload.checkIn : "";
+            document.getElementById("checkOut").value = payload ? payload.checkOut : "";
           }
         });
       }
-
       initBookingCalendar();
-      /* =========================================================
-         BLOCK 15F END: FETCH GOOGLE CALENDAR BLOCKED DATES
-         ========================================================= */
 
-
-      /* =========================================================
-         BLOCK 15G START: POST BOOKING FORM TO SERVERLESS ENDPOINT
-         ========================================================= */
       const bookingForm = document.getElementById("bookingForm");
       const submitButton = document.getElementById("submitBooking");
-
       bookingForm?.addEventListener("submit", async (event) => {
         event.preventDefault();
-
-        const formData = new FormData(bookingForm);
-        const payload = Object.fromEntries(formData.entries());
-
-        if (!payload.checkIn || !payload.checkOut) {
-          setStatus("formStatus", "Please select a valid check-in and check-out range.", "error");
-          return;
-        }
-
-        if (!payload.name || !payload.email || !payload.guestCount || !payload.eventType) {
-          setStatus("formStatus", "Please complete the required fields before submitting.", "error");
-          return;
-        }
-
+        const payload = Object.fromEntries(new FormData(bookingForm).entries());
+        if (!payload.checkIn || !payload.checkOut) return setStatus("formStatus", "Please select a valid check-in and check-out range.", "error");
+        if (!payload.name || !payload.email || !payload.guestCount || !payload.eventType) return setStatus("formStatus", "Please complete the required fields before submitting.", "error");
         submitButton.disabled = true;
         submitButton.textContent = "Submitting...";
         setStatus("formStatus", "Sending your VIP inquiry and calendar hold...", "warn");
-
         try {
           const response = await fetch(`${API_BASE_URL}/api/bookings`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
             body: JSON.stringify(payload)
           });
-
           const data = await response.json().catch(() => ({}));
-
-          if (!response.ok) {
-            throw new Error(data.error || `Booking endpoint returned ${response.status}`);
-          }
-
+          if (!response.ok) throw new Error(data.error || `Booking endpoint returned ${response.status}`);
           setStatus("formStatus", "Success. Your inquiry was submitted and the requested dates were sent to the calendar.", "ok");
           bookingForm.reset();
-
-          if (flatpickrInstance) {
-            flatpickrInstance.clear();
-          }
-
+          flatpickrInstance?.clear();
           await initBookingCalendar();
         } catch (error) {
           console.error("Booking submit failed:", error);
@@ -3315,15 +648,10 @@ One important note: I did not connect to a real Google Calendar because you have
           submitButton.textContent = "Submit VIP Inquiry";
         }
       });
-      /* =========================================================
-         BLOCK 15G END: POST BOOKING FORM TO SERVERLESS ENDPOINT
-         ========================================================= */
     });
   </script>
   <!-- =========================================================
-       BLOCK 15 END: FRONTEND JAVASCRIPT
+       BLOCK 13 END: FRONTEND JAVASCRIPT
        ========================================================= -->
 </body>
 </html>
-
-
