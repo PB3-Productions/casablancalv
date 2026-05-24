@@ -1,0 +1,16 @@
+{
+  "name": "casablanca-hacienda-booking-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Single-page luxury estate website with Vercel serverless Google Calendar booking integration.",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  }
+}
