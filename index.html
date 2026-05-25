@@ -12,13 +12,13 @@
   <link rel="canonical" href="https://casablancalv.vercel.app/" />
   <meta property="og:title" content="Luxury Mansion Rental Near the Las Vegas Strip | Casablanca Las Vegas" />
   <meta property="og:description" content="Book Casablanca Las Vegas, a luxury private mansion-style estate rental just 5 miles from the Strip for group stays, events, retreats, and VIP getaways." />
-  <meta property="og:image" content="https://media.eventective.com/4096897_lg.jpg" />
+  <meta property="og:image" content="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://casablancalv.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Luxury Mansion Rental Near the Las Vegas Strip | Casablanca Las Vegas" />
   <meta name="twitter:description" content="A luxury private mansion-style estate rental just 5 miles from the Las Vegas Strip for group stays, private events, retreats, and VIP getaways." />
-  <meta name="twitter:image" content="https://media.eventective.com/4096897_lg.jpg" />
+  <meta name="twitter:image" content="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png" />
   <!-- =========================================================
        BLOCK 1 END: BASIC META + SEO
        ========================================================= -->
@@ -207,8 +207,8 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(17,17,17,.82), rgba(17,17,17,.32) 43%, rgba(17,17,17,.7)),
-        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.62));
+        linear-gradient(90deg, rgba(17,17,17,.86), rgba(17,17,17,.42) 43%, rgba(17,17,17,.76)),
+        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.68));
       pointer-events: none;
     }
 
@@ -332,6 +332,15 @@
       justify-content: flex-end;
       flex-wrap: wrap;
       z-index: 2;
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity .35s ease, transform .35s ease;
+      transform: translateY(0);
+    }
+    .tour-video-card.controls-hidden .tour-video-controls {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
     }
     .tour-control {
       border: 1px solid rgba(255,255,255,.35);
@@ -463,7 +472,7 @@
         "@id": "https://casablancalv.vercel.app/#lodging",
         "name": "Casablanca Las Vegas",
         "url": "https://casablancalv.vercel.app/",
-        "image": ["https://media.eventective.com/4096897_lg.jpg", "https://media.eventective.com/4096902_lg.jpg", "https://media.eventective.com/4096883_lg.jpg"],
+        "image": ["https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png", "https://media.eventective.com/4096902_lg.jpg", "https://media.eventective.com/4096883_lg.jpg"],
         "description": "Casablanca Las Vegas is a luxury private mansion-style estate rental located about 5 miles from the Las Vegas Strip, offering an elevated alternative to hotels, suites, Airbnb, and VRBO for group stays, private celebrations, corporate retreats, and VIP Las Vegas getaways.",
         "address": { "@type": "PostalAddress", "addressLocality": "Las Vegas", "addressRegion": "NV", "addressCountry": "US" },
         "amenityFeature": [
@@ -541,7 +550,7 @@
          ========================================================= -->
     <section class="hero-section relative min-h-[100svh] overflow-hidden bg-hacienda-iron text-hacienda-cream">
       <div class="hero-media absolute inset-0">
-        <img class="h-full w-full object-cover" src="https://media.eventective.com/4096897_lg.jpg" alt="Casablanca Las Vegas luxury mansion rental near the Strip with private resort pool and estate grounds" fetchpriority="high" />
+        <img class="h-full w-full object-cover" src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png" alt="Casablanca Las Vegas luxury mansion rental near the Strip with private resort pool and estate grounds" fetchpriority="high" />
       </div>
       <div class="relative z-10 flex min-h-[100svh] items-center">
         <div class="site-shell pt-28 pb-6">
@@ -938,6 +947,16 @@
       const forwardBtn = document.getElementById("tourForward");
       let stickyClosed = false;
       let videoStarted = false;
+      let controlsTimer = null;
+
+      const showVideoControls = () => {
+        if (!videoCard) return;
+        videoCard.classList.remove("controls-hidden");
+        clearTimeout(controlsTimer);
+        controlsTimer = setTimeout(() => {
+          videoCard.classList.add("controls-hidden");
+        }, 3000);
+      };
 
       const moveVideoToBody = () => {
         if (!videoSlot || !videoCard) return;
@@ -963,6 +982,7 @@
         }
         tourVideo.play().catch(() => {});
         if (pauseBtn) pauseBtn.textContent = "Pause";
+        showVideoControls();
       };
 
       const updateStickyVideo = () => {
@@ -975,7 +995,8 @@
 
         if (backNearTop || beforeTour) {
           returnVideoToSlot();
-          videoCard.classList.remove("is-sticky", "is-hidden");
+          videoCard.classList.remove("is-sticky", "is-hidden", "controls-hidden");
+          clearTimeout(controlsTimer);
           tourVideo.pause();
           tourVideo.currentTime = 0;
           videoStarted = false;
@@ -998,11 +1019,16 @@
         }
       };
 
+      videoCard?.addEventListener("mousemove", showVideoControls);
+      videoCard?.addEventListener("pointerdown", showVideoControls);
+      videoCard?.addEventListener("touchstart", showVideoControls, { passive: true });
+      videoCard?.addEventListener("click", showVideoControls);
       window.addEventListener("scroll", updateStickyVideo, { passive: true });
       window.addEventListener("resize", updateStickyVideo);
       updateStickyVideo();
 
       pauseBtn?.addEventListener("click", () => {
+        showVideoControls();
         if (tourVideo.paused) {
           if (!videoStarted) {
             tourVideo.currentTime = 0;
@@ -1016,20 +1042,24 @@
         }
       });
       musicBtn?.addEventListener("click", () => {
+        showVideoControls();
         tourVideo.muted = !tourVideo.muted;
         musicBtn.textContent = tourVideo.muted ? "Music Off" : "Music On";
         if (!tourVideo.paused) tourVideo.play().catch(() => {});
       });
       backBtn?.addEventListener("click", () => {
+        showVideoControls();
         tourVideo.currentTime = Math.max(0, tourVideo.currentTime - 10);
       });
       forwardBtn?.addEventListener("click", () => {
+        showVideoControls();
         const safeDuration = Number.isFinite(tourVideo.duration) ? tourVideo.duration : tourVideo.currentTime + 10;
         tourVideo.currentTime = Math.min(safeDuration, tourVideo.currentTime + 10);
       });
       closeBtn?.addEventListener("click", () => {
         stickyClosed = true;
-        videoCard.classList.remove("is-sticky");
+        clearTimeout(controlsTimer);
+        videoCard.classList.remove("is-sticky", "controls-hidden");
         videoCard.classList.add("is-hidden");
         tourVideo.pause();
         if (pauseBtn) pauseBtn.textContent = "Play";
