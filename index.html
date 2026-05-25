@@ -153,6 +153,13 @@
       height: 1px;
       background: currentColor;
     }
+    .eyebrow::after {
+      content: "";
+      display: none;
+      width: 2.2rem;
+      height: 1px;
+      background: currentColor;
+    }
 
     .btn {
       display: inline-flex;
@@ -329,7 +336,7 @@
       bottom: .85rem;
       display: flex;
       gap: .45rem;
-      justify-content: flex-end;
+      justify-content: center;
       flex-wrap: wrap;
       z-index: 2;
       opacity: 1;
@@ -430,6 +437,20 @@
         font-size: .88rem;
         line-height: .98;
         letter-spacing: .2em;
+      }
+      .eyebrow {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        gap: .55rem;
+        text-align: center;
+        letter-spacing: .16em;
+      }
+      .eyebrow::before,
+      .eyebrow::after {
+        display: block;
+        flex: 1 1 2rem;
+        max-width: 3rem;
       }
       .gallery-featured-img { aspect-ratio: 4 / 3; }
       .gallery-arrow { width: 2.55rem; height: 2.55rem; font-size: 1.25rem; }
@@ -974,15 +995,15 @@
         }
       };
 
-      const playVideoFromStartOnce = () => {
+      const playVideoFromStartOnce = (shouldRevealControls = false) => {
         if (!tourVideo) return;
         if (!videoStarted) {
           tourVideo.currentTime = 0;
           videoStarted = true;
+          tourVideo.play().catch(() => {});
+          if (pauseBtn) pauseBtn.textContent = "Pause";
         }
-        tourVideo.play().catch(() => {});
-        if (pauseBtn) pauseBtn.textContent = "Pause";
-        showVideoControls();
+        if (shouldRevealControls) showVideoControls();
       };
 
       const updateStickyVideo = () => {
@@ -1006,16 +1027,18 @@
         }
 
         if (inTour && !videoCard.classList.contains("is-sticky")) {
+          const shouldRevealControls = !videoStarted;
           videoCard.classList.remove("is-hidden");
-          playVideoFromStartOnce();
+          playVideoFromStartOnce(shouldRevealControls);
           return;
         }
 
         if (pastTour && !stickyClosed) {
+          const shouldRevealControls = !videoStarted;
           moveVideoToBody();
           videoCard.classList.add("is-sticky");
           videoCard.classList.remove("is-hidden");
-          playVideoFromStartOnce();
+          playVideoFromStartOnce(shouldRevealControls);
         }
       };
 
