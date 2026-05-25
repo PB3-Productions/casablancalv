@@ -106,7 +106,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      opacity: .28;
+      opacity: .23;
       background-image:
         radial-gradient(circle at 22% 18%, rgba(0,0,0,.06) 0 1px, transparent 1px),
         radial-gradient(circle at 75% 42%, rgba(255,255,255,.65) 0 1px, transparent 1px),
@@ -122,12 +122,16 @@
 
     .iron-bg {
       position: fixed;
-      inset: auto -10vw -16vh -10vw;
-      height: min(72vh, 760px);
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 0;
       pointer-events: none;
-      opacity: .16;
-      background: url("https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a138a136cc0eead5ccaa1a9.webp") center bottom / contain no-repeat;
+      opacity: .14;
+      background-image: url("https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a138a136cc0eead5ccaa1a9.webp");
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
       mix-blend-mode: multiply;
       filter: contrast(1.12) saturate(.9);
       will-change: transform;
@@ -168,6 +172,16 @@
     .btn-primary { background: var(--iron); color: var(--cream); border: 1px solid var(--iron); }
     .btn-outline { color: var(--iron); border: 1px solid rgba(17,17,17,.35); background: rgba(250,249,246,.42); backdrop-filter: blur(12px); }
 
+    .brand-logo-desktop {
+      display: block;
+      width: clamp(11rem, 16vw, 15rem);
+      height: auto;
+      max-height: 3rem;
+      object-fit: contain;
+      object-position: left center;
+    }
+    .brand-mobile-text { display: none; }
+
     .hacienda-card {
       background:
         linear-gradient(135deg, rgba(255,255,255,.62), rgba(245,245,220,.76)),
@@ -187,6 +201,7 @@
       border-radius: var(--radius-xl);
     }
 
+    .hero-section { padding-bottom: 16px; }
     .hero-media::after {
       content: "";
       position: absolute;
@@ -197,7 +212,7 @@
       pointer-events: none;
     }
 
-    .hero-stats { margin-top: 10px; }
+    .hero-stats { margin-top: 14px; margin-bottom: 18px; }
     .stat-card { min-height: 5.7rem; }
     .reveal { opacity: 0; transform: translateY(26px); }
 
@@ -296,6 +311,7 @@
       font-size: 1.8rem;
     }
 
+    .tour-video-slot { min-height: 1px; }
     .tour-video-card {
       position: relative;
       overflow: hidden;
@@ -303,7 +319,7 @@
       border: 1px solid rgba(185,150,90,.42);
       background: #050505;
       box-shadow: 0 32px 90px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.07) inset;
-      transition: width .25s ease, right .25s ease, bottom .25s ease, transform .25s ease;
+      transition: width .25s ease, right .25s ease, bottom .25s ease, transform .25s ease, border-radius .25s ease;
     }
     .tour-video-card video { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; filter: contrast(1.06) brightness(.92); }
     .tour-video-controls {
@@ -330,12 +346,13 @@
       letter-spacing: .1em;
     }
     .tour-video-card.is-sticky {
-      position: fixed;
+      position: fixed !important;
       z-index: 9997;
       right: clamp(.75rem, 3vw, 2rem);
       bottom: clamp(.75rem, 3vw, 2rem);
       width: min(420px, calc(100vw - 1.5rem));
       border-radius: 1.1rem;
+      transform: none !important;
     }
     .tour-video-card.is-hidden { display: none; }
 
@@ -359,6 +376,13 @@
     .status-ok { color: #7ce09b; }
     .status-warn { color: #f3bd74; }
     .status-error { color: #ff9a9a; }
+
+    .footer-logo {
+      width: min(280px, 72vw);
+      height: auto;
+      display: block;
+      margin-inline: auto;
+    }
 
     .flatpickr-calendar {
       font-family: Inter, system-ui, sans-serif;
@@ -387,13 +411,26 @@
 
     @media (max-width: 768px) {
       .btn { width: 100%; }
-      .iron-bg { opacity: .1; height: 48vh; }
+      .iron-bg { opacity: .12; background-size: cover; background-position: center center; }
+      .brand-logo-desktop { display: none; }
+      .brand-mobile-text {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .08rem;
+        font-size: .88rem;
+        line-height: .98;
+        letter-spacing: .2em;
+      }
       .gallery-featured-img { aspect-ratio: 4 / 3; }
       .gallery-arrow { width: 2.55rem; height: 2.55rem; font-size: 1.25rem; }
       .gallery-prev { left: .55rem; }
       .gallery-next { right: .55rem; }
       .tour-video-card.is-sticky { width: calc(100vw - 1rem); right: .5rem; bottom: .5rem; }
-      .tour-control { font-size: .68rem; padding: .52rem .7rem; }
+      .tour-video-controls { left: .55rem; right: .55rem; bottom: .55rem; justify-content: center; }
+      .tour-control { font-size: .62rem; padding: .46rem .58rem; letter-spacing: .07em; }
+      .hero-section { padding-bottom: 20px; }
+      .hero-stats { margin-bottom: 22px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -473,7 +510,10 @@
   <header class="fixed inset-x-0 top-0 z-50">
     <div class="site-shell py-4">
       <div class="flex items-center justify-between rounded-full border border-white/20 bg-black/25 px-4 py-3 text-hacienda-cream backdrop-blur-xl shadow-2xl">
-        <a href="#top" class="font-display text-sm font-extrabold uppercase tracking-[.2em] md:text-base">Casablanca Las Vegas</a>
+        <a href="#top" class="font-display font-extrabold uppercase tracking-[.2em]" aria-label="Casablanca Las Vegas home">
+          <img class="brand-logo-desktop" src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a5873c3aed7c63b13ea8.svg" alt="Casablanca Las Vegas luxury mansion rental near the Strip" />
+          <span class="brand-mobile-text"><span>Casablanca</span><span>Las Vegas</span></span>
+        </a>
         <nav class="hidden items-center gap-6 text-xs font-extrabold uppercase tracking-[.18em] md:flex">
           <a class="hover:text-hacienda-gold" href="#estate">Estate</a>
           <a class="hover:text-hacienda-gold" href="#tour">Tour</a>
@@ -499,12 +539,12 @@
     <!-- =========================================================
          BLOCK 7 START: HERO
          ========================================================= -->
-    <section class="relative min-h-[100svh] overflow-hidden bg-hacienda-iron text-hacienda-cream">
+    <section class="hero-section relative min-h-[100svh] overflow-hidden bg-hacienda-iron text-hacienda-cream">
       <div class="hero-media absolute inset-0">
         <img class="h-full w-full object-cover" src="https://media.eventective.com/4096897_lg.jpg" alt="Casablanca Las Vegas luxury mansion rental near the Strip with private resort pool and estate grounds" fetchpriority="high" />
       </div>
       <div class="relative z-10 flex min-h-[100svh] items-center">
-        <div class="site-shell pt-28">
+        <div class="site-shell pt-28 pb-6">
           <div class="max-w-5xl">
             <p class="eyebrow text-hacienda-gold reveal">Casablanca Las Vegas</p>
             <h1 class="font-display mt-6 max-w-5xl text-[clamp(2.75rem,7vw,7rem)] font-extrabold leading-[.92] tracking-[-.055em] reveal">Luxury Mansion Rental Near the Las Vegas Strip</h1>
@@ -595,14 +635,16 @@
             <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none">Casablanca Las Vegas Estate Tour</h2>
             <p class="mt-6 text-lg leading-9 text-white/72">Luxury private mansion-style estate near the Strip. Watch the property tour, then keep exploring the page while the player follows you until you close it.</p>
           </div>
-          <div class="tour-media reveal">
+          <div id="estateVideoSlot" class="tour-video-slot">
             <div id="estateVideoCard" class="tour-video-card">
-              <video id="estateTourVideo" autoplay muted loop playsinline preload="metadata" poster="https://media.eventective.com/4096897_lg.jpg" aria-label="Casablanca Las Vegas luxury estate tour video near the Strip">
+              <video id="estateTourVideo" muted playsinline preload="metadata" poster="https://media.eventective.com/4096897_lg.jpg" aria-label="Casablanca Las Vegas luxury estate tour video near the Strip">
                 <source src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1399a9e05851175c6f3221.mp4" type="video/mp4" />
               </video>
               <div class="tour-video-controls" aria-label="Video player controls">
                 <button id="tourClose" class="tour-control" type="button">Close</button>
-                <button id="tourPause" class="tour-control" type="button">Pause</button>
+                <button id="tourBack" class="tour-control" type="button">Back 10</button>
+                <button id="tourPause" class="tour-control" type="button">Play</button>
+                <button id="tourForward" class="tour-control" type="button">Fwd 10</button>
                 <button id="tourMusic" class="tour-control" type="button">Music Off</button>
               </div>
             </div>
@@ -742,11 +784,9 @@
   </div>
 
   <footer class="bg-hacienda-iron py-12 text-hacienda-cream">
-    <div class="site-shell flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-      <div>
-        <div class="font-display text-xl font-extrabold uppercase tracking-[.18em]">Casablanca Las Vegas</div>
-        <p class="mt-2 text-sm text-white/55">Luxury mansion rental near the Las Vegas Strip for group stays, private celebrations, retreats, and VIP getaways.</p>
-      </div>
+    <div class="site-shell flex flex-col items-center justify-center gap-6 text-center">
+      <img class="footer-logo" src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a587fe2210f89e6cc355.svg" alt="Casablanca Las Vegas luxury private estate rental logo" loading="lazy" />
+      <p class="max-w-2xl text-sm leading-7 text-white/55">Luxury mansion rental near the Las Vegas Strip for group stays, private celebrations, retreats, and VIP getaways.</p>
       <a href="#booking" class="btn border border-white/25 bg-white/10 text-white hover:border-white">Request Availability</a>
     </div>
   </footer>
@@ -844,7 +884,7 @@
             scrollTrigger: { trigger: element, start: "top 88%", once: true }
           });
         });
-        gsap.to(".iron-bg", { yPercent: -12, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1.2 } });
+        gsap.to(".iron-bg", { scale: 1.08, yPercent: -5, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1.2 } });
         gsap.to(".hero-media img", { scale: 1.08, yPercent: 6, ease: "none", scrollTrigger: { trigger: "#top", start: "top top", end: "bottom top", scrub: true } });
       } else {
         document.querySelectorAll(".reveal").forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; });
@@ -887,38 +927,87 @@
       lightbox?.addEventListener("click", (event) => { if (event.target === lightbox) lightbox.classList.remove("active"); });
       window.addEventListener("keydown", (event) => { if (event.key === "Escape") lightbox?.classList.remove("active"); });
 
+      const videoSlot = document.getElementById("estateVideoSlot");
       const videoCard = document.getElementById("estateVideoCard");
       const tourVideo = document.getElementById("estateTourVideo");
       const tourSection = document.getElementById("tour");
       const pauseBtn = document.getElementById("tourPause");
       const musicBtn = document.getElementById("tourMusic");
       const closeBtn = document.getElementById("tourClose");
+      const backBtn = document.getElementById("tourBack");
+      const forwardBtn = document.getElementById("tourForward");
       let stickyClosed = false;
+      let videoStarted = false;
 
-      const updateStickyVideo = () => {
-        if (!videoCard || !tourSection || !tourVideo) return;
-        const rect = tourSection.getBoundingClientRect();
-        const aboveTour = rect.top > 20;
-        const pastTourIntro = rect.top < -160;
-        if (aboveTour || window.scrollY < 120) {
-          videoCard.classList.remove("is-sticky", "is-hidden");
-          tourVideo.pause();
-          pauseBtn.textContent = "Play";
-          return;
-        }
-        if (pastTourIntro && !stickyClosed) {
-          videoCard.classList.add("is-sticky");
-          videoCard.classList.remove("is-hidden");
-          tourVideo.play().catch(() => {});
-          pauseBtn.textContent = "Pause";
-        } else if (!videoCard.classList.contains("is-sticky")) {
-          videoCard.classList.remove("is-hidden");
+      const moveVideoToBody = () => {
+        if (!videoSlot || !videoCard) return;
+        if (videoCard.parentElement !== document.body) {
+          videoSlot.style.minHeight = `${videoCard.offsetHeight}px`;
+          document.body.appendChild(videoCard);
         }
       };
+
+      const returnVideoToSlot = () => {
+        if (!videoSlot || !videoCard) return;
+        if (videoCard.parentElement !== videoSlot) {
+          videoSlot.appendChild(videoCard);
+          videoSlot.style.minHeight = "";
+        }
+      };
+
+      const playVideoFromStartOnce = () => {
+        if (!tourVideo) return;
+        if (!videoStarted) {
+          tourVideo.currentTime = 0;
+          videoStarted = true;
+        }
+        tourVideo.play().catch(() => {});
+        if (pauseBtn) pauseBtn.textContent = "Pause";
+      };
+
+      const updateStickyVideo = () => {
+        if (!videoCard || !tourSection || !tourVideo || !videoSlot) return;
+        const rect = tourSection.getBoundingClientRect();
+        const backNearTop = window.scrollY < 120;
+        const beforeTour = rect.top > window.innerHeight * 0.55;
+        const inTour = rect.top < window.innerHeight * 0.75 && rect.bottom > 160;
+        const pastTour = rect.bottom <= 160;
+
+        if (backNearTop || beforeTour) {
+          returnVideoToSlot();
+          videoCard.classList.remove("is-sticky", "is-hidden");
+          tourVideo.pause();
+          tourVideo.currentTime = 0;
+          videoStarted = false;
+          stickyClosed = false;
+          if (pauseBtn) pauseBtn.textContent = "Play";
+          return;
+        }
+
+        if (inTour && !videoCard.classList.contains("is-sticky")) {
+          videoCard.classList.remove("is-hidden");
+          playVideoFromStartOnce();
+          return;
+        }
+
+        if (pastTour && !stickyClosed) {
+          moveVideoToBody();
+          videoCard.classList.add("is-sticky");
+          videoCard.classList.remove("is-hidden");
+          playVideoFromStartOnce();
+        }
+      };
+
       window.addEventListener("scroll", updateStickyVideo, { passive: true });
       window.addEventListener("resize", updateStickyVideo);
+      updateStickyVideo();
+
       pauseBtn?.addEventListener("click", () => {
         if (tourVideo.paused) {
+          if (!videoStarted) {
+            tourVideo.currentTime = 0;
+            videoStarted = true;
+          }
           tourVideo.play().catch(() => {});
           pauseBtn.textContent = "Pause";
         } else {
@@ -931,12 +1020,19 @@
         musicBtn.textContent = tourVideo.muted ? "Music Off" : "Music On";
         if (!tourVideo.paused) tourVideo.play().catch(() => {});
       });
+      backBtn?.addEventListener("click", () => {
+        tourVideo.currentTime = Math.max(0, tourVideo.currentTime - 10);
+      });
+      forwardBtn?.addEventListener("click", () => {
+        const safeDuration = Number.isFinite(tourVideo.duration) ? tourVideo.duration : tourVideo.currentTime + 10;
+        tourVideo.currentTime = Math.min(safeDuration, tourVideo.currentTime + 10);
+      });
       closeBtn?.addEventListener("click", () => {
         stickyClosed = true;
         videoCard.classList.remove("is-sticky");
         videoCard.classList.add("is-hidden");
         tourVideo.pause();
-        pauseBtn.textContent = "Play";
+        if (pauseBtn) pauseBtn.textContent = "Play";
       });
 
       const pad = (num) => String(num).padStart(2, "0");
