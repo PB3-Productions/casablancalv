@@ -1,12 +1,14 @@
-# Casablanca Las Vegas Website + Google Calendar Booking API
+# Casablanca Las Vegas Website + Google Calendar Inquiry API
 
 This project contains:
 
 1. A high-end single-page luxury estate website.
-2. A wrought-iron GSAP ScrollTrigger parallax effect.
-3. A Flatpickr VIP booking calendar.
-4. A Vercel serverless API endpoint that reads and writes to Google Calendar.
-5. A copy-paste-friendly deployment flow.
+2. Production CSS/JS files instead of Tailwind CDN usage.
+3. Structured gallery JSON.
+4. Flatpickr availability calendar.
+5. Matterport 3D tour embed.
+6. Vercel serverless API endpoint that reads approved Google Calendar holds and writes pending inquiries.
+7. Anti-spam validation and analytics event hooks.
 
 ---
 
@@ -17,6 +19,13 @@ casablancalv/
 ├── index.html
 ├── api/
 │   └── bookings.js
+├── assets/
+│   ├── css/
+│   │   └── app.css
+│   ├── js/
+│   │   └── app.js
+│   └── data/
+│       └── gallery.json
 ├── package.json
 ├── .env.example
 └── README_DEPLOY.md
@@ -24,132 +33,27 @@ casablancalv/
 
 ---
 
-## Step 1: Deploy to Vercel
+## Deployment
 
 In Vercel:
-
-1. Click **Add New**.
-2. Click **Project**.
-3. Import this GitHub repo:
-
-```txt
-PB3-Productions/casablancalv
-```
-
-4. Use these settings:
 
 ```txt
 Framework Preset: Other
 Install Command: npm install
-Build Command: leave blank
+Build Command: npm run build
 Output Directory: leave blank
 ```
 
-5. Click **Deploy**.
-
-The frontend will load from:
+The `build` script confirms the production assets are already compiled in:
 
 ```txt
-https://your-vercel-project.vercel.app
-```
-
-The booking API will load from:
-
-```txt
-https://your-vercel-project.vercel.app/api/bookings
+/assets/css/app.css
+/assets/js/app.js
 ```
 
 ---
 
-## Step 2: Google Cloud Setup
-
-### 1. Enable Google Calendar API
-
-In Google Cloud Console:
-
-```txt
-APIs & Services > Library > Google Calendar API > Enable
-```
-
-### 2. Create a Service Account
-
-Go to:
-
-```txt
-IAM & Admin > Service Accounts > Create Service Account
-```
-
-Suggested name:
-
-```txt
-hacienda-calendar-bot
-```
-
-### 3. Create a JSON Key
-
-Inside the service account:
-
-```txt
-Keys > Add Key > Create New Key > JSON
-```
-
-Download the JSON file.
-
-Do **not** upload this JSON file to GitHub.
-
----
-
-## Step 3: Share Google Calendar With the Service Account
-
-Open the downloaded JSON file and copy the `client_email` value.
-
-It will look like:
-
-```txt
-hacienda-calendar-bot@your-project.iam.gserviceaccount.com
-```
-
-Then open Google Calendar:
-
-```txt
-Calendar Settings > Share with specific people or groups
-```
-
-Add the service account email and grant:
-
-```txt
-Make changes to events
-```
-
-This is required. Without it, the API can authenticate but cannot read/write the booking calendar.
-
----
-
-## Step 4: Get Calendar ID
-
-In Google Calendar:
-
-```txt
-Settings and sharing > Integrate calendar > Calendar ID
-```
-
-Copy the Calendar ID.
-
-It may look like:
-
-```txt
-yourname@gmail.com
-```
-
-or:
-
-```txt
-abc123@group.calendar.google.com
-```
-
----
-
-## Step 5: Add Vercel Environment Variables
+## Environment Variables
 
 In Vercel:
 
@@ -172,34 +76,63 @@ Use:
 GOOGLE_CALENDAR_TIMEZONE=America/Los_Angeles
 ```
 
-For `ALLOWED_ORIGINS`, start with your Vercel URL:
+For `ALLOWED_ORIGINS`, use:
 
 ```txt
-https://your-vercel-project.vercel.app
+https://casablancalv.vercel.app
 ```
 
 For `GOOGLE_SERVICE_ACCOUNT_JSON`, paste the entire downloaded service account JSON as one value.
 
+Never commit secrets to GitHub.
+
 ---
 
-## Step 6: Redeploy After Adding Env Vars
+## Calendar Approval Workflow
 
-In Vercel:
+The API now creates **pending inquiries**, not automatic hard holds.
+
+New submissions create Google Calendar events titled like:
 
 ```txt
-Project > Deployments > Latest Deployment > Three dots > Redeploy
+PENDING: Name - Inquiry Type
 ```
 
-Environment variables are applied during deployments, so redeploy after adding them.
+Pending events are created with:
+
+```txt
+transparency: transparent
+extendedProperties.private.approvalStatus=pending
+```
+
+The availability API only treats events as unavailable when they are approved/blocked. A calendar event blocks dates when either:
+
+1. The private extended property is changed to:
+
+```txt
+approvalStatus=approved
+```
+
+or
+
+2. The event title starts with:
+
+```txt
+HOLD:
+CONFIRMED:
+BLOCKED:
+```
+
+This lets the owner review inquiries before actually blocking inventory.
 
 ---
 
-## Step 7: Test the API
+## API Test
 
 Open:
 
 ```txt
-https://your-vercel-project.vercel.app/api/bookings
+https://casablancalv.vercel.app/api/bookings
 ```
 
 Healthy response:
@@ -210,35 +143,40 @@ Healthy response:
 }
 ```
 
-or actual unavailable ranges.
+or approved unavailable ranges.
 
 ---
 
-## Step 8: Test the Booking Form
+## Analytics Events
 
-1. Open the live Vercel site.
-2. Scroll to the VIP Booking section.
-3. Select check-in/check-out dates.
-4. Fill out the form.
-5. Submit.
-6. Confirm that a Google Calendar event was created.
+The frontend pushes events into `window.dataLayer` and calls `gtag()` when available.
 
-The current backend creates a calendar event immediately with a title like:
+Tracked events include:
 
 ```txt
-HOLD: Name - Inquiry Type
+gallery_image_view
+gallery_lightbox_open
+video_start
+video_play
+video_pause
+video_back_10
+video_forward_10
+video_mute_toggle
+video_close
+date_select
+form_start
+form_submit
+form_submit_error
+phone_click
+mobile_menu_open
 ```
 
 ---
 
-## Production Recommendation
+## Notes
 
-Right now, every submitted inquiry creates a real calendar hold immediately.
-
-For production, consider changing the event title to:
-
-```txt
-PENDING REQUEST: Name - Inquiry Type
-```
-
-and manually approving qualified bookings.
+- The gallery is loaded from `/assets/data/gallery.json`.
+- The site uses `/assets/css/app.css` instead of Tailwind CDN.
+- Images include dimensions, responsive `sizes`, and structured alt text.
+- The Matterport 3D tour is embedded in the 3D Tour section.
+- City VIP Concierge is linked as the concierge service provider.
