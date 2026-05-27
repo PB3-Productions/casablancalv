@@ -40,16 +40,19 @@ In Vercel:
 ```txt
 Framework Preset: Other
 Install Command: npm install
-Build Command: npm run build
+Build Command: leave blank
 Output Directory: leave blank
 ```
 
-The `build` script confirms the production assets are already compiled in:
+The frontend production assets are committed directly in:
 
 ```txt
 /assets/css/app.css
 /assets/js/app.js
+/assets/data/gallery.json
 ```
+
+No Tailwind CDN is used on the page. The site links to the compiled/static CSS and JS assets above.
 
 ---
 
@@ -177,6 +180,7 @@ mobile_menu_open
 
 - The gallery is loaded from `/assets/data/gallery.json`.
 - The site uses `/assets/css/app.css` instead of Tailwind CDN.
-- Images include dimensions, responsive `sizes`, and structured alt text.
+- Images include dimensions, responsive `sizes`, structured alt text, and WebP where the provided asset supports it.
 - The Matterport 3D tour is embedded in the 3D Tour section.
 - City VIP Concierge is linked as the concierge service provider.
+- Public location language intentionally avoids exposing the exact street address too early.
