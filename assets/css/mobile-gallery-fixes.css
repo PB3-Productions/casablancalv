@@ -3,7 +3,7 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA TARGETED OVERRIDES
    Purpose: Final typography, centered stats, normalized gallery thumbnails,
-   featured-image gallery arrows, and tightened mobile nav.
+   featured-image gallery arrows, no-auto-float video controls, and tightened mobile nav.
    ========================================================= */
 
 /* BLOCK 1.1 START: Typography System */
@@ -66,8 +66,63 @@ h6,
   font-weight: 800;
 }
 
-.lead {
+.title-xl {
+  font-size: clamp(1.6rem, 4.5vw, 4.3rem) !important;
+}
+
+.title-lg {
+  font-size: clamp(1.18rem, 3.1vw, 3.15rem) !important;
+  line-height: 1.02 !important;
+}
+
+.title-md {
+  font-size: clamp(1rem, 1.75vw, 1.6rem) !important;
+  line-height: 1.08 !important;
+}
+
+h1:not(.brand-title),
+h2,
+h3:not(.price-card h3),
+.font-display {
+  font-weight: 800 !important;
+}
+
+p,
+.lead,
+.text-muted,
+.feature-list li,
+.mini-card p,
+.card p,
+.card-dark p,
+.price-card .count,
+.status-note {
+  max-width: 74ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left !important;
   font-weight: 500;
+}
+
+#gallery .lead,
+#pricing .lead,
+#concierge .lead,
+#faq .lead,
+#welcome .lead,
+#availability .lead,
+#video-tour .lead,
+#matterport .lead,
+#sleeping-layout .lead,
+#policies .lead,
+#amenities .lead {
+  text-align: left !important;
+}
+
+#welcome h1,
+#pricing .reveal,
+#concierge .reveal,
+#faq .reveal,
+#matterport .reveal {
+  text-align: center;
 }
 /* BLOCK 1.1 END: Typography System */
 
@@ -216,7 +271,61 @@ h6,
 }
 /* BLOCK 1.3 END: Clean Gallery Thumbnail Strip + Featured Image Arrows */
 
-/* BLOCK 1.4 START: Tight Mobile VIP Header */
+/* BLOCK 1.4 START: Video Manual Detach + Enlarge */
+.video-shell.is-sticky:not(.is-manual-detached) {
+  position: relative !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  z-index: auto !important;
+}
+
+.video-shell.is-manual-detached {
+  position: fixed !important;
+  z-index: 999;
+  right: clamp(.75rem, 3vw, 2rem);
+  bottom: clamp(.75rem, 3vw, 2rem);
+  width: min(430px, calc(100vw - 1.5rem));
+  border-radius: 1.1rem;
+}
+
+.video-shell.is-large {
+  position: fixed !important;
+  z-index: 1001;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(1120px, calc(100vw - 2rem)) !important;
+  max-height: calc(100vh - 2rem);
+  transform: translate(-50%, -50%);
+  border-radius: 1.2rem;
+}
+
+.video-shell.is-large video {
+  max-height: calc(100vh - 2rem);
+}
+
+.video-control[data-dynamic-video-control="true"] {
+  border-color: rgba(201,168,90,.5);
+}
+/* BLOCK 1.4 END: Video Manual Detach + Enlarge */
+
+/* BLOCK 1.5 START: Availability Copy + Badge Cleanup */
+#availability .trust-strip .badge:nth-child(3) {
+  display: none !important;
+}
+/* BLOCK 1.5 END: Availability Copy + Badge Cleanup */
+
+/* BLOCK 1.6 START: Footer Badge Logo */
+footer img:first-child {
+  content: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168b71ab53822e7e031366.png');
+  width: min(160px, 42vw) !important;
+  height: auto !important;
+}
+/* BLOCK 1.6 END: Footer Badge Logo */
+
+/* BLOCK 1.7 START: Tight Mobile VIP Header */
 @media (max-width: 1022px) {
   .site-header {
     background-color: rgba(8,8,8,.98);
@@ -371,7 +480,7 @@ h6,
     object-position: center top;
   }
 }
-/* BLOCK 1.4 END: Tight Mobile VIP Header */
+/* BLOCK 1.7 END: Tight Mobile VIP Header */
 
 @media (max-width: 900px) {
   #gallery .gallery-featured {
@@ -388,6 +497,14 @@ h6,
 }
 
 @media (max-width: 520px) {
+  .title-lg {
+    font-size: clamp(1.15rem, 8vw, 2.05rem) !important;
+  }
+
+  .title-md {
+    font-size: clamp(1rem, 6.5vw, 1.45rem) !important;
+  }
+
   #gallery .gallery-thumbs {
     height: clamp(62px, 18vw, 78px);
     grid-auto-columns: clamp(70px, 24vw, 94px);
@@ -403,6 +520,16 @@ h6,
 
   #gallery .gallery-thumb {
     border-radius: .72rem;
+  }
+
+  .video-shell.is-manual-detached {
+    width: calc(100vw - 1rem);
+    right: .5rem;
+    bottom: .5rem;
+  }
+
+  .video-shell.is-large {
+    width: calc(100vw - .75rem) !important;
   }
 }
 
