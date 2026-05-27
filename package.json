@@ -1,11 +1,10 @@
 {
   "name": "casablanca-las-vegas-luxury-estate-site",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
-  "description": "Luxury estate rental website with compiled CSS/JS assets and Vercel Google Calendar inquiry API.",
+  "description": "Luxury estate rental website with compiled static CSS/JS assets and Vercel Google Calendar inquiry API.",
   "scripts": {
     "dev": "vercel dev",
-    "build": "node -e \"console.log('Static production assets already compiled in assets/css/app.css and assets/js/app.js')\"",
     "deploy": "vercel --prod"
   },
   "dependencies": {
