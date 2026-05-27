@@ -1,478 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <!-- =========================================================
-       BLOCK 1 START: BASIC META + SEO
+       BLOCK 1 START: META, SEO, SOCIAL
        ========================================================= -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Luxury Mansion Rental Near the Las Vegas Strip | Casablanca Las Vegas</title>
-  <meta name="description" content="Book Casablanca Las Vegas, a luxury private mansion-style estate rental just 5 miles from the Strip for group stays, events, retreats, and VIP getaways." />
+  <meta name="description" content="Explore Casablanca Las Vegas, an ultra-private luxury estate near the Las Vegas Strip with resort pool, 10 bedrooms, concierge add-ons, 3D tour, event pricing, and VIP booking support." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://casablancalv.vercel.app/" />
   <meta property="og:title" content="Luxury Mansion Rental Near the Las Vegas Strip | Casablanca Las Vegas" />
-  <meta property="og:description" content="Book Casablanca Las Vegas, a luxury private mansion-style estate rental just 5 miles from the Strip for group stays, events, retreats, and VIP getaways." />
-  <meta property="og:image" content="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png" />
+  <meta property="og:description" content="An ultra-private luxury estate near the Las Vegas Strip for VIP stays, private events, productions, retreats, and curated concierge experiences." />
+  <meta property="og:image" content="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1730e5ab0c04a0ea3601a7.webp" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://casablancalv.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Luxury Mansion Rental Near the Las Vegas Strip | Casablanca Las Vegas" />
-  <meta name="twitter:description" content="A luxury private mansion-style estate rental just 5 miles from the Las Vegas Strip for group stays, private events, retreats, and VIP getaways." />
-  <meta name="twitter:image" content="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png" />
+  <meta name="twitter:description" content="Ultra-private Las Vegas luxury estate with resort pool, 10 bedrooms, 3D tour, VIP concierge support, and guided availability review." />
+  <meta name="twitter:image" content="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1730e5ab0c04a0ea3601a7.webp" />
   <!-- =========================================================
-       BLOCK 1 END: BASIC META + SEO
+       BLOCK 1 END: META, SEO, SOCIAL
        ========================================================= -->
 
   <!-- =========================================================
-       BLOCK 2 START: LIBRARIES
+       BLOCK 2 START: FONTS AND PRODUCTION CSS
        ========================================================= -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="dns-prefetch" href="https://media.eventective.com" />
   <link rel="dns-prefetch" href="https://assets.cdn.filesafe.space" />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="dns-prefetch" href="https://media.eventective.com" />
+  <link rel="dns-prefetch" href="https://my.matterport.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link rel="stylesheet" href="/assets/css/app.css" />
   <!-- =========================================================
-       BLOCK 2 END: LIBRARIES
+       BLOCK 2 END: FONTS AND PRODUCTION CSS
        ========================================================= -->
 
   <!-- =========================================================
-       BLOCK 3 START: TAILWIND CONFIG
-       ========================================================= -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            hacienda: {
-              cream: "#FAF9F6",
-              parchment: "#F5F5DC",
-              stucco: "#EEE6D4",
-              sand: "#D8C9AA",
-              iron: "#111111",
-              charcoal: "#222222",
-              ember: "#A05A2C",
-              gold: "#B9965A"
-            }
-          },
-          fontFamily: {
-            display: ["Cinzel", "serif"],
-            body: ["Inter", "sans-serif"]
-          }
-        }
-      }
-    };
-  </script>
-  <!-- =========================================================
-       BLOCK 3 END: TAILWIND CONFIG
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 4 START: CUSTOM CSS
-       ========================================================= -->
-  <style>
-    :root {
-      --cream: #FAF9F6;
-      --parchment: #F5F5DC;
-      --stucco: #EEE6D4;
-      --iron: #111111;
-      --charcoal: #222222;
-      --gold: #B9965A;
-      --ember: #A05A2C;
-      --container: min(1180px, calc(100% - clamp(1.25rem, 5vw, 4.5rem)));
-      --radius-xl: clamp(1.25rem, 2vw, 2.25rem);
-    }
-
-    * { box-sizing: border-box; }
-    html { background: var(--cream); color: var(--iron); }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      color: var(--iron);
-      background:
-        radial-gradient(circle at 18% 0%, rgba(160,90,44,.12), transparent 26rem),
-        radial-gradient(circle at 82% 14%, rgba(185,150,90,.16), transparent 30rem),
-        linear-gradient(180deg, #FAF9F6 0%, #F5F5DC 42%, #EEE6D4 100%);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: .23;
-      background-image:
-        radial-gradient(circle at 22% 18%, rgba(0,0,0,.06) 0 1px, transparent 1px),
-        radial-gradient(circle at 75% 42%, rgba(255,255,255,.65) 0 1px, transparent 1px),
-        radial-gradient(circle at 50% 88%, rgba(0,0,0,.045) 0 1px, transparent 1px);
-      background-size: 19px 19px, 31px 31px, 43px 43px;
-      mix-blend-mode: multiply;
-    }
-
-    body > * { position: relative; z-index: 1; }
-    .site-shell { width: var(--container); margin-inline: auto; }
-    .section-pad { padding-block: clamp(4rem, 8vw, 8rem); }
-    .font-display { letter-spacing: -.025em; }
-
-    .iron-bg {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      opacity: .14;
-      background-image: url("https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a138a136cc0eead5ccaa1a9.webp");
-      background-position: center center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      mix-blend-mode: multiply;
-      filter: contrast(1.12) saturate(.9);
-      will-change: transform;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: .65rem;
-      text-transform: uppercase;
-      letter-spacing: .22em;
-      font-size: .72rem;
-      font-weight: 800;
-      color: var(--ember);
-    }
-    .eyebrow::before {
-      content: "";
-      width: 2.2rem;
-      height: 1px;
-      background: currentColor;
-    }
-    .eyebrow::after {
-      content: "";
-      display: none;
-      width: 2.2rem;
-      height: 1px;
-      background: currentColor;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 3.1rem;
-      padding: .95rem 1.4rem;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: .8rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      transition: transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
-      white-space: nowrap;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: var(--iron); color: var(--cream); border: 1px solid var(--iron); }
-    .btn-outline { color: var(--iron); border: 1px solid rgba(17,17,17,.35); background: rgba(250,249,246,.42); backdrop-filter: blur(12px); }
-
-    .brand-logo-desktop {
-      display: block;
-      width: clamp(11rem, 16vw, 15rem);
-      height: auto;
-      max-height: 3rem;
-      object-fit: contain;
-      object-position: left center;
-    }
-    .brand-mobile-text { display: none; }
-
-    .hacienda-card {
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.62), rgba(245,245,220,.76)),
-        radial-gradient(circle at top left, rgba(185,150,90,.16), transparent 18rem);
-      border: 1px solid rgba(17,17,17,.16);
-      box-shadow: 0 24px 70px rgba(17,17,17,.13);
-      border-radius: var(--radius-xl);
-    }
-
-    .dark-card {
-      background:
-        linear-gradient(135deg, rgba(17,17,17,.98), rgba(34,34,34,.94)),
-        radial-gradient(circle at top right, rgba(185,150,90,.18), transparent 16rem);
-      color: var(--cream);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 30px 90px rgba(17,17,17,.32);
-      border-radius: var(--radius-xl);
-    }
-
-    .hero-section { padding-bottom: 16px; }
-    .hero-media::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(17,17,17,.86), rgba(17,17,17,.42) 43%, rgba(17,17,17,.76)),
-        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.68));
-      pointer-events: none;
-    }
-
-    .hero-stats { margin-top: 14px; margin-bottom: 18px; }
-    .stat-card { min-height: 5.7rem; }
-    .reveal { opacity: 0; transform: translateY(26px); }
-
-    .feature-list li {
-      display: flex;
-      gap: .75rem;
-      padding-block: .72rem;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-    }
-    .feature-list li::before {
-      content: "◆";
-      color: var(--gold);
-      flex: 0 0 auto;
-      font-size: .7rem;
-      margin-top: .25rem;
-    }
-
-    .gallery-stage {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 28px 80px rgba(0,0,0,.45);
-      background: rgba(255,255,255,.05);
-    }
-    .gallery-featured-img {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      display: block;
-      cursor: zoom-in;
-      filter: saturate(.96) contrast(1.05);
-    }
-    .gallery-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 3rem;
-      height: 3rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.45);
-      background: rgba(0,0,0,.48);
-      color: #fff;
-      font-size: 1.6rem;
-      line-height: 1;
-      display: grid;
-      place-items: center;
-      backdrop-filter: blur(10px);
-      transition: transform .2s ease, background .2s ease;
-    }
-    .gallery-arrow:hover { background: rgba(0,0,0,.72); transform: translateY(-50%) scale(1.04); }
-    .gallery-prev { left: 1rem; }
-    .gallery-next { right: 1rem; }
-    .gallery-thumbs {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(96px, 140px);
-      gap: .55rem;
-      overflow-x: auto;
-      padding: .75rem 0 .2rem;
-      scrollbar-width: thin;
-    }
-    .gallery-thumb {
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: .85rem;
-      overflow: hidden;
-      background: rgba(255,255,255,.07);
-      cursor: pointer;
-      opacity: .74;
-      transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
-    }
-    .gallery-thumb:hover, .gallery-thumb.is-active { opacity: 1; transform: translateY(-2px); border-color: var(--gold); }
-    .gallery-thumb img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
-
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      place-items: center;
-      background: rgba(0,0,0,.88);
-      padding: clamp(1rem, 4vw, 3rem);
-    }
-    .lightbox.active { display: grid; }
-    .lightbox img { max-width: min(1100px, 94vw); max-height: 82vh; object-fit: contain; border-radius: 1rem; box-shadow: 0 30px 100px rgba(0,0,0,.7); }
-    .lightbox button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 2.75rem;
-      height: 2.75rem;
-      border-radius: 999px;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.4);
-      background: rgba(0,0,0,.52);
-      font-size: 1.8rem;
-    }
-
-    .tour-video-slot { min-height: 1px; }
-    .tour-video-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(185,150,90,.42);
-      background: #050505;
-      box-shadow: 0 32px 90px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.07) inset;
-      transition: width .25s ease, right .25s ease, bottom .25s ease, transform .25s ease, border-radius .25s ease;
-    }
-    .tour-video-card video { width: 100%; display: block; aspect-ratio: 16 / 9; object-fit: cover; filter: contrast(1.06) brightness(.92); }
-    .tour-video-controls {
-      position: absolute;
-      left: .85rem;
-      right: .85rem;
-      bottom: .85rem;
-      display: flex;
-      gap: .45rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      z-index: 2;
-      opacity: 1;
-      pointer-events: auto;
-      transition: opacity .35s ease, transform .35s ease;
-      transform: translateY(0);
-    }
-    .tour-video-card.controls-hidden .tour-video-controls {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(8px);
-    }
-    .tour-control {
-      border: 1px solid rgba(255,255,255,.35);
-      color: #fff;
-      background: rgba(0,0,0,.52);
-      backdrop-filter: blur(10px);
-      border-radius: 999px;
-      padding: .58rem .82rem;
-      font-size: .74rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-    }
-    .tour-video-card.is-sticky {
-      position: fixed !important;
-      z-index: 9997;
-      right: clamp(.75rem, 3vw, 2rem);
-      bottom: clamp(.75rem, 3vw, 2rem);
-      width: min(420px, calc(100vw - 1.5rem));
-      border-radius: 1.1rem;
-      transform: none !important;
-    }
-    .tour-video-card.is-hidden { display: none; }
-
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      background: rgba(250,249,246,.92);
-      color: var(--iron);
-      border: 1px solid rgba(17,17,17,.22);
-      border-radius: 1rem;
-      padding: 1rem 1.05rem;
-      outline: none;
-      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
-    }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--iron);
-      box-shadow: 0 0 0 4px rgba(17,17,17,.08);
-      background: #fff;
-    }
-    .form-textarea { min-height: 9rem; resize: vertical; }
-    .status-note { min-height: 1.35rem; font-size: .86rem; font-weight: 700; }
-    .status-ok { color: #7ce09b; }
-    .status-warn { color: #f3bd74; }
-    .status-error { color: #ff9a9a; }
-
-    .footer-logo {
-      width: min(280px, 72vw);
-      height: auto;
-      display: block;
-      margin-inline: auto;
-    }
-
-    .flatpickr-calendar {
-      font-family: Inter, system-ui, sans-serif;
-      border-radius: 1.25rem !important;
-      border: 1px solid rgba(17,17,17,.18) !important;
-      box-shadow: 0 28px 80px rgba(17,17,17,.22) !important;
-      overflow: hidden;
-    }
-    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
-      background: var(--iron) !important;
-      border-color: var(--iron) !important;
-      color: var(--cream) !important;
-    }
-    .flatpickr-day.inRange {
-      background: rgba(17,17,17,.12) !important;
-      border-color: transparent !important;
-      color: var(--iron) !important;
-      box-shadow: -5px 0 0 rgba(17,17,17,.12), 5px 0 0 rgba(17,17,17,.12) !important;
-    }
-    .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover {
-      background: rgba(17,17,17,.12) !important;
-      color: rgba(17,17,17,.32) !important;
-      text-decoration: line-through;
-      cursor: not-allowed;
-    }
-
-    @media (max-width: 768px) {
-      .btn { width: 100%; }
-      .iron-bg { opacity: .12; background-size: cover; background-position: center center; }
-      .brand-logo-desktop { display: none; }
-      .brand-mobile-text {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: .08rem;
-        font-size: .88rem;
-        line-height: .98;
-        letter-spacing: .2em;
-      }
-      .eyebrow {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        gap: .55rem;
-        text-align: center;
-        letter-spacing: .16em;
-      }
-      .eyebrow::before,
-      .eyebrow::after {
-        display: block;
-        flex: 1 1 2rem;
-        max-width: 3rem;
-      }
-      .gallery-featured-img { aspect-ratio: 4 / 3; }
-      .gallery-arrow { width: 2.55rem; height: 2.55rem; font-size: 1.25rem; }
-      .gallery-prev { left: .55rem; }
-      .gallery-next { right: .55rem; }
-      .tour-video-card.is-sticky { width: calc(100vw - 1rem); right: .5rem; bottom: .5rem; }
-      .tour-video-controls { left: .55rem; right: .55rem; bottom: .55rem; justify-content: center; }
-      .tour-control { font-size: .62rem; padding: .46rem .58rem; letter-spacing: .07em; }
-      .hero-section { padding-bottom: 20px; }
-      .hero-stats { margin-bottom: 22px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal, .iron-bg { opacity: 1 !important; transform: none !important; transition: none !important; }
-    }
-  </style>
-  <!-- =========================================================
-       BLOCK 4 END: CUSTOM CSS
-       ========================================================= -->
-
-  <!-- =========================================================
-       BLOCK 5 START: STRUCTURED DATA
+       BLOCK 3 START: STRUCTURED DATA
        ========================================================= -->
   <script type="application/ld+json">
   {
@@ -483,700 +50,482 @@
         "@id": "https://casablancalv.vercel.app/#webpage",
         "url": "https://casablancalv.vercel.app/",
         "name": "Luxury Mansion Rental Near the Las Vegas Strip | Casablanca Las Vegas",
-        "description": "Book Casablanca Las Vegas, a luxury private mansion-style estate rental just 5 miles from the Strip for group stays, events, retreats, and VIP getaways.",
-        "keywords": "luxury mansion rental Las Vegas, Las Vegas mansions for rent, luxury vacation rentals Las Vegas, mansion rental Las Vegas, Las Vegas villa rental, private estate rental Las Vegas, luxury home rentals Las Vegas, vacation rental near Las Vegas Strip, private event venue Las Vegas, group vacation rental Las Vegas",
-        "about": ["Luxury vacation rental", "Mansion rental", "Private estate rental", "Las Vegas Strip lodging", "Group accommodations", "Private event venue", "Villa rental", "VIP travel", "Corporate retreat venue", "Luxury home rental"],
-        "mainEntity": { "@id": "https://casablancalv.vercel.app/#lodging" }
+        "description": "Explore Casablanca Las Vegas, an ultra-private luxury estate near the Las Vegas Strip with resort pool, 10 bedrooms, concierge add-ons, 3D tour, event pricing, and VIP booking support.",
+        "keywords": "luxury mansion rental Las Vegas, Las Vegas mansions for rent, luxury vacation rentals Las Vegas, private estate rental Las Vegas, Las Vegas villa rental, luxury home rental Las Vegas, private event venue Las Vegas, vacation rental near Las Vegas Strip, VIP concierge Las Vegas, production location Las Vegas",
+        "about": ["Luxury mansion rental", "Private estate rental", "Las Vegas Strip lodging", "VIP concierge", "Private event venue", "Photo shoot location", "Video production location", "Group vacation rental", "Luxury retreat venue"],
+        "mainEntity": { "@id": "https://casablancalv.vercel.app/#estate" }
       },
       {
         "@type": ["LodgingBusiness", "VacationRental", "LocalBusiness", "Place"],
-        "@id": "https://casablancalv.vercel.app/#lodging",
+        "@id": "https://casablancalv.vercel.app/#estate",
         "name": "Casablanca Las Vegas",
         "url": "https://casablancalv.vercel.app/",
-        "image": ["https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png", "https://media.eventective.com/4096902_lg.jpg", "https://media.eventective.com/4096883_lg.jpg"],
-        "description": "Casablanca Las Vegas is a luxury private mansion-style estate rental located about 5 miles from the Las Vegas Strip, offering an elevated alternative to hotels, suites, Airbnb, and VRBO for group stays, private celebrations, corporate retreats, and VIP Las Vegas getaways.",
-        "address": { "@type": "PostalAddress", "addressLocality": "Las Vegas", "addressRegion": "NV", "addressCountry": "US" },
+        "image": [
+          "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1730e5ab0c04a0ea3601a7.webp",
+          "https://media.eventective.com/4096902_lg.jpg",
+          "https://media.eventective.com/4096883_lg.jpg"
+        ],
+        "description": "Casablanca Las Vegas is an ultra-private luxury mansion-style estate near the Las Vegas Strip with 10 possible bedrooms, 6 bathrooms, resort-style pool, spa, courtyard, private yard, circular driveway, and VIP concierge support.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Las Vegas",
+          "addressRegion": "NV",
+          "postalCode": "89120",
+          "addressCountry": "US"
+        },
+        "floorSize": { "@type": "QuantitativeValue", "value": 6991, "unitCode": "FTK" },
         "amenityFeature": [
-          { "@type": "LocationFeatureSpecification", "name": "10 bedrooms", "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "6 bathrooms", "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Private resort pool", "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Jacuzzi", "value": true },
-          { "@type": "LocationFeatureSpecification", "name": "Gated private estate", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "10 possible bedrooms", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "6 full bathrooms", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Private in-ground pool with waterfall", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Spa", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Security system", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Circular driveway and carport parking", "value": true },
           { "@type": "LocationFeatureSpecification", "name": "Approximately 5 miles from the Las Vegas Strip", "value": true }
-        ]
+        ],
+        "areaServed": "Las Vegas, Nevada"
       },
       {
-        "@type": "BreadcrumbList",
-        "@id": "https://casablancalv.vercel.app/#breadcrumb",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://casablancalv.vercel.app/" },
-          { "@type": "ListItem", "position": 2, "name": "Luxury Mansion Rental Near the Las Vegas Strip", "item": "https://casablancalv.vercel.app/" }
-        ]
+        "@type": "Organization",
+        "@id": "https://cityvipconcierge.com/#organization",
+        "name": "City VIP Concierge",
+        "url": "https://cityvipconcierge.com/",
+        "description": "VIP concierge partner for Casablanca Las Vegas private chef, transportation, security, bartender, stocking, and production support add-ons."
       },
       {
         "@type": "FAQPage",
         "@id": "https://casablancalv.vercel.app/#faq",
         "mainEntity": [
-          { "@type": "Question", "name": "What is Casablanca Las Vegas?", "acceptedAnswer": { "@type": "Answer", "text": "Casablanca Las Vegas is a luxury private mansion-style estate rental located about 5 miles from the Las Vegas Strip." } },
-          { "@type": "Question", "name": "How far is Casablanca Las Vegas from the Strip?", "acceptedAnswer": { "@type": "Answer", "text": "Casablanca Las Vegas is located approximately 5 miles from the Las Vegas Strip, giving guests private estate-style space while staying close to major casinos, restaurants, nightlife, shows, and attractions." } },
-          { "@type": "Question", "name": "Is Casablanca Las Vegas good for group stays?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Casablanca Las Vegas is positioned for group stays, VIP getaways, retreats, private celebrations, and guests who want more privacy and space than a traditional hotel suite." } },
-          { "@type": "Question", "name": "Can Casablanca Las Vegas be used for private events?", "acceptedAnswer": { "@type": "Answer", "text": "Private event use may be available depending on group size, event type, dates, and property rules. Submit your preferred dates and details so the team can confirm availability and next steps." } }
+          { "@type": "Question", "name": "Where is Casablanca Las Vegas located?", "acceptedAnswer": { "@type": "Answer", "text": "Casablanca Las Vegas is located in a private Southeast Las Vegas residential estate area, approximately 5 miles from the Las Vegas Strip. Exact address details are shared during the private booking process." } },
+          { "@type": "Question", "name": "Can Casablanca Las Vegas host private events?", "acceptedAnswer": { "@type": "Answer", "text": "Private events may be available depending on event type, guest count, vendors, noise plan, dates, and approval. Submit an inquiry for review before making plans." } },
+          { "@type": "Question", "name": "Are dates automatically held when I submit the form?", "acceptedAnswer": { "@type": "Answer", "text": "No. New requests are submitted as pending inquiries for admin review. Dates become unavailable only after approval or confirmed hold." } },
+          { "@type": "Question", "name": "Who provides concierge services?", "acceptedAnswer": { "@type": "Answer", "text": "All concierge services are provided by City VIP Concierge, including transportation, private chef, bartender, security, grocery stocking, and production support options." } }
         ]
       }
     ]
   }
   </script>
   <!-- =========================================================
-       BLOCK 5 END: STRUCTURED DATA
+       BLOCK 3 END: STRUCTURED DATA
        ========================================================= -->
 </head>
 
 <body>
-  <div class="iron-bg" aria-hidden="true"></div>
-
   <!-- =========================================================
-       BLOCK 6 START: HEADER
+       BLOCK 4 START: HEADER + MOBILE DRAWER
        ========================================================= -->
-  <header class="fixed inset-x-0 top-0 z-50">
-    <div class="site-shell py-4">
-      <div class="flex items-center justify-between rounded-full border border-white/20 bg-black/25 px-4 py-3 text-hacienda-cream backdrop-blur-xl shadow-2xl">
-        <a href="#top" class="font-display font-extrabold uppercase tracking-[.2em]" aria-label="Casablanca Las Vegas home">
-          <img class="brand-logo-desktop" src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a5873c3aed7c63b13ea8.svg" alt="Casablanca Las Vegas luxury mansion rental near the Strip" />
-          <span class="brand-mobile-text"><span>Casablanca</span><span>Las Vegas</span></span>
-        </a>
-        <nav class="hidden items-center gap-6 text-xs font-extrabold uppercase tracking-[.18em] md:flex">
-          <a class="hover:text-hacienda-gold" href="#estate">Estate</a>
-          <a class="hover:text-hacienda-gold" href="#tour">Tour</a>
-          <a class="hover:text-hacienda-gold" href="#gallery">Gallery</a>
-          <a class="hover:text-hacienda-gold" href="#booking">Booking</a>
-        </nav>
-        <a href="#booking" class="hidden rounded-full bg-hacienda-cream px-5 py-3 text-xs font-extrabold uppercase tracking-[.16em] text-hacienda-iron transition hover:bg-white md:inline-flex">Request Dates</a>
-        <button id="mobileMenuButton" class="rounded-full border border-white/25 px-4 py-2 text-xs font-extrabold uppercase tracking-[.18em] md:hidden">Menu</button>
+  <header id="site-header" class="site-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="casa-container"><img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1711558c6ee949299e2da0.png" alt="Casablanca" class="text-img" width="150" height="31" /></div>
+        <div class="vegas-container"><img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a17115550a5a2a5d2fce6fd.png" alt="Las Vegas" class="text-img" width="150" height="31" /></div>
+        <a href="#top" class="logo-wrapper" aria-label="Casablanca Las Vegas home"><img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168b71ab53822e7e031366.png" alt="Casablanca Las Vegas Logo" class="main-logo" width="190" height="190" /></a>
       </div>
-      <nav id="mobileMenu" class="hidden mt-3 rounded-[1.5rem] border border-black/10 bg-hacienda-cream/95 p-4 text-sm font-extrabold uppercase tracking-[.14em] shadow-2xl md:hidden">
-        <a class="block py-3" href="#estate">Estate</a>
-        <a class="block py-3" href="#tour">Tour</a>
-        <a class="block py-3" href="#gallery">Gallery</a>
-        <a class="block py-3" href="#booking">Booking</a>
+
+      <nav class="nav-bar-container" aria-label="Primary navigation">
+        <ul class="nav-list nav-left">
+          <li class="nav-item"><a href="#welcome" class="nav-link">Welcome</a></li>
+          <li class="nav-item"><a href="#amenities" class="nav-link">Amenities</a></li>
+          <li class="nav-item"><a href="#video-tour" class="nav-link">Tours</a></li>
+          <li class="nav-item"><a href="#gallery" class="nav-link">Gallery</a></li>
+        </ul>
+        <ul class="nav-list nav-right">
+          <li class="nav-item"><a href="#availability" class="nav-link">Availability</a></li>
+          <li class="nav-item"><a href="#pricing" class="nav-link">Pricing</a></li>
+          <li class="nav-item"><a href="#concierge" class="nav-link">Concierge</a></li>
+          <li class="nav-item"><a href="#faq" class="nav-link">FAQs</a></li>
+        </ul>
+        <button id="hamburger-btn" class="hamburger-btn" type="button" aria-label="Open navigation">☰</button>
       </nav>
     </div>
   </header>
+
+  <aside id="drawer" class="drawer" aria-label="Mobile navigation">
+    <div class="drawer-header">
+      <img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168b71ab53822e7e031366.png" alt="Casablanca Las Vegas Logo" class="drawer-logo" width="130" height="130" />
+      <button id="close-drawer" class="close-btn" type="button" aria-label="Close navigation">×</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="#welcome">Welcome</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#video-tour">Video Tour</a>
+      <a href="#matterport">3D Tour</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#availability">Availability</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#concierge">Concierge</a>
+      <a href="#faq">FAQs</a>
+    </nav>
+    <div class="drawer-actions">
+      <a class="btn btn-gold" href="#availability">Request Private Review</a>
+      <a class="btn btn-outline" href="https://cityvipconcierge.com/" target="_blank" rel="noopener">City VIP Concierge</a>
+    </div>
+  </aside>
+  <div id="drawerOverlay" class="overlay" aria-hidden="true"></div>
   <!-- =========================================================
-       BLOCK 6 END: HEADER
+       BLOCK 4 END: HEADER + MOBILE DRAWER
        ========================================================= -->
 
   <main id="top">
     <!-- =========================================================
-         BLOCK 7 START: HERO
+         BLOCK 5 START: FULL BLEED HERO IMAGE — NO TEXT OVERLAY
          ========================================================= -->
-    <section class="hero-section relative min-h-[100svh] overflow-hidden bg-hacienda-iron text-hacienda-cream">
-      <div class="hero-media absolute inset-0">
-        <img class="h-full w-full object-cover" src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a9e43c3aed7c63b189ea.png" alt="Casablanca Las Vegas luxury mansion rental near the Strip with private resort pool and estate grounds" fetchpriority="high" />
+    <section class="hero" aria-label="Casablanca Las Vegas luxury estate hero image">
+      <picture class="hero-picture">
+        <source srcset="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1730e5ab0c04a0ea3601a7.webp 1920w" type="image/webp" sizes="100vw" />
+        <img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1730e5ab0c04a0ea3601a7.webp" srcset="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1730e5ab0c04a0ea3601a7.webp 1920w" sizes="100vw" width="1920" height="1080" alt="Ultra-private Casablanca Las Vegas luxury estate with resort pool near the Las Vegas Strip" fetchpriority="high" decoding="async" />
+      </picture>
+    </section>
+    <!-- =========================================================
+         BLOCK 5 END: FULL BLEED HERO IMAGE — NO TEXT OVERLAY
+         ========================================================= -->
+
+    <!-- =========================================================
+         BLOCK 6 START: INTRO / FIRST REVEAL SECTION
+         ========================================================= -->
+    <section id="welcome" class="section intro-panel">
+      <div class="narrow-shell card p-card reveal">
+        <p class="eyebrow center">Casablanca Las Vegas</p>
+        <h1 class="font-display title-lg" style="text-align:center; margin:1rem 0 1.25rem;">Luxury Mansion Rental Near the Las Vegas Strip</h1>
+        <p class="lead" style="text-align:center; max-width:920px; margin-inline:auto;">A private, high-end estate for guests who want the space of a luxury residence, the discretion of a private booking team, and the service layer of a VIP concierge experience. Casablanca Las Vegas is positioned for elevated group stays, private retreats, productions, professional networking events, weddings, and premium day events close to the Strip without placing the exact address in front of every casual browser.</p>
+        <div class="stat-row">
+          <div class="stat"><b>10</b><span>Possible Bedrooms</span></div>
+          <div class="stat"><b>6</b><span>Full Bathrooms</span></div>
+          <div class="stat"><b>6,991</b><span>Approx. Living Sq Ft</span></div>
+          <div class="stat"><b>1.13</b><span>Private Acres</span></div>
+        </div>
+        <div class="trust-strip">
+          <div class="badge">Secure Inquiry</div>
+          <div class="badge">Personally Verified Estate</div>
+          <div class="badge">Private Booking Support</div>
+        </div>
       </div>
-      <div class="relative z-10 flex min-h-[100svh] items-center">
-        <div class="site-shell pt-28 pb-6">
-          <div class="max-w-5xl">
-            <p class="eyebrow text-hacienda-gold reveal">Casablanca Las Vegas</p>
-            <h1 class="font-display mt-6 max-w-5xl text-[clamp(2.75rem,7vw,7rem)] font-extrabold leading-[.92] tracking-[-.055em] reveal">Luxury Mansion Rental Near the Las Vegas Strip</h1>
-            <p class="mt-5 font-display text-[clamp(1.35rem,3vw,2.5rem)] font-bold leading-tight text-hacienda-gold reveal">5 Miles to the Strip. 1.5 Acres All to Yourself.</p>
-            <p class="mt-5 max-w-3xl text-[clamp(1rem,1.45vw,1.22rem)] leading-8 text-white/84 reveal">Say goodbye to cramped hotel suites and restrictive resorts. Just 5 miles from the Strip for quick access to work or leisure, this high-privacy luxury hacienda is built for unforgettable group stays. Featuring a massive resort pool, a relaxing jacuzzi, and game-ready spaces tailored for both kids and adults, this exclusive estate gives your family and friends the freedom to connect in absolute, gated luxury.</p>
-            <div class="mt-8 flex flex-col gap-3 sm:flex-row reveal">
-              <a href="#booking" class="btn bg-hacienda-cream text-hacienda-iron hover:bg-white">Request Your Dates</a>
-              <a href="#gallery" class="btn border border-white/35 bg-white/10 text-white backdrop-blur-md hover:border-white">View Estate Gallery</a>
-            </div>
-            <div class="hero-stats grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4 reveal">
-              <div class="stat-card rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">10</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bedrooms</div></div>
-              <div class="stat-card rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">6</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Bathrooms</div></div>
-              <div class="stat-card rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">100</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Event Capacity</div></div>
-              <div class="stat-card rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"><div class="font-display text-3xl font-extrabold">1.5</div><div class="mt-1 text-xs font-bold uppercase tracking-[.16em] text-white/70">Acres</div></div>
-            </div>
+    </section>
+    <!-- =========================================================
+         BLOCK 6 END: INTRO / FIRST REVEAL SECTION
+         ========================================================= -->
+
+    <!-- =========================================================
+         BLOCK 7 START: ULTRA EXCLUSIVE POSITIONING
+         ========================================================= -->
+    <section class="section bg-ivory">
+      <div class="site-shell grid-2">
+        <div class="media-card parallax-media reveal">
+          <img src="https://media.eventective.com/4096902_lg.jpg" srcset="https://media.eventective.com/4096902_lg.jpg 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="1600" height="1067" alt="Private resort pool at Casablanca Las Vegas luxury estate rental" loading="lazy" decoding="async" />
+        </div>
+        <div class="reveal">
+          <p class="eyebrow">Private Estate Experience</p>
+          <h2 class="font-display title-lg">More High-End Private Real Estate Than Standard Vacation Rental</h2>
+          <p class="lead">Think private vineyard estate energy translated into Las Vegas: controlled arrival, discreet surroundings, resort-style pool, gated privacy, social rooms, and enough space for a curated itinerary instead of a standard hotel weekend.</p>
+          <div class="proof-grid" style="margin-top:1.5rem;">
+            <div class="mini-card"><h3>Matterport 3D Tour</h3><p>Guests can review the estate virtually before serious booking conversations.</p></div>
+            <div class="mini-card"><h3>Calendar-Connected</h3><p>Approved holds are reflected through the live availability system.</p></div>
+            <div class="mini-card"><h3>VIP Concierge Layer</h3><p>City VIP Concierge can coordinate upgrades beyond the property itself.</p></div>
           </div>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 7 END: HERO
+         BLOCK 7 END: ULTRA EXCLUSIVE POSITIONING
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 8 START: ESTATE INTRO
+         BLOCK 8 START: AMENITIES + PROPERTY DETAILS
          ========================================================= -->
-    <section id="estate" class="section-pad">
+    <section id="amenities" class="section bg-dark">
       <div class="site-shell">
-        <div class="grid gap-8 md:grid-cols-[.9fr_1.1fr] md:items-end">
-          <div>
-            <p class="eyebrow reveal">Welcome to Casablanca Las Vegas</p>
-            <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none text-hacienda-iron reveal">A Private Mansion-Style Estate Just 5 Miles from the Strip</h2>
+        <div class="grid-2">
+          <div class="reveal">
+            <p class="eyebrow">Estate Details</p>
+            <h2 class="font-display title-lg">Private Resort Amenities With Real Estate Substance</h2>
+            <p class="lead light">Casablanca Las Vegas combines scale, outdoor luxury, and practical event utility: marble and tile flooring, two fireplaces, large common spaces, private yard, courtyard, covered patio areas, balcony, deck, water feature, security system, and a private in-ground pool with waterfall.</p>
           </div>
-          <p class="max-w-2xl text-lg leading-9 text-black/70 reveal">Casablanca Las Vegas is a luxury private mansion-style estate rental located just 5 miles from the Las Vegas Strip, designed for group stays, private celebrations, executive retreats, VIP getaways, and guests who want more privacy, space, and exclusivity than a traditional hotel suite.</p>
-        </div>
-
-        <div class="mt-12 grid gap-6 lg:grid-cols-2 lg:items-stretch">
-          <div class="hacienda-card overflow-hidden reveal"><img src="https://media.eventective.com/4096883_lg.jpg" alt="Private mansion-style estate rental in Las Vegas for group stays and VIP getaways" class="h-full min-h-[28rem] w-full object-cover" loading="lazy" /></div>
-          <div class="dark-card p-[clamp(1.5rem,4vw,3rem)] reveal">
-            <p class="eyebrow text-hacienda-gold">Luxury Vacation Rental for Groups, Retreats & VIP Getaways</p>
-            <h3 class="font-display mt-5 text-[clamp(2rem,4vw,4.25rem)] font-extrabold leading-none">An Elegant Alternative to Hotels, Suites, Airbnb & VRBO</h3>
-            <p class="mt-6 text-lg leading-9 text-white/72">This Las Vegas mansion rental gives guests private estate amenities, resort-style outdoor space, indoor-outdoor entertaining areas, and a calm gated environment close to the Strip without feeling trapped inside a traditional resort.</p>
-            <ul class="feature-list mt-7 text-white/78">
-              <li>Luxury vacation home in Las Vegas with 10 bedrooms, 6 bathrooms, and expansive common areas.</li>
-              <li>Massive private resort pool, relaxing jacuzzi, courtyard space, and luxury outdoor entertaining areas.</li>
-              <li>Game-ready spaces for families, friends, retreats, productions, VIP celebrations, and corporate groups.</li>
-              <li>A Las Vegas villa-style rental experience with the privacy and flexibility of a full private estate.</li>
+          <div class="card-dark p-card reveal">
+            <ul class="feature-list">
+              <li>Residential current use with approximately 6,991 square feet of living area and 6,155 square feet of building area listed in property data.</li>
+              <li>Lot features include backyard, garden, landscaped grounds, drip irrigation, synthetic grass, and sprinkler timers.</li>
+              <li>Exterior features include balcony, circular driveway, courtyard, deck, covered patio, private yard, water feature, and full block/electric fencing.</li>
+              <li>Interior features include main-level laundry, ceiling fans, bedroom on main level, central air, gas heat, and multiple heating/cooling units.</li>
+              <li>Kitchen information includes custom cabinets, granite countertops, island, and pantry.</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 8 END: ESTATE INTRO
+         BLOCK 8 END: AMENITIES + PROPERTY DETAILS
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 9 START: AMENITIES
+         BLOCK 9 START: VIDEO TOUR + 3D TOUR
          ========================================================= -->
-    <section id="features" class="section-pad pt-0">
-      <div class="site-shell">
-        <div class="max-w-3xl">
-          <p class="eyebrow reveal">Private Estate Amenities</p>
-          <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none reveal">Private Estate Amenities Designed for a Las Vegas Escape</h2>
+    <section id="video-tour" class="section bg-dark">
+      <div class="site-shell grid-2">
+        <div class="reveal">
+          <p class="eyebrow">Estate Tour</p>
+          <h2 class="font-display title-lg">Casablanca Las Vegas Estate Tour</h2>
+          <p class="lead light">Start with the cinematic property tour, then explore the 3D walkthrough below. The video player follows as you scroll, but the controls fade away so the estate stays front and center.</p>
         </div>
-        <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Resort Pool & Jacuzzi</h3><p class="mt-4 leading-7 text-black/68">A luxury Las Vegas vacation rental with a massive private pool, jacuzzi relaxation, and resort-style outdoor space for friends, family, and VIP stays.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Gated Privacy Near the Strip</h3><p class="mt-4 leading-7 text-black/68">A private estate rental in Las Vegas that keeps your group close to the Strip while giving everyone room to breathe.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Group Stay Layout</h3><p class="mt-4 leading-7 text-black/68">Built for Las Vegas rental estate group stays with flexible indoor-outdoor gathering zones and family-friendly social spaces.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Chef-Style Kitchen</h3><p class="mt-4 leading-7 text-black/68">A luxury vacation home setup with group dining, entertaining utility, and space for private meals or catered experiences.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Game & Lounge Energy</h3><p class="mt-4 leading-7 text-black/68">Game-ready spaces for kids and adults, designed to make the estate feel like a private Las Vegas retreat rental.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Private Events & Retreats</h3><p class="mt-4 leading-7 text-black/68">Private event use may be available depending on group size, event type, dates, and property rules.</p></article>
+        <div id="estateVideoSlot" class="reveal">
+          <div id="estateVideoShell" class="video-shell">
+            <video id="estateVideo" muted playsinline preload="metadata" poster="https://media.eventective.com/4096897_lg.jpg" aria-label="Casablanca Las Vegas luxury estate tour video">
+              <source src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1399a9e05851175c6f3221.mp4" type="video/mp4" />
+            </video>
+            <div class="video-controls" aria-label="Video controls">
+              <button id="videoClose" class="video-control" type="button">Close</button>
+              <button id="videoBack" class="video-control" type="button">Back 10</button>
+              <button id="videoPause" class="video-control" type="button">Play</button>
+              <button id="videoForward" class="video-control" type="button">Fwd 10</button>
+              <button id="videoMusic" class="video-control" type="button">Music Off</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="matterport" class="site-shell section-tight" style="padding-bottom:0;">
+        <div class="reveal" style="text-align:center; max-width:900px; margin-inline:auto; margin-bottom:2rem;">
+          <p class="eyebrow center">3D Virtual Tour</p>
+          <h2 class="font-display title-md">Walk the Estate Before the Private Review</h2>
+          <p class="lead light">Use the Matterport tour to understand flow, gathering areas, bedrooms, and indoor-outdoor movement before submitting your preferred dates.</p>
+        </div>
+        <div class="matterport-shell reveal">
+          <iframe src="https://my.matterport.com/show/?m=SJM6jmmgauy" title="Casablanca Las Vegas Matterport 3D virtual tour" allowfullscreen loading="lazy"></iframe>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 9 END: AMENITIES
+         BLOCK 9 END: VIDEO TOUR + 3D TOUR
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 10 START: ESTATE TOUR VIDEO
+         BLOCK 10 START: GALLERY
          ========================================================= -->
-    <section id="tour" class="section-pad bg-hacienda-iron text-hacienda-cream">
+    <section id="gallery" class="section bg-dark">
       <div class="site-shell">
-        <div class="grid gap-8 lg:grid-cols-[.82fr_1.18fr] lg:items-center">
+        <div class="grid-2" style="align-items:end; margin-bottom:2rem;">
           <div class="reveal">
-            <p class="eyebrow text-hacienda-gold">Estate Tour</p>
-            <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none">Casablanca Las Vegas Estate Tour</h2>
-            <p class="mt-6 text-lg leading-9 text-white/72">Luxury private mansion-style estate near the Strip. Watch the property tour, then keep exploring the page while the player follows you until you close it.</p>
+            <p class="eyebrow">Luxury Estate Gallery</p>
+            <h2 class="font-display title-lg">A Closer Look at Luxury.</h2>
           </div>
-          <div id="estateVideoSlot" class="tour-video-slot">
-            <div id="estateVideoCard" class="tour-video-card">
-              <video id="estateTourVideo" muted playsinline preload="metadata" poster="https://media.eventective.com/4096897_lg.jpg" aria-label="Casablanca Las Vegas luxury estate tour video near the Strip">
-                <source src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1399a9e05851175c6f3221.mp4" type="video/mp4" />
-              </video>
-              <div class="tour-video-controls" aria-label="Video player controls">
-                <button id="tourClose" class="tour-control" type="button">Close</button>
-                <button id="tourBack" class="tour-control" type="button">Back 10</button>
-                <button id="tourPause" class="tour-control" type="button">Play</button>
-                <button id="tourForward" class="tour-control" type="button">Fwd 10</button>
-                <button id="tourMusic" class="tour-control" type="button">Music Off</button>
-              </div>
-            </div>
-          </div>
+          <p class="lead light reveal">The gallery is now powered by structured JSON data, with lazy-loaded thumbnails, alt text, image dimensions, responsive sizing, and analytics events for engagement tracking.</p>
         </div>
+        <div class="gallery-stage reveal">
+          <img id="galleryFeatured" class="gallery-featured" src="https://media.eventective.com/4096897_lg.jpg" srcset="https://media.eventective.com/4096897_lg.jpg 1600w" sizes="100vw" width="1600" height="1067" alt="Casablanca Las Vegas luxury mansion rental near the Strip" loading="eager" decoding="async" />
+        </div>
+        <div class="gallery-controls reveal">
+          <button id="galleryPrev" class="gallery-btn" type="button" aria-label="Previous gallery image">‹</button>
+          <button id="galleryNext" class="gallery-btn" type="button" aria-label="Next gallery image">›</button>
+        </div>
+        <div id="galleryThumbs" class="gallery-thumbs reveal" aria-label="Casablanca Las Vegas gallery thumbnails"></div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 10 END: ESTATE TOUR VIDEO
+         BLOCK 10 END: GALLERY
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 11 START: GALLERY
+         BLOCK 11 START: PRICING GUIDANCE
          ========================================================= -->
-    <section id="gallery" class="section-pad bg-hacienda-iron text-hacienda-cream">
+    <section id="pricing" class="section bg-cream">
       <div class="site-shell">
-        <div class="grid gap-8 md:grid-cols-[.85fr_1.15fr] md:items-end">
-          <div>
-            <p class="eyebrow text-hacienda-gold reveal">Luxury Estate Gallery</p>
-            <h2 class="font-display mt-5 text-[clamp(2.2rem,5vw,5rem)] font-extrabold leading-none reveal">A Closer Look at Luxury.</h2>
-          </div>
-          <p class="max-w-2xl text-lg leading-9 text-white/70 reveal">The details make all the difference. Tour the pristine outdoor grounds, the sweeping courtyard, and the flawlessly curated social spaces that make this sprawling estate the perfect canvas for your friends, family, or next private event.</p>
+        <div class="reveal" style="text-align:center; max-width:980px; margin-inline:auto; margin-bottom:2rem;">
+          <p class="eyebrow center">Starting Pricing & Guidance</p>
+          <h2 class="font-display title-lg">Premium Estate Pricing by Use Case</h2>
+          <p class="lead">Pricing depends on date category, guest count, overnight use, event type, vendor requirements, and concierge build-out. These ranges create a transparent starting point before private review.</p>
         </div>
-        <div class="mt-12 reveal">
-          <div class="gallery-stage">
-            <img id="galleryFeatured" class="gallery-featured-img" src="https://media.eventective.com/4096897_lg.jpg" alt="Casablanca Las Vegas luxury mansion rental near the Strip" loading="eager" />
-            <button id="galleryPrev" class="gallery-arrow gallery-prev" type="button" aria-label="Previous image">‹</button>
-            <button id="galleryNext" class="gallery-arrow gallery-next" type="button" aria-label="Next image">›</button>
-          </div>
-          <div id="galleryThumbs" class="gallery-thumbs" aria-label="Casablanca Las Vegas gallery thumbnails"></div>
+        <div class="pricing-grid">
+          <article class="price-card reveal"><h3>Photo Shoot / Video Production</h3><div class="price">$4,500</div><div class="count">20 guests max</div></article>
+          <article class="price-card reveal"><h3>Professional Networking Event</h3><div class="price">$4,500</div><div class="count">1–60 guests · 4 hours</div></article>
+          <article class="price-card reveal"><h3>Day Events</h3><div class="price">$6,000–$12,489</div><div class="count">100 guests max</div></article>
+          <article class="price-card reveal"><h3>Production: 21–40 Guests</h3><div class="price">$6,500</div><div class="count">30 guests max</div></article>
+          <article class="price-card reveal"><h3>Weekday Overnight Package</h3><div class="price">$6,500–$8,500</div><div class="count">1–23 guests · non-premium dates</div></article>
+          <article class="price-card reveal"><h3>Couples Retreat Package</h3><div class="price">$8,500–$25,000</div><div class="count">2–20 guests · 3 days / 2 nights</div></article>
+          <article class="price-card reveal"><h3>Holiday Day Events</h3><div class="price">$10,000–$14,989</div><div class="count">102 guests max</div></article>
+          <article class="price-card reveal"><h3>Premium Date Day Events</h3><div class="price">$10,000–$14,999</div><div class="count">100 guests max</div></article>
+          <article class="price-card reveal"><h3>Weekend Overnight Package</h3><div class="price">$10,000–$15,000</div><div class="count">1–23 guests · non-premium dates</div></article>
+          <article class="price-card reveal"><h3>Production: 45–100 Guests</h3><div class="price">$11,000</div><div class="count">45–60 guests</div></article>
+          <article class="price-card reveal"><h3>Wedding Package</h3><div class="price">$18,000</div><div class="count">100 wedding guests · 3 days / 2 nights</div></article>
+          <article class="price-card reveal"><h3>Holiday Weekend Premium</h3><div class="price">$30,000–$40,000</div><div class="count">23 guests max · 3 days / 2 nights</div></article>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 11 END: GALLERY
+         BLOCK 11 END: PRICING GUIDANCE
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 12 START: VIP BOOKING
+         BLOCK 12 START: SLEEPING LAYOUT
          ========================================================= -->
-    <section id="booking" class="section-pad bg-hacienda-stucco">
+    <section id="sleeping-layout" class="section bg-ivory">
       <div class="site-shell">
-        <div class="dark-card overflow-hidden">
-          <div class="grid lg:grid-cols-[.9fr_1.1fr]">
-            <div class="relative min-h-[28rem]">
-              <img src="https://media.eventective.com/4096902_lg.jpg" alt="Private event estate rental near the Las Vegas Strip with luxury resort pool" class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20"></div>
-              <div class="absolute inset-x-0 bottom-0 p-[clamp(1.5rem,4vw,3rem)]">
-                <p class="eyebrow text-hacienda-gold">VIP Booking</p>
-                <h2 class="font-display mt-5 text-[clamp(2rem,4vw,4rem)] font-extrabold leading-none">Request Your Dates</h2>
-                <p class="mt-5 max-w-lg leading-8 text-white/72">Choose your dates below to begin the reservation process. To maintain our standard of exceptional hospitality, our team handles all bookings personally. We will contact you directly to confirm availability, securely process your payment, and walk through the details of your upcoming Casablanca Las Vegas experience.</p>
-              </div>
-            </div>
-            <div class="p-[clamp(1.25rem,4vw,3rem)]">
-              <form id="bookingForm" class="grid gap-4" novalidate>
-                <div>
-                  <label for="stayRange" class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70">Check-In / Check-Out</label>
-                  <input id="stayRange" class="form-input" type="text" placeholder="Select your date range" readonly required />
-                  <input id="checkIn" name="checkIn" type="hidden" />
-                  <input id="checkOut" name="checkOut" type="hidden" />
-                  <p id="calendarStatus" class="status-note status-warn mt-2">Loading booking calendar...</p>
-                </div>
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="name">Name</label><input id="name" name="name" class="form-input" type="text" autocomplete="name" placeholder="Your name" required /></div>
-                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="email">Email</label><input id="email" name="email" class="form-input" type="email" autocomplete="email" placeholder="you@example.com" required /></div>
-                </div>
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="phone">Phone</label><input id="phone" name="phone" class="form-input" type="tel" autocomplete="tel" placeholder="Phone number" /></div>
-                  <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="guestCount">Guest Count</label><input id="guestCount" name="guestCount" class="form-input" type="number" min="1" max="120" placeholder="Estimated guests" required /></div>
-                </div>
-                <div class="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="eventType">Inquiry Type</label>
-                    <select id="eventType" name="eventType" class="form-select" required>
-                      <option value="">Select one</option>
-                      <option>Private Overnight Stay</option>
-                      <option>Photo / Video Production</option>
-                      <option>Professional Networking Event</option>
-                      <option>Wedding / Celebration</option>
-                      <option>Retreat / VIP Hospitality</option>
-                      <option>Other Private Event</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="budget">Budget Range</label>
-                    <select id="budget" name="budget" class="form-select">
-                      <option value="">Select range</option>
-                      <option>$4,500 - $6,500</option>
-                      <option>$6,500 - $10,000</option>
-                      <option>$10,000 - $18,000</option>
-                      <option>$18,000+</option>
-                      <option>Not sure yet</option>
-                    </select>
-                  </div>
-                </div>
-                <div><label class="mb-2 block text-xs font-extrabold uppercase tracking-[.16em] text-white/70" for="message">Details</label><textarea id="message" name="message" class="form-textarea" placeholder="Tell us what you are planning, ideal arrival/departure times, event purpose, production needs, or VIP add-ons."></textarea></div>
-                <button id="submitBooking" class="btn bg-hacienda-cream text-hacienda-iron hover:bg-white" type="submit">Submit VIP Inquiry</button>
-                <p id="formStatus" class="status-note text-white/70"></p>
-              </form>
-            </div>
+        <div class="grid-2" style="align-items:start;">
+          <div class="reveal">
+            <p class="eyebrow">Bedroom-by-Bedroom Layout</p>
+            <h2 class="font-display title-lg">Sleeping Layout & Room Flow</h2>
+            <p class="lead">Bed sizes and final assignments are confirmed during private booking review, but property records support 10 possible bedrooms and 6 full bathrooms, with several major common rooms for gathering, dining, and production support.</p>
+          </div>
+          <div class="bedroom-grid">
+            <div class="mini-card reveal"><h3>Primary Bedroom</h3><p>Upstairs, separate from other rooms, walk-in closet; listed dimensions 29×24.</p></div>
+            <div class="mini-card reveal"><h3>Bedroom 2</h3><p>Listed dimensions 18×19; ideal for VIP guest assignment review.</p></div>
+            <div class="mini-card reveal"><h3>Bedroom 3</h3><p>Listed dimensions 17×13; final sleeping setup confirmed before booking.</p></div>
+            <div class="mini-card reveal"><h3>Bedroom 4</h3><p>With bath; listed dimensions 13×16.</p></div>
+            <div class="mini-card reveal"><h3>Bedroom 5</h3><p>Downstairs; listed dimensions 17×15.</p></div>
+            <div class="mini-card reveal"><h3>Additional Sleeping Rooms</h3><p>Property records list 10 possible bedrooms; concierge team confirms current bed setup during review.</p></div>
+            <div class="mini-card reveal"><h3>Great Room</h3><p>Downstairs gathering room; listed dimensions 35×30.</p></div>
+            <div class="mini-card reveal"><h3>Living Room</h3><p>Rear living room; listed dimensions 35×30.</p></div>
+            <div class="mini-card reveal"><h3>Family Room</h3><p>Downstairs, separate family room with wet bar; listed dimensions 25×30.</p></div>
           </div>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 12 END: VIP BOOKING
+         BLOCK 12 END: SLEEPING LAYOUT
          ========================================================= -->
 
     <!-- =========================================================
-         BLOCK 13 START: FAQ
+         BLOCK 13 START: CONCIERGE SERVICES
          ========================================================= -->
-    <section id="faq" class="section-pad">
+    <section id="concierge" class="section bg-dark">
       <div class="site-shell">
-        <div class="max-w-3xl">
-          <p class="eyebrow reveal">Frequently Asked Questions</p>
-          <h2 class="font-display mt-5 text-[clamp(2.1rem,5vw,4.8rem)] font-extrabold leading-none reveal">Frequently Asked Questions About Casablanca Las Vegas</h2>
+        <div class="reveal" style="text-align:center; max-width:960px; margin-inline:auto; margin-bottom:2rem;">
+          <p class="eyebrow center">City VIP Concierge</p>
+          <h2 class="font-display title-lg">Concierge & VIP Add-Ons</h2>
+          <p class="lead light">All concierge services are provided by <a href="https://cityvipconcierge.com/" target="_blank" rel="noopener" style="color:var(--gold); font-weight:900;">City VIP Concierge</a>. Add-ons are coordinated separately from base estate pricing and may require additional approvals, vendors, staffing, insurance, or lead time.</p>
         </div>
-        <div class="mt-10 grid gap-4 md:grid-cols-2">
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">What is Casablanca Las Vegas?</h3><p class="mt-4 leading-7 text-black/68">Casablanca Las Vegas is a luxury private mansion-style estate rental located about 5 miles from the Las Vegas Strip.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">How far is Casablanca from the Strip?</h3><p class="mt-4 leading-7 text-black/68">Casablanca Las Vegas is approximately 5 miles from the Strip, close enough for casinos, restaurants, nightlife, shows, and attractions while still giving your group private estate-style space.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Is Casablanca good for group stays?</h3><p class="mt-4 leading-7 text-black/68">Yes. Casablanca is positioned for group stays, VIP getaways, retreats, private celebrations, and guests who want more privacy and room than a traditional hotel suite.</p></article>
-          <article class="hacienda-card p-7 reveal"><h3 class="font-display text-2xl font-extrabold">Can Casablanca be used for private events?</h3><p class="mt-4 leading-7 text-black/68">Private event use may be available depending on group size, event type, dates, and property rules. Submit your preferred dates and event details so the team can confirm availability.</p></article>
+        <div class="concierge-grid">
+          <div class="mini-card reveal"><h3>Private Chef</h3><p>Chef dinners, plated meals, casual poolside dining, or specialty menu support.</p></div>
+          <div class="mini-card reveal"><h3>Transportation</h3><p>Airport transfers, Sprinters, executive SUVs, group shuttles, and Strip transportation.</p></div>
+          <div class="mini-card reveal"><h3>Security</h3><p>Private security planning for high-profile guests, productions, or larger events.</p></div>
+          <div class="mini-card reveal"><h3>Bartender & Service Staff</h3><p>Private bartender, cocktail service, wait staff, and event hospitality support.</p></div>
+          <div class="mini-card reveal"><h3>Grocery Stocking</h3><p>Arrival-ready pantry, beverages, snacks, wellness requests, and celebration packages.</p></div>
+          <div class="mini-card reveal"><h3>Production Support</h3><p>Load-in coordination, production schedule support, staging considerations, and vendor flow.</p></div>
         </div>
       </div>
     </section>
     <!-- =========================================================
-         BLOCK 13 END: FAQ
+         BLOCK 13 END: CONCIERGE SERVICES
+         ========================================================= -->
+
+    <!-- =========================================================
+         BLOCK 14 START: POLICIES + LOCATION CONTEXT
+         ========================================================= -->
+    <section id="policies" class="section bg-cream">
+      <div class="site-shell">
+        <div class="grid-2" style="align-items:start;">
+          <div class="reveal">
+            <p class="eyebrow">Policies & Location</p>
+            <h2 class="font-display title-lg">Private Review Before Exact Address Release</h2>
+            <p class="lead">Casablanca Las Vegas is in Southeast Las Vegas near the Russell / Eastern corridor, roughly 5 miles from the Strip and close to Harry Reid International Airport. Exact address and access details are released during the private booking process.</p>
+          </div>
+          <div class="policy-grid">
+            <div class="mini-card reveal"><h3>Events</h3><p>Events require approval based on guest count, event use, hours, vendors, staffing, noise plan, and date category.</p></div>
+            <div class="mini-card reveal"><h3>Deposits</h3><p>Deposit and payment terms are confirmed in the private booking agreement based on package type and date demand.</p></div>
+            <div class="mini-card reveal"><h3>Cancellation</h3><p>Cancellation terms are confirmed before payment and may vary for premium, holiday, overnight, event, and production dates.</p></div>
+            <div class="mini-card reveal"><h3>Noise</h3><p>Quiet hours, amplified sound, DJ/music, and outdoor activity must follow venue rules and local requirements.</p></div>
+            <div class="mini-card reveal"><h3>Vendors</h3><p>Outside vendors may require approval, insurance, load-in coordination, parking plans, and conduct standards.</p></div>
+            <div class="mini-card reveal"><h3>Address Privacy</h3><p>General location context is public; exact address is held for qualified booking conversations and confirmed guests.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- =========================================================
+         BLOCK 14 END: POLICIES + LOCATION CONTEXT
+         ========================================================= -->
+
+    <!-- =========================================================
+         BLOCK 15 START: AVAILABILITY FORM
+         ========================================================= -->
+    <section id="availability" class="section bg-dark">
+      <div class="site-shell grid-2">
+        <div class="reveal">
+          <p class="eyebrow">Secure Inquiry</p>
+          <h2 class="font-display title-lg">Request Private Availability Review</h2>
+          <p class="lead light">New submissions are now treated as pending private inquiries, not automatic hard holds. Our team reviews the date window, event type, guest count, and concierge needs before approving or blocking dates.</p>
+          <div class="trust-strip" style="grid-template-columns:1fr;">
+            <div class="badge" style="background:rgba(255,255,255,.08); color:var(--bg-ivory);">Pending/Admin-Approved Holds</div>
+            <div class="badge" style="background:rgba(255,255,255,.08); color:var(--bg-ivory);">Anti-Spam Protected Form</div>
+            <div class="badge" style="background:rgba(255,255,255,.08); color:var(--bg-ivory);">Analytics Event Tracking</div>
+          </div>
+        </div>
+        <div class="card-dark p-card reveal">
+          <form id="bookingForm" class="form-grid" novalidate>
+            <input class="honeypot" type="text" id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <input type="hidden" id="sourcePage" name="sourcePage" value="Casablanca Las Vegas homepage" />
+            <input type="hidden" id="checkIn" name="checkIn" />
+            <input type="hidden" id="checkOut" name="checkOut" />
+            <div class="form-field full">
+              <label for="stayRange">Check-In / Check-Out</label>
+              <input id="stayRange" class="form-input" type="text" placeholder="Select your date range" readonly required />
+              <p id="calendarStatus" class="status-note status-warn">Loading booking calendar...</p>
+            </div>
+            <div class="form-field"><label for="name">Name</label><input id="name" name="name" class="form-input" type="text" autocomplete="name" placeholder="Your name" required /></div>
+            <div class="form-field"><label for="email">Email</label><input id="email" name="email" class="form-input" type="email" autocomplete="email" placeholder="you@example.com" required /></div>
+            <div class="form-field"><label for="phone">Phone</label><input id="phone" name="phone" class="form-input" type="tel" autocomplete="tel" placeholder="Phone number" /></div>
+            <div class="form-field"><label for="guestCount">Guest Count</label><input id="guestCount" name="guestCount" class="form-input" type="number" min="1" max="120" placeholder="Estimated guests" required /></div>
+            <div class="form-field"><label for="eventType">Inquiry Type</label><select id="eventType" name="eventType" class="form-select" required><option value="">Select one</option><option>Private Overnight Stay</option><option>Photo / Video Production</option><option>Professional Networking Event</option><option>Wedding / Celebration</option><option>Couples Retreat</option><option>Day Event</option><option>Holiday / Premium Date</option><option>Other Private Event</option></select></div>
+            <div class="form-field"><label for="budget">Budget Range</label><select id="budget" name="budget" class="form-select"><option value="">Select range</option><option>$4,500 - $6,500</option><option>$6,500 - $10,000</option><option>$10,000 - $18,000</option><option>$18,000 - $30,000</option><option>$30,000+</option><option>Not sure yet</option></select></div>
+            <div class="form-field full"><label for="message">Details</label><textarea id="message" name="message" class="form-textarea" placeholder="Tell us about your preferred dates, event purpose, arrival/departure needs, concierge add-ons, vendors, production requirements, or guest experience goals."></textarea></div>
+            <div class="form-field full"><button id="submitBooking" class="btn btn-gold" type="submit">Submit Private Inquiry</button><p id="formStatus" class="status-note"></p></div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- =========================================================
+         BLOCK 15 END: AVAILABILITY FORM
+         ========================================================= -->
+
+    <!-- =========================================================
+         BLOCK 16 START: FAQ
+         ========================================================= -->
+    <section id="faq" class="section bg-ivory">
+      <div class="site-shell">
+        <div class="reveal" style="text-align:center; max-width:920px; margin-inline:auto; margin-bottom:2rem;">
+          <p class="eyebrow center">FAQ</p>
+          <h2 class="font-display title-lg">Private Estate Rental Questions</h2>
+        </div>
+        <div class="policy-grid">
+          <div class="mini-card reveal"><h3>Are form submissions automatic holds?</h3><p>No. New submissions are pending inquiries. Dates block only after admin approval or confirmed hold.</p></div>
+          <div class="mini-card reveal"><h3>Can I host a large event?</h3><p>Possibly. Event use is reviewed by guest count, duration, vendors, noise, date category, and staffing requirements.</p></div>
+          <div class="mini-card reveal"><h3>Who handles concierge add-ons?</h3><p>All concierge services are provided by City VIP Concierge at cityvipconcierge.com.</p></div>
+          <div class="mini-card reveal"><h3>Is the exact address public?</h3><p>No. The general Southeast Las Vegas location is provided publicly, while exact access details are reserved for private booking conversations.</p></div>
+          <div class="mini-card reveal"><h3>Can productions book the property?</h3><p>Yes, production pricing guidance is available for photo, video, and music production use cases, subject to approval.</p></div>
+          <div class="mini-card reveal"><h3>Are overnight stays available?</h3><p>Yes. Weekday, weekend, couples retreat, wedding, and premium holiday overnight packages are available depending on dates and approval.</p></div>
+        </div>
+      </div>
+    </section>
+    <!-- =========================================================
+         BLOCK 16 END: FAQ
          ========================================================= -->
   </main>
 
   <!-- =========================================================
-       BLOCK 14 START: LIGHTBOX + FOOTER
+       BLOCK 17 START: LIGHTBOX + FOOTER
        ========================================================= -->
   <div id="galleryLightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Casablanca Las Vegas image viewer">
-    <button id="lightboxClose" type="button" aria-label="Close gallery image">×</button>
-    <img id="lightboxImage" src="https://media.eventective.com/4096897_lg.jpg" alt="Casablanca Las Vegas luxury estate gallery image" />
+    <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Close gallery image">×</button>
+    <img id="lightboxImage" src="https://media.eventective.com/4096897_lg.jpg" alt="Casablanca Las Vegas estate gallery image" width="1600" height="1067" />
   </div>
 
-  <footer class="bg-hacienda-iron py-12 text-hacienda-cream">
-    <div class="site-shell flex flex-col items-center justify-center gap-6 text-center">
-      <img class="footer-logo" src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a587fe2210f89e6cc355.svg" alt="Casablanca Las Vegas luxury private estate rental logo" loading="lazy" />
-      <p class="max-w-2xl text-sm leading-7 text-white/55">Luxury mansion rental near the Las Vegas Strip for group stays, private celebrations, retreats, and VIP getaways.</p>
-      <a href="#booking" class="btn border border-white/25 bg-white/10 text-white hover:border-white">Request Availability</a>
+  <footer class="section-tight bg-dark">
+    <div class="site-shell" style="text-align:center;">
+      <img src="https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a13a587fe2210f89e6cc355.svg" alt="Casablanca Las Vegas logo" width="280" height="120" loading="lazy" style="width:min(280px,72vw); height:auto; margin-inline:auto; display:block;" />
+      <p class="lead light" style="max-width:780px; margin:1.5rem auto 0;">Ultra-private luxury mansion rental near the Las Vegas Strip with secure inquiry review, 3D tour, VIP concierge add-ons, and private booking support.</p>
+      <div style="display:flex; gap:.85rem; justify-content:center; flex-wrap:wrap; margin-top:1.5rem;">
+        <a class="btn btn-gold" href="#availability">Request Availability</a>
+        <a class="btn btn-outline" href="https://cityvipconcierge.com/" target="_blank" rel="noopener">City VIP Concierge</a>
+      </div>
     </div>
   </footer>
   <!-- =========================================================
-       BLOCK 14 END: LIGHTBOX + FOOTER
+       BLOCK 17 END: LIGHTBOX + FOOTER
        ========================================================= -->
 
   <!-- =========================================================
-       BLOCK 15 START: FRONTEND JAVASCRIPT
+       BLOCK 18 START: JAVASCRIPT
        ========================================================= -->
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      const API_BASE_URL = "";
-
-      const galleryImages = [
-        "https://media.eventective.com/4096897_lg.jpg",
-        "https://media.eventective.com/4096883_lg.jpg",
-        "https://media.eventective.com/4096881_lg.jpg",
-        "https://media.eventective.com/4096902_lg.jpg",
-        "https://media.eventective.com/4096903_lg.jpg",
-        "https://media.eventective.com/4096712_lg.jpg",
-        "https://media.eventective.com/4096663_lg.jpg",
-        "https://media.eventective.com/4096665_lg.jpg",
-        "https://media.eventective.com/4096671_lg.jpg",
-        "https://media.eventective.com/4096680_lg.jpg",
-        "https://media.eventective.com/4096754_lg.jpg",
-        "https://media.eventective.com/4096758_lg.jpg",
-        "https://media.eventective.com/4096717_lg.jpg",
-        "https://media.eventective.com/4096724_lg.jpg",
-        "https://media.eventective.com/4096719_lg.jpg",
-        "https://media.eventective.com/4096725_lg.jpg",
-        "https://media.eventective.com/4096720_lg.jpg",
-        "https://media.eventective.com/4096728_lg.jpg",
-        "https://media.eventective.com/4096730_lg.jpg",
-        "https://media.eventective.com/4096735_lg.jpg",
-        "https://media.eventective.com/4096743_lg.jpg",
-        "https://media.eventective.com/4096740_lg.jpg",
-        "https://media.eventective.com/4096763_lg.jpg",
-        "https://media.eventective.com/4096765_lg.jpg",
-        "https://media.eventective.com/4096778_lg.jpg",
-        "https://media.eventective.com/4096772_lg.jpg",
-        "https://media.eventective.com/4096852_lg.jpg",
-        "https://media.eventective.com/4096806_lg.jpg",
-        "https://media.eventective.com/4096831_lg.jpg",
-        "https://media.eventective.com/4096809_lg.jpg",
-        "https://media.eventective.com/4096714_lg.jpg",
-        "https://media.eventective.com/4096713_lg.jpg",
-        "https://media.eventective.com/4096716_lg.jpg",
-        "https://media.eventective.com/4096751_lg.jpg",
-        "https://media.eventective.com/4096748_lg.jpg",
-        "https://media.eventective.com/4096773_lg.jpg",
-        "https://media.eventective.com/4096747_lg.jpg",
-        "https://media.eventective.com/4096756_lg.jpg",
-        "https://media.eventective.com/4096745_lg.jpg",
-        "https://media.eventective.com/4096768_lg.jpg",
-        "https://media.eventective.com/4096820_lg.jpg",
-        "https://media.eventective.com/4096826_lg.jpg",
-        "https://media.eventective.com/4096827_lg.jpg",
-        "https://media.eventective.com/4096833_lg.jpg",
-        "https://media.eventective.com/4096830_lg.jpg",
-        "https://media.eventective.com/4096834_lg.jpg",
-        "https://media.eventective.com/4096835_lg.jpg",
-        "https://media.eventective.com/4096836_lg.jpg",
-        "https://media.eventective.com/4096818_lg.jpg",
-        "https://media.eventective.com/4096837_lg.jpg"
-      ];
-
-      const altTemplates = [
-        "Casablanca Las Vegas luxury mansion rental near the Strip",
-        "Private mansion-style estate rental in Las Vegas for group stays",
-        "Luxury Las Vegas vacation home with private estate amenities",
-        "Casablanca Las Vegas villa-style rental for VIP getaways",
-        "Private event estate rental near the Las Vegas Strip",
-        "Luxury vacation rental in Las Vegas with resort-style pool",
-        "Las Vegas mansion rental with private courtyard and social spaces",
-        "Luxury home rental in Las Vegas for retreats and celebrations"
-      ];
-      const getAlt = (index) => altTemplates[index % altTemplates.length];
-
-      const menuButton = document.getElementById("mobileMenuButton");
-      const mobileMenu = document.getElementById("mobileMenu");
-      menuButton?.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
-      mobileMenu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => mobileMenu.classList.add("hidden")));
-
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!prefersReducedMotion && window.gsap && window.ScrollTrigger) {
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.utils.toArray(".reveal").forEach((element, index) => {
-          gsap.to(element, {
-            opacity: 1,
-            y: 0,
-            duration: .85,
-            ease: "power3.out",
-            delay: Math.min(index * .018, .14),
-            scrollTrigger: { trigger: element, start: "top 88%", once: true }
-          });
-        });
-        gsap.to(".iron-bg", { scale: 1.08, yPercent: -5, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1.2 } });
-        gsap.to(".hero-media img", { scale: 1.08, yPercent: 6, ease: "none", scrollTrigger: { trigger: "#top", start: "top top", end: "bottom top", scrub: true } });
-      } else {
-        document.querySelectorAll(".reveal").forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; });
-      }
-
-      let currentGalleryIndex = 0;
-      const featured = document.getElementById("galleryFeatured");
-      const thumbs = document.getElementById("galleryThumbs");
-      const prev = document.getElementById("galleryPrev");
-      const next = document.getElementById("galleryNext");
-      const lightbox = document.getElementById("galleryLightbox");
-      const lightboxImage = document.getElementById("lightboxImage");
-      const lightboxClose = document.getElementById("lightboxClose");
-
-      const setGalleryImage = (index) => {
-        currentGalleryIndex = (index + galleryImages.length) % galleryImages.length;
-        if (featured) {
-          featured.src = galleryImages[currentGalleryIndex];
-          featured.alt = getAlt(currentGalleryIndex);
-        }
-        thumbs?.querySelectorAll(".gallery-thumb").forEach((thumb, i) => thumb.classList.toggle("is-active", i === currentGalleryIndex));
-      };
-
-      if (thumbs) {
-        thumbs.innerHTML = galleryImages.map((src, index) => `
-          <button class="gallery-thumb ${index === 0 ? "is-active" : ""}" type="button" aria-label="Open ${getAlt(index)}">
-            <img src="${src}" alt="${getAlt(index)}" loading="lazy" />
-          </button>
-        `).join("");
-        thumbs.querySelectorAll(".gallery-thumb").forEach((button, index) => button.addEventListener("click", () => setGalleryImage(index)));
-      }
-      prev?.addEventListener("click", () => setGalleryImage(currentGalleryIndex - 1));
-      next?.addEventListener("click", () => setGalleryImage(currentGalleryIndex + 1));
-      featured?.addEventListener("click", () => {
-        lightboxImage.src = galleryImages[currentGalleryIndex];
-        lightboxImage.alt = getAlt(currentGalleryIndex);
-        lightbox.classList.add("active");
-      });
-      lightboxClose?.addEventListener("click", () => lightbox.classList.remove("active"));
-      lightbox?.addEventListener("click", (event) => { if (event.target === lightbox) lightbox.classList.remove("active"); });
-      window.addEventListener("keydown", (event) => { if (event.key === "Escape") lightbox?.classList.remove("active"); });
-
-      const videoSlot = document.getElementById("estateVideoSlot");
-      const videoCard = document.getElementById("estateVideoCard");
-      const tourVideo = document.getElementById("estateTourVideo");
-      const tourSection = document.getElementById("tour");
-      const pauseBtn = document.getElementById("tourPause");
-      const musicBtn = document.getElementById("tourMusic");
-      const closeBtn = document.getElementById("tourClose");
-      const backBtn = document.getElementById("tourBack");
-      const forwardBtn = document.getElementById("tourForward");
-      let stickyClosed = false;
-      let videoStarted = false;
-      let controlsTimer = null;
-
-      const showVideoControls = () => {
-        if (!videoCard) return;
-        videoCard.classList.remove("controls-hidden");
-        clearTimeout(controlsTimer);
-        controlsTimer = setTimeout(() => {
-          videoCard.classList.add("controls-hidden");
-        }, 3000);
-      };
-
-      const moveVideoToBody = () => {
-        if (!videoSlot || !videoCard) return;
-        if (videoCard.parentElement !== document.body) {
-          videoSlot.style.minHeight = `${videoCard.offsetHeight}px`;
-          document.body.appendChild(videoCard);
-        }
-      };
-
-      const returnVideoToSlot = () => {
-        if (!videoSlot || !videoCard) return;
-        if (videoCard.parentElement !== videoSlot) {
-          videoSlot.appendChild(videoCard);
-          videoSlot.style.minHeight = "";
-        }
-      };
-
-      const playVideoFromStartOnce = (shouldRevealControls = false) => {
-        if (!tourVideo) return;
-        if (!videoStarted) {
-          tourVideo.currentTime = 0;
-          videoStarted = true;
-          tourVideo.play().catch(() => {});
-          if (pauseBtn) pauseBtn.textContent = "Pause";
-        }
-        if (shouldRevealControls) showVideoControls();
-      };
-
-      const updateStickyVideo = () => {
-        if (!videoCard || !tourSection || !tourVideo || !videoSlot) return;
-        const rect = tourSection.getBoundingClientRect();
-        const backNearTop = window.scrollY < 120;
-        const beforeTour = rect.top > window.innerHeight * 0.55;
-        const inTour = rect.top < window.innerHeight * 0.75 && rect.bottom > 160;
-        const pastTour = rect.bottom <= 160;
-
-        if (backNearTop || beforeTour) {
-          returnVideoToSlot();
-          videoCard.classList.remove("is-sticky", "is-hidden", "controls-hidden");
-          clearTimeout(controlsTimer);
-          tourVideo.pause();
-          tourVideo.currentTime = 0;
-          videoStarted = false;
-          stickyClosed = false;
-          if (pauseBtn) pauseBtn.textContent = "Play";
-          return;
-        }
-
-        if (inTour && !videoCard.classList.contains("is-sticky")) {
-          const shouldRevealControls = !videoStarted;
-          videoCard.classList.remove("is-hidden");
-          playVideoFromStartOnce(shouldRevealControls);
-          return;
-        }
-
-        if (pastTour && !stickyClosed) {
-          const shouldRevealControls = !videoStarted;
-          moveVideoToBody();
-          videoCard.classList.add("is-sticky");
-          videoCard.classList.remove("is-hidden");
-          playVideoFromStartOnce(shouldRevealControls);
-        }
-      };
-
-      videoCard?.addEventListener("mousemove", showVideoControls);
-      videoCard?.addEventListener("pointerdown", showVideoControls);
-      videoCard?.addEventListener("touchstart", showVideoControls, { passive: true });
-      videoCard?.addEventListener("click", showVideoControls);
-      window.addEventListener("scroll", updateStickyVideo, { passive: true });
-      window.addEventListener("resize", updateStickyVideo);
-      updateStickyVideo();
-
-      pauseBtn?.addEventListener("click", () => {
-        showVideoControls();
-        if (tourVideo.paused) {
-          if (!videoStarted) {
-            tourVideo.currentTime = 0;
-            videoStarted = true;
-          }
-          tourVideo.play().catch(() => {});
-          pauseBtn.textContent = "Pause";
-        } else {
-          tourVideo.pause();
-          pauseBtn.textContent = "Play";
-        }
-      });
-      musicBtn?.addEventListener("click", () => {
-        showVideoControls();
-        tourVideo.muted = !tourVideo.muted;
-        musicBtn.textContent = tourVideo.muted ? "Music Off" : "Music On";
-        if (!tourVideo.paused) tourVideo.play().catch(() => {});
-      });
-      backBtn?.addEventListener("click", () => {
-        showVideoControls();
-        tourVideo.currentTime = Math.max(0, tourVideo.currentTime - 10);
-      });
-      forwardBtn?.addEventListener("click", () => {
-        showVideoControls();
-        const safeDuration = Number.isFinite(tourVideo.duration) ? tourVideo.duration : tourVideo.currentTime + 10;
-        tourVideo.currentTime = Math.min(safeDuration, tourVideo.currentTime + 10);
-      });
-      closeBtn?.addEventListener("click", () => {
-        stickyClosed = true;
-        clearTimeout(controlsTimer);
-        videoCard.classList.remove("is-sticky", "controls-hidden");
-        videoCard.classList.add("is-hidden");
-        tourVideo.pause();
-        if (pauseBtn) pauseBtn.textContent = "Play";
-      });
-
-      const pad = (num) => String(num).padStart(2, "0");
-      const toISODate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-      const addDays = (date, days) => { const copy = new Date(date); copy.setDate(copy.getDate() + days); return copy; };
-      const setStatus = (elementId, message, tone = "") => {
-        const el = document.getElementById(elementId);
-        if (!el) return;
-        el.textContent = message;
-        el.classList.remove("status-ok", "status-warn", "status-error");
-        if (tone) el.classList.add(`status-${tone}`);
-      };
-      const formatRangePayload = (selectedDates) => {
-        if (!selectedDates || selectedDates.length < 2) return null;
-        const checkIn = toISODate(selectedDates[0]);
-        const checkOut = toISODate(selectedDates[1]);
-        if (checkIn === checkOut) return null;
-        return { checkIn, checkOut };
-      };
-
-      let flatpickrInstance = null;
-      async function loadUnavailableDates() {
-        const today = new Date();
-        const start = toISODate(today);
-        const end = toISODate(addDays(today, 365));
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/bookings?start=${start}&end=${end}`, { method: "GET", headers: { "Accept": "application/json" } });
-          if (!response.ok) throw new Error(`Calendar endpoint returned ${response.status}`);
-          const data = await response.json();
-          const disabled = Array.isArray(data.unavailable) ? data.unavailable.map((range) => ({ from: range.start, to: range.end })) : [];
-          setStatus("calendarStatus", disabled.length ? `${disabled.length} unavailable date block(s) loaded.` : "Calendar loaded. No blocked dates found.", "ok");
-          return disabled;
-        } catch (error) {
-          console.error("Calendar load failed:", error);
-          setStatus("calendarStatus", "Calendar API not connected yet. Dates are selectable for testing.", "warn");
-          return [];
-        }
-      }
-
-      async function initBookingCalendar() {
-        const disabledRanges = await loadUnavailableDates();
-        if (flatpickrInstance) flatpickrInstance.destroy();
-        flatpickrInstance = flatpickr("#stayRange", {
-          mode: "range",
-          minDate: "today",
-          dateFormat: "Y-m-d",
-          disable: disabledRanges,
-          showMonths: window.innerWidth >= 768 ? 2 : 1,
-          onChange: (selectedDates) => {
-            const payload = formatRangePayload(selectedDates);
-            document.getElementById("checkIn").value = payload ? payload.checkIn : "";
-            document.getElementById("checkOut").value = payload ? payload.checkOut : "";
-          }
-        });
-      }
-      initBookingCalendar();
-
-      const bookingForm = document.getElementById("bookingForm");
-      const submitButton = document.getElementById("submitBooking");
-      bookingForm?.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const payload = Object.fromEntries(new FormData(bookingForm).entries());
-        if (!payload.checkIn || !payload.checkOut) return setStatus("formStatus", "Please select a valid check-in and check-out range.", "error");
-        if (!payload.name || !payload.email || !payload.guestCount || !payload.eventType) return setStatus("formStatus", "Please complete the required fields before submitting.", "error");
-        submitButton.disabled = true;
-        submitButton.textContent = "Submitting...";
-        setStatus("formStatus", "Sending your VIP inquiry and calendar hold...", "warn");
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/bookings`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(payload)
-          });
-          const data = await response.json().catch(() => ({}));
-          if (!response.ok) throw new Error(data.error || `Booking endpoint returned ${response.status}`);
-          setStatus("formStatus", "Success. Your inquiry was submitted and the requested dates were sent to the calendar.", "ok");
-          bookingForm.reset();
-          flatpickrInstance?.clear();
-          await initBookingCalendar();
-        } catch (error) {
-          console.error("Booking submit failed:", error);
-          setStatus("formStatus", error.message || "Something went wrong. Please try again.", "error");
-        } finally {
-          submitButton.disabled = false;
-          submitButton.textContent = "Submit VIP Inquiry";
-        }
-      });
-    });
-  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script defer src="/assets/js/app.js"></script>
   <!-- =========================================================
-       BLOCK 15 END: FRONTEND JAVASCRIPT
+       BLOCK 18 END: JAVASCRIPT
        ========================================================= -->
 </body>
 </html>
