@@ -1,0 +1,302 @@
+/* =========================================================
+   BLOCK 1 START: CASABLANCA MOBILE HEADER + GALLERY OVERRIDES
+   Purpose: Targeted production overrides for mobile CTA header, centered stats,
+   and thumbnail gallery strip placement.
+   ========================================================= */
+
+/* BLOCK 1.1 START: Center Stat Cards On Mobile + Desktop */
+.stat {
+  text-align: center;
+  display: flex;
+  min-height: 7.25rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat b,
+.stat span {
+  width: 100%;
+  text-align: center;
+}
+/* BLOCK 1.1 END: Center Stat Cards On Mobile + Desktop */
+
+/* BLOCK 1.2 START: Gallery Thumbnail Strip Along Featured Image Bottom */
+#gallery .gallery-stage {
+  position: relative;
+  overflow: hidden;
+}
+
+#gallery .gallery-stage::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(6rem, 13vw, 9.5rem);
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.48) 38%, rgba(0,0,0,.86) 100%);
+}
+
+#gallery .gallery-controls {
+  position: relative;
+  z-index: 4;
+  justify-content: center;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+
+#gallery .gallery-thumbs {
+  position: relative;
+  z-index: 5;
+  width: min(100%, 100%);
+  margin-top: calc(clamp(5.4rem, 12vw, 8.5rem) * -1);
+  margin-inline: auto;
+  padding: .65rem clamp(.55rem, 2vw, 1rem) .85rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(82px, 10vw, 138px);
+  align-items: end;
+  gap: clamp(.45rem, 1vw, .7rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.1) 100%);
+}
+
+#gallery .gallery-thumbs::-webkit-scrollbar {
+  height: 7px;
+}
+
+#gallery .gallery-thumbs::-webkit-scrollbar-track {
+  background: rgba(255,255,255,.1);
+  border-radius: 999px;
+}
+
+#gallery .gallery-thumbs::-webkit-scrollbar-thumb {
+  background: rgba(201,168,90,.82);
+  border-radius: 999px;
+}
+
+#gallery .gallery-thumb {
+  border-radius: .9rem;
+  border: 2px solid rgba(255,255,255,.26);
+  background: rgba(0,0,0,.45);
+  box-shadow: 0 10px 24px rgba(0,0,0,.42);
+}
+
+#gallery .gallery-thumb.is-active,
+#gallery .gallery-thumb:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201,168,90,.18), 0 12px 28px rgba(0,0,0,.5);
+}
+/* BLOCK 1.2 END: Gallery Thumbnail Strip Along Featured Image Bottom */
+
+/* BLOCK 1.3 START: Mobile Header CTA Concept Matching Provided Mockup */
+@media (max-width: 1022px) {
+  .site-header {
+    background-color: rgba(8,8,8,.98);
+    background-image:
+      radial-gradient(circle at 50% 10%, rgba(201,168,90,.16), transparent 7rem),
+      url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168ffdebdb915d9a7311b1.webp');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .site-header.is-scrolled {
+    background-image:
+      radial-gradient(circle at 50% 10%, rgba(201,168,90,.16), transparent 7rem),
+      url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168ffdebdb915d9a7311b1.webp');
+  }
+
+  .header-container {
+    padding-inline: clamp(.55rem, 2vw, 1rem);
+  }
+
+  .nav-bar-container {
+    min-height: clamp(220px, 54vw, 272px);
+    padding: 0;
+    position: relative;
+    align-items: stretch;
+  }
+
+  .nav-left {
+    display: none;
+  }
+
+  .nav-right {
+    position: absolute;
+    left: clamp(.65rem, 3vw, 1.2rem);
+    right: clamp(.65rem, 3vw, 1.2rem);
+    bottom: clamp(.85rem, 3.5vw, 1.2rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(.5rem, 2.5vw, .9rem);
+    margin: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    z-index: 26;
+  }
+
+  .nav-right .nav-item {
+    display: none;
+  }
+
+  .nav-right .nav-item:nth-child(1),
+  .nav-right .nav-item:nth-child(3) {
+    display: block;
+  }
+
+  .nav-right .nav-link {
+    position: relative;
+    min-height: clamp(3.35rem, 12vw, 4.1rem);
+    width: 100%;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 999px;
+    border: 1px solid rgba(255,245,164,.84);
+    color: transparent;
+    background:
+      linear-gradient(180deg, #fff0a6 0%, #c77716 37%, #ffdc67 54%, #6c3305 100%);
+    box-shadow:
+      inset 0 2px 5px rgba(255,255,255,.64),
+      inset 0 -5px 8px rgba(68,24,0,.8),
+      0 9px 18px rgba(0,0,0,.55);
+    padding: .35rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .nav-right .nav-link::after {
+    content: "Check Availability";
+    position: absolute;
+    inset: clamp(.28rem, 1vw, .42rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #f2d93b;
+    background: linear-gradient(180deg, #121212 0%, #020202 48%, #121212 100%);
+    font-size: clamp(.92rem, 4.15vw, 1.25rem);
+    font-weight: 900;
+    letter-spacing: -.03em;
+    line-height: 1;
+    white-space: nowrap;
+    text-shadow: 0 1px 0 rgba(0,0,0,.9), 0 0 10px rgba(255,225,75,.24);
+  }
+
+  .nav-right .nav-item:nth-child(3) .nav-link::after {
+    content: "Speak to Agent";
+  }
+
+  .hamburger-btn {
+    opacity: 1;
+    pointer-events: auto;
+    right: clamp(2.2rem, 10vw, 3.8rem);
+    top: 50%;
+    color: #fff;
+    font-size: clamp(2.6rem, 10vw, 3.7rem);
+    z-index: 27;
+    text-shadow: 0 2px 12px rgba(0,0,0,.8);
+  }
+
+  .brand-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(.8rem, 4vw, 1.35rem);
+    top: clamp(.75rem, 3vw, 1.2rem);
+    width: calc(100% - 1.25rem);
+    z-index: 25;
+  }
+
+  .casa-container,
+  .vegas-container {
+    position: static;
+    margin: 0;
+    transform: none;
+  }
+
+  .text-img {
+    width: clamp(104px, 30vw, 164px);
+  }
+
+  .logo-wrapper {
+    top: clamp(3.1rem, 13vw, 4.35rem);
+  }
+
+  .main-logo {
+    width: clamp(104px, 31vw, 146px);
+  }
+
+  .site-header.is-scrolled .nav-bar-container {
+    min-height: clamp(204px, 48vw, 246px);
+    padding: 0;
+  }
+
+  .site-header.is-scrolled .brand-group {
+    top: clamp(.65rem, 2.5vw, 1rem);
+  }
+
+  .site-header.is-scrolled .logo-wrapper {
+    top: clamp(2.8rem, 12vw, 3.9rem);
+  }
+
+  .site-header.is-scrolled .main-logo {
+    width: clamp(96px, 28vw, 132px);
+  }
+
+  .site-header.is-scrolled .text-img {
+    width: clamp(96px, 27vw, 148px);
+  }
+
+  .hero {
+    margin-top: clamp(220px, 54vw, 272px);
+    min-height: calc(100svh - clamp(220px, 54vw, 272px));
+  }
+
+  .hero-picture img {
+    min-height: calc(100svh - clamp(220px, 54vw, 272px));
+    object-position: center top;
+  }
+}
+/* BLOCK 1.3 END: Mobile Header CTA Concept Matching Provided Mockup */
+
+@media (max-width: 900px) {
+  #gallery .gallery-featured {
+    aspect-ratio: 4 / 3;
+  }
+
+  #gallery .gallery-thumbs {
+    grid-auto-columns: clamp(76px, 22vw, 108px);
+    margin-top: -5.65rem;
+  }
+}
+
+@media (max-width: 520px) {
+  #gallery .gallery-thumbs {
+    grid-auto-columns: clamp(70px, 24vw, 96px);
+    margin-top: -5.25rem;
+    padding-inline: .55rem;
+  }
+
+  #gallery .gallery-thumb {
+    border-radius: .72rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-right .nav-link::after {
+    font-size: clamp(.78rem, 4vw, .96rem);
+    letter-spacing: -.055em;
+  }
+
+  .hamburger-btn {
+    right: clamp(1.4rem, 7vw, 2.6rem);
+  }
+}
+/* =========================================================
+   BLOCK 1 END: CASABLANCA MOBILE HEADER + GALLERY OVERRIDES
+   ========================================================= */
