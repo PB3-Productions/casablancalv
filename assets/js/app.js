@@ -39,7 +39,24 @@ window.addEventListener("DOMContentLoaded", () => {
   hamburger?.addEventListener("click", openDrawer);
   closeDrawer?.addEventListener("click", closeDrawerMenu);
   overlay?.addEventListener("click", closeDrawerMenu);
-  $$(".drawer-nav a").forEach((link) => link.addEventListener("click", closeDrawerMenu));
+  $$(".drawer-nav a, .drawer-actions a").forEach((link) => link.addEventListener("click", closeDrawerMenu));
+
+  const drawerButtons = $$(".drawer-actions a");
+  if (drawerButtons[0]) {
+    drawerButtons[0].textContent = "Check Availability";
+    drawerButtons[0].setAttribute("href", "#availability");
+  }
+  if (drawerButtons[1]) {
+    drawerButtons[1].textContent = "Call Sales Agent";
+    drawerButtons[1].setAttribute("href", "tel:6167457148");
+    drawerButtons[1].removeAttribute("target");
+    drawerButtons[1].removeAttribute("rel");
+  }
+
+  const availabilityIntro = $("#availability .lead.light");
+  if (availabilityIntro) {
+    availabilityIntro.textContent = "Our team reviews your date window, event type, guest count, and concierge needs personally. We typically respond within 24–48 hours. If you have immediate questions or need to book ASAP, please call and speak with a sales agent.";
+  }
 
   /* =========================================================
      BLOCK 3 START: SCROLL REVEALS
@@ -113,9 +130,8 @@ window.addEventListener("DOMContentLoaded", () => {
   lightbox?.addEventListener("click", (event) => { if (event.target === lightbox) lightbox.classList.remove("active"); });
 
   /* =========================================================
-     BLOCK 5 START: VIDEO PLAYER WITH STICKY BEHAVIOR
+     BLOCK 5 START: VIDEO PLAYER MANUAL DETACH + ENLARGE
      ========================================================= */
-  const videoSlot = $("#estateVideoSlot");
   const videoShell = $("#estateVideoShell");
   const estateVideo = $("#estateVideo");
   const pauseButton = $("#videoPause");
@@ -123,10 +139,30 @@ window.addEventListener("DOMContentLoaded", () => {
   const backButton = $("#videoBack");
   const forwardButton = $("#videoForward");
   const musicButton = $("#videoMusic");
-  const tourSection = $("#video-tour");
-  let stickyClosed = false;
   let videoStarted = false;
   let controlsTimer = null;
+
+  const detachButton = document.createElement("button");
+  detachButton.id = "videoDetach";
+  detachButton.className = "video-control";
+  detachButton.type = "button";
+  detachButton.dataset.dynamicVideoControl = "true";
+  detachButton.textContent = "Detach";
+
+  const largeButton = document.createElement("button");
+  largeButton.id = "videoLarge";
+  largeButton.className = "video-control";
+  largeButton.type = "button";
+  largeButton.dataset.dynamicVideoControl = "true";
+  largeButton.textContent = "Large";
+
+  const videoControls = videoShell?.querySelector(".video-controls");
+  if (videoControls) {
+    videoControls.insertBefore(detachButton, videoControls.firstChild);
+    videoControls.insertBefore(largeButton, detachButton.nextSibling);
+  }
+
+  if (closeButton) closeButton.textContent = "Hide";
 
   const showVideoControls = () => {
     if (!videoShell) return;
@@ -135,77 +171,26 @@ window.addEventListener("DOMContentLoaded", () => {
     controlsTimer = setTimeout(() => videoShell.classList.add("controls-hidden"), 3000);
   };
 
-  const moveVideoToBody = () => {
-    if (!videoSlot || !videoShell || videoShell.parentElement === document.body) return;
-    videoSlot.style.minHeight = `${videoShell.offsetHeight}px`;
-    document.body.appendChild(videoShell);
-  };
-
-  const returnVideoToSlot = () => {
-    if (!videoSlot || !videoShell || videoShell.parentElement === videoSlot) return;
-    videoSlot.appendChild(videoShell);
-    videoSlot.style.minHeight = "";
-  };
-
-  const playVideoOnce = (revealControls = false) => {
+  const playVideo = () => {
     if (!estateVideo) return;
     if (!videoStarted) {
       estateVideo.currentTime = 0;
       videoStarted = true;
-      estateVideo.play().catch(() => {});
-      if (pauseButton) pauseButton.textContent = "Pause";
       trackEvent("video_start", { video_name: "Casablanca Las Vegas Estate Tour" });
     }
-    if (revealControls) showVideoControls();
+    estateVideo.play().catch(() => {});
+    if (pauseButton) pauseButton.textContent = "Pause";
   };
 
-  const updateStickyVideo = () => {
-    if (!videoShell || !estateVideo || !tourSection || !videoSlot) return;
-    const rect = tourSection.getBoundingClientRect();
-    const beforeTour = rect.top > window.innerHeight * 0.58;
-    const inTour = rect.top < window.innerHeight * 0.76 && rect.bottom > 160;
-    const pastTour = rect.bottom <= 160;
-    const nearTop = window.scrollY < 120;
-
-    if (nearTop || beforeTour) {
-      returnVideoToSlot();
-      stickyClosed = false;
-      videoStarted = false;
-      clearTimeout(controlsTimer);
-      videoShell.classList.remove("is-sticky", "is-hidden", "controls-hidden");
-      estateVideo.pause();
-      estateVideo.currentTime = 0;
-      if (pauseButton) pauseButton.textContent = "Play";
-      return;
-    }
-
-    if (inTour && !videoShell.classList.contains("is-sticky")) {
-      videoShell.classList.remove("is-hidden");
-      playVideoOnce(!videoStarted);
-      return;
-    }
-
-    if (pastTour && !stickyClosed) {
-      moveVideoToBody();
-      videoShell.classList.add("is-sticky");
-      videoShell.classList.remove("is-hidden");
-      playVideoOnce(false);
-    }
-  };
-
+  videoShell?.classList.remove("is-sticky");
   videoShell?.addEventListener("mousemove", showVideoControls);
   videoShell?.addEventListener("click", showVideoControls);
   videoShell?.addEventListener("touchstart", showVideoControls, { passive: true });
-  window.addEventListener("scroll", updateStickyVideo, { passive: true });
-  window.addEventListener("resize", updateStickyVideo);
-  updateStickyVideo();
 
   pauseButton?.addEventListener("click", () => {
     showVideoControls();
     if (estateVideo.paused) {
-      if (!videoStarted) { estateVideo.currentTime = 0; videoStarted = true; }
-      estateVideo.play().catch(() => {});
-      pauseButton.textContent = "Pause";
+      playVideo();
       trackEvent("video_play", { video_name: "Casablanca Las Vegas Estate Tour" });
     } else {
       estateVideo.pause();
@@ -230,13 +215,27 @@ window.addEventListener("DOMContentLoaded", () => {
     musicButton.textContent = estateVideo.muted ? "Music Off" : "Music On";
     trackEvent("video_mute_toggle", { muted: estateVideo.muted });
   });
+  detachButton.addEventListener("click", () => {
+    showVideoControls();
+    videoShell.classList.toggle("is-manual-detached");
+    videoShell.classList.remove("is-hidden");
+    detachButton.textContent = videoShell.classList.contains("is-manual-detached") ? "Dock" : "Detach";
+    trackEvent("video_detach_toggle", { detached: videoShell.classList.contains("is-manual-detached") });
+  });
+  largeButton.addEventListener("click", () => {
+    showVideoControls();
+    videoShell.classList.toggle("is-large");
+    videoShell.classList.remove("is-hidden");
+    largeButton.textContent = videoShell.classList.contains("is-large") ? "Normal" : "Large";
+    trackEvent("video_large_toggle", { large: videoShell.classList.contains("is-large") });
+  });
   closeButton?.addEventListener("click", () => {
-    stickyClosed = true;
     clearTimeout(controlsTimer);
-    videoShell.classList.remove("is-sticky", "controls-hidden");
+    videoShell.classList.remove("is-manual-detached", "is-large", "controls-hidden");
     videoShell.classList.add("is-hidden");
     estateVideo.pause();
-    trackEvent("video_close", { video_name: "Casablanca Las Vegas Estate Tour" });
+    if (pauseButton) pauseButton.textContent = "Play";
+    trackEvent("video_hide", { video_name: "Casablanca Las Vegas Estate Tour" });
   });
 
   /* =========================================================
@@ -324,7 +323,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || `Booking endpoint returned ${response.status}`);
-      setStatus("formStatus", "Success. Your request was submitted as pending. Our private booking team will verify availability and follow up personally.", "ok");
+      setStatus("formStatus", "Success. Your request was submitted as pending. Our private booking team will verify availability and follow up within 24–48 hours.", "ok");
       trackEvent("form_submit", { form_name: "vip_booking_inquiry", status: "pending", event_type: payload.eventType });
       bookingForm.reset();
       flatpickrInstance?.clear();
