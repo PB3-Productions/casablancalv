@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap');
 
 /* =========================================================
-   BLOCK 1 START: CASABLANCA TARGETED OVERRIDES
-   Purpose: Final typography, centered stats, normalized gallery thumbnails,
-   featured-image gallery arrows, no-auto-float video controls, and tightened mobile nav.
+   BLOCK 1 START: CASABLANCA FINAL VISUAL OVERRIDES
+   Purpose: Typography, spacing, new badge logo, glossy double-bevel CTAs,
+   gallery controls, video controls, and mobile nav refinement.
    ========================================================= */
 
 /* BLOCK 1.1 START: Typography System */
 :root {
   --font-title: "Alibaba Sans", "Alibaba PuHuiTi", "Inter", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Lora", Georgia, "Times New Roman", serif;
+  --casa-new-badge: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a179c499f3201833ce9b6a4.png');
 }
 
 html,
@@ -103,20 +104,6 @@ p,
   font-weight: 500;
 }
 
-#gallery .lead,
-#pricing .lead,
-#concierge .lead,
-#faq .lead,
-#welcome .lead,
-#availability .lead,
-#video-tour .lead,
-#matterport .lead,
-#sleeping-layout .lead,
-#policies .lead,
-#amenities .lead {
-  text-align: left !important;
-}
-
 #welcome h1,
 #pricing .reveal,
 #concierge .reveal,
@@ -126,7 +113,158 @@ p,
 }
 /* BLOCK 1.1 END: Typography System */
 
-/* BLOCK 1.2 START: Center Stat Cards */
+/* BLOCK 1.2 START: New Badge Logo + Header Spacing */
+.casa-container,
+.vegas-container {
+  display: none !important;
+}
+
+.main-logo,
+.drawer-logo,
+footer img:first-child {
+  content: var(--casa-new-badge);
+  object-fit: contain;
+}
+
+.logo-wrapper {
+  top: clamp(.35rem, .9vw, .75rem) !important;
+}
+
+.main-logo {
+  width: clamp(112px, 9.4vw, 146px) !important;
+  height: auto !important;
+}
+
+.brand-group {
+  top: 0 !important;
+  width: min(180px, 16vw) !important;
+  pointer-events: none;
+}
+
+.brand-group .logo-wrapper {
+  pointer-events: auto;
+}
+
+.nav-bar-container {
+  min-height: clamp(104px, 9vw, 124px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  align-items: center !important;
+}
+
+.site-header.is-scrolled .nav-bar-container {
+  min-height: clamp(88px, 7.8vw, 108px) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.site-header.is-scrolled .main-logo {
+  width: clamp(96px, 7.8vw, 122px) !important;
+}
+
+.nav-left {
+  margin-right: clamp(82px, 10vw, 145px) !important;
+}
+
+.nav-right {
+  margin-left: clamp(82px, 10vw, 145px) !important;
+}
+
+footer img:first-child {
+  width: min(150px, 42vw) !important;
+  height: auto !important;
+  margin-inline: auto !important;
+  display: block !important;
+}
+/* BLOCK 1.2 END: New Badge Logo + Header Spacing */
+
+/* BLOCK 1.3 START: Glossy Double-Bevel CTA System From Attached Button 5 */
+.btn,
+.drawer-actions .btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(42px, 4.2vw, 56px);
+  padding: clamp(.72rem, 1.4vw, .95rem) clamp(1.2rem, 3vw, 2.35rem);
+  border: 1px solid rgba(255, 238, 169, .96) !important;
+  border-radius: 999px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.48), transparent 34%),
+    linear-gradient(90deg, #7c4e0c 0%, #fff0a6 18%, #c09128 34%, #6b4108 50%, #f7d977 70%, #a97416 100%) !important;
+  color: #ffe58a !important;
+  text-shadow: 0 0 .6rem rgba(255,229,138,.56), 0 1px 0 rgba(0,0,0,.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.26),
+    0 0 .7rem rgba(255,220,118,.54),
+    0 .9rem 1.65rem rgba(0,0,0,.74) !important;
+  font-size: clamp(.74rem, 1.1vw, .98rem);
+  line-height: 1;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+
+.btn::before,
+.drawer-actions .btn::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border: 1px solid rgba(255,229,138,.38);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.16), transparent 30%),
+    radial-gradient(circle at 50% 0%, rgba(255,229,138,.14), transparent 44%),
+    linear-gradient(180deg, #181818 0%, #000000 50%, #17120a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 .75rem 1rem rgba(255,255,255,.045),
+    inset 0 -1px 0 rgba(0,0,0,.92),
+    inset 0 0 0 1px rgba(0,0,0,.72);
+}
+
+.btn::after,
+.drawer-actions .btn::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: -85%;
+  left: -115%;
+  width: 70%;
+  height: 280%;
+  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,.1) 24%, rgba(255,255,255,.82) 47%, rgba(255,255,255,.18) 66%, transparent 100%);
+  transform: rotate(18deg);
+  opacity: .78;
+  pointer-events: none;
+  transition: left 620ms ease;
+  mix-blend-mode: screen;
+}
+
+.btn:hover::after,
+.btn:focus-visible::after,
+.drawer-actions .btn:hover::after,
+.drawer-actions .btn:focus-visible::after {
+  left: 138%;
+}
+
+.btn:hover,
+.btn:focus-visible,
+.drawer-actions .btn:hover,
+.drawer-actions .btn:focus-visible {
+  outline: none;
+  transform: translateY(-2px);
+  filter: brightness(1.1) saturate(1.18);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.34),
+    0 0 .95rem rgba(255,229,138,.78),
+    0 0 1.85rem rgba(212,175,55,.48),
+    0 1rem 1.85rem rgba(0,0,0,.8) !important;
+}
+/* BLOCK 1.3 END: Glossy Double-Bevel CTA System From Attached Button 5 */
+
+/* BLOCK 1.4 START: Center Stat Cards */
 .stat {
   text-align: center;
   display: flex;
@@ -141,9 +279,9 @@ p,
   width: 100%;
   text-align: center;
 }
-/* BLOCK 1.2 END: Center Stat Cards */
+/* BLOCK 1.4 END: Center Stat Cards */
 
-/* BLOCK 1.3 START: Clean Gallery Thumbnail Strip + Featured Image Arrows */
+/* BLOCK 1.5 START: Clean Gallery Thumbnail Strip + Featured Image Arrows */
 #gallery .site-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -269,9 +407,9 @@ p,
   border-color: var(--gold);
   box-shadow: 0 0 0 2px rgba(201,168,90,.18), 0 12px 28px rgba(0,0,0,.42);
 }
-/* BLOCK 1.3 END: Clean Gallery Thumbnail Strip + Featured Image Arrows */
+/* BLOCK 1.5 END: Clean Gallery Thumbnail Strip + Featured Image Arrows */
 
-/* BLOCK 1.4 START: Video Manual Detach + Enlarge */
+/* BLOCK 1.6 START: Video Manual Detach + Enlarge */
 .video-shell.is-sticky:not(.is-manual-detached) {
   position: relative !important;
   right: auto !important;
@@ -309,37 +447,24 @@ p,
 .video-control[data-dynamic-video-control="true"] {
   border-color: rgba(201,168,90,.5);
 }
-/* BLOCK 1.4 END: Video Manual Detach + Enlarge */
+/* BLOCK 1.6 END: Video Manual Detach + Enlarge */
 
-/* BLOCK 1.5 START: Availability Copy + Badge Cleanup */
+/* BLOCK 1.7 START: Availability Badge Cleanup */
 #availability .trust-strip .badge:nth-child(3) {
   display: none !important;
 }
-/* BLOCK 1.5 END: Availability Copy + Badge Cleanup */
+/* BLOCK 1.7 END: Availability Badge Cleanup */
 
-/* BLOCK 1.6 START: Footer Badge Logo */
-footer img:first-child {
-  content: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168b71ab53822e7e031366.png');
-  width: min(160px, 42vw) !important;
-  height: auto !important;
-}
-/* BLOCK 1.6 END: Footer Badge Logo */
-
-/* BLOCK 1.7 START: Tight Mobile VIP Header */
+/* BLOCK 1.8 START: Mobile Header + Mobile Nav Buttons */
 @media (max-width: 1022px) {
-  .site-header {
+  .site-header,
+  .site-header.is-scrolled {
     background-color: rgba(8,8,8,.98);
     background-image:
-      radial-gradient(circle at 50% 12%, rgba(201,168,90,.18), transparent 6.25rem),
+      radial-gradient(circle at 50% 14%, rgba(201,168,90,.16), transparent 5.5rem),
       url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168ffdebdb915d9a7311b1.webp');
     background-size: cover;
     background-position: center;
-  }
-
-  .site-header.is-scrolled {
-    background-image:
-      radial-gradient(circle at 50% 12%, rgba(201,168,90,.18), transparent 6.25rem),
-      url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a168ffdebdb915d9a7311b1.webp');
   }
 
   .header-container {
@@ -348,71 +473,57 @@ footer img:first-child {
 
   .nav-bar-container,
   .site-header.is-scrolled .nav-bar-container {
-    min-height: clamp(184px, 43vw, 226px);
-    padding: 0;
+    min-height: clamp(152px, 39vw, 188px) !important;
+    padding: 0 !important;
     position: relative;
-    align-items: stretch;
+    align-items: stretch !important;
   }
 
   .nav-left {
-    display: none;
+    display: none !important;
   }
 
   .brand-group,
   .site-header.is-scrolled .brand-group {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(.38rem, 1.75vw, .72rem);
-    top: clamp(.42rem, 1.9vw, .78rem);
-    width: calc(100% - .85rem);
+    top: 0 !important;
+    left: 50%;
+    width: min(110px, 24vw) !important;
+    transform: translateX(-50%);
     z-index: 25;
-  }
-
-  .casa-container,
-  .vegas-container {
-    position: static;
-    margin: 0;
-    transform: none;
-  }
-
-  .text-img,
-  .site-header.is-scrolled .text-img {
-    width: min(clamp(124px, 36vw, 178px), calc(50vw - .48rem));
-    height: auto;
   }
 
   .logo-wrapper,
   .site-header.is-scrolled .logo-wrapper {
-    top: clamp(2.35rem, 9.1vw, 3.18rem);
+    top: clamp(.35rem, 1.8vw, .62rem) !important;
   }
 
   .main-logo,
   .site-header.is-scrolled .main-logo {
-    width: clamp(82px, 22vw, 110px);
+    width: clamp(68px, 20vw, 98px) !important;
+    height: auto !important;
   }
 
   .hamburger-btn {
     opacity: 1;
     pointer-events: auto;
-    right: clamp(1.65rem, 7.8vw, 3.15rem);
-    top: 48%;
+    right: clamp(1.3rem, 6.8vw, 2.8rem);
+    top: 46%;
     color: #fff;
-    font-size: clamp(2.25rem, 8.9vw, 3.15rem);
+    font-size: clamp(2rem, 8vw, 2.9rem);
     z-index: 27;
     text-shadow: 0 2px 12px rgba(0,0,0,.8);
   }
 
-  .nav-right {
+  .nav-right,
+  .site-header.is-scrolled .nav-right {
     position: absolute;
-    left: clamp(.6rem, 2.5vw, 1rem);
-    right: clamp(.6rem, 2.5vw, 1rem);
-    bottom: clamp(.55rem, 2.25vw, .92rem);
+    left: clamp(.55rem, 2.4vw, .95rem);
+    right: clamp(.55rem, 2.4vw, .95rem);
+    bottom: clamp(.48rem, 2vw, .78rem);
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(.42rem, 2vw, .75rem);
-    margin: 0;
+    margin: 0 !important;
     opacity: 1;
     pointer-events: auto;
     transform: none;
@@ -430,57 +541,78 @@ footer img:first-child {
 
   .nav-right .nav-link {
     position: relative;
-    min-height: clamp(2.9rem, 10.3vw, 3.55rem);
+    min-height: clamp(2.8rem, 10vw, 3.45rem);
     width: 100%;
     justify-content: center;
     overflow: hidden;
     border-radius: 999px;
-    border: 1px solid rgba(255,245,164,.84);
-    color: transparent;
+    border: 1px solid rgba(255,238,169,.96) !important;
+    color: transparent !important;
     background:
-      linear-gradient(180deg, #fff0a6 0%, #c77716 37%, #ffdc67 54%, #6c3305 100%);
+      radial-gradient(circle at 50% 0%, rgba(255,255,255,.48), transparent 34%),
+      linear-gradient(90deg, #7c4e0c 0%, #fff0a6 18%, #c09128 34%, #6b4108 50%, #f7d977 70%, #a97416 100%) !important;
     box-shadow:
-      inset 0 2px 5px rgba(255,255,255,.64),
-      inset 0 -4px 7px rgba(68,24,0,.8),
-      0 7px 14px rgba(0,0,0,.5);
-    padding: .28rem;
+      inset 0 0 0 1px rgba(255,255,255,.26),
+      0 0 .7rem rgba(255,220,118,.54),
+      0 .75rem 1.2rem rgba(0,0,0,.68) !important;
+    padding: .2rem;
     letter-spacing: 0;
     text-transform: none;
+  }
+
+  .nav-right .nav-link::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(255,229,138,.38);
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.16), transparent 30%),
+      radial-gradient(circle at 50% 0%, rgba(255,229,138,.14), transparent 44%),
+      linear-gradient(180deg, #181818 0%, #000000 50%, #17120a 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      inset 0 .75rem 1rem rgba(255,255,255,.045),
+      inset 0 -1px 0 rgba(0,0,0,.92),
+      inset 0 0 0 1px rgba(0,0,0,.72);
   }
 
   .nav-right .nav-link::after {
     content: "Check Availability";
     position: absolute;
-    inset: clamp(.22rem, .8vw, .34rem);
+    inset: 0;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 999px;
-    color: #f2d93b;
-    background: linear-gradient(180deg, #121212 0%, #020202 48%, #121212 100%);
-    font-size: clamp(.86rem, 3.78vw, 1.12rem);
+    color: #ffe58a;
+    font-size: clamp(.78rem, 3.55vw, 1.02rem);
     font-weight: 900;
-    letter-spacing: -.045em;
+    letter-spacing: -.035em;
     line-height: 1;
     white-space: nowrap;
-    text-shadow: 0 1px 0 rgba(0,0,0,.9), 0 0 10px rgba(255,225,75,.24);
+    text-shadow: 0 0 .6rem rgba(255,229,138,.56), 0 1px 0 rgba(0,0,0,.94);
   }
 
   .nav-right .nav-item:nth-child(3) .nav-link::after {
     content: "Speak to Agent";
   }
 
+  .drawer-actions .btn {
+    width: 100%;
+  }
+
   .hero {
-    margin-top: clamp(184px, 43vw, 226px);
-    min-height: calc(100svh - clamp(184px, 43vw, 226px));
+    margin-top: clamp(152px, 39vw, 188px);
+    min-height: calc(100svh - clamp(152px, 39vw, 188px));
   }
 
   .hero-picture img {
-    min-height: calc(100svh - clamp(184px, 43vw, 226px));
+    min-height: calc(100svh - clamp(152px, 39vw, 188px));
     object-position: center top;
   }
 }
-/* BLOCK 1.7 END: Tight Mobile VIP Header */
+/* BLOCK 1.8 END: Mobile Header + Mobile Nav Buttons */
 
 @media (max-width: 900px) {
   #gallery .gallery-featured {
@@ -536,43 +668,38 @@ footer img:first-child {
 @media (max-width: 380px) {
   .nav-bar-container,
   .site-header.is-scrolled .nav-bar-container {
-    min-height: 176px;
-  }
-
-  .text-img,
-  .site-header.is-scrolled .text-img {
-    width: min(clamp(112px, 34vw, 142px), calc(50vw - .42rem));
-  }
-
-  .logo-wrapper,
-  .site-header.is-scrolled .logo-wrapper {
-    top: 2.22rem;
+    min-height: 146px !important;
   }
 
   .main-logo,
   .site-header.is-scrolled .main-logo {
-    width: 78px;
+    width: 66px !important;
+  }
+
+  .logo-wrapper,
+  .site-header.is-scrolled .logo-wrapper {
+    top: .32rem !important;
   }
 
   .nav-right .nav-link::after {
-    font-size: clamp(.76rem, 3.75vw, .9rem);
-    letter-spacing: -.06em;
+    font-size: clamp(.72rem, 3.55vw, .88rem);
+    letter-spacing: -.055em;
   }
 
   .hamburger-btn {
-    right: clamp(1.25rem, 6vw, 2.2rem);
-    font-size: 2.25rem;
+    right: clamp(1.1rem, 5.8vw, 2rem);
+    font-size: 2.05rem;
   }
 
   .hero {
-    margin-top: 176px;
-    min-height: calc(100svh - 176px);
+    margin-top: 146px;
+    min-height: calc(100svh - 146px);
   }
 
   .hero-picture img {
-    min-height: calc(100svh - 176px);
+    min-height: calc(100svh - 146px);
   }
 }
 /* =========================================================
-   BLOCK 1 END: CASABLANCA TARGETED OVERRIDES
+   BLOCK 1 END: CASABLANCA FINAL VISUAL OVERRIDES
    ========================================================= */
