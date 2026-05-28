@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap');
 
 /* =========================================================
-   BLOCK 1 START: CASABLANCA FINAL OVERRIDES
-   Purpose: Production override layer for typography, hero image, badge/logo,
-   equal glossy nav buttons, compact nav spacing, scroll-shrink interaction,
-   mobile button-first header, gallery cleanup, video controls, and width lock.
+   BLOCK 1 START: CASABLANCA FINAL OVERRIDE LAYER
+   Purpose: preserve final visual direction while tightening desktop nav,
+   restoring scroll-shrink, locking mobile width, and keeping hero/logo updates.
    ========================================================= */
 
 :root {
@@ -14,9 +13,7 @@
   --casa-new-hero: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a17ac41ff82912d6575f814.webp');
 }
 
-/* =========================================================
-   BLOCK 2 START: GLOBAL WIDTH LOCK
-   ========================================================= */
+/* BLOCK 1.1 START: Global Width Lock */
 html,
 body {
   width: 100%;
@@ -25,8 +22,10 @@ body {
   font-family: var(--font-body);
 }
 
-body {
-  position: relative;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 .site-header,
@@ -37,19 +36,9 @@ section,
 footer {
   max-width: 100vw;
 }
+/* BLOCK 1.1 END: Global Width Lock */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-/* =========================================================
-   BLOCK 2 END: GLOBAL WIDTH LOCK
-   ========================================================= */
-
-/* =========================================================
-   BLOCK 3 START: TYPOGRAPHY
-   ========================================================= */
+/* BLOCK 1.2 START: Typography */
 p,
 li,
 .lead,
@@ -62,7 +51,7 @@ li,
 .form-select,
 .form-textarea,
 .drawer-actions {
-  font-family: var(--font-body);
+  font-family: var(--font-body) !important;
 }
 
 h1,
@@ -77,7 +66,7 @@ h6,
 .title-md,
 .stat b,
 .price-card .price {
-  font-family: var(--font-title);
+  font-family: var(--font-title) !important;
   font-weight: 800 !important;
   letter-spacing: -0.025em;
 }
@@ -94,23 +83,13 @@ h6,
 .hamburger-btn,
 .stat span,
 .price-card h3 {
-  font-family: var(--font-title);
-  font-weight: 800;
+  font-family: var(--font-title) !important;
+  font-weight: 800 !important;
 }
 
-.title-xl {
-  font-size: clamp(1.6rem, 4.5vw, 4.3rem) !important;
-}
-
-.title-lg {
-  font-size: clamp(1.18rem, 3.1vw, 3.15rem) !important;
-  line-height: 1.02 !important;
-}
-
-.title-md {
-  font-size: clamp(1rem, 1.75vw, 1.6rem) !important;
-  line-height: 1.08 !important;
-}
+.title-xl { font-size: clamp(1.6rem, 4.5vw, 4.3rem) !important; }
+.title-lg { font-size: clamp(1.18rem, 3.1vw, 3.15rem) !important; line-height: 1.02 !important; }
+.title-md { font-size: clamp(1rem, 1.75vw, 1.6rem) !important; line-height: 1.08 !important; }
 
 p,
 .lead,
@@ -135,25 +114,15 @@ p,
 #matterport .reveal {
   text-align: center;
 }
-/* =========================================================
-   BLOCK 3 END: TYPOGRAPHY
-   ========================================================= */
+/* BLOCK 1.2 END: Typography */
 
-/* =========================================================
-   BLOCK 4 START: HERO IMAGE SWAP
-   ========================================================= */
+/* BLOCK 1.3 START: Hero + Badge Source */
 .hero-picture img {
   content: var(--casa-new-hero);
   object-fit: cover;
   object-position: center;
 }
-/* =========================================================
-   BLOCK 4 END: HERO IMAGE SWAP
-   ========================================================= */
 
-/* =========================================================
-   BLOCK 5 START: LOGO / BADGE SOURCE
-   ========================================================= */
 .casa-container,
 .vegas-container {
   display: none !important;
@@ -172,13 +141,9 @@ footer img:first-child {
   margin-inline: auto !important;
   display: block !important;
 }
-/* =========================================================
-   BLOCK 5 END: LOGO / BADGE SOURCE
-   ========================================================= */
+/* BLOCK 1.3 END: Hero + Badge Source */
 
-/* =========================================================
-   BLOCK 6 START: GLOSSY DOUBLE-BEVEL BUTTON SYSTEM
-   ========================================================= */
+/* BLOCK 1.4 START: Glossy Gold / Black Button System */
 .btn,
 .drawer-actions .btn,
 .nav-link {
@@ -187,7 +152,7 @@ footer img:first-child {
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(255, 238, 169, .96) !important;
-  border-radius: 999px;
+  border-radius: 999px !important;
   overflow: hidden;
   isolation: isolate;
   background:
@@ -217,7 +182,7 @@ footer img:first-child {
   background:
     linear-gradient(180deg, rgba(255,255,255,.16), transparent 30%),
     radial-gradient(circle at 50% 0%, rgba(255,229,138,.14), transparent 44%),
-    linear-gradient(180deg, #181818 0%, #000000 50%, #17120a 100%);
+    linear-gradient(180deg, #181818 0%, #000 50%, #17120a 100%);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.16),
     inset 0 .75rem 1rem rgba(255,255,255,.045),
@@ -271,13 +236,9 @@ footer img:first-child {
 .drawer-actions .btn {
   width: 100%;
 }
-/* =========================================================
-   BLOCK 6 END: GLOSSY DOUBLE-BEVEL BUTTON SYSTEM
-   ========================================================= */
+/* BLOCK 1.4 END: Glossy Gold / Black Button System */
 
-/* =========================================================
-   BLOCK 7 START: DESKTOP NAV / BADGE SPACING + SCROLL SHRINK
-   ========================================================= */
+/* BLOCK 1.5 START: Desktop Nav — Compact Grid, No Edge Cutoff */
 @media (min-width: 1023px) {
   .site-header,
   .header-container,
@@ -285,24 +246,33 @@ footer img:first-child {
     overflow: visible !important;
   }
 
+  .header-container {
+    position: relative !important;
+    width: 100% !important;
+  }
+
   .nav-bar-container {
-    min-height: clamp(142px, 9.7vw, 162px) !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 22vw, 410px) minmax(0, 1fr);
+    column-gap: clamp(.15rem, .5vw, .5rem);
     align-items: center !important;
-    transition: min-height .32s ease, transform .32s ease;
+    min-height: clamp(136px, 9.3vw, 156px) !important;
+    padding: 0 clamp(.95rem, 2vw, 2rem) !important;
+    transition: min-height .32s ease, grid-template-columns .32s ease;
   }
 
   .site-header.is-scrolled .nav-bar-container {
-    min-height: clamp(92px, 6.4vw, 112px) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(210px, 15vw, 290px) minmax(0, 1fr);
+    min-height: clamp(88px, 6.1vw, 106px) !important;
   }
 
   .brand-group {
+    position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    width: clamp(300px, 21vw, 420px) !important;
+    width: clamp(300px, 21vw, 405px) !important;
     height: clamp(150px, 12vw, 230px) !important;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) !important;
     z-index: 40;
     pointer-events: none;
     transition: width .32s ease, height .32s ease, transform .32s ease;
@@ -315,12 +285,12 @@ footer img:first-child {
   .logo-wrapper {
     top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -16%) !important;
+    transform: translate(-50%, -15%) !important;
     transition: transform .32s ease;
   }
 
   .main-logo {
-    width: clamp(285px, 20vw, 405px) !important;
+    width: clamp(285px, 20vw, 392px) !important;
     height: auto !important;
     max-width: none !important;
     filter: drop-shadow(0 16px 26px rgba(0,0,0,.68));
@@ -328,64 +298,62 @@ footer img:first-child {
   }
 
   .site-header.is-scrolled .brand-group {
-    width: clamp(220px, 15vw, 300px) !important;
-    height: clamp(96px, 7vw, 142px) !important;
+    width: clamp(205px, 14vw, 280px) !important;
+    height: clamp(94px, 7vw, 138px) !important;
   }
 
   .site-header.is-scrolled .logo-wrapper {
-    transform: translate(-50%, -8%) !important;
+    transform: translate(-50%, -6%) !important;
   }
 
   .site-header.is-scrolled .main-logo {
-    width: clamp(205px, 14vw, 285px) !important;
+    width: clamp(190px, 13vw, 265px) !important;
     filter: drop-shadow(0 11px 18px rgba(0,0,0,.58));
   }
 
   .nav-list {
-    gap: clamp(.35rem, .55vw, .62rem) !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: clamp(.24rem, .42vw, .5rem) !important;
     min-width: 0;
+    max-width: 100%;
+    overflow: visible !important;
+  }
+
+  .nav-left {
+    grid-column: 1 !important;
+    justify-self: end !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+  }
+
+  .nav-right {
+    grid-column: 3 !important;
+    justify-self: start !important;
+    justify-content: flex-start !important;
+    margin: 0 !important;
   }
 
   .nav-link {
-    width: clamp(108px, 7.1vw, 132px) !important;
-    min-height: clamp(40px, 2.85vw, 48px) !important;
-    padding-inline: .42rem !important;
-    font-size: clamp(.58rem, .62vw, .7rem) !important;
+    width: clamp(92px, 6vw, 112px) !important;
+    min-width: 0 !important;
+    min-height: clamp(39px, 2.75vw, 46px) !important;
+    padding-inline: .34rem !important;
+    font-size: clamp(.54rem, .58vw, .66rem) !important;
     text-align: center;
     transition: width .32s ease, min-height .32s ease, font-size .32s ease, transform .2s ease;
   }
 
   .site-header.is-scrolled .nav-link {
-    width: clamp(96px, 6.2vw, 116px) !important;
-    min-height: clamp(34px, 2.35vw, 40px) !important;
-    font-size: clamp(.52rem, .54vw, .63rem) !important;
-  }
-
-  .nav-left {
-    margin-right: clamp(145px, 12vw, 220px) !important;
-    justify-content: flex-end;
-  }
-
-  .nav-right {
-    margin-left: clamp(145px, 12vw, 220px) !important;
-    justify-content: flex-start;
-  }
-
-  .site-header.is-scrolled .nav-left {
-    margin-right: clamp(108px, 8.6vw, 165px) !important;
-  }
-
-  .site-header.is-scrolled .nav-right {
-    margin-left: clamp(108px, 8.6vw, 165px) !important;
+    width: clamp(82px, 5.2vw, 98px) !important;
+    min-height: clamp(33px, 2.25vw, 39px) !important;
+    font-size: clamp(.48rem, .5vw, .58rem) !important;
   }
 }
-/* =========================================================
-   BLOCK 7 END: DESKTOP NAV / BADGE SPACING + SCROLL SHRINK
-   ========================================================= */
+/* BLOCK 1.5 END: Desktop Nav — Compact Grid, No Edge Cutoff */
 
-/* =========================================================
-   BLOCK 8 START: MOBILE HEADER — BUTTONS FIRST, BADGE SECOND + SCROLL SHRINK
-   ========================================================= */
+/* BLOCK 1.6 START: Mobile Header — Buttons First, Badge Second + Scroll Shrink */
 @media (max-width: 1022px) {
   .site-header,
   .site-header.is-scrolled {
@@ -400,6 +368,7 @@ footer img:first-child {
   }
 
   .header-container {
+    position: relative !important;
     width: 100%;
     max-width: 100vw;
     padding-inline: clamp(.5rem, 2vw, .85rem);
@@ -407,7 +376,7 @@ footer img:first-child {
   }
 
   .nav-bar-container {
-    min-height: clamp(196px, 48vw, 252px) !important;
+    min-height: clamp(188px, 46vw, 244px) !important;
     padding: 0 !important;
     position: relative;
     align-items: stretch !important;
@@ -416,7 +385,7 @@ footer img:first-child {
   }
 
   .site-header.is-scrolled .nav-bar-container {
-    min-height: clamp(132px, 32vw, 172px) !important;
+    min-height: clamp(126px, 30vw, 164px) !important;
   }
 
   .nav-left {
@@ -426,13 +395,13 @@ footer img:first-child {
   .nav-right,
   .site-header.is-scrolled .nav-right {
     position: absolute;
-    top: clamp(.45rem, 1.8vw, .78rem);
+    top: clamp(.42rem, 1.7vw, .72rem);
     left: clamp(.55rem, 2.6vw, .95rem);
     right: clamp(.55rem, 2.6vw, .95rem);
     bottom: auto;
-    display: grid;
+    display: grid !important;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(.36rem, 1.6vw, .62rem);
+    gap: clamp(.32rem, 1.45vw, .55rem);
     width: auto;
     margin: 0 !important;
     opacity: 1;
@@ -455,17 +424,17 @@ footer img:first-child {
     width: 100% !important;
     max-width: 100%;
     min-width: 0;
-    min-height: clamp(2.55rem, 9vw, 3.2rem);
-    padding: .18rem .12rem;
-    font-size: clamp(.68rem, 3.05vw, .9rem) !important;
-    letter-spacing: -.05em;
+    min-height: clamp(2.48rem, 8.6vw, 3.05rem);
+    padding: .16rem .1rem;
+    font-size: clamp(.66rem, 2.95vw, .86rem) !important;
+    letter-spacing: -.052em;
     text-align: center;
     transition: min-height .32s ease, font-size .32s ease;
   }
 
   .site-header.is-scrolled .nav-right .nav-link {
-    min-height: clamp(2.25rem, 7.5vw, 2.7rem);
-    font-size: clamp(.62rem, 2.75vw, .78rem) !important;
+    min-height: clamp(2.1rem, 7vw, 2.48rem);
+    font-size: clamp(.58rem, 2.55vw, .74rem) !important;
   }
 
   .nav-right .nav-item:nth-child(1) .nav-link,
@@ -494,9 +463,9 @@ footer img:first-child {
     background: none;
     opacity: 1;
     color: #ffe58a;
-    font-size: clamp(.68rem, 3.05vw, .9rem);
+    font-size: clamp(.66rem, 2.95vw, .86rem);
     font-weight: 900;
-    letter-spacing: -.05em;
+    letter-spacing: -.052em;
     text-shadow: 0 0 .6rem rgba(255,229,138,.56), 0 1px 0 rgba(0,0,0,.94);
     mix-blend-mode: normal;
     transition: font-size .32s ease;
@@ -504,7 +473,7 @@ footer img:first-child {
 
   .site-header.is-scrolled .nav-right .nav-item:nth-child(1) .nav-link::after,
   .site-header.is-scrolled .nav-right .nav-item:nth-child(3) .nav-link::after {
-    font-size: clamp(.62rem, 2.75vw, .78rem);
+    font-size: clamp(.58rem, 2.55vw, .74rem);
   }
 
   .nav-right .nav-item:nth-child(1) .nav-link::after {
@@ -516,7 +485,8 @@ footer img:first-child {
   }
 
   .brand-group {
-    top: clamp(3.55rem, 13.2vw, 4.85rem) !important;
+    position: absolute !important;
+    top: clamp(3.35rem, 12.4vw, 4.45rem) !important;
     left: 50% !important;
     width: clamp(205px, 58vw, 300px) !important;
     height: clamp(112px, 32vw, 172px) !important;
@@ -528,9 +498,9 @@ footer img:first-child {
   }
 
   .site-header.is-scrolled .brand-group {
-    top: clamp(2.78rem, 9.4vw, 3.42rem) !important;
-    width: clamp(138px, 38vw, 190px) !important;
-    height: clamp(76px, 21vw, 110px) !important;
+    top: clamp(2.58rem, 8.9vw, 3.18rem) !important;
+    width: clamp(132px, 36vw, 180px) !important;
+    height: clamp(72px, 20vw, 104px) !important;
   }
 
   .brand-group .logo-wrapper {
@@ -553,7 +523,7 @@ footer img:first-child {
   }
 
   .site-header.is-scrolled .main-logo {
-    width: clamp(138px, 38vw, 190px) !important;
+    width: clamp(132px, 36vw, 180px) !important;
     max-width: calc(100vw - 2rem) !important;
     filter: drop-shadow(0 9px 14px rgba(0,0,0,.58));
   }
@@ -629,34 +599,29 @@ footer img:first-child {
   }
 
   .hero {
-    margin-top: clamp(196px, 48vw, 252px) !important;
-    min-height: calc(100svh - clamp(196px, 48vw, 252px)) !important;
+    margin-top: clamp(188px, 46vw, 244px) !important;
+    min-height: calc(100svh - clamp(188px, 46vw, 244px)) !important;
     transition: margin-top .32s ease, min-height .32s ease;
   }
 
-  .site-header.is-scrolled + .drawer + .overlay + main .hero,
   body:has(.site-header.is-scrolled) .hero {
-    margin-top: clamp(132px, 32vw, 172px) !important;
-    min-height: calc(100svh - clamp(132px, 32vw, 172px)) !important;
+    margin-top: clamp(126px, 30vw, 164px) !important;
+    min-height: calc(100svh - clamp(126px, 30vw, 164px)) !important;
   }
 
   .hero-picture img {
-    min-height: calc(100svh - clamp(196px, 48vw, 252px)) !important;
+    min-height: calc(100svh - clamp(188px, 46vw, 244px)) !important;
     object-position: center top;
     transition: min-height .32s ease;
   }
 
   body:has(.site-header.is-scrolled) .hero-picture img {
-    min-height: calc(100svh - clamp(132px, 32vw, 172px)) !important;
+    min-height: calc(100svh - clamp(126px, 30vw, 164px)) !important;
   }
 }
-/* =========================================================
-   BLOCK 8 END: MOBILE HEADER — BUTTONS FIRST, BADGE SECOND + SCROLL SHRINK
-   ========================================================= */
+/* BLOCK 1.6 END: Mobile Header — Buttons First, Badge Second + Scroll Shrink */
 
-/* =========================================================
-   BLOCK 9 START: STATS / GALLERY / VIDEO / MISC
-   ========================================================= */
+/* BLOCK 1.7 START: Stat Cards */
 .stat {
   text-align: center;
   display: flex;
@@ -671,7 +636,9 @@ footer img:first-child {
   width: 100%;
   text-align: center;
 }
+/* BLOCK 1.7 END: Stat Cards */
 
+/* BLOCK 1.8 START: Gallery Fixes */
 #gallery .site-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -777,6 +744,41 @@ footer img:first-child {
   box-shadow: 0 0 0 2px rgba(201,168,90,.18), 0 12px 28px rgba(0,0,0,.42);
 }
 
+@media (max-width: 900px) {
+  #gallery .gallery-featured {
+    aspect-ratio: 4 / 3;
+    max-height: 62vh;
+  }
+
+  #gallery .gallery-thumbs {
+    height: clamp(66px, 18vw, 88px);
+    grid-auto-columns: clamp(74px, 22vw, 108px);
+    margin-top: .7rem;
+    padding-bottom: .5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  #gallery .gallery-thumbs {
+    height: clamp(62px, 18vw, 78px);
+    grid-auto-columns: clamp(70px, 24vw, 94px);
+    margin-top: .6rem;
+    padding-inline: .35rem;
+  }
+
+  #gallery .gallery-btn {
+    width: 2.45rem;
+    height: 2.45rem;
+    font-size: 1.25rem;
+  }
+
+  #gallery .gallery-thumb {
+    border-radius: .72rem;
+  }
+}
+/* BLOCK 1.8 END: Gallery Fixes */
+
+/* BLOCK 1.9 START: Video + Availability Badge Cleanup */
 .video-shell.is-sticky:not(.is-manual-detached) {
   position: relative !important;
   right: auto !important;
@@ -818,24 +820,9 @@ footer img:first-child {
 #availability .trust-strip .badge:nth-child(3) {
   display: none !important;
 }
-/* =========================================================
-   BLOCK 9 END: STATS / GALLERY / VIDEO / MISC
-   ========================================================= */
+/* BLOCK 1.9 END: Video + Availability Badge Cleanup */
 
-@media (max-width: 900px) {
-  #gallery .gallery-featured {
-    aspect-ratio: 4 / 3;
-    max-height: 62vh;
-  }
-
-  #gallery .gallery-thumbs {
-    height: clamp(66px, 18vw, 88px);
-    grid-auto-columns: clamp(74px, 22vw, 108px);
-    margin-top: .7rem;
-    padding-bottom: .5rem;
-  }
-}
-
+/* BLOCK 1.10 START: Small Screen Tightening */
 @media (max-width: 520px) {
   .title-lg {
     font-size: clamp(1.15rem, 8vw, 2.05rem) !important;
@@ -843,23 +830,6 @@ footer img:first-child {
 
   .title-md {
     font-size: clamp(1rem, 6.5vw, 1.45rem) !important;
-  }
-
-  #gallery .gallery-thumbs {
-    height: clamp(62px, 18vw, 78px);
-    grid-auto-columns: clamp(70px, 24vw, 94px);
-    margin-top: .6rem;
-    padding-inline: .35rem;
-  }
-
-  #gallery .gallery-btn {
-    width: 2.45rem;
-    height: 2.45rem;
-    font-size: 1.25rem;
-  }
-
-  #gallery .gallery-thumb {
-    border-radius: .72rem;
   }
 
   .video-shell.is-manual-detached {
@@ -875,42 +845,42 @@ footer img:first-child {
 
 @media (max-width: 380px) {
   .nav-bar-container {
-    min-height: 184px !important;
+    min-height: 180px !important;
   }
 
   .site-header.is-scrolled .nav-bar-container {
-    min-height: 126px !important;
+    min-height: 122px !important;
   }
 
   .brand-group {
-    top: 3.42rem !important;
-    width: min(212px, calc(100vw - 2rem)) !important;
+    top: 3.28rem !important;
+    width: min(208px, calc(100vw - 2rem)) !important;
   }
 
   .site-header.is-scrolled .brand-group {
-    top: 2.65rem !important;
-    width: min(140px, calc(100vw - 2rem)) !important;
+    top: 2.5rem !important;
+    width: min(136px, calc(100vw - 2rem)) !important;
   }
 
   .main-logo {
-    width: min(212px, calc(100vw - 2rem)) !important;
+    width: min(208px, calc(100vw - 2rem)) !important;
   }
 
   .site-header.is-scrolled .main-logo {
-    width: min(140px, calc(100vw - 2rem)) !important;
+    width: min(136px, calc(100vw - 2rem)) !important;
   }
 
   .nav-right .nav-link,
   .nav-right .nav-item:nth-child(1) .nav-link::after,
   .nav-right .nav-item:nth-child(3) .nav-link::after {
-    font-size: .66rem !important;
-    letter-spacing: -.06em;
+    font-size: .64rem !important;
+    letter-spacing: -.065em;
   }
 
   .site-header.is-scrolled .nav-right .nav-link,
   .site-header.is-scrolled .nav-right .nav-item:nth-child(1) .nav-link::after,
   .site-header.is-scrolled .nav-right .nav-item:nth-child(3) .nav-link::after {
-    font-size: .58rem !important;
+    font-size: .56rem !important;
   }
 
   .hamburger-btn {
@@ -919,23 +889,25 @@ footer img:first-child {
   }
 
   .hero {
-    margin-top: 184px !important;
-    min-height: calc(100svh - 184px) !important;
+    margin-top: 180px !important;
+    min-height: calc(100svh - 180px) !important;
   }
 
   body:has(.site-header.is-scrolled) .hero {
-    margin-top: 126px !important;
-    min-height: calc(100svh - 126px) !important;
+    margin-top: 122px !important;
+    min-height: calc(100svh - 122px) !important;
   }
 
   .hero-picture img {
-    min-height: calc(100svh - 184px) !important;
+    min-height: calc(100svh - 180px) !important;
   }
 
   body:has(.site-header.is-scrolled) .hero-picture img {
-    min-height: calc(100svh - 126px) !important;
+    min-height: calc(100svh - 122px) !important;
   }
 }
+/* BLOCK 1.10 END: Small Screen Tightening */
+
 /* =========================================================
-   BLOCK 1 END: CASABLANCA FINAL OVERRIDES
+   BLOCK 1 END: CASABLANCA FINAL OVERRIDE LAYER
    ========================================================= */
