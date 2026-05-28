@@ -22,9 +22,35 @@ window.addEventListener("DOMContentLoaded", () => {
   const hamburger = $("#hamburger-btn");
   const closeDrawer = $("#close-drawer");
 
-  const setHeaderState = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
-  setHeaderState();
-  window.addEventListener("scroll", setHeaderState, { passive: true });
+  let lastScrollY = Math.max(window.scrollY || 0, 0);
+  let headerScrollTicking = false;
+
+  if (lastScrollY > 24) header?.classList.add("is-scrolled");
+
+  const updateHeaderScrollState = () => {
+    if (!header) return;
+    const currentScrollY = Math.max(window.scrollY || 0, 0);
+    const scrollDelta = currentScrollY - lastScrollY;
+
+    if (currentScrollY <= 24) {
+      header.classList.remove("is-scrolled");
+    } else if (scrollDelta > 4) {
+      header.classList.add("is-scrolled");
+    } else if (scrollDelta < -4) {
+      header.classList.remove("is-scrolled");
+    }
+
+    lastScrollY = currentScrollY;
+    headerScrollTicking = false;
+  };
+
+  const requestHeaderScrollState = () => {
+    if (headerScrollTicking) return;
+    headerScrollTicking = true;
+    window.requestAnimationFrame(updateHeaderScrollState);
+  };
+
+  window.addEventListener("scroll", requestHeaderScrollState, { passive: true });
 
   const openDrawer = () => {
     drawer?.classList.add("open");
