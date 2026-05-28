@@ -22,22 +22,32 @@ window.addEventListener("DOMContentLoaded", () => {
   const hamburger = $("#hamburger-btn");
   const closeDrawer = $("#close-drawer");
 
+  const setShrunkHeader = (shouldShrink) => {
+    if (!header) return;
+    header.classList.toggle("is-scrolled", shouldShrink);
+    if (shouldShrink) {
+      header.style.backgroundColor = "#050505";
+      header.style.backgroundImage = "linear-gradient(180deg, rgba(5,5,5,.99), rgba(10,10,10,.96))";
+    } else {
+      header.style.backgroundColor = "";
+      header.style.backgroundImage = "";
+    }
+  };
+
   let lastScrollY = Math.max(window.scrollY || 0, 0);
   let headerScrollTicking = false;
-
-  if (lastScrollY > 24) header?.classList.add("is-scrolled");
+  setShrunkHeader(lastScrollY > 24);
 
   const updateHeaderScrollState = () => {
-    if (!header) return;
     const currentScrollY = Math.max(window.scrollY || 0, 0);
     const scrollDelta = currentScrollY - lastScrollY;
 
     if (currentScrollY <= 24) {
-      header.classList.remove("is-scrolled");
+      setShrunkHeader(false);
     } else if (scrollDelta > 4) {
-      header.classList.add("is-scrolled");
+      setShrunkHeader(true);
     } else if (scrollDelta < -4) {
-      header.classList.remove("is-scrolled");
+      setShrunkHeader(false);
     }
 
     lastScrollY = currentScrollY;
