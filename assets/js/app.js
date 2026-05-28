@@ -58,6 +58,12 @@ window.addEventListener("DOMContentLoaded", () => {
     availabilityIntro.textContent = "Our team reviews your date window, event type, guest count, and concierge needs personally. We typically respond within 24–48 hours. If you have immediate questions or need to book ASAP, please call and speak with a sales agent.";
   }
 
+  const privateEstateProofGrid = $$(".proof-grid").find((grid) => {
+    const text = grid.textContent || "";
+    return text.includes("Matterport 3D Tour") && text.includes("Calendar-Connected") && text.includes("VIP Concierge Layer");
+  });
+  privateEstateProofGrid?.remove();
+
   /* =========================================================
      BLOCK 3 START: SCROLL REVEALS
      ========================================================= */
