@@ -1,0 +1,30 @@
+/* =========================================================
+   BLOCK 1 START: NAV SCROLL DIRECTION OVERRIDES
+   Purpose: Ensure the header expands on upward scroll, shrinks on downward
+   scroll, and turns black in the shrunk state on mobile and desktop.
+   ========================================================= */
+
+.site-header {
+  transition:
+    background-color .32s ease,
+    background-image .32s ease,
+    min-height .32s ease,
+    transform .32s ease;
+}
+
+.site-header.is-scrolled {
+  background-color: #050505 !important;
+  background-image: linear-gradient(180deg, rgba(5,5,5,.99), rgba(10,10,10,.96)) !important;
+}
+
+@media (max-width: 1022px) {
+  .site-header.is-scrolled {
+    background-color: #050505 !important;
+    background-image: linear-gradient(180deg, rgba(5,5,5,.99), rgba(10,10,10,.96)) !important;
+    box-shadow: 0 16px 34px rgba(0,0,0,.5);
+  }
+}
+
+/* =========================================================
+   BLOCK 1 END: NAV SCROLL DIRECTION OVERRIDES
+   ========================================================= */
