@@ -2,8 +2,9 @@
 
 /* =========================================================
    BLOCK 1 START: CASABLANCA FINAL OVERRIDE LAYER
-   Purpose: preserve final visual direction while tightening desktop nav,
-   restoring scroll-shrink, locking mobile width, and keeping hero/logo updates.
+   Purpose: production override layer for typography, updated hero/badge,
+   glossy CTA/nav buttons, desktop pre-shrink nav tuning, mobile header,
+   gallery cleanup, video controls, and width locking.
    ========================================================= */
 
 :root {
@@ -13,7 +14,7 @@
   --casa-new-hero: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a17ac41ff82912d6575f814.webp');
 }
 
-/* BLOCK 1.1 START: Global Width Lock */
+/* BLOCK 1.1 START: Global width lock */
 html,
 body {
   width: 100%;
@@ -36,7 +37,7 @@ section,
 footer {
   max-width: 100vw;
 }
-/* BLOCK 1.1 END: Global Width Lock */
+/* BLOCK 1.1 END: Global width lock */
 
 /* BLOCK 1.2 START: Typography */
 p,
@@ -116,7 +117,7 @@ p,
 }
 /* BLOCK 1.2 END: Typography */
 
-/* BLOCK 1.3 START: Hero + Badge Source */
+/* BLOCK 1.3 START: Hero and badge source overrides */
 .hero-picture img {
   content: var(--casa-new-hero);
   object-fit: cover;
@@ -141,9 +142,9 @@ footer img:first-child {
   margin-inline: auto !important;
   display: block !important;
 }
-/* BLOCK 1.3 END: Hero + Badge Source */
+/* BLOCK 1.3 END: Hero and badge source overrides */
 
-/* BLOCK 1.4 START: Glossy Gold / Black Button System */
+/* BLOCK 1.4 START: Glossy black/gold button system */
 .btn,
 .drawer-actions .btn,
 .nav-link {
@@ -236,9 +237,9 @@ footer img:first-child {
 .drawer-actions .btn {
   width: 100%;
 }
-/* BLOCK 1.4 END: Glossy Gold / Black Button System */
+/* BLOCK 1.4 END: Glossy black/gold button system */
 
-/* BLOCK 1.5 START: Desktop Nav — Compact Grid, No Edge Cutoff */
+/* BLOCK 1.5 START: Desktop nav — larger pre-shrink buttons with safe spacing */
 @media (min-width: 1023px) {
   .site-header,
   .header-container,
@@ -253,16 +254,17 @@ footer img:first-child {
 
   .nav-bar-container {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) clamp(300px, 22vw, 410px) minmax(0, 1fr);
-    column-gap: clamp(.15rem, .5vw, .5rem);
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 21vw, 390px) minmax(0, 1fr);
+    column-gap: clamp(.35rem, .8vw, .9rem);
     align-items: center !important;
-    min-height: clamp(136px, 9.3vw, 156px) !important;
-    padding: 0 clamp(.95rem, 2vw, 2rem) !important;
-    transition: min-height .32s ease, grid-template-columns .32s ease;
+    min-height: clamp(138px, 9.4vw, 158px) !important;
+    padding: 0 clamp(.75rem, 1.6vw, 1.65rem) !important;
+    transition: min-height .32s ease, grid-template-columns .32s ease, column-gap .32s ease;
   }
 
   .site-header.is-scrolled .nav-bar-container {
     grid-template-columns: minmax(0, 1fr) clamp(210px, 15vw, 290px) minmax(0, 1fr);
+    column-gap: clamp(.16rem, .45vw, .5rem);
     min-height: clamp(88px, 6.1vw, 106px) !important;
   }
 
@@ -315,10 +317,14 @@ footer img:first-child {
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
-    gap: clamp(.24rem, .42vw, .5rem) !important;
+    gap: clamp(.42rem, .68vw, .82rem) !important;
     min-width: 0;
     max-width: 100%;
     overflow: visible !important;
+  }
+
+  .site-header.is-scrolled .nav-list {
+    gap: clamp(.22rem, .4vw, .48rem) !important;
   }
 
   .nav-left {
@@ -336,11 +342,11 @@ footer img:first-child {
   }
 
   .nav-link {
-    width: clamp(92px, 6vw, 112px) !important;
+    width: clamp(104px, 6.65vw, 126px) !important;
     min-width: 0 !important;
-    min-height: clamp(39px, 2.75vw, 46px) !important;
-    padding-inline: .34rem !important;
-    font-size: clamp(.54rem, .58vw, .66rem) !important;
+    min-height: clamp(42px, 2.95vw, 50px) !important;
+    padding-inline: .4rem !important;
+    font-size: clamp(.58rem, .62vw, .72rem) !important;
     text-align: center;
     transition: width .32s ease, min-height .32s ease, font-size .32s ease, transform .2s ease;
   }
@@ -351,9 +357,41 @@ footer img:first-child {
     font-size: clamp(.48rem, .5vw, .58rem) !important;
   }
 }
-/* BLOCK 1.5 END: Desktop Nav — Compact Grid, No Edge Cutoff */
 
-/* BLOCK 1.6 START: Mobile Header — Buttons First, Badge Second + Scroll Shrink */
+@media (min-width: 1500px) {
+  .nav-bar-container {
+    grid-template-columns: minmax(0, 1fr) clamp(320px, 20vw, 410px) minmax(0, 1fr) !important;
+    column-gap: clamp(.55rem, 1vw, 1.2rem) !important;
+    padding-inline: clamp(1rem, 1.9vw, 2rem) !important;
+  }
+
+  .nav-list {
+    gap: clamp(.65rem, .86vw, 1rem) !important;
+  }
+
+  .nav-link {
+    width: clamp(116px, 7vw, 138px) !important;
+    min-height: clamp(44px, 3vw, 52px) !important;
+    font-size: clamp(.62rem, .66vw, .76rem) !important;
+  }
+}
+
+@media (min-width: 1800px) {
+  .nav-bar-container {
+    column-gap: clamp(.75rem, 1.1vw, 1.35rem) !important;
+  }
+
+  .nav-list {
+    gap: clamp(.8rem, .96vw, 1.15rem) !important;
+  }
+
+  .nav-link {
+    width: clamp(124px, 7.2vw, 144px) !important;
+  }
+}
+/* BLOCK 1.5 END: Desktop nav — larger pre-shrink buttons with safe spacing */
+
+/* BLOCK 1.6 START: Mobile header — buttons first, badge second + scroll shrink */
 @media (max-width: 1022px) {
   .site-header,
   .site-header.is-scrolled {
@@ -449,10 +487,7 @@ footer img:first-child {
 
   .nav-right .nav-item:nth-child(1) .nav-link::after,
   .nav-right .nav-item:nth-child(3) .nav-link::after {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     width: auto;
     height: auto;
     z-index: 3;
@@ -619,9 +654,9 @@ footer img:first-child {
     min-height: calc(100svh - clamp(126px, 30vw, 164px)) !important;
   }
 }
-/* BLOCK 1.6 END: Mobile Header — Buttons First, Badge Second + Scroll Shrink */
+/* BLOCK 1.6 END: Mobile header — buttons first, badge second + scroll shrink */
 
-/* BLOCK 1.7 START: Stat Cards */
+/* BLOCK 1.7 START: Stat cards */
 .stat {
   text-align: center;
   display: flex;
@@ -636,9 +671,9 @@ footer img:first-child {
   width: 100%;
   text-align: center;
 }
-/* BLOCK 1.7 END: Stat Cards */
+/* BLOCK 1.7 END: Stat cards */
 
-/* BLOCK 1.8 START: Gallery Fixes */
+/* BLOCK 1.8 START: Gallery */
 #gallery .site-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -776,9 +811,9 @@ footer img:first-child {
     border-radius: .72rem;
   }
 }
-/* BLOCK 1.8 END: Gallery Fixes */
+/* BLOCK 1.8 END: Gallery */
 
-/* BLOCK 1.9 START: Video + Availability Badge Cleanup */
+/* BLOCK 1.9 START: Video + availability badge cleanup */
 .video-shell.is-sticky:not(.is-manual-detached) {
   position: relative !important;
   right: auto !important;
@@ -820,9 +855,9 @@ footer img:first-child {
 #availability .trust-strip .badge:nth-child(3) {
   display: none !important;
 }
-/* BLOCK 1.9 END: Video + Availability Badge Cleanup */
+/* BLOCK 1.9 END: Video + availability badge cleanup */
 
-/* BLOCK 1.10 START: Small Screen Tightening */
+/* BLOCK 1.10 START: Small screen tightening */
 @media (max-width: 520px) {
   .title-lg {
     font-size: clamp(1.15rem, 8vw, 2.05rem) !important;
@@ -906,7 +941,7 @@ footer img:first-child {
     min-height: calc(100svh - 122px) !important;
   }
 }
-/* BLOCK 1.10 END: Small Screen Tightening */
+/* BLOCK 1.10 END: Small screen tightening */
 
 /* =========================================================
    BLOCK 1 END: CASABLANCA FINAL OVERRIDE LAYER
