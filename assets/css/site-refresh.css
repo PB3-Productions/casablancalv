@@ -1,0 +1,468 @@
+/* =========================================================
+   BLOCK 1 START: CASABLANCA SITE REFRESH OVERRIDES
+   Purpose: Black luxury nav, WebGL hero shell, gold icon system,
+   split-merge support, concierge glow, Matterport cleanup, footer polish,
+   and final desktop/mobile spacing audit.
+   ========================================================= */
+
+:root {
+  --casa-new-logo: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1cc593d7322952d16d78e3.webp');
+  --lux-black: #050505;
+  --lux-black-2: #0d0b08;
+  --lux-card: #fffaf0;
+  --lux-gold: #d7ad45;
+  --lux-gold-light: #fff0a6;
+  --lux-border: rgba(255, 226, 138, .32);
+}
+
+/* BLOCK 1.1 START: BLACK LUXURY NAV + LOGO SWAP */
+.site-header,
+.site-header.is-scrolled {
+  background-color: var(--lux-black) !important;
+  background-image: none !important;
+  background: linear-gradient(180deg, #070707 0%, #030303 100%) !important;
+  border-bottom: 1px solid rgba(255, 226, 138, .16);
+  box-shadow: 0 14px 36px rgba(0,0,0,.66), inset 0 -1px 0 rgba(255,255,255,.035) !important;
+}
+
+.main-logo,
+.drawer-logo,
+.footer-brand-block img,
+.site-footer-luxury img {
+  content: var(--casa-new-logo) !important;
+  object-fit: contain !important;
+}
+
+.casa-container,
+.vegas-container {
+  display: none !important;
+}
+/* BLOCK 1.1 END: BLACK LUXURY NAV + LOGO SWAP */
+
+/* BLOCK 1.2 START: WEBGL HERO */
+.casa-webgl-hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.casa-webgl-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #000;
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.casa-webgl-stage.is-ready {
+  opacity: 1;
+}
+
+.casa-webgl-stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  background: #000;
+}
+
+.hero-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 700ms ease;
+}
+
+.casa-webgl-stage.is-ready + .hero-fallback {
+  opacity: 0;
+}
+
+.casa-webgl-hero::after {
+  z-index: 4;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.06) 45%, rgba(0,0,0,.34));
+}
+/* BLOCK 1.2 END: WEBGL HERO */
+
+/* BLOCK 1.3 START: HERO INTRO + WHITE CARD BLACK BACKGROUND */
+.hero-intro-section {
+  padding-top: clamp(4.5rem, 8vw, 7rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+
+.hero-intro-section .title-lg,
+.private-estate-card-section .title-lg {
+  max-width: 1120px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.intro-lead {
+  max-width: 960px !important;
+  text-align: center !important;
+  margin: 1.25rem auto 0 !important;
+}
+
+.private-estate-card-section {
+  padding-top: clamp(3rem, 6vw, 5rem);
+}
+
+.estate-summary-card {
+  background: rgba(255, 250, 240, .96) !important;
+  color: #111 !important;
+  border: 1px solid rgba(255, 226, 138, .38) !important;
+  box-shadow: 0 36px 120px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.42) inset !important;
+}
+
+.estate-summary-card .lead {
+  max-width: 980px;
+  text-align: center !important;
+}
+
+.intro-button-row,
+.footer-button-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(.8rem, 2vw, 1.15rem);
+  margin: clamp(1.35rem, 3vw, 2rem) auto;
+}
+
+.estate-summary-card .stat-row {
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+}
+/* BLOCK 1.3 END: HERO INTRO + WHITE CARD BLACK BACKGROUND */
+
+/* BLOCK 1.4 START: GOLD SVG ICON SYSTEM */
+.gold-svg-icon {
+  width: 2.65rem;
+  height: 2.65rem;
+  min-width: 2.65rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--lux-gold-light);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,.35), transparent 38%),
+    linear-gradient(135deg, #7c4e0c, #fff0a6 26%, #c09128 48%, #6b4108 72%, #f7d977);
+  box-shadow:
+    0 0 18px rgba(255, 220, 118, .38),
+    0 10px 24px rgba(0,0,0,.35),
+    inset 0 0 0 1px rgba(255,255,255,.36);
+}
+
+.gold-svg-icon svg {
+  width: 1.24rem;
+  height: 1.24rem;
+  fill: #17100a;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.28));
+}
+
+.icon-card,
+.concierge-option {
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-card .gold-svg-icon,
+.concierge-option .gold-svg-icon {
+  margin-bottom: .9rem;
+}
+
+.luxury-feature-list {
+  display: grid;
+  gap: 1rem;
+  padding-left: 0 !important;
+}
+
+.luxury-feature-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .9rem;
+  align-items: start;
+  list-style: none;
+}
+
+.luxury-feature-list li::before {
+  display: none !important;
+}
+/* BLOCK 1.4 END: GOLD SVG ICON SYSTEM */
+
+/* BLOCK 1.5 START: GSAP SPLIT-MERGE SUPPORT */
+.split-merge-section {
+  overflow: hidden;
+}
+
+.split-half {
+  will-change: transform, opacity;
+}
+
+.split-merge-grid {
+  position: relative;
+}
+
+.split-merge-grid::before {
+  content: "";
+  position: absolute;
+  inset: -2rem;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(215,173,69,.14), transparent 40rem);
+  opacity: .7;
+}
+/* BLOCK 1.5 END: GSAP SPLIT-MERGE SUPPORT */
+
+/* BLOCK 1.6 START: MAP / FLOORPLAN / GALLERY / MATTERPORT POLISH */
+.map-positioning-section,
+.floorplan-section {
+  background: #f7f2e8 !important;
+}
+
+.framed-map-card,
+.framed-floorplan {
+  padding: clamp(.55rem, 1.3vw, .9rem);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.92), rgba(239,227,204,.96));
+  border: 1px solid rgba(115,84,24,.22);
+  box-shadow: 0 26px 90px rgba(17,14,9,.22), inset 0 0 0 1px rgba(255,255,255,.62);
+}
+
+.framed-map-card img,
+.framed-floorplan img {
+  width: 100%;
+  border-radius: calc(var(--radius-xl) - .5rem);
+  display: block;
+  object-fit: cover;
+}
+
+.gallery-heading-centered {
+  text-align: center;
+  max-width: 980px;
+  margin: 0 auto clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.gallery-heading-centered .title-lg {
+  text-align: center;
+  margin: 1rem auto 0;
+}
+
+.matterport-shell {
+  border: 1px solid var(--lux-border);
+  box-shadow: 0 26px 90px rgba(0,0,0,.46), 0 0 0 1px rgba(255,255,255,.05) inset;
+  background: #050505;
+}
+/* BLOCK 1.6 END: MAP / FLOORPLAN / GALLERY / MATTERPORT POLISH */
+
+/* BLOCK 1.7 START: PRICING + FAQ BLACK SECTIONS */
+.pricing-black-section,
+.faq-dark-section {
+  background: #050505 !important;
+}
+
+.pricing-black-section .price-card,
+.faq-dark-section .mini-card {
+  background: var(--lux-card) !important;
+  color: #151413 !important;
+  border: 1px solid rgba(215,173,69,.2) !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,.26), inset 0 0 0 1px rgba(255,255,255,.56) !important;
+}
+
+.pricing-black-section .price-card h3,
+.faq-dark-section .mini-card h3 {
+  color: #111 !important;
+}
+
+.pricing-black-section .price-card p,
+.faq-dark-section .mini-card p,
+.pricing-black-section .count {
+  color: rgba(21,20,19,.72) !important;
+}
+/* BLOCK 1.7 END: PRICING + FAQ BLACK SECTIONS */
+
+/* BLOCK 1.8 START: CONCIERGE GLOW INTERACTIONS */
+.concierge-option {
+  display: block;
+  color: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(255,226,138,.18) !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255,226,138,.11), transparent 12rem),
+    linear-gradient(145deg, rgba(255,253,247,.96), rgba(242,234,219,.95)) !important;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, filter .28s ease;
+}
+
+.concierge-option::after {
+  content: "";
+  position: absolute;
+  top: -70%;
+  left: -90%;
+  width: 55%;
+  height: 240%;
+  transform: rotate(18deg);
+  background: linear-gradient(115deg, transparent, rgba(255,255,255,.74), transparent);
+  opacity: 0;
+  transition: left .75s ease, opacity .25s ease;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.concierge-option:hover,
+.concierge-option:focus-visible {
+  transform: translateY(-6px);
+  border-color: rgba(255,226,138,.58) !important;
+  box-shadow: 0 0 0 1px rgba(255,226,138,.18), 0 0 32px rgba(215,173,69,.32), 0 28px 70px rgba(0,0,0,.38) !important;
+  outline: none;
+}
+
+.concierge-option:hover::after,
+.concierge-option:focus-visible::after {
+  left: 138%;
+  opacity: .9;
+}
+/* BLOCK 1.8 END: CONCIERGE GLOW INTERACTIONS */
+
+/* BLOCK 1.9 START: FOOTER POLISH */
+.site-footer-luxury {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(215,173,69,.14), transparent 24rem),
+    radial-gradient(circle at 86% 70%, rgba(255,240,166,.09), transparent 22rem),
+    linear-gradient(180deg, #080808, #020202) !important;
+  border-top: 1px solid rgba(255,226,138,.18);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr .7fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: stretch;
+}
+
+.footer-brand-block,
+.footer-cta-card,
+.footer-links-card {
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255,226,138,.14);
+  background: rgba(255,255,255,.045);
+  box-shadow: 0 24px 70px rgba(0,0,0,.32);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.footer-brand-block img {
+  width: min(330px, 76vw);
+  height: auto;
+  display: block;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,.5));
+}
+
+.footer-cta-card p,
+.footer-links-card a,
+.footer-brand-block p {
+  color: rgba(255,253,247,.74) !important;
+}
+
+.footer-links-card {
+  display: grid;
+  gap: .7rem;
+  align-content: start;
+}
+
+.footer-links-card h3 {
+  color: var(--lux-gold-light);
+  margin-bottom: .25rem;
+}
+
+.footer-links-card a {
+  padding: .62rem .75rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.08);
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.footer-links-card a:hover,
+.footer-links-card a:focus-visible {
+  color: var(--lux-gold-light) !important;
+  border-color: rgba(255,226,138,.34);
+  background: rgba(255,226,138,.08);
+  outline: none;
+}
+/* BLOCK 1.9 END: FOOTER POLISH */
+
+/* BLOCK 1.10 START: FINAL SPACING AUDIT */
+.section {
+  padding-block: clamp(4.5rem, 8.5vw, 8rem);
+}
+
+.bg-dark + .bg-dark {
+  border-top: 1px solid rgba(255,255,255,.04);
+}
+
+@media (max-width: 1022px) {
+  .site-header,
+  .site-header.is-scrolled {
+    background: linear-gradient(180deg, #070707 0%, #030303 100%) !important;
+    background-image: none !important;
+  }
+
+  .hero-intro-section,
+  .private-estate-card-section {
+    padding-inline: 0;
+  }
+
+  .intro-button-row .btn,
+  .footer-button-row .btn {
+    width: 100%;
+  }
+
+  .luxury-feature-list li {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .luxury-feature-list .gold-svg-icon {
+    margin-inline: auto;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand-block,
+  .footer-cta-card,
+  .footer-links-card {
+    text-align: center;
+  }
+
+  .footer-brand-block img {
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .section {
+    padding-block: clamp(3.4rem, 14vw, 5rem);
+  }
+
+  .estate-summary-card,
+  .footer-brand-block,
+  .footer-cta-card,
+  .footer-links-card {
+    border-radius: 1.3rem;
+  }
+
+  .hero-intro-section .title-lg,
+  .private-estate-card-section .title-lg,
+  .gallery-heading-centered .title-lg {
+    font-size: clamp(1.7rem, 9vw, 2.65rem) !important;
+  }
+}
+/* BLOCK 1.10 END: FINAL SPACING AUDIT */
+
+/* =========================================================
+   BLOCK 1 END: CASABLANCA SITE REFRESH OVERRIDES
+   ========================================================= */
