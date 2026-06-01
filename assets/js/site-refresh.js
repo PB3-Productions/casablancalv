@@ -1,8 +1,8 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA SITE REFRESH JS
-   Purpose: Oscar-style WebGL hero transition, below-hero layout fixes,
-   map/floorplan lightbox, GSAP split-merge, Matterport privacy cleanup,
-   concierge card behavior, and copy adjustments.
+   Purpose: Oscar-style WebGL hero transition, yellow slide titles,
+   below-hero layout fixes, map/floorplan lightbox, GSAP split-merge,
+   Matterport privacy cleanup, concierge card behavior, and copy adjustments.
    ========================================================= */
 
 import * as THREE from "https://unpkg.com/three@0.128.0/build/three.module.js";
@@ -23,6 +23,17 @@ const HERO_SLIDES_RAW = [
 ];
 
 const HERO_SLIDES = HERO_SLIDES_RAW.filter((url, index, arr) => arr.indexOf(url) === index);
+const HERO_SLIDE_TITLES = [
+  "CASABLANCA LAS VEGAS",
+  "PRIVATE GATED ARRIVAL",
+  "RESORT POOL & SANDY BEACH",
+  "LUXURY GROUP STAYS",
+  "VIP EVENT ESTATE",
+  "PRIVATE CHEF READY",
+  "PRODUCTION & SHOOT READY",
+  "NEAR THE LAS VEGAS STRIP",
+  ""
+];
 const HOLD_DURATION_MS = 1980;
 const TRANSITION_DURATION_MS = 1720;
 const MAX_PIXEL_RATIO = 2;
@@ -120,7 +131,52 @@ function patchContentFlow() {
    ========================================================= */
 
 /* =========================================================
-   BLOCK 4 START: MAP + FLOORPLAN LIGHTBOX
+   BLOCK 4 START: HERO YELLOW SLIDE TITLE OVERLAY
+   ========================================================= */
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"]/g, (match) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[match]));
+}
+
+function ensureHeroSlideTitle() {
+  const hero = document.querySelector(".casa-webgl-hero");
+  if (!hero) return null;
+
+  let title = hero.querySelector(".casa-hero-slide-title");
+  if (!title) {
+    title = document.createElement("div");
+    title.className = "casa-hero-slide-title";
+    title.setAttribute("aria-live", "polite");
+    hero.appendChild(title);
+  }
+  return title;
+}
+
+function setHeroSlideTitle(index, shouldAnimate = true) {
+  const title = ensureHeroSlideTitle();
+  if (!title) return;
+
+  const text = HERO_SLIDE_TITLES[index] || "";
+  title.classList.toggle("is-hidden", !text);
+  title.classList.remove("is-active");
+  title.innerHTML = text
+    ? escapeHtml(text).split("").map((char, charIndex) => {
+        const safeChar = char === " " ? "&nbsp;" : char;
+        return `<span style="--char-index:${charIndex}">${safeChar}</span>`;
+      }).join("")
+    : "";
+
+  if (text && shouldAnimate) {
+    window.requestAnimationFrame(() => title.classList.add("is-active"));
+  } else if (text) {
+    title.classList.add("is-active");
+  }
+}
+/* =========================================================
+   BLOCK 4 END: HERO YELLOW SLIDE TITLE OVERLAY
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 5 START: MAP + FLOORPLAN LIGHTBOX
    ========================================================= */
 function initMapAndFloorplanLightbox() {
   const lightbox = document.getElementById("galleryLightbox");
@@ -165,15 +221,20 @@ function initMapAndFloorplanLightbox() {
   });
 }
 /* =========================================================
-   BLOCK 4 END: MAP + FLOORPLAN LIGHTBOX
+   BLOCK 5 END: MAP + FLOORPLAN LIGHTBOX
    ========================================================= */
 
 /* =========================================================
-   BLOCK 5 START: OSCAR-STYLE WEBGL HERO
+   BLOCK 6 START: OSCAR-STYLE WEBGL HERO
    ========================================================= */
 function initWebglHero() {
   const heroStage = document.getElementById("casaWebglHero");
-  if (!heroStage || prefersReducedMotion || HERO_SLIDES.length < 2) return;
+  if (!heroStage || prefersReducedMotion || HERO_SLIDES.length < 2) {
+    setHeroSlideTitle(0, false);
+    return;
+  }
+
+  setHeroSlideTitle(0, false);
 
   const loader = new THREE.TextureLoader();
   loader.crossOrigin = "anonymous";
@@ -334,6 +395,7 @@ function initWebglHero() {
     const finishTransition = () => {
       currentIndex = targetIndex;
       targetIndex = getNextIndex(currentIndex);
+      setHeroSlideTitle(currentIndex, true);
       uniforms.uTexture1.value = textures[currentIndex];
       uniforms.uTexture2.value = textures[targetIndex];
       setTextureSize("uTexture1Size", textures[currentIndex]);
@@ -367,11 +429,11 @@ function initWebglHero() {
   });
 }
 /* =========================================================
-   BLOCK 5 END: OSCAR-STYLE WEBGL HERO
+   BLOCK 6 END: OSCAR-STYLE WEBGL HERO
    ========================================================= */
 
 /* =========================================================
-   BLOCK 6 START: GSAP SPLIT-MERGE SECTION
+   BLOCK 7 START: GSAP SPLIT-MERGE SECTION
    ========================================================= */
 function initSplitMergeAnimation() {
   const gsapRef = window.gsap;
@@ -398,14 +460,15 @@ function initSplitMergeAnimation() {
   observer.observe(section);
 }
 /* =========================================================
-   BLOCK 6 END: GSAP SPLIT-MERGE SECTION
+   BLOCK 7 END: GSAP SPLIT-MERGE SECTION
    ========================================================= */
 
 /* =========================================================
-   BLOCK 7 START: INIT
+   BLOCK 8 START: INIT
    ========================================================= */
 function initCasablancaRefresh() {
   patchContentFlow();
+  ensureHeroSlideTitle();
   initMapAndFloorplanLightbox();
   initWebglHero();
   initSplitMergeAnimation();
@@ -419,7 +482,7 @@ if (document.readyState === "loading") {
 
 window.addEventListener("load", removeLegacyHeroConflicts, { once: true });
 /* =========================================================
-   BLOCK 7 END: INIT
+   BLOCK 8 END: INIT
    ========================================================= */
 
 /* =========================================================
