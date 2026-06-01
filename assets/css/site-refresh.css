@@ -189,7 +189,20 @@
 .casa-webgl-hero #dynamic-title,
 .casa-webgl-hero .credit,
 .casa-webgl-hero .hero-copy,
-.casa-webgl-hero .intro-panel {
+.casa-webgl-hero .intro-panel,
+.casa-webgl-hero .hero-content,
+.casa-webgl-hero .hero-grid {
+  display: none !important;
+}
+
+main > section.hero:not(.casa-webgl-hero),
+.legacy-hero,
+.old-hero,
+.hero-split,
+.hero-panel,
+.hero-content:not(.casa-webgl-hero .hero-content),
+.hero-copy:not(.casa-webgl-hero .hero-copy),
+.intro-panel:not(.casa-webgl-hero .intro-panel) {
   display: none !important;
 }
 /* =========================================================
@@ -232,6 +245,11 @@
 .hero-intro-section .intro-button-row {
   margin-top: clamp(1.5rem, 3vw, 2.25rem) !important;
   margin-bottom: 0 !important;
+}
+
+.hero-intro-buttons .btn {
+  width: min(318px, 100%) !important;
+  min-width: min(318px, 100%) !important;
 }
 
 .estate-summary-card > .intro-button-row {
@@ -331,6 +349,8 @@
   background: #f7f2e8 !important;
 }
 
+.media-card.framed-map-card,
+.media-card.framed-floorplan,
 .framed-map-card,
 .framed-floorplan {
   padding: 0 !important;
@@ -341,20 +361,36 @@
   overflow: visible !important;
 }
 
+.framed-map-card.parallax-media,
+.framed-floorplan.parallax-media,
+.parallax-media.framed-map-card {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.framed-map-card::before,
+.framed-map-card::after,
+.framed-floorplan::before,
+.framed-floorplan::after {
+  display: none !important;
+  content: none !important;
+}
+
 .framed-map-card img,
 .framed-floorplan img,
 .map-lightbox-image,
 .floorplan-lightbox-image {
   width: 100% !important;
+  height: auto !important;
   display: block !important;
-  border-radius: clamp(.65rem, 1.2vw, 1rem) !important;
+  border-radius: 0 !important;
   object-fit: contain !important;
-  box-shadow: 0 28px 80px rgba(17,14,9,.18) !important;
+  box-shadow: none !important;
   cursor: zoom-in !important;
 }
 
 .framed-map-card img {
-  max-height: min(70vh, 760px) !important;
+  max-height: none !important;
 }
 
 .floorplan-section .floorplan-grid {
@@ -381,7 +417,7 @@
 }
 
 .framed-floorplan img {
-  max-height: min(78vh, 860px) !important;
+  max-height: none !important;
 }
 /* =========================================================
    BLOCK 6 END: MAP + FLOORPLAN CLEAN FRAMELESS ZOOM
@@ -585,14 +621,19 @@
   display: grid;
   gap: .7rem;
   align-content: start;
+  text-align: center !important;
+  justify-items: center !important;
 }
 
 .footer-links-card h3 {
   color: var(--lux-gold-light) !important;
-  margin-bottom: .25rem;
+  margin: 0 auto .25rem !important;
+  text-align: center !important;
+  width: 100%;
 }
 
 .footer-links-card a {
+  width: min(250px, 100%);
   padding: .62rem .75rem;
   border-radius: 999px;
   background: rgba(255,255,255,.045);
@@ -632,7 +673,7 @@
   .casa-webgl-hero,
   .casa-webgl-hero .hero-picture img,
   .casa-webgl-hero .hero-fallback img {
-    min-height: calc(100svh - 0px) !important;
+    min-height: 100svh !important;
     height: 100svh !important;
   }
 
