@@ -1,27 +1,31 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA SITE REFRESH OVERRIDES
-   Purpose: Black luxury nav, WebGL hero shell, gold icon system,
-   split-merge support, concierge glow, Matterport cleanup, footer polish,
-   and final desktop/mobile spacing audit.
+   Purpose: Final desktop/mobile refinements for the black luxury nav,
+   Oscar-style WebGL hero, below-hero content flow, map/floorplan zoom,
+   gold icons, concierge cards, Matterport privacy, and footer CTA.
    ========================================================= */
 
 :root {
   --casa-new-logo: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1cc593d7322952d16d78e3.webp');
+  --casa-webgl-fallback: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b15.webp');
   --lux-black: #050505;
   --lux-black-2: #0d0b08;
   --lux-card: #fffaf0;
   --lux-gold: #d7ad45;
+  --lux-gold-deep: #9b6e18;
   --lux-gold-light: #fff0a6;
   --lux-border: rgba(255, 226, 138, .32);
 }
 
-/* BLOCK 1.1 START: BLACK LUXURY NAV + LOGO SWAP */
+/* =========================================================
+   BLOCK 2 START: BLACK LUXURY NAV + SMALLER BADGE OVERHANG
+   ========================================================= */
 .site-header,
 .site-header.is-scrolled {
   background-color: var(--lux-black) !important;
   background-image: none !important;
   background: linear-gradient(180deg, #070707 0%, #030303 100%) !important;
-  border-bottom: 1px solid rgba(255, 226, 138, .16);
+  border-bottom: 1px solid rgba(255, 226, 138, .16) !important;
   box-shadow: 0 14px 36px rgba(0,0,0,.66), inset 0 -1px 0 rgba(255,255,255,.035) !important;
 }
 
@@ -37,21 +41,94 @@
 .vegas-container {
   display: none !important;
 }
-/* BLOCK 1.1 END: BLACK LUXURY NAV + LOGO SWAP */
 
-/* BLOCK 1.2 START: WEBGL HERO */
+@media (min-width: 1023px) {
+  .site-header,
+  .header-container,
+  .nav-bar-container {
+    overflow: visible !important;
+  }
+
+  .nav-bar-container {
+    grid-template-columns: minmax(0, 1fr) clamp(230px, 16vw, 305px) minmax(0, 1fr) !important;
+    min-height: clamp(120px, 8.2vw, 138px) !important;
+    column-gap: clamp(.5rem, 1vw, 1.2rem) !important;
+  }
+
+  .site-header.is-scrolled .nav-bar-container {
+    grid-template-columns: minmax(0, 1fr) clamp(180px, 12vw, 230px) minmax(0, 1fr) !important;
+    min-height: clamp(82px, 5.6vw, 98px) !important;
+  }
+
+  .brand-group {
+    top: 50% !important;
+    left: 50% !important;
+    width: clamp(220px, 15.5vw, 305px) !important;
+    height: clamp(108px, 7.4vw, 150px) !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 44 !important;
+  }
+
+  .logo-wrapper {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -40%) !important;
+  }
+
+  .main-logo {
+    width: clamp(218px, 15.5vw, 300px) !important;
+    max-width: none !important;
+    height: auto !important;
+    filter: drop-shadow(0 13px 20px rgba(0,0,0,.65)) !important;
+  }
+
+  .site-header.is-scrolled .brand-group {
+    width: clamp(150px, 10.6vw, 205px) !important;
+    height: clamp(74px, 5.1vw, 102px) !important;
+  }
+
+  .site-header.is-scrolled .logo-wrapper {
+    transform: translate(-50%, -36%) !important;
+  }
+
+  .site-header.is-scrolled .main-logo {
+    width: clamp(148px, 10.5vw, 200px) !important;
+  }
+
+  .nav-left {
+    justify-self: end !important;
+    margin: 0 !important;
+  }
+
+  .nav-right {
+    justify-self: start !important;
+    margin: 0 !important;
+  }
+}
+/* =========================================================
+   BLOCK 2 END: BLACK LUXURY NAV + SMALLER BADGE OVERHANG
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 3 START: OSCAR-STYLE WEBGL HERO, NO HERO TEXT
+   ========================================================= */
 .casa-webgl-hero {
-  position: relative;
-  min-height: 100svh;
-  overflow: hidden;
-  background: #000;
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-height: 100svh !important;
+  height: 100svh !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  background: #000 !important;
+  isolation: isolate;
 }
 
 .casa-webgl-stage {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: #000;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 4 !important;
+  background: #000 !important;
   opacity: 0;
   transition: opacity 700ms ease;
 }
@@ -61,18 +138,18 @@
 }
 
 .casa-webgl-stage canvas {
-  position: absolute;
-  inset: 0;
-  display: block;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
   width: 100% !important;
   height: 100% !important;
-  background: #000;
+  background: #000 !important;
 }
 
-.hero-fallback {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+.casa-webgl-hero .hero-fallback {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
   opacity: 1;
   transition: opacity 700ms ease;
 }
@@ -81,64 +158,115 @@
   opacity: 0;
 }
 
+.casa-webgl-hero .hero-picture,
+.casa-webgl-hero .hero-picture img,
+.casa-webgl-hero .hero-fallback img {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100svh !important;
+  display: block !important;
+}
+
+.casa-webgl-hero .hero-fallback img {
+  content: var(--casa-webgl-fallback) !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  filter: saturate(1.06) contrast(1.04) brightness(.92) !important;
+}
+
 .casa-webgl-hero::after {
-  z-index: 4;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.06) 45%, rgba(0,0,0,.34));
+    radial-gradient(circle at 50% 38%, transparent 0%, rgba(0,0,0,.08) 42%, rgba(0,0,0,.36) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.04) 48%, rgba(0,0,0,.28));
 }
-/* BLOCK 1.2 END: WEBGL HERO */
 
-/* BLOCK 1.3 START: HERO INTRO + WHITE CARD BLACK BACKGROUND */
+.casa-webgl-hero .hero-text,
+.casa-webgl-hero #dynamic-title,
+.casa-webgl-hero .credit,
+.casa-webgl-hero .hero-copy,
+.casa-webgl-hero .intro-panel {
+  display: none !important;
+}
+/* =========================================================
+   BLOCK 3 END: OSCAR-STYLE WEBGL HERO, NO HERO TEXT
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 4 START: BELOW-HERO COPY FLOW + BUTTON PLACEMENT
+   ========================================================= */
 .hero-intro-section {
-  padding-top: clamp(4.5rem, 8vw, 7rem);
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  display: block !important;
+  background: #050505 !important;
+  background-image: radial-gradient(circle at 50% 0%, rgba(215,173,69,.12), transparent 30rem) !important;
+  padding-top: clamp(4.5rem, 8vw, 7rem) !important;
+  padding-bottom: clamp(3.2rem, 6.5vw, 5.8rem) !important;
+  color: var(--bg-ivory) !important;
 }
 
-.hero-intro-section .title-lg,
-.private-estate-card-section .title-lg {
-  max-width: 1120px;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.intro-lead {
-  max-width: 960px !important;
+.hero-intro-section .narrow-shell {
+  display: block !important;
   text-align: center !important;
-  margin: 1.25rem auto 0 !important;
+  max-width: min(1180px, calc(100% - clamp(1.25rem, 6vw, 6rem))) !important;
+}
+
+.hero-intro-section .title-lg {
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  font-size: clamp(2.25rem, 5.4vw, 5.25rem) !important;
+  line-height: .94 !important;
+}
+
+.hero-intro-section .intro-lead {
+  max-width: 980px !important;
+  margin: clamp(1.1rem, 2.4vw, 1.8rem) auto 0 !important;
+  text-align: center !important;
+  color: rgba(255,253,247,.78) !important;
+}
+
+.hero-intro-section .intro-button-row {
+  margin-top: clamp(1.5rem, 3vw, 2.25rem) !important;
+  margin-bottom: 0 !important;
+}
+
+.estate-summary-card > .intro-button-row {
+  display: none !important;
 }
 
 .private-estate-card-section {
-  padding-top: clamp(3rem, 6vw, 5rem);
+  background: #050505 !important;
+  padding-top: clamp(2.4rem, 5vw, 4.5rem) !important;
 }
 
 .estate-summary-card {
-  background: rgba(255, 250, 240, .96) !important;
+  background: rgba(255, 250, 240, .97) !important;
   color: #111 !important;
-  border: 1px solid rgba(255, 226, 138, .38) !important;
-  box-shadow: 0 36px 120px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.42) inset !important;
+  border: 1px solid rgba(255, 226, 138, .36) !important;
+  box-shadow: 0 36px 120px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.48) inset !important;
+}
+
+.estate-summary-card .title-lg,
+.estate-summary-card .lead {
+  text-align: center !important;
+  margin-inline: auto !important;
 }
 
 .estate-summary-card .lead {
-  max-width: 980px;
-  text-align: center !important;
+  color: rgba(21,20,19,.76) !important;
+  max-width: 1020px !important;
 }
+/* =========================================================
+   BLOCK 4 END: BELOW-HERO COPY FLOW + BUTTON PLACEMENT
+   ========================================================= */
 
-.intro-button-row,
-.footer-button-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: clamp(.8rem, 2vw, 1.15rem);
-  margin: clamp(1.35rem, 3vw, 2rem) auto;
-}
-
-.estate-summary-card .stat-row {
-  margin-top: clamp(1.25rem, 3vw, 2rem);
-}
-/* BLOCK 1.3 END: HERO INTRO + WHITE CARD BLACK BACKGROUND */
-
-/* BLOCK 1.4 START: GOLD SVG ICON SYSTEM */
+/* =========================================================
+   BLOCK 5 START: GOLD SVG ICON SYSTEM
+   ========================================================= */
 .gold-svg-icon {
   width: 2.65rem;
   height: 2.65rem;
@@ -191,9 +319,77 @@
 .luxury-feature-list li::before {
   display: none !important;
 }
-/* BLOCK 1.4 END: GOLD SVG ICON SYSTEM */
+/* =========================================================
+   BLOCK 5 END: GOLD SVG ICON SYSTEM
+   ========================================================= */
 
-/* BLOCK 1.5 START: GSAP SPLIT-MERGE SUPPORT */
+/* =========================================================
+   BLOCK 6 START: MAP + FLOORPLAN CLEAN FRAMELESS ZOOM
+   ========================================================= */
+.map-positioning-section,
+.floorplan-section {
+  background: #f7f2e8 !important;
+}
+
+.framed-map-card,
+.framed-floorplan {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+.framed-map-card img,
+.framed-floorplan img,
+.map-lightbox-image,
+.floorplan-lightbox-image {
+  width: 100% !important;
+  display: block !important;
+  border-radius: clamp(.65rem, 1.2vw, 1rem) !important;
+  object-fit: contain !important;
+  box-shadow: 0 28px 80px rgba(17,14,9,.18) !important;
+  cursor: zoom-in !important;
+}
+
+.framed-map-card img {
+  max-height: min(70vh, 760px) !important;
+}
+
+.floorplan-section .floorplan-grid {
+  display: block !important;
+  text-align: center !important;
+}
+
+.floorplan-section .floorplan-grid > .reveal:first-child {
+  max-width: 920px !important;
+  margin: 0 auto clamp(1.5rem, 3vw, 2.25rem) !important;
+  text-align: center !important;
+}
+
+.floorplan-section .floorplan-grid > .reveal:first-child .lead,
+.floorplan-section .floorplan-grid > .reveal:first-child h2,
+.floorplan-section .floorplan-grid > .reveal:first-child .eyebrow {
+  text-align: center !important;
+  margin-inline: auto !important;
+}
+
+.framed-floorplan {
+  max-width: min(1060px, 100%) !important;
+  margin: 0 auto !important;
+}
+
+.framed-floorplan img {
+  max-height: min(78vh, 860px) !important;
+}
+/* =========================================================
+   BLOCK 6 END: MAP + FLOORPLAN CLEAN FRAMELESS ZOOM
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 7 START: SPLIT MERGE + GALLERY + MATTERPORT
+   ========================================================= */
 .split-merge-section {
   overflow: hidden;
 }
@@ -214,50 +410,30 @@
   background: radial-gradient(circle at 50% 50%, rgba(215,173,69,.14), transparent 40rem);
   opacity: .7;
 }
-/* BLOCK 1.5 END: GSAP SPLIT-MERGE SUPPORT */
-
-/* BLOCK 1.6 START: MAP / FLOORPLAN / GALLERY / MATTERPORT POLISH */
-.map-positioning-section,
-.floorplan-section {
-  background: #f7f2e8 !important;
-}
-
-.framed-map-card,
-.framed-floorplan {
-  padding: clamp(.55rem, 1.3vw, .9rem);
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.92), rgba(239,227,204,.96));
-  border: 1px solid rgba(115,84,24,.22);
-  box-shadow: 0 26px 90px rgba(17,14,9,.22), inset 0 0 0 1px rgba(255,255,255,.62);
-}
-
-.framed-map-card img,
-.framed-floorplan img {
-  width: 100%;
-  border-radius: calc(var(--radius-xl) - .5rem);
-  display: block;
-  object-fit: cover;
-}
 
 .gallery-heading-centered {
-  text-align: center;
+  text-align: center !important;
   max-width: 980px;
   margin: 0 auto clamp(1.5rem, 4vw, 2.75rem);
 }
 
 .gallery-heading-centered .title-lg {
-  text-align: center;
+  text-align: center !important;
   margin: 1rem auto 0;
 }
 
 .matterport-shell {
-  border: 1px solid var(--lux-border);
-  box-shadow: 0 26px 90px rgba(0,0,0,.46), 0 0 0 1px rgba(255,255,255,.05) inset;
-  background: #050505;
+  border: 1px solid var(--lux-border) !important;
+  box-shadow: 0 26px 90px rgba(0,0,0,.46), 0 0 0 1px rgba(255,255,255,.05) inset !important;
+  background: #050505 !important;
 }
-/* BLOCK 1.6 END: MAP / FLOORPLAN / GALLERY / MATTERPORT POLISH */
+/* =========================================================
+   BLOCK 7 END: SPLIT MERGE + GALLERY + MATTERPORT
+   ========================================================= */
 
-/* BLOCK 1.7 START: PRICING + FAQ BLACK SECTIONS */
+/* =========================================================
+   BLOCK 8 START: PRICING + FAQ BLACK SECTIONS
+   ========================================================= */
 .pricing-black-section,
 .faq-dark-section {
   background: #050505 !important;
@@ -281,17 +457,21 @@
 .pricing-black-section .count {
   color: rgba(21,20,19,.72) !important;
 }
-/* BLOCK 1.7 END: PRICING + FAQ BLACK SECTIONS */
+/* =========================================================
+   BLOCK 8 END: PRICING + FAQ BLACK SECTIONS
+   ========================================================= */
 
-/* BLOCK 1.8 START: CONCIERGE GLOW INTERACTIONS */
+/* =========================================================
+   BLOCK 9 START: CONCIERGE READABILITY + GOLD GLOW
+   ========================================================= */
 .concierge-option {
   display: block;
-  color: inherit;
+  color: #151413 !important;
   cursor: pointer;
-  border: 1px solid rgba(255,226,138,.18) !important;
+  border: 1px solid rgba(255,226,138,.28) !important;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255,226,138,.11), transparent 12rem),
-    linear-gradient(145deg, rgba(255,253,247,.96), rgba(242,234,219,.95)) !important;
+    radial-gradient(circle at 18% 12%, rgba(255,226,138,.14), transparent 12rem),
+    linear-gradient(145deg, rgba(255,253,247,.98), rgba(242,234,219,.96)) !important;
   transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, filter .28s ease;
 }
 
@@ -310,11 +490,21 @@
   mix-blend-mode: screen;
 }
 
+.concierge-option h3 {
+  color: var(--lux-gold-deep) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 0 16px rgba(215,173,69,.22) !important;
+}
+
+.concierge-option p,
+.bg-dark .concierge-option p {
+  color: rgba(21,20,19,.74) !important;
+}
+
 .concierge-option:hover,
 .concierge-option:focus-visible {
   transform: translateY(-6px);
-  border-color: rgba(255,226,138,.58) !important;
-  box-shadow: 0 0 0 1px rgba(255,226,138,.18), 0 0 32px rgba(215,173,69,.32), 0 28px 70px rgba(0,0,0,.38) !important;
+  border-color: rgba(255,226,138,.62) !important;
+  box-shadow: 0 0 0 1px rgba(255,226,138,.2), 0 0 34px rgba(215,173,69,.36), 0 28px 70px rgba(0,0,0,.38) !important;
   outline: none;
 }
 
@@ -323,9 +513,17 @@
   left: 138%;
   opacity: .9;
 }
-/* BLOCK 1.8 END: CONCIERGE GLOW INTERACTIONS */
+/* =========================================================
+   BLOCK 9 END: CONCIERGE READABILITY + GOLD GLOW
+   ========================================================= */
 
-/* BLOCK 1.9 START: FOOTER POLISH */
+/* =========================================================
+   BLOCK 10 START: AVAILABILITY + FOOTER POLISH
+   ========================================================= */
+#availability .eyebrow {
+  text-align: center !important;
+}
+
 .site-footer-luxury {
   background:
     radial-gradient(circle at 18% 20%, rgba(215,173,69,.14), transparent 24rem),
@@ -336,7 +534,7 @@
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.05fr 1.15fr .7fr;
+  grid-template-columns: 1fr minmax(420px, .95fr) 1fr;
   gap: clamp(1rem, 3vw, 2rem);
   align-items: stretch;
 }
@@ -352,17 +550,35 @@
 }
 
 .footer-brand-block img {
-  width: min(330px, 76vw);
+  width: min(300px, 72vw) !important;
   height: auto;
   display: block;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
   filter: drop-shadow(0 14px 22px rgba(0,0,0,.5));
+}
+
+.footer-cta-card {
+  text-align: center !important;
+  display: grid;
+  align-content: center;
+  justify-items: center;
 }
 
 .footer-cta-card p,
 .footer-links-card a,
 .footer-brand-block p {
-  color: rgba(255,253,247,.74) !important;
+  color: rgba(255,253,247,.76) !important;
+  text-align: center !important;
+}
+
+.footer-button-row {
+  width: 100%;
+  justify-content: center !important;
+}
+
+.footer-button-row .btn {
+  width: min(250px, 100%) !important;
+  min-width: min(250px, 100%) !important;
 }
 
 .footer-links-card {
@@ -372,7 +588,7 @@
 }
 
 .footer-links-card h3 {
-  color: var(--lux-gold-light);
+  color: var(--lux-gold-light) !important;
   margin-bottom: .25rem;
 }
 
@@ -391,9 +607,13 @@
   background: rgba(255,226,138,.08);
   outline: none;
 }
-/* BLOCK 1.9 END: FOOTER POLISH */
+/* =========================================================
+   BLOCK 10 END: AVAILABILITY + FOOTER POLISH
+   ========================================================= */
 
-/* BLOCK 1.10 START: FINAL SPACING AUDIT */
+/* =========================================================
+   BLOCK 11 START: FINAL SPACING AUDIT
+   ========================================================= */
 .section {
   padding-block: clamp(4.5rem, 8.5vw, 8rem);
 }
@@ -409,14 +629,21 @@
     background-image: none !important;
   }
 
-  .hero-intro-section,
-  .private-estate-card-section {
-    padding-inline: 0;
+  .casa-webgl-hero,
+  .casa-webgl-hero .hero-picture img,
+  .casa-webgl-hero .hero-fallback img {
+    min-height: calc(100svh - 0px) !important;
+    height: 100svh !important;
+  }
+
+  .hero-intro-section .title-lg {
+    font-size: clamp(1.8rem, 9vw, 3.4rem) !important;
   }
 
   .intro-button-row .btn,
   .footer-button-row .btn {
-    width: 100%;
+    width: 100% !important;
+    min-width: 0 !important;
   }
 
   .luxury-feature-list li {
@@ -455,13 +682,14 @@
     border-radius: 1.3rem;
   }
 
-  .hero-intro-section .title-lg,
   .private-estate-card-section .title-lg,
   .gallery-heading-centered .title-lg {
     font-size: clamp(1.7rem, 9vw, 2.65rem) !important;
   }
 }
-/* BLOCK 1.10 END: FINAL SPACING AUDIT */
+/* =========================================================
+   BLOCK 11 END: FINAL SPACING AUDIT
+   ========================================================= */
 
 /* =========================================================
    BLOCK 1 END: CASABLANCA SITE REFRESH OVERRIDES
