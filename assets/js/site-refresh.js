@@ -34,33 +34,73 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 /* =========================================================
    BLOCK 3 START: DOM PATCHES
    ========================================================= */
+function removeLegacyHeroConflicts() {
+  const approvedHero = document.querySelector(".casa-webgl-hero");
+  const main = document.querySelector("main");
+  if (!main || !approvedHero) return;
+
+  Array.from(main.querySelectorAll("section.hero")).forEach((section) => {
+    if (section !== approvedHero) section.remove();
+  });
+
+  Array.from(document.querySelectorAll(".hero-content, .hero-copy, .hero-grid, .intro-panel")).forEach((node) => {
+    if (!approvedHero.contains(node)) node.remove();
+  });
+
+  const firstNonHero = Array.from(main.children).find((node) => node.tagName && node.tagName.toLowerCase() === "section" && node !== approvedHero);
+  if (main.firstElementChild !== approvedHero) {
+    main.insertBefore(approvedHero, main.firstElementChild);
+  }
+  if (firstNonHero && firstNonHero.id !== "welcome") {
+    const welcome = document.getElementById("welcome");
+    if (welcome && approvedHero.nextElementSibling !== welcome) {
+      main.insertBefore(welcome, approvedHero.nextElementSibling);
+    }
+  }
+}
+
 function patchContentFlow() {
+  removeLegacyHeroConflicts();
+
   const welcome = document.querySelector("#welcome .narrow-shell");
   const summaryCard = document.querySelector(".estate-summary-card");
   const availabilityHeading = document.querySelector("#availability h2");
   const matterportFrame = document.querySelector(".matterport-shell iframe");
   const conciergeCards = Array.from(document.querySelectorAll(".concierge-option"));
+  const footerExploreTitle = document.querySelector(".footer-links-card h3");
 
-  if (welcome && !welcome.querySelector(".intro-button-row")) {
-    const introButtons = document.createElement("div");
-    introButtons.className = "intro-button-row hero-intro-buttons";
+  if (welcome) {
+    let introButtons = welcome.querySelector(".intro-button-row");
+    if (!introButtons) {
+      introButtons = document.createElement("div");
+      introButtons.className = "intro-button-row hero-intro-buttons";
+      welcome.appendChild(introButtons);
+    }
     introButtons.innerHTML = `
-      <a class="btn btn-gold" href="#availability">Check Your Dates For Availability</a>
+      <a class="btn btn-gold" href="#availability">Check Available Dates</a>
       <a class="btn btn-outline" href="#video-tour">View the Estate Tour</a>
     `;
-    welcome.appendChild(introButtons);
   }
 
   if (summaryCard) {
     const cardTitle = summaryCard.querySelector("h2");
     const cardLead = summaryCard.querySelector(".lead");
+    const duplicateButtons = summaryCard.querySelector(".intro-button-row");
     if (cardTitle) cardTitle.textContent = "A Private Las Vegas Estate Designed for Groups, Events & VIP Stays";
     if (cardLead) {
       cardLead.textContent = "A private, high-end estate for guests who want the space of a luxury residence, the discretion of a private booking team, and the service layer of a VIP concierge experience. Casablanca Las Vegas is positioned for elevated group stays, private retreats, productions, professional networking events, weddings, and premium day events close to the Strip without placing the exact address in front of every casual browser.";
     }
+    duplicateButtons?.remove();
   }
 
   if (availabilityHeading) availabilityHeading.textContent = "Check Dates For Availability";
+  if (footerExploreTitle) footerExploreTitle.textContent = "Explore";
+
+  document.querySelectorAll(".btn").forEach((button) => {
+    if ((button.textContent || "").trim().toLowerCase().includes("check your dates")) {
+      button.textContent = "Check Available Dates";
+    }
+  });
 
   if (matterportFrame) {
     const baseUrl = "https://my.matterport.com/show/?m=SJM6jmmgauy";
@@ -197,10 +237,7 @@ function initWebglHero() {
       uniforms.uResolution.value.set(width, height);
     };
 
-    const getNextIndex = (index) => {
-      if (textures.length <= 1) return index;
-      return (index + 1) % textures.length;
-    };
+    const getNextIndex = (index) => textures.length <= 1 ? index : (index + 1) % textures.length;
 
     setTextureSize("uTexture1Size", textures[currentIndex]);
     setTextureSize("uTexture2Size", textures[targetIndex]);
@@ -246,42 +283,29 @@ function initWebglHero() {
         vec2 baseUv = vUv;
         vec2 uv1 = coverUv(baseUv, uTexture1Size, uResolution);
         vec2 uv2 = coverUv(baseUv, uTexture2Size, uResolution);
-
         float transitionStrength = sin(uProgress * 3.14159265);
         float band = 0.28;
         float revealLine = uProgress * (1.0 + band * 2.0) - band;
-        float revealNoise =
-          sin(baseUv.y * 15.0 + uTime * 1.65) * 0.035 * transitionStrength +
-          sin(baseUv.y * 43.0 - uTime * 2.05) * 0.018 * transitionStrength;
-
-        float revealMask = 1.0 - smoothstep(
-          revealLine - band,
-          revealLine + band,
-          baseUv.x + revealNoise
-        );
-
+        float revealNoise = sin(baseUv.y * 15.0 + uTime * 1.65) * 0.035 * transitionStrength + sin(baseUv.y * 43.0 - uTime * 2.05) * 0.018 * transitionStrength;
+        float revealMask = 1.0 - smoothstep(revealLine - band, revealLine + band, baseUv.x + revealNoise);
         float sliceCount = 20.0;
         float sliceIndex = floor(baseUv.y * sliceCount);
         float sliceRandom = hash(sliceIndex + 11.0);
         float sliceOffset = (sliceRandom - 0.5) * 0.12 * transitionStrength;
         float verticalWave = sin(baseUv.y * 34.0 + uTime * 2.2) * 0.034 * transitionStrength;
         float horizontalWave = cos(baseUv.x * 24.0 - uTime * 1.65) * 0.018 * transitionStrength;
-
         vec2 displacement = vec2(verticalWave + sliceOffset, horizontalWave);
         vec2 directionalPull = vec2((revealMask - 0.5) * 0.16, 0.0) * transitionStrength;
         vec2 distortedUv1 = uv1 + displacement + directionalPull;
         vec2 distortedUv2 = uv2 - displacement - directionalPull;
-
         vec4 color1 = sampleWithSoftClamp(uTexture1, distortedUv1);
         vec4 color2 = sampleWithSoftClamp(uTexture2, distortedUv2);
         vec4 finalColor = mix(color1, color2, revealMask);
-
         float splitStrength = 0.01 * transitionStrength;
         vec4 redShift = sampleWithSoftClamp(uTexture2, distortedUv2 + vec2(splitStrength, 0.0));
         vec4 blueShift = sampleWithSoftClamp(uTexture1, distortedUv1 - vec2(splitStrength, 0.0));
         finalColor.r = mix(finalColor.r, redShift.r, transitionStrength * 0.24);
         finalColor.b = mix(finalColor.b, blueShift.b, transitionStrength * 0.18);
-
         float vignette = smoothstep(0.94, 0.20, distance(baseUv, vec2(0.5)));
         finalColor.rgb *= mix(0.76, 1.0, vignette);
         gl_FragColor = finalColor;
@@ -392,6 +416,8 @@ if (document.readyState === "loading") {
 } else {
   initCasablancaRefresh();
 }
+
+window.addEventListener("load", removeLegacyHeroConflicts, { once: true });
 /* =========================================================
    BLOCK 7 END: INIT
    ========================================================= */
