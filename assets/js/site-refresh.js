@@ -52,7 +52,7 @@ const HERO_SLIDES = [
     title: "Put Your Feet In the Sand"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1fbdc8e2e735bbc37599bd.jpg",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1fbffa9e7a0d5a8b40bfe9.jpg",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5f8c5a3e6e89b62fa02e.webp",
     title: ""
   }
@@ -1008,6 +1008,3 @@ if (document.readyState === "loading") {
 }
 
 window.addEventListener("load", removeLegacyHeroConflicts, { once: true });
-/* =========================================================
-   BLOCK 10 END: INIT
-   ========================================================= */
