@@ -1,7 +1,7 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA LAS VEGAS FRONTEND APPLICATION
    Purpose: Core page interactions, booking form, gallery, video controls,
-   and final mobile hero/copy polish.
+   and final mobile hero/title polish.
    ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   const API_BASE_URL = "";
@@ -40,6 +40,7 @@ window.addEventListener("DOMContentLoaded", () => {
     lastScrollY = y;
     headerTicking = false;
   };
+
   window.addEventListener("scroll", () => {
     if (headerTicking) return;
     headerTicking = true;
@@ -56,6 +57,7 @@ window.addEventListener("DOMContentLoaded", () => {
     drawer?.classList.remove("open");
     overlay?.classList.remove("active");
   };
+
   hamburger?.addEventListener("click", openDrawer);
   closeDrawer?.addEventListener("click", closeDrawerMenu);
   overlay?.addEventListener("click", closeDrawerMenu);
@@ -77,7 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================================================= */
 
   /* =========================================================
-     BLOCK 3 START: BASIC CONTENT CLEANUP + REVEALS
+     BLOCK 3 START: CONTENT CLEANUP + REVEALS
      ========================================================= */
   const availabilityIntro = $("#availability .lead.light");
   if (availabilityIntro) {
@@ -99,7 +101,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
   $$(".reveal").forEach((element) => revealObserver.observe(element));
   /* =========================================================
-     BLOCK 3 END: BASIC CONTENT CLEANUP + REVEALS
+     BLOCK 3 END: CONTENT CLEANUP + REVEALS
      ========================================================= */
 
   /* =========================================================
@@ -375,10 +377,11 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================================================= */
 
   /* =========================================================
-     BLOCK 7 START: FINAL MOBILE HERO + COPY POLISH
+     BLOCK 7 START: FINAL MOBILE HERO STACKING + COPY POLISH
      ========================================================= */
-  const WAVE_KEY = "casablancaHeroAdventureWaveV5";
+  const WAVE_KEY = "casablancaHeroAdventureWaveV6";
   const FINAL_POLISH_STYLE_ID = "casablancaFinalPolishPatch";
+  const MOBILE_QUERY = window.matchMedia("(max-width: 768px)");
 
   const injectFinalPolishStyles = () => {
     let style = document.getElementById(FINAL_POLISH_STYLE_ID);
@@ -387,6 +390,7 @@ window.addEventListener("DOMContentLoaded", () => {
       style.id = FINAL_POLISH_STYLE_ID;
       document.head.appendChild(style);
     }
+
     style.textContent = `
       #welcome .intro-lead,
       .estate-summary-card .lead,
@@ -419,10 +423,10 @@ window.addEventListener("DOMContentLoaded", () => {
         .casa-webgl-hero #dynamic-title {
           width: 100vw !important;
           max-width: 100vw !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
+          margin: 0 auto !important;
           text-align: center !important;
           transform-origin: center center !important;
+          display: block !important;
         }
 
         .casa-webgl-hero .mobile-title-line {
@@ -444,9 +448,8 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-top,
-        .casa-webgl-hero .mobile-title-line-middle,
         .casa-webgl-hero .mobile-title-line-bottom + .mobile-title-line-bottom {
-          margin-top: clamp(.18rem, .9vh, .42rem) !important;
+          margin-top: clamp(.08rem, .45vh, .24rem) !important;
         }
 
         .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-middle,
@@ -474,27 +477,6 @@ window.addEventListener("DOMContentLoaded", () => {
     caption.className = "floorplan-caption";
     caption.textContent = "(Actual floorplan)";
     floorplanCard.insertAdjacentElement("afterend", caption);
-  };
-
-  const makeCharWordLine = (lineText, className) => {
-    const line = document.createElement("span");
-    line.className = `mobile-title-line ${className}`;
-    lineText.split(" ").filter(Boolean).forEach((word, wordIndex, words) => {
-      const wordContainer = document.createElement("span");
-      wordContainer.className = "word-container";
-      const wordSpan = document.createElement("span");
-      wordSpan.className = "word";
-      Array.from(word).forEach((letter) => {
-        const char = document.createElement("span");
-        char.className = "char";
-        char.textContent = letter;
-        wordSpan.appendChild(char);
-      });
-      wordContainer.appendChild(wordSpan);
-      line.appendChild(wordContainer);
-      if (wordIndex < words.length - 1) line.appendChild(document.createTextNode(" "));
-    });
-    return line;
   };
 
   const mobileLinePlan = (text) => {
@@ -525,41 +507,68 @@ window.addEventListener("DOMContentLoaded", () => {
     return plans[normalized] || null;
   };
 
-  const animatePolishedMobileTitle = (title) => {
+  const getUnstackedTitleText = (title) => {
+    if (!title) return "";
+    if (title.dataset.forceStackedTitle && title.querySelector(".mobile-title-line")) return "";
+    return (title.textContent || "").trim().replace(/\s+/g, " ");
+  };
+
+  const makeCharWordLine = (lineText, className) => {
+    const line = document.createElement("span");
+    line.className = `mobile-title-line ${className}`;
+
+    lineText.split(" ").filter(Boolean).forEach((word, wordIndex, words) => {
+      const wordContainer = document.createElement("span");
+      wordContainer.className = "word-container";
+      const wordSpan = document.createElement("span");
+      wordSpan.className = "word";
+
+      Array.from(word).forEach((letter) => {
+        const char = document.createElement("span");
+        char.className = "char";
+        char.textContent = letter;
+        wordSpan.appendChild(char);
+      });
+
+      wordContainer.appendChild(wordSpan);
+      line.appendChild(wordContainer);
+      if (wordIndex < words.length - 1) line.appendChild(document.createTextNode(" "));
+    });
+
+    return line;
+  };
+
+  const animateForcedStack = (title) => {
     const gsapRef = window.gsap;
-    if (!gsapRef || !window.matchMedia("(max-width: 768px)").matches) return;
+    if (!gsapRef || !MOBILE_QUERY.matches) return;
+
     const topChars = title.querySelectorAll(".mobile-title-line-top .char");
     const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
     const bottomChars = title.querySelectorAll(".mobile-title-line-bottom .char");
-    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
-    gsapRef.set(middleChars, { y: "0%", opacity: 0, scale: 0.94, rotateZ: 0 });
-    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
-    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .72, ease: "expo.out", stagger: { each: .022, from: "start" } });
-    gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .66, delay: .08, ease: "expo.out", stagger: { each: .018, from: "start" } });
-    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .72, ease: "expo.out", stagger: { each: .022, from: "start" } });
+
+    gsapRef.killTweensOf(title.querySelectorAll(".char"));
+    gsapRef.set(topChars, { y: "-145%", opacity: 0, rotateZ: -4 });
+    gsapRef.set(middleChars, { y: "0%", opacity: 0, scale: 0.92, rotateZ: 0 });
+    gsapRef.set(bottomChars, { y: "145%", opacity: 0, rotateZ: 4 });
+
+    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .68, ease: "expo.out", stagger: { each: .02, from: "start" } });
+    gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .62, delay: .07, ease: "expo.out", stagger: { each: .016, from: "start" } });
+    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .68, ease: "expo.out", stagger: { each: .02, from: "start" } });
   };
 
-  const normalizeMobileHeroTitle = () => {
-    if (!window.matchMedia("(max-width: 768px)").matches) return;
+  const forceMobileTitleStacking = () => {
+    if (!MOBILE_QUERY.matches) return;
     const title = document.getElementById("dynamic-title");
     if (!title) return;
-    const text = (title.textContent || "").trim().replace(/\s+/g, " ");
-    if (!text) return;
 
+    const text = getUnstackedTitleText(title);
     const plan = mobileLinePlan(text);
-    if (plan && title.dataset.polishedMobileTitle !== text) {
-      title.dataset.polishedMobileTitle = text;
-      title.textContent = "";
-      plan.forEach(([lineText, lineClass]) => title.appendChild(makeCharWordLine(lineText, lineClass)));
-      animatePolishedMobileTitle(title);
-      return;
-    }
+    if (!plan) return;
 
-    title.querySelectorAll(".mobile-title-line").forEach((line) => {
-      Array.from(line.childNodes).forEach((node) => {
-        if (node.nodeType === Node.TEXT_NODE) node.remove();
-      });
-    });
+    title.dataset.forceStackedTitle = text;
+    title.textContent = "";
+    plan.forEach(([lineText, lineClass]) => title.appendChild(makeCharWordLine(lineText, lineClass)));
+    animateForcedStack(title);
   };
 
   const hasWaveRun = () => {
@@ -620,14 +629,14 @@ window.addEventListener("DOMContentLoaded", () => {
   const initHeroWaveObserver = () => {
     const startedAt = Date.now();
     let finalBlankTimer = null;
-    let observer = null;
+    let titleObserver = null;
 
     const attach = () => {
       const title = document.getElementById("dynamic-title");
-      if (!title || observer) return Boolean(title);
+      if (!title || titleObserver) return Boolean(title);
 
-      observer = new MutationObserver(() => {
-        normalizeMobileHeroTitle();
+      titleObserver = new MutationObserver(() => {
+        window.requestAnimationFrame(forceMobileTitleStacking);
         const text = (title.textContent || "").trim().replace(/\s+/g, " ");
         const oldEnough = Date.now() - startedAt > 9000;
 
@@ -637,13 +646,11 @@ window.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        if (text !== "") {
-          window.clearTimeout(finalBlankTimer);
-        }
+        if (text !== "") window.clearTimeout(finalBlankTimer);
       });
 
-      observer.observe(title, { childList: true, subtree: true, characterData: true });
-      normalizeMobileHeroTitle();
+      titleObserver.observe(title, { childList: true, subtree: true, characterData: true });
+      forceMobileTitleStacking();
       return true;
     };
 
@@ -651,7 +658,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const waitForTitle = window.setInterval(() => {
       if (attach()) window.clearInterval(waitForTitle);
     }, 120);
-    window.setTimeout(() => window.clearInterval(waitForTitle), 6000);
+    window.setTimeout(() => window.clearInterval(waitForTitle), 60000);
   };
 
   injectFinalPolishStyles();
@@ -659,15 +666,19 @@ window.addEventListener("DOMContentLoaded", () => {
   addFloorplanCaption();
   initHeroWaveObserver();
 
+  const persistentTitleStacker = window.setInterval(forceMobileTitleStacking, 120);
+  window.setTimeout(() => window.clearInterval(persistentTitleStacker), 240000);
+
   window.setTimeout(() => {
     injectFinalPolishStyles();
     addFloorplanCaption();
-    normalizeMobileHeroTitle();
+    forceMobileTitleStacking();
   }, 900);
 
-  window.addEventListener("resize", normalizeMobileHeroTitle, { passive: true });
+  window.addEventListener("resize", forceMobileTitleStacking, { passive: true });
+  document.addEventListener("visibilitychange", forceMobileTitleStacking);
   /* =========================================================
-     BLOCK 7 END: FINAL MOBILE HERO + COPY POLISH
+     BLOCK 7 END: FINAL MOBILE HERO STACKING + COPY POLISH
      ========================================================= */
 });
 /* =========================================================
