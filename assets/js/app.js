@@ -1,17 +1,17 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA LAS VEGAS FRONTEND APPLICATION
-   Purpose: Core navigation, reveals, gallery, video controls, booking form,
-   analytics, and final mobile/hero polish patches.
+   Purpose: Core page interactions, booking form, gallery, video controls,
+   and final mobile hero/copy polish.
    ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   const API_BASE_URL = "";
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const analyticsLayer = window.dataLayer || (window.dataLayer = []);
   const trackEvent = (eventName, params = {}) => {
     analyticsLayer.push({ event: eventName, ...params });
     if (typeof window.gtag === "function") window.gtag("event", eventName, params);
   };
-  const $ = (selector, scope = document) => scope.querySelector(selector);
-  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
   /* =========================================================
      BLOCK 2 START: HEADER + DRAWER
@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   let lastScrollY = Math.max(window.scrollY || 0, 0);
-  let ticking = false;
+  let headerTicking = false;
   const updateHeader = () => {
     const y = Math.max(window.scrollY || 0, 0);
     const delta = y - lastScrollY;
@@ -38,11 +38,11 @@ window.addEventListener("DOMContentLoaded", () => {
     else if (delta > 4) setShrunkHeader(true);
     else if (delta < -4) setShrunkHeader(false);
     lastScrollY = y;
-    ticking = false;
+    headerTicking = false;
   };
   window.addEventListener("scroll", () => {
-    if (ticking) return;
-    ticking = true;
+    if (headerTicking) return;
+    headerTicking = true;
     window.requestAnimationFrame(updateHeader);
   }, { passive: true });
   setShrunkHeader(lastScrollY > 24);
@@ -77,24 +77,19 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================================================= */
 
   /* =========================================================
-     BLOCK 3 START: CONTENT CLEANUP
+     BLOCK 3 START: BASIC CONTENT CLEANUP + REVEALS
      ========================================================= */
   const availabilityIntro = $("#availability .lead.light");
   if (availabilityIntro) {
     availabilityIntro.textContent = "Our team reviews your date window, event type, guest count, and concierge needs personally. We typically respond within 24–48 hours. If you have immediate questions or need to book ASAP, please call and speak with a sales agent.";
   }
+
   const privateEstateProofGrid = $$(".proof-grid").find((grid) => {
     const text = grid.textContent || "";
     return text.includes("Matterport 3D Tour") && text.includes("Calendar-Connected") && text.includes("VIP Concierge Layer");
   });
   privateEstateProofGrid?.remove();
-  /* =========================================================
-     BLOCK 3 END: CONTENT CLEANUP
-     ========================================================= */
 
-  /* =========================================================
-     BLOCK 4 START: SCROLL REVEALS
-     ========================================================= */
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -104,11 +99,11 @@ window.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
   $$(".reveal").forEach((element) => revealObserver.observe(element));
   /* =========================================================
-     BLOCK 4 END: SCROLL REVEALS
+     BLOCK 3 END: BASIC CONTENT CLEANUP + REVEALS
      ========================================================= */
 
   /* =========================================================
-     BLOCK 5 START: STRUCTURED GALLERY
+     BLOCK 4 START: STRUCTURED GALLERY
      ========================================================= */
   let galleryImages = [];
   let galleryIndex = 0;
@@ -164,11 +159,11 @@ window.addEventListener("DOMContentLoaded", () => {
   lightboxClose?.addEventListener("click", () => lightbox?.classList.remove("active"));
   lightbox?.addEventListener("click", (event) => { if (event.target === lightbox) lightbox.classList.remove("active"); });
   /* =========================================================
-     BLOCK 5 END: STRUCTURED GALLERY
+     BLOCK 4 END: STRUCTURED GALLERY
      ========================================================= */
 
   /* =========================================================
-     BLOCK 6 START: VIDEO CONTROLS
+     BLOCK 5 START: VIDEO CONTROLS
      ========================================================= */
   const videoShell = $("#estateVideoShell");
   const estateVideo = $("#estateVideo");
@@ -190,6 +185,7 @@ window.addEventListener("DOMContentLoaded", () => {
     button.textContent = text;
     return button;
   };
+
   const detachButton = makeVideoButton("videoDetach", "Detach");
   const largeButton = makeVideoButton("videoLarge", "Large");
   if (videoControls) {
@@ -204,6 +200,7 @@ window.addEventListener("DOMContentLoaded", () => {
     clearTimeout(controlsTimer);
     controlsTimer = setTimeout(() => videoShell.classList.add("controls-hidden"), 3000);
   };
+
   const playVideo = () => {
     if (!estateVideo) return;
     if (!videoStarted) {
@@ -219,6 +216,7 @@ window.addEventListener("DOMContentLoaded", () => {
   videoShell?.addEventListener("mousemove", showVideoControls);
   videoShell?.addEventListener("click", showVideoControls);
   videoShell?.addEventListener("touchstart", showVideoControls, { passive: true });
+
   pauseButton?.addEventListener("click", () => {
     showVideoControls();
     if (estateVideo.paused) {
@@ -270,11 +268,11 @@ window.addEventListener("DOMContentLoaded", () => {
     trackEvent("video_hide", { video_name: "Casablanca Las Vegas Estate Tour" });
   });
   /* =========================================================
-     BLOCK 6 END: VIDEO CONTROLS
+     BLOCK 5 END: VIDEO CONTROLS
      ========================================================= */
 
   /* =========================================================
-     BLOCK 7 START: BOOKING CALENDAR + PENDING INQUIRIES
+     BLOCK 6 START: BOOKING CALENDAR + PENDING INQUIRIES
      ========================================================= */
   const pad = (num) => String(num).padStart(2, "0");
   const toISODate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
@@ -373,13 +371,13 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   $$("a[href^='tel:']").forEach((link) => link.addEventListener("click", () => trackEvent("phone_click", { phone_href: link.getAttribute("href") })));
   /* =========================================================
-     BLOCK 7 END: BOOKING CALENDAR + PENDING INQUIRIES
+     BLOCK 6 END: BOOKING CALENDAR + PENDING INQUIRIES
      ========================================================= */
 
   /* =========================================================
-     BLOCK 8 START: FINAL MOBILE HERO + COPY POLISH
+     BLOCK 7 START: FINAL MOBILE HERO + COPY POLISH
      ========================================================= */
-  const WAVE_KEY = "casablancaHeroAdventureWaveV4";
+  const WAVE_KEY = "casablancaHeroAdventureWaveV5";
   const FINAL_POLISH_STYLE_ID = "casablancaFinalPolishPatch";
 
   const injectFinalPolishStyles = () => {
@@ -387,6 +385,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!style) {
       style = document.createElement("style");
       style.id = FINAL_POLISH_STYLE_ID;
+      document.head.appendChild(style);
     }
     style.textContent = `
       #welcome .intro-lead,
@@ -422,8 +421,6 @@ window.addEventListener("DOMContentLoaded", () => {
           max-width: 100vw !important;
           margin-left: auto !important;
           margin-right: auto !important;
-          left: auto !important;
-          right: auto !important;
           text-align: center !important;
           transform-origin: center center !important;
         }
@@ -446,6 +443,18 @@ window.addEventListener("DOMContentLoaded", () => {
           margin-right: 0 !important;
         }
 
+        .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-top,
+        .casa-webgl-hero .mobile-title-line-middle,
+        .casa-webgl-hero .mobile-title-line-bottom + .mobile-title-line-bottom {
+          margin-top: clamp(.18rem, .9vh, .42rem) !important;
+        }
+
+        .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-middle,
+        .casa-webgl-hero .mobile-title-line-middle + .mobile-title-line-bottom,
+        .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-bottom {
+          margin-top: clamp(.34rem, 1.45vh, .82rem) !important;
+        }
+
         #welcome .intro-lead,
         .estate-summary-card .lead,
         .floorplan-section .lead,
@@ -456,7 +465,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       }
     `;
-    document.head.appendChild(style);
   };
 
   const addFloorplanCaption = () => {
@@ -468,10 +476,85 @@ window.addEventListener("DOMContentLoaded", () => {
     floorplanCard.insertAdjacentElement("afterend", caption);
   };
 
+  const makeCharWordLine = (lineText, className) => {
+    const line = document.createElement("span");
+    line.className = `mobile-title-line ${className}`;
+    lineText.split(" ").filter(Boolean).forEach((word, wordIndex, words) => {
+      const wordContainer = document.createElement("span");
+      wordContainer.className = "word-container";
+      const wordSpan = document.createElement("span");
+      wordSpan.className = "word";
+      Array.from(word).forEach((letter) => {
+        const char = document.createElement("span");
+        char.className = "char";
+        char.textContent = letter;
+        wordSpan.appendChild(char);
+      });
+      wordContainer.appendChild(wordSpan);
+      line.appendChild(wordContainer);
+      if (wordIndex < words.length - 1) line.appendChild(document.createTextNode(" "));
+    });
+    return line;
+  };
+
+  const mobileLinePlan = (text) => {
+    const normalized = text.trim().replace(/\s+/g, " ");
+    const plans = {
+      "Your New Vegas Night": [
+        ["Your", "mobile-title-line-top"],
+        ["New", "mobile-title-line-top"],
+        ["Vegas", "mobile-title-line-bottom"],
+        ["Night", "mobile-title-line-bottom"]
+      ],
+      "Your Personal Oasis": [
+        ["Your", "mobile-title-line-top"],
+        ["Personal", "mobile-title-line-middle"],
+        ["Oasis", "mobile-title-line-bottom"]
+      ],
+      "Something For Everyone": [
+        ["Something", "mobile-title-line-top"],
+        ["For", "mobile-title-line-middle"],
+        ["Everyone", "mobile-title-line-bottom"]
+      ],
+      "Put Your Feet In the Sand": [
+        ["Put Your", "mobile-title-line-top"],
+        ["Feet In", "mobile-title-line-middle"],
+        ["The Sand", "mobile-title-line-bottom"]
+      ]
+    };
+    return plans[normalized] || null;
+  };
+
+  const animatePolishedMobileTitle = (title) => {
+    const gsapRef = window.gsap;
+    if (!gsapRef || !window.matchMedia("(max-width: 768px)").matches) return;
+    const topChars = title.querySelectorAll(".mobile-title-line-top .char");
+    const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
+    const bottomChars = title.querySelectorAll(".mobile-title-line-bottom .char");
+    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+    gsapRef.set(middleChars, { y: "0%", opacity: 0, scale: 0.94, rotateZ: 0 });
+    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
+    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .72, ease: "expo.out", stagger: { each: .022, from: "start" } });
+    gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .66, delay: .08, ease: "expo.out", stagger: { each: .018, from: "start" } });
+    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .72, ease: "expo.out", stagger: { each: .022, from: "start" } });
+  };
+
   const normalizeMobileHeroTitle = () => {
     if (!window.matchMedia("(max-width: 768px)").matches) return;
     const title = document.getElementById("dynamic-title");
     if (!title) return;
+    const text = (title.textContent || "").trim().replace(/\s+/g, " ");
+    if (!text) return;
+
+    const plan = mobileLinePlan(text);
+    if (plan && title.dataset.polishedMobileTitle !== text) {
+      title.dataset.polishedMobileTitle = text;
+      title.textContent = "";
+      plan.forEach(([lineText, lineClass]) => title.appendChild(makeCharWordLine(lineText, lineClass)));
+      animatePolishedMobileTitle(title);
+      return;
+    }
+
     title.querySelectorAll(".mobile-title-line").forEach((line) => {
       Array.from(line.childNodes).forEach((node) => {
         if (node.nodeType === Node.TEXT_NODE) node.remove();
@@ -536,7 +619,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const initHeroWaveObserver = () => {
     const startedAt = Date.now();
-    let sawFinalBlankSlide = false;
+    let finalBlankTimer = null;
     let observer = null;
 
     const attach = () => {
@@ -545,17 +628,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
       observer = new MutationObserver(() => {
         normalizeMobileHeroTitle();
-        const text = (title.textContent || "").trim();
+        const text = (title.textContent || "").trim().replace(/\s+/g, " ");
         const oldEnough = Date.now() - startedAt > 9000;
 
-        if (oldEnough && text === "") {
-          sawFinalBlankSlide = true;
+        if (oldEnough && text === "" && !hasWaveRun()) {
+          window.clearTimeout(finalBlankTimer);
+          finalBlankTimer = window.setTimeout(waveScrollToWelcome, 2300);
           return;
         }
 
-        if (sawFinalBlankSlide && /^Off-Strip Paradise/i.test(text) && !hasWaveRun()) {
-          sawFinalBlankSlide = false;
-          window.setTimeout(waveScrollToWelcome, 120);
+        if (text !== "") {
+          window.clearTimeout(finalBlankTimer);
         }
       });
 
@@ -584,7 +667,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("resize", normalizeMobileHeroTitle, { passive: true });
   /* =========================================================
-     BLOCK 8 END: FINAL MOBILE HERO + COPY POLISH
+     BLOCK 7 END: FINAL MOBILE HERO + COPY POLISH
      ========================================================= */
 });
 /* =========================================================
