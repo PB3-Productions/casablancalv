@@ -1,74 +1,96 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA SITE REFRESH JS
    Purpose: Keep the uploaded Oscar-style WebGL hero behavior intact,
-   including the original centered yellow waterfall text animation, while
-   preserving page-specific cleanup, lightbox, Matterport, and split animation.
+   add mobile-specific hero images, mobile split-title animation, floating
+   mobile CTAs, floorplan swap, policy layout polish, Matterport removal,
+   and page-specific cleanup/lightbox behavior.
    ========================================================= */
 
 import * as THREE from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
 /* =========================================================
-   BLOCK 2 START: SLIDE DATA FROM APPROVED HERO FILE
+   BLOCK 2 START: HERO SLIDE DATA
    ========================================================= */
 const rawSlides = [
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b15.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e22f8d7322952d1866b94.png",
     title: "Off-Strip Paradise"
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabbff82912d65b40a8f.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e22f8bb0618436a527c7d.png",
     title: "Your New Vegas Night"
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb8acf4e863e398382.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5d7a282a51721af02845.webp",
     title: "Beauty Redefined"
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabbff82912d65b40a8e.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5de4ff82912d65e10a7c.webp",
     title: "Your Personal Oasis"
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabd045e32379f1bec11.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5fa4d7322952d18a1007.webp",
     title: "Unwind or Entertain"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabdff82912d65b40ade.webp",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2d0cf258f15ece4451fc.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2d515a3e6e89b62c63c9.webp",
     title: "Modern & Spacious"
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b14.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2e4fff82912d65ddfa4c.webp",
     title: "Something For Everyone"
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabbd53fc25488ce16d3.webp",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2dabf563bf237f8c12f5.webp",
     title: "Put Your Feet In the Sand"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1c9db5ff82912d65c21a12.webp",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1faa0bbce897da752c1750.jpg",
+    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5f8c5a3e6e89b62fa02e.webp",
     title: ""
   }
 ];
 
-function removeDuplicateImages(slides) {
-  const seen = new Set();
+const MOBILE_BREAKPOINT = "(max-width: 768px)";
+const mobileMediaQuery = window.matchMedia(MOBILE_BREAKPOINT);
+let slides = [];
+let imageUrls = [];
+let slideTitles = [];
 
-  return slides.filter((slide) => {
-    const cleanUrl = slide.image.trim();
-
-    if (seen.has(cleanUrl)) {
-      return false;
-    }
-
-    seen.add(cleanUrl);
-    return true;
-  });
+function getPreferredSlideImage(slide) {
+  return mobileMediaQuery.matches && slide.mobileImage ? slide.mobileImage : slide.image;
 }
 
-const slides = removeDuplicateImages(rawSlides);
-const imageUrls = slides.map((slide) => slide.image);
-const slideTitles = slides.map((slide) => slide.title);
+function buildActiveSlides() {
+  const seen = new Set();
+
+  return rawSlides
+    .map((slide) => ({
+      image: getPreferredSlideImage(slide).trim(),
+      title: slide.title
+    }))
+    .filter((slide) => {
+      if (seen.has(slide.image)) return false;
+      seen.add(slide.image);
+      return true;
+    });
+}
+
+function refreshActiveSlideData() {
+  slides = buildActiveSlides();
+  imageUrls = slides.map((slide) => slide.image);
+  slideTitles = slides.map((slide) => slide.title);
+}
 /* =========================================================
-   BLOCK 2 END: SLIDE DATA FROM APPROVED HERO FILE
+   BLOCK 2 END: HERO SLIDE DATA
    ========================================================= */
 
 /* =========================================================
@@ -79,6 +101,7 @@ const FINAL_SLIDE_HOLD_DURATION = 1.98;
 const TRANSITION_DURATION = 1.72;
 const MAX_PIXEL_RATIO = 2;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const FLOORPLAN_IMAGE = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1f8bc1098539f71824b491.webp";
 
 let currentIndex = 0;
 let texturesLoaded = [];
@@ -91,6 +114,7 @@ let uniforms;
 let transitionTimer = null;
 let textSwapTimer = null;
 let isTransitioning = false;
+let heroStarted = false;
 
 const clock = new THREE.Clock();
 
@@ -103,7 +127,173 @@ function getHoldDuration(index) {
    ========================================================= */
 
 /* =========================================================
-   BLOCK 4 START: PAGE-SPECIFIC DOM PATCHES
+   BLOCK 4 START: GLOBAL STYLE PATCHES
+   ========================================================= */
+function injectMobileLayoutStyles() {
+  if (document.getElementById("casablancaMobileHeavyStyles")) return;
+
+  const style = document.createElement("style");
+  style.id = "casablancaMobileHeavyStyles";
+  style.textContent = `
+    #matterport,
+    .drawer-nav a[href="#matterport"] {
+      display: none !important;
+    }
+
+    .mobile-floating-actions {
+      position: fixed;
+      left: 50%;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+      z-index: 80;
+      display: none;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .36s ease, transform .36s ease;
+      width: min(92vw, 370px);
+    }
+
+    .mobile-floating-actions__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.72rem;
+      width: 100%;
+    }
+
+    .mobile-floating-actions .btn {
+      min-height: 48px !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      padding: .78rem 1rem !important;
+      border-radius: 999px !important;
+      font-size: clamp(.76rem, 3.15vw, .93rem) !important;
+      letter-spacing: .105em !important;
+      line-height: 1.08 !important;
+      white-space: nowrap !important;
+      text-align: center !important;
+      justify-content: center !important;
+    }
+
+    .mobile-floating-actions.is-visible:not(.is-hidden):not(.is-scrolling) {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+    }
+
+    #policies .site-shell > .grid-2 {
+      display: block !important;
+    }
+
+    #policies .site-shell > .grid-2 > .reveal:first-child {
+      max-width: 980px !important;
+      margin: 0 auto clamp(1.4rem, 3vw, 2.4rem) !important;
+      text-align: center !important;
+    }
+
+    #policies .site-shell > .grid-2 > .reveal:first-child .eyebrow,
+    #policies .site-shell > .grid-2 > .reveal:first-child h2,
+    #policies .site-shell > .grid-2 > .reveal:first-child .lead {
+      text-align: center !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    #policies .policy-grid {
+      display: grid !important;
+      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+      gap: clamp(.7rem, 1vw, 1rem) !important;
+      align-items: stretch !important;
+    }
+
+    #policies .policy-grid .mini-card {
+      padding: clamp(1rem, 1.2vw, 1.35rem) !important;
+    }
+
+    #policies .policy-grid .mini-card h3 {
+      font-size: clamp(.95rem, 1vw, 1.12rem) !important;
+    }
+
+    #policies .policy-grid .mini-card p {
+      font-size: clamp(.86rem, .9vw, .98rem) !important;
+      line-height: 1.58 !important;
+    }
+
+    @media (max-width: 1200px) {
+      #policies .policy-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mobile-floating-actions {
+        display: block;
+      }
+
+      main p,
+      main .lead,
+      main .mini-card p,
+      main .price-card p,
+      main .count,
+      main .status-note,
+      main .badge,
+      main li,
+      main .feature-list span:not(.gold-svg-icon) {
+        text-align: left !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .hero-intro-section .intro-lead,
+      .estate-summary-card .lead,
+      .gallery-heading-centered .lead,
+      .floorplan-section .lead,
+      #policies .lead,
+      #availability .lead,
+      .footer-cta-card p,
+      .footer-brand-block p {
+        max-width: min(92vw, 34rem) !important;
+      }
+
+      .hero-intro-section .title-lg,
+      .estate-summary-card .title-lg,
+      .floorplan-section .title-lg,
+      #policies .title-lg,
+      #availability .title-lg {
+        text-align: center !important;
+      }
+
+      #policies .policy-grid {
+        grid-template-columns: 1fr !important;
+        max-width: min(92vw, 520px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .hero-intro-buttons {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: .82rem !important;
+        max-width: min(92vw, 360px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .hero-intro-buttons .btn {
+        min-height: 50px !important;
+        font-size: clamp(.78rem, 3.2vw, .92rem) !important;
+        letter-spacing: .09em !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+/* =========================================================
+   BLOCK 4 END: GLOBAL STYLE PATCHES
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 5 START: PAGE-SPECIFIC DOM PATCHES
    ========================================================= */
 function removeLegacyHeroConflicts() {
   const approvedHero = document.querySelector(".casa-webgl-hero");
@@ -129,14 +319,19 @@ function removeLegacyHeroConflicts() {
 }
 
 function patchContentFlow() {
+  injectMobileLayoutStyles();
   removeLegacyHeroConflicts();
 
   const welcome = document.querySelector("#welcome .narrow-shell");
   const summaryCard = document.querySelector(".estate-summary-card");
   const availabilityHeading = document.querySelector("#availability h2");
-  const matterportFrame = document.querySelector(".matterport-shell iframe");
+  const matterport = document.getElementById("matterport");
   const conciergeCards = Array.from(document.querySelectorAll(".concierge-option"));
   const footerExploreTitle = document.querySelector(".footer-links-card h3");
+  const floorplanImage = document.querySelector(".framed-floorplan img");
+
+  matterport?.remove();
+  document.querySelectorAll('a[href="#matterport"]').forEach((link) => link.remove());
 
   if (welcome) {
     let introButtons = welcome.querySelector(".intro-button-row");
@@ -171,10 +366,11 @@ function patchContentFlow() {
     }
   });
 
-  if (matterportFrame) {
-    const baseUrl = "https://my.matterport.com/show/?m=SJM6jmmgauy";
-    matterportFrame.setAttribute("src", `${baseUrl}&brand=0&help=0&mls=0&mt=0&qs=1&search=0&hr=0`);
-    matterportFrame.setAttribute("title", "Casablanca Las Vegas private estate Matterport 3D virtual tour");
+  if (floorplanImage) {
+    floorplanImage.src = FLOORPLAN_IMAGE;
+    floorplanImage.srcset = `${FLOORPLAN_IMAGE} 1600w`;
+    floorplanImage.sizes = "(max-width: 900px) 100vw, 72vw";
+    floorplanImage.alt = "Updated Casablanca Las Vegas estate floorplan showing sleeping layout and room flow";
   }
 
   conciergeCards.forEach((card) => {
@@ -185,11 +381,68 @@ function patchContentFlow() {
   });
 }
 /* =========================================================
-   BLOCK 4 END: PAGE-SPECIFIC DOM PATCHES
+   BLOCK 5 END: PAGE-SPECIFIC DOM PATCHES
    ========================================================= */
 
 /* =========================================================
-   BLOCK 5 START: EXACT UPLOADED TEXT CSS + STRUCTURE
+   BLOCK 6 START: MOBILE FLOATING CTA BUTTONS
+   ========================================================= */
+function ensureMobileFloatingActions() {
+  let actions = document.querySelector(".mobile-floating-actions");
+  if (actions) return actions;
+
+  actions = document.createElement("div");
+  actions.className = "mobile-floating-actions is-hidden";
+  actions.setAttribute("aria-label", "Mobile booking actions");
+  actions.innerHTML = `
+    <div class="mobile-floating-actions__inner">
+      <a class="btn btn-gold" href="#availability">Check Availability</a>
+      <a class="btn btn-outline" href="tel:6167457148">Speak to Agent</a>
+    </div>
+  `;
+  document.body.appendChild(actions);
+  return actions;
+}
+
+function initMobileFloatingActions() {
+  const actions = ensureMobileFloatingActions();
+  const hero = document.querySelector(".casa-webgl-hero");
+  if (!actions || !hero) return;
+
+  let isScrolling = false;
+  let scrollTimer = null;
+
+  const isInsideHero = () => {
+    const heroHeight = hero.offsetHeight || window.innerHeight;
+    return window.scrollY < heroHeight * 0.82;
+  };
+
+  const syncState = () => {
+    const shouldHide = !mobileMediaQuery.matches || isInsideHero();
+    actions.classList.toggle("is-hidden", shouldHide);
+    actions.classList.toggle("is-scrolling", isScrolling);
+    actions.classList.toggle("is-visible", mobileMediaQuery.matches && !shouldHide);
+  };
+
+  window.addEventListener("scroll", () => {
+    isScrolling = true;
+    syncState();
+    window.clearTimeout(scrollTimer);
+    scrollTimer = window.setTimeout(() => {
+      isScrolling = false;
+      syncState();
+    }, 3000);
+  }, { passive: true });
+
+  window.addEventListener("resize", syncState, { passive: true });
+  syncState();
+}
+/* =========================================================
+   BLOCK 6 END: MOBILE FLOATING CTA BUTTONS
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 7 START: EXACT UPLOADED TEXT CSS + STRUCTURE
    ========================================================= */
 function injectExactHeroTextStyles() {
   if (document.getElementById("exactUploadedHeroTextStyles")) return;
@@ -226,7 +479,7 @@ function injectExactHeroTextStyles() {
       color: #ffd400 !important;
       font-size: clamp(2.35rem, 8vw, 7.25rem) !important;
       font-weight: 900 !important;
-      line-height: 0.62 !important;
+      line-height: 0.74 !important;
       letter-spacing: -0.045em !important;
       text-align: center !important;
       text-wrap: balance !important;
@@ -240,7 +493,7 @@ function injectExactHeroTextStyles() {
     .casa-webgl-hero .word-container {
       display: inline-flex !important;
       vertical-align: top !important;
-      margin: 0 0.13em !important;
+      margin: 0 0.16em !important;
       padding: 0.04em 0.02em 0.12em !important;
       overflow: visible !important;
     }
@@ -259,16 +512,26 @@ function injectExactHeroTextStyles() {
       overflow: visible !important;
     }
 
+    .casa-webgl-hero .mobile-title-line {
+      display: block !important;
+      width: 100% !important;
+      overflow: visible !important;
+    }
+
+    .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+      margin-top: clamp(.3rem, 1.5vh, .85rem) !important;
+    }
+
     @media (max-width: 768px) {
       .casa-webgl-hero #dynamic-title {
         font-size: clamp(2rem, 11vw, 4.4rem) !important;
-        line-height: 0.66 !important;
+        line-height: 0.78 !important;
         letter-spacing: -0.04em !important;
         padding-bottom: 0.36em !important;
       }
 
       .casa-webgl-hero .word-container {
-        margin: 0 0.09em !important;
+        margin: 0 0.105em !important;
       }
     }
 
@@ -300,23 +563,14 @@ function ensureExactHeroText() {
   return heroText.querySelector("#dynamic-title");
 }
 /* =========================================================
-   BLOCK 5 END: EXACT UPLOADED TEXT CSS + STRUCTURE
+   BLOCK 7 END: EXACT UPLOADED TEXT CSS + STRUCTURE
    ========================================================= */
 
 /* =========================================================
-   BLOCK 6 START: LEFT-TO-RIGHT WATERFALL TEXT FROM APPROVED FILE
+   BLOCK 8 START: WATERFALL TEXT ANIMATION
    ========================================================= */
-function animateTextIn(title) {
-  const titleContainer = ensureExactHeroText();
-  if (!titleContainer) return;
-
-  titleContainer.textContent = "";
-
-  if (!title || !title.trim()) {
-    return;
-  }
-
-  const words = title.split(" ");
+function createWordSpans(text, container) {
+  const words = text.split(" ").filter(Boolean);
 
   words.forEach((word, wordIndex) => {
     const wordContainer = document.createElement("span");
@@ -333,12 +587,53 @@ function animateTextIn(title) {
     });
 
     wordContainer.appendChild(wordSpan);
-    titleContainer.appendChild(wordContainer);
+    container.appendChild(wordContainer);
 
     if (wordIndex < words.length - 1) {
-      titleContainer.appendChild(document.createTextNode(" "));
+      container.appendChild(document.createTextNode(" "));
     }
   });
+}
+
+function splitMobileTitle(title) {
+  const words = title.split(" ").filter(Boolean);
+  if (words.length <= 1) return [title, ""];
+
+  const splitIndex = title === "Put Your Feet In the Sand"
+    ? 3
+    : Math.ceil(words.length / 2);
+
+  return [
+    words.slice(0, splitIndex).join(" "),
+    words.slice(splitIndex).join(" ")
+  ];
+}
+
+function animateTextIn(title) {
+  const titleContainer = ensureExactHeroText();
+  if (!titleContainer) return;
+
+  titleContainer.textContent = "";
+
+  if (!title || !title.trim()) {
+    return;
+  }
+
+  const useMobileSplit = mobileMediaQuery.matches;
+
+  if (useMobileSplit) {
+    const [topLine, bottomLine] = splitMobileTitle(title);
+    const topWrapper = document.createElement("span");
+    const bottomWrapper = document.createElement("span");
+    topWrapper.className = "mobile-title-line mobile-title-line-top";
+    bottomWrapper.className = "mobile-title-line mobile-title-line-bottom";
+    createWordSpans(topLine, topWrapper);
+    createWordSpans(bottomLine, bottomWrapper);
+    titleContainer.appendChild(topWrapper);
+    if (bottomLine) titleContainer.appendChild(bottomWrapper);
+  } else {
+    createWordSpans(title, titleContainer);
+  }
 
   const chars = titleContainer.querySelectorAll(".char");
   const gsapRef = window.gsap;
@@ -348,6 +643,33 @@ function animateTextIn(title) {
       char.style.transform = "translateY(0%)";
       char.style.opacity = "1";
       char.style.rotate = "0deg";
+    });
+    return;
+  }
+
+  if (useMobileSplit) {
+    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
+    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
+
+    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
+
+    gsapRef.to(topChars, {
+      y: "0%",
+      opacity: 1,
+      rotateZ: 0,
+      duration: 0.9,
+      ease: "expo.out",
+      stagger: { each: 0.026, from: "start" }
+    });
+
+    gsapRef.to(bottomChars, {
+      y: "0%",
+      opacity: 1,
+      rotateZ: 0,
+      duration: 0.9,
+      ease: "expo.out",
+      stagger: { each: 0.026, from: "start" }
     });
     return;
   }
@@ -372,10 +694,35 @@ function animateTextIn(title) {
 }
 
 function animateTextOut() {
-  const chars = document.querySelectorAll("#dynamic-title .char");
+  const titleContainer = document.querySelector("#dynamic-title");
+  const chars = titleContainer?.querySelectorAll(".char") || [];
   const gsapRef = window.gsap;
 
   if (!chars.length || prefersReducedMotion || !gsapRef) {
+    return;
+  }
+
+  if (mobileMediaQuery.matches) {
+    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
+    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
+
+    gsapRef.to(topChars, {
+      y: "-135%",
+      opacity: 0,
+      rotateZ: -5,
+      duration: 0.42,
+      ease: "power2.in",
+      stagger: { each: 0.014, from: "start" }
+    });
+
+    gsapRef.to(bottomChars, {
+      y: "135%",
+      opacity: 0,
+      rotateZ: 5,
+      duration: 0.42,
+      ease: "power2.in",
+      stagger: { each: 0.014, from: "start" }
+    });
     return;
   }
 
@@ -392,11 +739,11 @@ function animateTextOut() {
   });
 }
 /* =========================================================
-   BLOCK 6 END: LEFT-TO-RIGHT WATERFALL TEXT FROM APPROVED FILE
+   BLOCK 8 END: WATERFALL TEXT ANIMATION
    ========================================================= */
 
 /* =========================================================
-   BLOCK 7 START: TEXTURE LOADING
+   BLOCK 9 START: TEXTURE LOADING
    ========================================================= */
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
@@ -425,11 +772,11 @@ function loadAllTextures() {
   );
 }
 /* =========================================================
-   BLOCK 7 END: TEXTURE LOADING
+   BLOCK 9 END: TEXTURE LOADING
    ========================================================= */
 
 /* =========================================================
-   BLOCK 8 START: WEBGL SHADERS
+   BLOCK 10 START: WEBGL SHADERS
    ========================================================= */
 const vertexShader = `
   varying vec2 vUv;
@@ -484,7 +831,6 @@ const fragmentShader = `
     vec2 uv2 = coverUv(baseUv, uTexture2Size, uResolution);
 
     float transitionStrength = sin(uProgress * 3.14159265);
-
     float band = 0.28;
     float revealLine = uProgress * (1.0 + band * 2.0) - band;
 
@@ -503,17 +849,10 @@ const fragmentShader = `
     float sliceRandom = hash(sliceIndex + 11.0);
     float sliceOffset = (sliceRandom - 0.5) * 0.12 * transitionStrength;
 
-    float verticalWave =
-      sin(baseUv.y * 34.0 + uTime * 2.2) * 0.034 * transitionStrength;
+    float verticalWave = sin(baseUv.y * 34.0 + uTime * 2.2) * 0.034 * transitionStrength;
+    float horizontalWave = cos(baseUv.x * 24.0 - uTime * 1.65) * 0.018 * transitionStrength;
 
-    float horizontalWave =
-      cos(baseUv.x * 24.0 - uTime * 1.65) * 0.018 * transitionStrength;
-
-    vec2 displacement = vec2(
-      verticalWave + sliceOffset,
-      horizontalWave
-    );
-
+    vec2 displacement = vec2(verticalWave + sliceOffset, horizontalWave);
     vec2 directionalPull = vec2((revealMask - 0.5) * 0.16, 0.0) * transitionStrength;
 
     vec2 distortedUv1 = uv1 + displacement + directionalPull;
@@ -521,20 +860,11 @@ const fragmentShader = `
 
     vec4 color1 = sampleWithSoftClamp(uTexture1, distortedUv1);
     vec4 color2 = sampleWithSoftClamp(uTexture2, distortedUv2);
-
     vec4 finalColor = mix(color1, color2, revealMask);
 
     float splitStrength = 0.01 * transitionStrength;
-
-    vec4 redShift = sampleWithSoftClamp(
-      uTexture2,
-      distortedUv2 + vec2(splitStrength, 0.0)
-    );
-
-    vec4 blueShift = sampleWithSoftClamp(
-      uTexture1,
-      distortedUv1 - vec2(splitStrength, 0.0)
-    );
+    vec4 redShift = sampleWithSoftClamp(uTexture2, distortedUv2 + vec2(splitStrength, 0.0));
+    vec4 blueShift = sampleWithSoftClamp(uTexture1, distortedUv1 - vec2(splitStrength, 0.0));
 
     finalColor.r = mix(finalColor.r, redShift.r, transitionStrength * 0.24);
     finalColor.b = mix(finalColor.b, blueShift.b, transitionStrength * 0.18);
@@ -546,11 +876,11 @@ const fragmentShader = `
   }
 `;
 /* =========================================================
-   BLOCK 8 END: WEBGL SHADERS
+   BLOCK 10 END: WEBGL SHADERS
    ========================================================= */
 
 /* =========================================================
-   BLOCK 9 START: THREE.JS SETUP
+   BLOCK 11 START: THREE.JS SETUP
    ========================================================= */
 function initWebGL() {
   const heroStage = document.getElementById("casaWebglHero");
@@ -628,11 +958,11 @@ function resizeRenderer() {
   uniforms.uResolution.value.set(width, height);
 }
 /* =========================================================
-   BLOCK 9 END: THREE.JS SETUP
+   BLOCK 11 END: THREE.JS SETUP
    ========================================================= */
 
 /* =========================================================
-   BLOCK 10 START: SAFE IMAGE SEQUENCING
+   BLOCK 12 START: SAFE IMAGE SEQUENCING
    ========================================================= */
 function getNextIndex(index) {
   if (imageUrls.length <= 1) {
@@ -651,11 +981,11 @@ function getNextIndex(index) {
   return next;
 }
 /* =========================================================
-   BLOCK 10 END: SAFE IMAGE SEQUENCING
+   BLOCK 12 END: SAFE IMAGE SEQUENCING
    ========================================================= */
 
 /* =========================================================
-   BLOCK 11 START: TRANSITION LOOP FROM APPROVED FILE
+   BLOCK 13 START: TRANSITION LOOP
    ========================================================= */
 function transitionToNext() {
   if (isTransitioning || texturesLoaded.length < 2) {
@@ -731,11 +1061,11 @@ function transitionToNext() {
   });
 }
 /* =========================================================
-   BLOCK 11 END: TRANSITION LOOP FROM APPROVED FILE
+   BLOCK 13 END: TRANSITION LOOP
    ========================================================= */
 
 /* =========================================================
-   BLOCK 12 START: RENDER LOOP
+   BLOCK 14 START: RENDER LOOP
    ========================================================= */
 function render() {
   if (uniforms) {
@@ -749,11 +1079,11 @@ function render() {
   requestAnimationFrame(render);
 }
 /* =========================================================
-   BLOCK 12 END: RENDER LOOP
+   BLOCK 14 END: RENDER LOOP
    ========================================================= */
 
 /* =========================================================
-   BLOCK 13 START: MAP + FLOORPLAN LIGHTBOX
+   BLOCK 15 START: MAP + FLOORPLAN LIGHTBOX
    ========================================================= */
 function initMapAndFloorplanLightbox() {
   const lightbox = document.getElementById("galleryLightbox");
@@ -798,11 +1128,11 @@ function initMapAndFloorplanLightbox() {
   });
 }
 /* =========================================================
-   BLOCK 13 END: MAP + FLOORPLAN LIGHTBOX
+   BLOCK 15 END: MAP + FLOORPLAN LIGHTBOX
    ========================================================= */
 
 /* =========================================================
-   BLOCK 14 START: GSAP SPLIT-MERGE SECTION
+   BLOCK 16 START: GSAP SPLIT-MERGE SECTION
    ========================================================= */
 function initSplitMergeAnimation() {
   const gsapRef = window.gsap;
@@ -829,14 +1159,18 @@ function initSplitMergeAnimation() {
   observer.observe(section);
 }
 /* =========================================================
-   BLOCK 14 END: GSAP SPLIT-MERGE SECTION
+   BLOCK 16 END: GSAP SPLIT-MERGE SECTION
    ========================================================= */
 
 /* =========================================================
-   BLOCK 15 START: INITIALIZATION
+   BLOCK 17 START: INITIALIZATION
    ========================================================= */
 async function startHero() {
+  if (heroStarted) return;
+  heroStarted = true;
+
   try {
+    refreshActiveSlideData();
     ensureExactHeroText();
     texturesLoaded = await loadAllTextures();
 
@@ -844,6 +1178,7 @@ async function startHero() {
       throw new Error("No textures loaded.");
     }
 
+    currentIndex = 0;
     initWebGL();
     animateTextIn(slideTitles[0]);
     render();
@@ -865,6 +1200,7 @@ async function startHero() {
 function initCasablancaRefresh() {
   patchContentFlow();
   ensureExactHeroText();
+  initMobileFloatingActions();
   initMapAndFloorplanLightbox();
   initSplitMergeAnimation();
   startHero();
@@ -878,7 +1214,7 @@ if (document.readyState === "loading") {
 
 window.addEventListener("load", removeLegacyHeroConflicts, { once: true });
 /* =========================================================
-   BLOCK 15 END: INITIALIZATION
+   BLOCK 17 END: INITIALIZATION
    ========================================================= */
 
 /* =========================================================
