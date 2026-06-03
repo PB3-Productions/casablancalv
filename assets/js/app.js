@@ -547,12 +547,14 @@ window.addEventListener("DOMContentLoaded", () => {
   const animateStackedTitle = (title) => {
     const gsapRef = window.gsap;
     const allChars = title.querySelectorAll(".char");
+    title.dataset.stackReady = "false";
 
     if (!gsapRef || !MOBILE_MEDIA.matches) {
       allChars.forEach((char) => {
         char.style.transform = "translateY(0%)";
         char.style.opacity = "1";
       });
+      title.dataset.stackReady = "true";
       return;
     }
 
@@ -568,6 +570,9 @@ window.addEventListener("DOMContentLoaded", () => {
     gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .62, ease: "expo.out", stagger: { each: .018, from: "start" } });
     gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .42, delay: .02, ease: "expo.out", stagger: { each: .012, from: "start" } });
     gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .62, ease: "expo.out", stagger: { each: .018, from: "start" } });
+    window.setTimeout(() => {
+      if (title.isConnected) title.dataset.stackReady = "true";
+    }, 760);
   };
 
   const forceMiddleFadeWithExitingWords = () => {
@@ -575,6 +580,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const title = document.getElementById("dynamic-title");
     if (!title || !title.classList.contains("casa-force-stacked-title")) return;
+    if (title.dataset.stackReady !== "true") return;
 
     const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
     if (!middleChars.length) return;
@@ -588,6 +594,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (middleOpacity > 0.08 && (topOpacity < 0.86 || bottomOpacity < 0.86)) {
       const gsapRef = window.gsap;
+      title.dataset.stackReady = "false";
       if (gsapRef) {
         gsapRef.killTweensOf(middleChars);
         gsapRef.to(middleChars, { opacity: 0, scale: 0.92, duration: .16, ease: "power1.out", overwrite: true });
@@ -610,6 +617,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (title.dataset.forceStackKey === currentKey && title.classList.contains("casa-force-stacked-title") && title.querySelector(".casa-force-stack-line")) return;
 
     title.dataset.forceStackKey = currentKey;
+    title.dataset.stackReady = "false";
     title.classList.add("casa-force-stacked-title");
     title.textContent = "";
     plan.forEach((lineData) => title.appendChild(makeStackedLine(lineData)));
