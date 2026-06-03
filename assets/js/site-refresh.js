@@ -1,7 +1,7 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA SITE REFRESH JS
    Purpose: Final hero, mobile layout, mobile CTA, floorplan, Matterport,
-   policy layout, and lightbox overrides.
+   policy layout, lightbox overrides, and first-visit hero wave scroll.
    ========================================================= */
 
 import * as THREE from "https://unpkg.com/three@0.128.0/build/three.module.js";
@@ -52,7 +52,7 @@ const HERO_SLIDES = [
     title: "Put Your Feet In the Sand"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1faeab9e7a0d5a8b3f64b5.jpg",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1fb70e9e7a0d5a8b40128f.jpg",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5f8c5a3e6e89b62fa02e.webp",
     title: ""
   }
@@ -61,6 +61,7 @@ const HERO_SLIDES = [
 const HOLD_DURATION = 1.98;
 const TRANSITION_DURATION = 1.72;
 const FLOORPLAN_IMAGE = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1f8bc1098539f71824b491.webp";
+const ADVENTURE_SCROLL_KEY = "casablancaHeroAdventureScrollComplete";
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let activeSlides = [];
@@ -549,6 +550,8 @@ function ensureHeroText() {
         text-align: center !important;
         text-wrap: balance !important;
         overflow: visible !important;
+        transform: scale(var(--mobile-title-scale, 1));
+        transform-origin: center center;
         text-shadow: 0 3px 7px rgba(0,0,0,.72), 0 10px 24px rgba(0,0,0,.54), 0 0 24px rgba(255,212,0,.16) !important;
       }
       .casa-webgl-hero .word-container {
@@ -561,10 +564,18 @@ function ensureHeroText() {
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
       .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
       .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.35rem, 1.55vh, .9rem) !important; }
+      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
       @media (max-width: 768px) {
-        .casa-webgl-hero #dynamic-title { font-size: clamp(2rem, 11vw, 4.4rem) !important; line-height: .78 !important; letter-spacing: -0.04em !important; padding-bottom: .36em !important; }
-        .casa-webgl-hero .word-container { margin: 0 .105em !important; }
+        .casa-webgl-hero #dynamic-title {
+          max-width: 98vw !important;
+          font-size: clamp(4rem, 22vw, 8.8rem) !important;
+          line-height: .72 !important;
+          letter-spacing: -0.062em !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          padding-bottom: .38em !important;
+        }
+        .casa-webgl-hero .word-container { margin: 0 .07em !important; }
       }
     `;
     document.head.appendChild(style);
@@ -598,10 +609,30 @@ function splitMobileTitle(title) {
   return [words.slice(0, splitIndex).join(" "), words.slice(splitIndex).join(" ")];
 }
 
+function fitMobileTitleToViewport() {
+  if (!MOBILE_QUERY.matches) return;
+
+  const titleContainer = document.querySelector("#dynamic-title");
+  if (!titleContainer) return;
+
+  titleContainer.style.setProperty("--mobile-title-scale", "1");
+
+  window.requestAnimationFrame(() => {
+    const lines = Array.from(titleContainer.querySelectorAll(".mobile-title-line"));
+    if (!lines.length) return;
+
+    const maxLineWidth = Math.max(...lines.map((line) => line.scrollWidth));
+    const availableWidth = window.innerWidth * 0.96;
+    const scale = Math.min(1, availableWidth / Math.max(maxLineWidth, 1));
+    titleContainer.style.setProperty("--mobile-title-scale", String(Math.max(0.62, scale)));
+  });
+}
+
 function animateTextIn(title) {
   const titleContainer = ensureHeroText();
   if (!titleContainer) return;
   titleContainer.textContent = "";
+  titleContainer.style.setProperty("--mobile-title-scale", "1");
   if (!title || !title.trim()) return;
 
   if (MOBILE_QUERY.matches) {
@@ -614,6 +645,7 @@ function animateTextIn(title) {
     createWordSpans(bottomLine, bottom);
     titleContainer.appendChild(top);
     if (bottomLine) titleContainer.appendChild(bottom);
+    fitMobileTitleToViewport();
   } else {
     createWordSpans(title, titleContainer);
   }
@@ -660,7 +692,58 @@ function animateTextOut() {
    ========================================================= */
 
 /* =========================================================
-   BLOCK 7 START: WEBGL HERO
+   BLOCK 7 START: FIRST-VISIT HERO WAVE SCROLL
+   ========================================================= */
+function hasAdventureScrollRun() {
+  try {
+    return window.localStorage.getItem(ADVENTURE_SCROLL_KEY) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function markAdventureScrollRun() {
+  try {
+    window.localStorage.setItem(ADVENTURE_SCROLL_KEY, "true");
+  } catch (error) {
+    // No-op when localStorage is unavailable.
+  }
+}
+
+function shouldRunAdventureScroll(fromIndex, toIndex) {
+  const lastIndex = imageUrls.length - 1;
+  const hero = document.querySelector(".casa-webgl-hero");
+  if (!hero || hasAdventureScrollRun()) return false;
+  if (fromIndex !== lastIndex || toIndex !== 0) return false;
+  return window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.42;
+}
+
+function runAdventureScroll() {
+  const target = document.getElementById("welcome") || document.querySelector("main section:not(.casa-webgl-hero)");
+  if (!target) return;
+
+  markAdventureScrollRun();
+
+  const gsapRef = window.gsap;
+  const targetTop = Math.max(0, target.getBoundingClientRect().top + window.scrollY);
+
+  if (gsapRef && !prefersReducedMotion) {
+    gsapRef.to(window, {
+      scrollTo: { y: targetTop, autoKill: true },
+      duration: 1.45,
+      ease: "power3.inOut"
+    });
+    return;
+  }
+
+  window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? "auto" : "smooth" });
+}
+/* =========================================================
+   BLOCK 7 END: FIRST-VISIT HERO WAVE SCROLL
+   ========================================================= */
+
+/* =========================================================
+   BLOCK 8 START: WEBGL HERO
    ========================================================= */
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
@@ -768,6 +851,7 @@ function resizeRenderer() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(width, height, false);
   uniforms.uResolution.value.set(width, height);
+  fitMobileTitleToViewport();
 }
 
 function initWebGL() {
@@ -801,6 +885,8 @@ function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
   isTransitioning = true;
   const targetIndex = getNextIndex(currentIndex);
+  const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
+
   uniforms.uTexture1.value = textures[currentIndex];
   uniforms.uTexture2.value = textures[targetIndex];
   uniforms.uTexture1Size.value = textureSize(textures[currentIndex]);
@@ -810,13 +896,22 @@ function transitionToNext() {
   window.clearTimeout(textSwapTimer);
   textSwapTimer = window.setTimeout(() => animateTextIn(slideTitles[targetIndex]), TRANSITION_DURATION * 430);
 
-  const gsapRef = window.gsap;
-  if (!gsapRef || prefersReducedMotion) {
+  const completeTransition = () => {
     currentIndex = targetIndex;
     setTexturePair(currentIndex);
     uniforms.uProgress.value = 0;
     isTransitioning = false;
+    window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+    if (shouldScrollAfterTransition) {
+      window.setTimeout(runAdventureScroll, 160);
+    }
+  };
+
+  const gsapRef = window.gsap;
+  if (!gsapRef || prefersReducedMotion) {
+    uniforms.uProgress.value = 1;
+    completeTransition();
     return;
   }
 
@@ -825,14 +920,7 @@ function transitionToNext() {
     value: 1,
     duration: TRANSITION_DURATION,
     ease: "power3.inOut",
-    onComplete: () => {
-      currentIndex = targetIndex;
-      setTexturePair(currentIndex);
-      uniforms.uProgress.value = 0;
-      isTransitioning = false;
-      window.clearTimeout(transitionTimer);
-      transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-    }
+    onComplete: completeTransition
   });
 }
 
@@ -861,11 +949,11 @@ async function startHero() {
   }
 }
 /* =========================================================
-   BLOCK 7 END: WEBGL HERO
+   BLOCK 8 END: WEBGL HERO
    ========================================================= */
 
 /* =========================================================
-   BLOCK 8 START: LIGHTBOX + SPLIT ANIMATION
+   BLOCK 9 START: LIGHTBOX + SPLIT ANIMATION
    ========================================================= */
 function initMapAndFloorplanLightbox() {
   const lightbox = document.getElementById("galleryLightbox");
@@ -921,11 +1009,11 @@ function initSplitMergeAnimation() {
   observer.observe(section);
 }
 /* =========================================================
-   BLOCK 8 END: LIGHTBOX + SPLIT ANIMATION
+   BLOCK 9 END: LIGHTBOX + SPLIT ANIMATION
    ========================================================= */
 
 /* =========================================================
-   BLOCK 9 START: INIT
+   BLOCK 10 START: INIT
    ========================================================= */
 function initCasablancaRefresh() {
   patchContentFlow();
@@ -945,5 +1033,5 @@ if (document.readyState === "loading") {
 
 window.addEventListener("load", removeLegacyHeroConflicts, { once: true });
 /* =========================================================
-   BLOCK 9 END: INIT
+   BLOCK 10 END: INIT
    ========================================================= */
