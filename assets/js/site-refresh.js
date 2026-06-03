@@ -52,7 +52,7 @@ const HERO_SLIDES = [
     title: "Put Your Feet In the Sand"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1fb70e9e7a0d5a8b40128f.jpg",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1fbdc8e2e735bbc37599bd.jpg",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5f8c5a3e6e89b62fa02e.webp",
     title: ""
   }
@@ -94,9 +94,6 @@ function refreshActiveSlides() {
   imageUrls = activeSlides.map((slide) => slide.image);
   slideTitles = activeSlides.map((slide) => slide.title);
 }
-/* =========================================================
-   BLOCK 2 END: HERO SLIDES
-   ========================================================= */
 
 /* =========================================================
    BLOCK 3 START: FINAL OVERRIDE STYLES
@@ -359,9 +356,6 @@ function injectFinalStyles() {
   `;
   document.head.appendChild(style);
 }
-/* =========================================================
-   BLOCK 3 END: FINAL OVERRIDE STYLES
-   ========================================================= */
 
 /* =========================================================
    BLOCK 4 START: DOM PATCHES
@@ -443,9 +437,6 @@ function patchContentFlow() {
     card.addEventListener("click", (event) => event.preventDefault());
   });
 }
-/* =========================================================
-   BLOCK 4 END: DOM PATCHES
-   ========================================================= */
 
 /* =========================================================
    BLOCK 5 START: MOBILE FLOATING CTA BUTTONS
@@ -496,9 +487,6 @@ function initMobileFloatingActions() {
   window.addEventListener("resize", sync, { passive: true });
   sync();
 }
-/* =========================================================
-   BLOCK 5 END: MOBILE FLOATING CTA BUTTONS
-   ========================================================= */
 
 /* =========================================================
    BLOCK 6 START: HERO TITLE TEXT
@@ -687,9 +675,6 @@ function animateTextOut() {
 
   gsapRef.to(titleContainer.querySelectorAll(".char"), { y: "-112%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
 }
-/* =========================================================
-   BLOCK 6 END: HERO TITLE TEXT
-   ========================================================= */
 
 /* =========================================================
    BLOCK 7 START: FIRST-VISIT HERO WAVE SCROLL
@@ -738,9 +723,6 @@ function runAdventureScroll() {
 
   window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? "auto" : "smooth" });
 }
-/* =========================================================
-   BLOCK 7 END: FIRST-VISIT HERO WAVE SCROLL
-   ========================================================= */
 
 /* =========================================================
    BLOCK 8 START: WEBGL HERO
@@ -948,9 +930,6 @@ async function startHero() {
     animateTextIn("Luxury Awaits");
   }
 }
-/* =========================================================
-   BLOCK 8 END: WEBGL HERO
-   ========================================================= */
 
 /* =========================================================
    BLOCK 9 START: LIGHTBOX + SPLIT ANIMATION
@@ -1008,9 +987,6 @@ function initSplitMergeAnimation() {
   }, { threshold: .28 });
   observer.observe(section);
 }
-/* =========================================================
-   BLOCK 9 END: LIGHTBOX + SPLIT ANIMATION
-   ========================================================= */
 
 /* =========================================================
    BLOCK 10 START: INIT
