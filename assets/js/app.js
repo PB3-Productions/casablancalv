@@ -649,7 +649,7 @@ window.addEventListener("DOMContentLoaded", () => {
     markWaveRun();
 
     const startY = window.scrollY || 0;
-    const offset = MOBILE_MEDIA.matches ? -15 : -75;
+    const offset = MOBILE_MEDIA.matches ? -15 : -45;
     const endY = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
     const distance = endY - startY;
     const duration = 1600;
