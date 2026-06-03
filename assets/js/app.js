@@ -379,7 +379,7 @@ window.addEventListener("DOMContentLoaded", () => {
   /* =========================================================
      BLOCK 7 START: HARD MOBILE HERO STACKING + WAVE TARGET FIX
      ========================================================= */
-  const WAVE_KEY = "casablancaHeroAdventureWaveV7";
+  const WAVE_KEY = "casablancaHeroAdventureWaveV8";
   const FINAL_POLISH_STYLE_ID = "casablancaFinalPolishPatch";
   const MOBILE_MEDIA = window.matchMedia("(max-width: 768px)");
 
@@ -565,9 +565,36 @@ window.addEventListener("DOMContentLoaded", () => {
     gsapRef.set(middleChars, { y: "0%", opacity: 0, scale: 0.92, rotateZ: 0 });
     gsapRef.set(bottomChars, { y: "145%", opacity: 0, rotateZ: 4 });
 
-    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .68, ease: "expo.out", stagger: { each: .02, from: "start" } });
-    gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .62, delay: .07, ease: "expo.out", stagger: { each: .016, from: "start" } });
-    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .68, ease: "expo.out", stagger: { each: .02, from: "start" } });
+    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .62, ease: "expo.out", stagger: { each: .018, from: "start" } });
+    gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .42, delay: .02, ease: "expo.out", stagger: { each: .012, from: "start" } });
+    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .62, ease: "expo.out", stagger: { each: .018, from: "start" } });
+  };
+
+  const forceMiddleFadeWithExitingWords = () => {
+    if (!MOBILE_MEDIA.matches) return;
+
+    const title = document.getElementById("dynamic-title");
+    if (!title || !title.classList.contains("casa-force-stacked-title")) return;
+
+    const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
+    if (!middleChars.length) return;
+
+    const topSample = title.querySelector(".mobile-title-line-top .char");
+    const bottomSample = title.querySelector(".mobile-title-line-bottom .char");
+    const middleSample = middleChars[0];
+    const topOpacity = topSample ? parseFloat(window.getComputedStyle(topSample).opacity || "1") : 1;
+    const bottomOpacity = bottomSample ? parseFloat(window.getComputedStyle(bottomSample).opacity || "1") : 1;
+    const middleOpacity = parseFloat(window.getComputedStyle(middleSample).opacity || "1");
+
+    if (middleOpacity > 0.08 && (topOpacity < 0.86 || bottomOpacity < 0.86)) {
+      const gsapRef = window.gsap;
+      if (gsapRef) {
+        gsapRef.killTweensOf(middleChars);
+        gsapRef.to(middleChars, { opacity: 0, scale: 0.92, duration: .16, ease: "power1.out", overwrite: true });
+      } else {
+        middleChars.forEach((char) => { char.style.opacity = "0"; });
+      }
+    }
   };
 
   const forceMobileTitleStacking = () => {
@@ -609,12 +636,12 @@ window.addEventListener("DOMContentLoaded", () => {
     const fallbackTarget = document.getElementById("welcome");
     const target = welcomeTitle || fallbackTarget;
     if (!hero || !target || hasWaveRun()) return;
-    if (window.scrollY > (hero.offsetHeight || window.innerHeight) * 0.52) return;
+    if (window.scrollY > (hero.offsetHeight || window.innerHeight) * 1.35) return;
 
     markWaveRun();
 
     const startY = window.scrollY || 0;
-    const offset = MOBILE_MEDIA.matches ? 8 : 18;
+    const offset = MOBILE_MEDIA.matches ? -14 : 18;
     const endY = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
     const distance = endY - startY;
     const duration = 1600;
@@ -654,6 +681,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       titleObserver = new MutationObserver(() => {
         window.requestAnimationFrame(forceMobileTitleStacking);
+        window.requestAnimationFrame(forceMiddleFadeWithExitingWords);
         const text = (title.textContent || "").trim().replace(/\s+/g, " ");
         const oldEnough = Date.now() - startedAt > 9000;
 
@@ -666,7 +694,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (text !== "") window.clearTimeout(finalBlankTimer);
       });
 
-      titleObserver.observe(title, { childList: true, subtree: true, characterData: true });
+      titleObserver.observe(title, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["style", "class"] });
       forceMobileTitleStacking();
       return true;
     };
@@ -683,7 +711,10 @@ window.addEventListener("DOMContentLoaded", () => {
   addFloorplanCaption();
   initHeroWaveObserver();
 
-  const persistentTitleStacker = window.setInterval(forceMobileTitleStacking, 80);
+  const persistentTitleStacker = window.setInterval(() => {
+    forceMobileTitleStacking();
+    forceMiddleFadeWithExitingWords();
+  }, 40);
   window.setTimeout(() => window.clearInterval(persistentTitleStacker), 300000);
 
   window.setTimeout(() => {
