@@ -377,11 +377,11 @@ window.addEventListener("DOMContentLoaded", () => {
      ========================================================= */
 
   /* =========================================================
-     BLOCK 7 START: FINAL MOBILE HERO STACKING + COPY POLISH
+     BLOCK 7 START: HARD MOBILE HERO STACKING + WAVE TARGET FIX
      ========================================================= */
-  const WAVE_KEY = "casablancaHeroAdventureWaveV6";
+  const WAVE_KEY = "casablancaHeroAdventureWaveV7";
   const FINAL_POLISH_STYLE_ID = "casablancaFinalPolishPatch";
-  const MOBILE_QUERY = window.matchMedia("(max-width: 768px)");
+  const MOBILE_MEDIA = window.matchMedia("(max-width: 768px)");
 
   const injectFinalPolishStyles = () => {
     let style = document.getElementById(FINAL_POLISH_STYLE_ID);
@@ -429,7 +429,16 @@ window.addEventListener("DOMContentLoaded", () => {
           display: block !important;
         }
 
-        .casa-webgl-hero .mobile-title-line {
+        .casa-webgl-hero #dynamic-title.casa-force-stacked-title {
+          font-size: clamp(3.4rem, 18.5vw, 7.6rem) !important;
+          line-height: .72 !important;
+          letter-spacing: -0.058em !important;
+          transform: none !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+
+        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .mobile-title-line {
           display: flex !important;
           justify-content: center !important;
           align-items: center !important;
@@ -440,22 +449,26 @@ window.addEventListener("DOMContentLoaded", () => {
           margin-left: auto !important;
           margin-right: auto !important;
           text-align: center !important;
+          white-space: nowrap !important;
         }
 
-        .casa-webgl-hero .mobile-title-line .word-container {
+        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .word-container {
           margin-left: 0 !important;
           margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
         }
 
-        .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-top,
-        .casa-webgl-hero .mobile-title-line-bottom + .mobile-title-line-bottom {
-          margin-top: clamp(.08rem, .45vh, .24rem) !important;
+        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .word {
+          white-space: nowrap !important;
         }
 
-        .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-middle,
-        .casa-webgl-hero .mobile-title-line-middle + .mobile-title-line-bottom,
-        .casa-webgl-hero .mobile-title-line-top + .mobile-title-line-bottom {
-          margin-top: clamp(.34rem, 1.45vh, .82rem) !important;
+        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .mobile-title-line + .mobile-title-line {
+          margin-top: clamp(.12rem, .65vh, .34rem) !important;
+        }
+
+        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .mobile-title-line[data-gap="large"] {
+          margin-top: clamp(.52rem, 1.95vh, 1.05rem) !important;
         }
 
         #welcome .intro-lead,
@@ -479,45 +492,38 @@ window.addEventListener("DOMContentLoaded", () => {
     floorplanCard.insertAdjacentElement("afterend", caption);
   };
 
-  const mobileLinePlan = (text) => {
-    const normalized = text.trim().replace(/\s+/g, " ");
-    const plans = {
-      "Your New Vegas Night": [
-        ["Your", "mobile-title-line-top"],
-        ["New", "mobile-title-line-top"],
-        ["Vegas", "mobile-title-line-bottom"],
-        ["Night", "mobile-title-line-bottom"]
-      ],
-      "Your Personal Oasis": [
-        ["Your", "mobile-title-line-top"],
-        ["Personal", "mobile-title-line-middle"],
-        ["Oasis", "mobile-title-line-bottom"]
-      ],
-      "Something For Everyone": [
-        ["Something", "mobile-title-line-top"],
-        ["For", "mobile-title-line-middle"],
-        ["Everyone", "mobile-title-line-bottom"]
-      ],
-      "Put Your Feet In the Sand": [
-        ["Put Your", "mobile-title-line-top"],
-        ["Feet In", "mobile-title-line-middle"],
-        ["The Sand", "mobile-title-line-bottom"]
-      ]
-    };
-    return plans[normalized] || null;
+  const stackedTitlePlans = {
+    yournewvegasnight: [
+      { text: "Your", direction: "top" },
+      { text: "New", direction: "top" },
+      { text: "Vegas", direction: "bottom", gap: "large" },
+      { text: "Night", direction: "bottom" }
+    ],
+    yourpersonaloasis: [
+      { text: "Your", direction: "top" },
+      { text: "Personal", direction: "middle", gap: "large" },
+      { text: "Oasis", direction: "bottom", gap: "large" }
+    ],
+    somethingforeveryone: [
+      { text: "Something", direction: "top" },
+      { text: "For", direction: "middle", gap: "large" },
+      { text: "Everyone", direction: "bottom", gap: "large" }
+    ],
+    putyourfeetinthesand: [
+      { text: "Put Your", direction: "top" },
+      { text: "Feet In", direction: "middle", gap: "large" },
+      { text: "The Sand", direction: "bottom", gap: "large" }
+    ]
   };
 
-  const getUnstackedTitleText = (title) => {
-    if (!title) return "";
-    if (title.dataset.forceStackedTitle && title.querySelector(".mobile-title-line")) return "";
-    return (title.textContent || "").trim().replace(/\s+/g, " ");
-  };
+  const collapseTitleKey = (text) => (text || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
-  const makeCharWordLine = (lineText, className) => {
+  const makeStackedLine = (lineData) => {
     const line = document.createElement("span");
-    line.className = `mobile-title-line ${className}`;
+    line.className = `mobile-title-line casa-force-stack-line mobile-title-line-${lineData.direction}`;
+    if (lineData.gap) line.dataset.gap = lineData.gap;
 
-    lineText.split(" ").filter(Boolean).forEach((word, wordIndex, words) => {
+    lineData.text.split(" ").filter(Boolean).forEach((word, wordIndex, words) => {
       const wordContainer = document.createElement("span");
       wordContainer.className = "word-container";
       const wordSpan = document.createElement("span");
@@ -538,15 +544,23 @@ window.addEventListener("DOMContentLoaded", () => {
     return line;
   };
 
-  const animateForcedStack = (title) => {
+  const animateStackedTitle = (title) => {
     const gsapRef = window.gsap;
-    if (!gsapRef || !MOBILE_QUERY.matches) return;
+    const allChars = title.querySelectorAll(".char");
+
+    if (!gsapRef || !MOBILE_MEDIA.matches) {
+      allChars.forEach((char) => {
+        char.style.transform = "translateY(0%)";
+        char.style.opacity = "1";
+      });
+      return;
+    }
 
     const topChars = title.querySelectorAll(".mobile-title-line-top .char");
     const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
     const bottomChars = title.querySelectorAll(".mobile-title-line-bottom .char");
 
-    gsapRef.killTweensOf(title.querySelectorAll(".char"));
+    gsapRef.killTweensOf(allChars);
     gsapRef.set(topChars, { y: "-145%", opacity: 0, rotateZ: -4 });
     gsapRef.set(middleChars, { y: "0%", opacity: 0, scale: 0.92, rotateZ: 0 });
     gsapRef.set(bottomChars, { y: "145%", opacity: 0, rotateZ: 4 });
@@ -557,18 +571,22 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   const forceMobileTitleStacking = () => {
-    if (!MOBILE_QUERY.matches) return;
+    if (!MOBILE_MEDIA.matches) return;
+
     const title = document.getElementById("dynamic-title");
     if (!title) return;
 
-    const text = getUnstackedTitleText(title);
-    const plan = mobileLinePlan(text);
+    const currentKey = collapseTitleKey(title.textContent);
+    const plan = stackedTitlePlans[currentKey];
     if (!plan) return;
 
-    title.dataset.forceStackedTitle = text;
+    if (title.dataset.forceStackKey === currentKey && title.classList.contains("casa-force-stacked-title") && title.querySelector(".casa-force-stack-line")) return;
+
+    title.dataset.forceStackKey = currentKey;
+    title.classList.add("casa-force-stacked-title");
     title.textContent = "";
-    plan.forEach(([lineText, lineClass]) => title.appendChild(makeCharWordLine(lineText, lineClass)));
-    animateForcedStack(title);
+    plan.forEach((lineData) => title.appendChild(makeStackedLine(lineData)));
+    animateStackedTitle(title);
   };
 
   const hasWaveRun = () => {
@@ -582,23 +600,24 @@ window.addEventListener("DOMContentLoaded", () => {
   const markWaveRun = () => {
     try {
       window.localStorage.setItem(WAVE_KEY, "true");
-    } catch (error) {
-      // localStorage can be blocked in private contexts.
-    }
+    } catch (error) {}
   };
 
   const waveScrollToWelcome = () => {
     const hero = document.querySelector(".casa-webgl-hero");
-    const target = document.getElementById("welcome");
+    const welcomeTitle = document.querySelector("#welcome h1");
+    const fallbackTarget = document.getElementById("welcome");
+    const target = welcomeTitle || fallbackTarget;
     if (!hero || !target || hasWaveRun()) return;
-    if (window.scrollY > (hero.offsetHeight || window.innerHeight) * 0.46) return;
+    if (window.scrollY > (hero.offsetHeight || window.innerHeight) * 0.52) return;
 
     markWaveRun();
 
     const startY = window.scrollY || 0;
-    const endY = Math.max(0, target.getBoundingClientRect().top + window.scrollY);
+    const offset = MOBILE_MEDIA.matches ? 8 : 18;
+    const endY = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
     const distance = endY - startY;
-    const duration = 1550;
+    const duration = 1600;
     const startTime = performance.now();
     const easeInOutCubic = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
@@ -615,9 +634,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const forceFirstVisitHeroStart = () => {
     try {
       if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
-    } catch (error) {
-      // Some browsers can reject scroll restoration updates.
-    }
+    } catch (error) {}
 
     if (window.location.hash || hasWaveRun()) return;
     window.setTimeout(() => window.scrollTo(0, 0), 40);
@@ -642,7 +659,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (oldEnough && text === "" && !hasWaveRun()) {
           window.clearTimeout(finalBlankTimer);
-          finalBlankTimer = window.setTimeout(waveScrollToWelcome, 2300);
+          finalBlankTimer = window.setTimeout(waveScrollToWelcome, 1800);
           return;
         }
 
@@ -666,8 +683,8 @@ window.addEventListener("DOMContentLoaded", () => {
   addFloorplanCaption();
   initHeroWaveObserver();
 
-  const persistentTitleStacker = window.setInterval(forceMobileTitleStacking, 120);
-  window.setTimeout(() => window.clearInterval(persistentTitleStacker), 240000);
+  const persistentTitleStacker = window.setInterval(forceMobileTitleStacking, 80);
+  window.setTimeout(() => window.clearInterval(persistentTitleStacker), 300000);
 
   window.setTimeout(() => {
     injectFinalPolishStyles();
@@ -678,7 +695,7 @@ window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", forceMobileTitleStacking, { passive: true });
   document.addEventListener("visibilitychange", forceMobileTitleStacking);
   /* =========================================================
-     BLOCK 7 END: FINAL MOBILE HERO STACKING + COPY POLISH
+     BLOCK 7 END: HARD MOBILE HERO STACKING + WAVE TARGET FIX
      ========================================================= */
 });
 /* =========================================================
