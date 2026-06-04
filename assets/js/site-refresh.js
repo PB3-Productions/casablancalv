@@ -461,14 +461,16 @@ function initMobileFloatingActions() {
   let isScrolling = false;
   let scrollTimer = null;
 
+  // Measure the hero once and remember it
   let heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
   
+  // Only remeasure if they rotate their phone
   window.addEventListener("resize", () => {
     heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
   }, { passive: true });
 
-  const isInsideHero = () => window.scrollY < heroCutoff;
-  const sync = () => {
+    const isInsideHero = () => window.scrollY < heroCutoff;
+    const sync = () => {
     const hidden = !MOBILE_QUERY.matches || isInsideHero();
     actions.classList.toggle("is-hidden", hidden);
     actions.classList.toggle("is-scrolling", isScrolling);
@@ -692,7 +694,7 @@ function markAdventureScrollRun() {
   try {
     window.localStorage.setItem(ADVENTURE_SCROLL_KEY, "true");
   } catch (error) {
-    // No-op
+    // No-op when localStorage is unavailable.
   }
 }
 
@@ -732,7 +734,7 @@ const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
 
 function loadAllTextures() {
-  return Promise.all(imageUrls.map((url) => new Promise((resolve) => {
+  return Promise.all(imageUrls.map((url) => new Promise((resolve, reject) => {
     loader.load(url, (texture) => {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
@@ -740,7 +742,7 @@ function loadAllTextures() {
       texture.wrapT = THREE.ClampToEdgeWrapping;
       texture.needsUpdate = true;
       resolve(texture);
-    }, undefined, () => resolve(null));
+    }, undefined, reject);
   })));
 }
 
@@ -848,57 +850,57 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
+   // Turn on our "watcher" from Step 1
   heroObserver.observe(stage);
 
+  // The Crash Net: If the phone runs out of memory, fade to the static backup image
   renderer.domElement.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
     stage.classList.remove("is-ready"); 
+    console.warn("Device memory low: Gracefully falling back to static image.");
   }, false);
 
   uniforms = {
-    uTexture1: { value: textures },
-    uTexture2: { value: textures[getNextIndex(0)] }, 
-    uTexture1Size: { value: textureSize(textures) },
+    uTexture1: { value: textures[0] },
+    uTexture2: { value: textures[getNextIndex(0)] },
+    uTexture1Size: { value: textureSize(textures[0]) },
     uTexture2Size: { value: textureSize(textures[getNextIndex(0)]) },
     uResolution: { value: new THREE.Vector2(1, 1) },
     uProgress: { value: 0 },
     uTime: { value: 0 }
   };
-   
+
   const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: false });
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
   resizeRenderer();
-  
-  if (textures) {
-    stage.classList.add("is-ready");
-  }
+  stage.classList.add("is-ready");
 }
 
 function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
-  
   isTransitioning = true;
   const targetIndex = getNextIndex(currentIndex);
   const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
-  
-  if (textSwapTimer) window.clearTimeout(textSwapTimer);
+
+  uniforms.uTexture1.value = textures[currentIndex];
+  uniforms.uTexture2.value = textures[targetIndex];
+  uniforms.uTexture1Size.value = textureSize(textures[currentIndex]);
+  uniforms.uTexture2Size.value = textureSize(textures[targetIndex]);
+  uniforms.uProgress.value = 0;
   animateTextOut();
-  textSwapTimer = window.setTimeout(() => {
-    animateTextIn(slideTitles[targetIndex]);
-  }, (TRANSITION_DURATION / 2) * 1000);
+  window.clearTimeout(textSwapTimer);
+  textSwapTimer = window.setTimeout(() => animateTextIn(slideTitles[targetIndex]), TRANSITION_DURATION * 430);
 
   const completeTransition = () => {
     currentIndex = targetIndex;
     setTexturePair(currentIndex);
     uniforms.uProgress.value = 0;
     isTransitioning = false;
-    
-    if (shouldScrollAfterTransition) {
-      runAdventureScroll();
-    }
-    
     window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+    if (shouldScrollAfterTransition) {
+      window.setTimeout(runAdventureScroll, 160);
+    }
   };
 
   const gsapRef = window.gsap;
@@ -917,14 +919,14 @@ function transitionToNext() {
   });
 }
 
+// Creates a "watcher" to see if the hero is on the screen
 let isHeroVisible = true;
 const heroObserver = new IntersectionObserver((entries) => {
-  if(entries && entries) {
-      isHeroVisible = entries.isIntersecting;
-  }
-}, { rootMargin: "150px" });
+  isHeroVisible = entries.isIntersecting;
+}, { rootMargin: "150px" }); // Keeps it running just slightly off-screen so it's ready
 
 function render() {
+  // Only do the heavy math and draw the animation IF the user can see it
   if (isHeroVisible && uniforms && renderer && scene && camera) {
     uniforms.uTime.value += clock.getDelta();
     renderer.render(scene, camera);
@@ -941,7 +943,7 @@ async function startHero() {
     textures = await loadAllTextures();
     currentIndex = 0;
     initWebGL();
-    animateTextIn(slideTitles);
+    animateTextIn(slideTitles[0]);
     render();
     if (textures.length > 1) transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
     window.addEventListener("resize", resizeRenderer, { passive: true });
