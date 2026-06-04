@@ -67,7 +67,7 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 let activeSlides = [];
 let imageUrls = [];
 let slideTitles = [];
-let textures = [];
+let validSlides = []; // Exclusively holds fully downloaded, crash-proof textures
 let currentIndex = 0;
 let renderer;
 let scene;
@@ -461,16 +461,8 @@ function initMobileFloatingActions() {
   let isScrolling = false;
   let scrollTimer = null;
 
-  // Measure the hero once and remember it
-  let heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
-  
-  // Only remeasure if they rotate their phone
-  window.addEventListener("resize", () => {
-    heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
-  }, { passive: true });
-
-    const isInsideHero = () => window.scrollY < heroCutoff;
-    const sync = () => {
+  const isInsideHero = () => window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.82;
+  const sync = () => {
     const hidden = !MOBILE_QUERY.matches || isInsideHero();
     actions.classList.toggle("is-hidden", hidden);
     actions.classList.toggle("is-scrolling", isScrolling);
@@ -694,12 +686,12 @@ function markAdventureScrollRun() {
   try {
     window.localStorage.setItem(ADVENTURE_SCROLL_KEY, "true");
   } catch (error) {
-    // No-op when localStorage is unavailable.
+    // No-op
   }
 }
 
 function shouldRunAdventureScroll(fromIndex, toIndex) {
-  const lastIndex = imageUrls.length - 1;
+  const lastIndex = validSlides.length - 1;
   const hero = document.querySelector(".casa-webgl-hero");
   if (!hero || hasAdventureScrollRun()) return false;
   if (fromIndex !== lastIndex || toIndex !== 0) return false;
@@ -732,19 +724,6 @@ function runAdventureScroll() {
    ========================================================= */
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
-
-function loadAllTextures() {
-  return Promise.all(imageUrls.map((url) => new Promise((resolve, reject) => {
-    loader.load(url, (texture) => {
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      texture.needsUpdate = true;
-      resolve(texture);
-    }, undefined, reject);
-  })));
-}
 
 const vertexShader = `
   varying vec2 vUv;
@@ -815,16 +794,19 @@ function textureSize(texture) {
 }
 
 function getNextIndex(index) {
-  if (imageUrls.length <= 1) return index;
-  return (index + 1) % imageUrls.length;
+  if (validSlides.length <= 1) return index;
+  return (index + 1) % validSlides.length;
 }
 
 function setTexturePair(index) {
   const nextIndex = getNextIndex(index);
-  uniforms.uTexture1.value = textures[index];
-  uniforms.uTexture2.value = textures[nextIndex];
-  uniforms.uTexture1Size.value = textureSize(textures[index]);
-  uniforms.uTexture2Size.value = textureSize(textures[nextIndex]);
+  const tex1 = validSlides[index].texture;
+  const tex2 = validSlides[nextIndex].texture;
+
+  uniforms.uTexture1.value = tex1;
+  uniforms.uTexture2.value = tex2;
+  uniforms.uTexture1Size.value = textureSize(tex1);
+  uniforms.uTexture2Size.value = textureSize(tex2);
 }
 
 function resizeRenderer() {
@@ -850,57 +832,56 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-   // Turn on our "watcher" from Step 1
-  heroObserver.observe(stage);
-
-  // The Crash Net: If the phone runs out of memory, fade to the static backup image
-  renderer.domElement.addEventListener('webglcontextlost', (event) => {
-    event.preventDefault();
-    stage.classList.remove("is-ready"); 
-    console.warn("Device memory low: Gracefully falling back to static image.");
-  }, false);
-
   uniforms = {
-    uTexture1: { value: textures[0] },
-    uTexture2: { value: textures[getNextIndex(0)] },
-    uTexture1Size: { value: textureSize(textures[0]) },
-    uTexture2Size: { value: textureSize(textures[getNextIndex(0)]) },
+    uTexture1: { value: validSlides.texture },
+    uTexture2: { value: validSlides.texture }, 
+    uTexture1Size: { value: textureSize(validSlides.texture) },
+    uTexture2Size: { value: textureSize(validSlides.texture) },
     uResolution: { value: new THREE.Vector2(1, 1) },
     uProgress: { value: 0 },
     uTime: { value: 0 }
   };
-
+   
   const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: false });
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
   resizeRenderer();
+  
   stage.classList.add("is-ready");
 }
 
 function transitionToNext() {
-  if (isTransitioning || textures.length < 2) return;
+  if (isTransitioning || validSlides.length < 2) return;
+  
   isTransitioning = true;
   const targetIndex = getNextIndex(currentIndex);
+  
+  // Snap the slots in place before we begin animating
+  setTexturePair(currentIndex);
+  
   const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
-
-  uniforms.uTexture1.value = textures[currentIndex];
-  uniforms.uTexture2.value = textures[targetIndex];
-  uniforms.uTexture1Size.value = textureSize(textures[currentIndex]);
-  uniforms.uTexture2Size.value = textureSize(textures[targetIndex]);
-  uniforms.uProgress.value = 0;
+  
+  if (textSwapTimer) window.clearTimeout(textSwapTimer);
   animateTextOut();
-  window.clearTimeout(textSwapTimer);
-  textSwapTimer = window.setTimeout(() => animateTextIn(slideTitles[targetIndex]), TRANSITION_DURATION * 430);
+  textSwapTimer = window.setTimeout(() => {
+    animateTextIn(validSlides[targetIndex].title);
+  }, (TRANSITION_DURATION / 2) * 1000);
 
   const completeTransition = () => {
     currentIndex = targetIndex;
-    setTexturePair(currentIndex);
+    
+    // Snap both slots to the new image to prevent boomeranging
+    uniforms.uTexture1.value = validSlides[currentIndex].texture;
+    uniforms.uTexture2.value = validSlides[currentIndex].texture;
     uniforms.uProgress.value = 0;
+    
     isTransitioning = false;
+    
+    if (shouldScrollAfterTransition) {
+      runAdventureScroll();
+    }
+    
     window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-    if (shouldScrollAfterTransition) {
-      window.setTimeout(runAdventureScroll, 160);
-    }
   };
 
   const gsapRef = window.gsap;
@@ -919,36 +900,71 @@ function transitionToNext() {
   });
 }
 
-// Creates a "watcher" to see if the hero is on the screen
-let isHeroVisible = true;
-const heroObserver = new IntersectionObserver((entries) => {
-  isHeroVisible = entries.isIntersecting;
-}, { rootMargin: "150px" }); // Keeps it running just slightly off-screen so it's ready
-
 function render() {
-  // Only do the heavy math and draw the animation IF the user can see it
-  if (isHeroVisible && uniforms && renderer && scene && camera) {
+  if (uniforms && renderer && scene && camera) {
     uniforms.uTime.value += clock.getDelta();
     renderer.render(scene, camera);
   }
   window.requestAnimationFrame(render);
 }
 
+// 100% BULLETPROOF LOAD LOGIC
 async function startHero() {
   if (heroStarted) return;
   heroStarted = true;
+  
   try {
     refreshActiveSlides();
     ensureHeroText();
-    textures = await loadAllTextures();
+    
+    // 1. Load the first image instantly
+    const tex0 = await new Promise((resolve) => {
+      loader.load(imageUrls, (texture) => {
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.needsUpdate = true;
+        resolve(texture);
+      }, undefined, () => resolve(null));
+    });
+
+    if (!tex0) throw new Error("Primary image failed");
+
+    // Add it to our "safe" array
+    validSlides.push({ texture: tex0, title: slideTitles });
     currentIndex = 0;
+    
     initWebGL();
-    animateTextIn(slideTitles[0]);
+    animateTextIn(validSlides.title);
     render();
-    if (textures.length > 1) transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
     window.addEventListener("resize", resizeRenderer, { passive: true });
+
+    // 2. Load the rest sequentially in the background
+    for (let i = 1; i < imageUrls.length; i++) {
+      const tex = await new Promise((resolve) => {
+        loader.load(imageUrls[i], (texture) => {
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.wrapS = THREE.ClampToEdgeWrapping;
+          texture.wrapT = THREE.ClampToEdgeWrapping;
+          texture.needsUpdate = true;
+          resolve(texture);
+        }, undefined, () => resolve(null));
+      });
+      
+      if (tex) {
+        validSlides.push({ texture: tex, title: slideTitles[i] });
+        
+        // Start the slider the exact moment the 2nd image finishes downloading
+        if (validSlides.length === 2) {
+          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+        }
+      }
+    }
+
   } catch (error) {
-    console.error("Hero transition failed to initialize:", error);
+    console.error("Hero failed to initialize:", error);
     animateTextIn("Luxury Awaits");
   }
 }
