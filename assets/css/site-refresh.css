@@ -51,21 +51,21 @@
   }
 
   .nav-bar-container {
-    grid-template-columns: minmax(0, 1fr) clamp(230px, 16vw, 305px) minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(230px, 22vw, 450px) minmax(0, 1fr) !important;
     min-height: clamp(120px, 8.2vw, 138px) !important;
     column-gap: clamp(.5rem, 1vw, 1.2rem) !important;
   }
 
   .site-header.is-scrolled .nav-bar-container {
-    grid-template-columns: minmax(0, 1fr) clamp(180px, 12vw, 230px) minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(180px, 15vw, 280px) minmax(0, 1fr) !important;
     min-height: clamp(82px, 5.6vw, 98px) !important;
   }
 
   .brand-group {
     top: 50% !important;
     left: 50% !important;
-    width: clamp(220px, 15.5vw, 305px) !important;
-    height: clamp(108px, 7.4vw, 150px) !important;
+    width: clamp(220px, 22vw, 450px) !important;
+    height: clamp(108px, 11vw, 220px) !important;
     transform: translate(-50%, -50%) !important;
     z-index: 44 !important;
   }
@@ -77,15 +77,15 @@
   }
 
   .main-logo {
-    width: clamp(218px, 15.5vw, 300px) !important;
+    width: clamp(218px, 22vw, 440px) !important;
     max-width: none !important;
     height: auto !important;
     filter: drop-shadow(0 13px 20px rgba(0,0,0,.65)) !important;
   }
 
   .site-header.is-scrolled .brand-group {
-    width: clamp(150px, 10.6vw, 205px) !important;
-    height: clamp(74px, 5.1vw, 102px) !important;
+    width: clamp(150px, 15vw, 280px) !important;
+    height: clamp(74px, 7.5vw, 140px) !important;
   }
 
   .site-header.is-scrolled .logo-wrapper {
@@ -93,7 +93,7 @@
   }
 
   .site-header.is-scrolled .main-logo {
-    width: clamp(148px, 10.5vw, 200px) !important;
+    width: clamp(148px, 15vw, 270px) !important;
   }
 
   .nav-left {
