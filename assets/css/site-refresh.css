@@ -73,7 +73,7 @@
   .logo-wrapper {
     top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -18%) !important;
+    transform: translate(-50%, -22%) !important;
   }
 
   .main-logo {
@@ -89,7 +89,7 @@
   }
 
   .site-header.is-scrolled .logo-wrapper {
-    transform: translate(-50%, -20%) !important;
+    transform: translate(-50%, -23%) !important;
   }
 
   .site-header.is-scrolled .main-logo {
