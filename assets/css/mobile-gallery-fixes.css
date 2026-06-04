@@ -427,7 +427,12 @@ footer img:first-child {
   }
 
   .nav-left {
-    display: none !important;
+    display: block !important; /* Keeps the container alive so the gold button can show */
+  }
+  
+  .nav-left .nav-item,
+  .nav-left .nav-link {
+    display: none !important; /* Hides any leftover desktop links so they don't mess up mobile */
   }
 
   .nav-right,
