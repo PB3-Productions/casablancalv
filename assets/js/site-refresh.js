@@ -751,16 +751,17 @@ async function loadAllTextures() {
   // Create empty slots for all our images
   const loadedTextures = new Array(imageUrls.length).fill(null);
   
-  // PAGE SPEED FIX: Only wait for the first two images to load so the site appears instantly!
+  // Wait for the first two images so the site appears instantly
   loadedTextures = await loadSingleTexture(imageUrls);
   if (imageUrls.length > 1) {
-    loadedTextures = await loadSingleTexture(imageUrls);
+    loadedTextures = await loadSingleTexture(imageUrls) || loadedTextures;
   }
   
-  // Load the rest silently in the background without making the user wait
+  // Load the rest silently in the background
   for (let i = 2; i < imageUrls.length; i++) {
     loadSingleTexture(imageUrls[i]).then(texture => {
-      if (texture) loadedTextures[i] = texture;
+      // NETWORK FAILSAFE: If a background image fails to download, use the first image as a backup so the slider never freezes
+      loadedTextures[i] = texture || loadedTextures;
     });
   }
   return loadedTextures;
@@ -905,40 +906,53 @@ function initWebGL() {
 function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
   const targetIndex = getNextIndex(currentIndex);
-  
+
   // SPEED CHECK: If the target image is still downloading, wait half a second
   if (!textures[targetIndex]) {
     window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, 500);
     return;
   }
-  
-  // THE FIX: Now that we know the next image is downloaded, refresh the slots!
+
+  // Set slot 1 to current, slot 2 to target
   setTexturePair(currentIndex);
   
   isTransitioning = true;
   const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
 
-  uniforms.uTexture1.value = textures[currentIndex];
-  uniforms.uTexture2.value = textures[targetIndex];
-  uniforms.uTexture1Size.value = textureSize(textures[currentIndex]);
-  uniforms.uTexture2Size.value = textureSize(textures[targetIndex]);
-  uniforms.uProgress.value = 0;
-  animateTextOut();
-  window.clearTimeout(textSwapTimer);
-  textSwapTimer = window.setTimeout(() => animateTextIn(slideTitles[targetIndex]), TRANSITION_DURATION * 430);
+  gsap.to(uniforms.uProgress, {
+    value: 1,
+    duration: 1.8,
+    ease: "power2.inOut",
+    onComplete: () => {
+      // 1. We have successfully slid to the new image!
+      currentIndex = targetIndex;
+      
+      // 2. CRITICAL BOOMERANG FIX:
+      // Update the slots so the engine knows this new image is the "current" one.
+      setTexturePair(currentIndex); 
+      
+      // 3. Now it is safe to reset the progress bar without snapping backwards.
+      uniforms.uProgress.value = 0;
 
-  const completeTransition = () => {
-    currentIndex = targetIndex;
-    setTexturePair(currentIndex);
-    uniforms.uProgress.value = 0;
-    isTransitioning = false;
-    window.clearTimeout(transitionTimer);
-    transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-    if (shouldScrollAfterTransition) {
-      window.setTimeout(runAdventureScroll, 160);
+      if (shouldScrollAfterTransition) {
+        const durationMs = 2000;
+        const easeFn = cubicBezier(0.65, 0, 0.35, 1);
+        smoothScrollToElement(document.getElementById("welcome"), durationMs, easeFn, () => {
+          hasScrolledForAdventure = true;
+          runTitleSequence();
+          isTransitioning = false;
+          window.clearTimeout(transitionTimer);
+          transitionTimer = window.setTimeout(transitionToNext, slideDuration);
+        });
+      } else {
+        isTransitioning = false;
+        window.clearTimeout(transitionTimer);
+        transitionTimer = window.setTimeout(transitionToNext, slideDuration);
+      }
     }
-  };
+  });
+}
 
   const gsapRef = window.gsap;
   if (!gsapRef || prefersReducedMotion) {
