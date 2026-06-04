@@ -569,6 +569,9 @@ footer img:first-child {
   }
 
   .hamburger-btn {
+    display: flex !important; /* Forces the button to un-hide from the base theme */
+    align-items: center !important;
+    justify-content: center !important;
     position: fixed !important;
     right: clamp(.75rem, 3vw, 1.15rem) !important;
     bottom: calc(clamp(.75rem, 3vw, 1.15rem) + env(safe-area-inset-bottom)) !important;
