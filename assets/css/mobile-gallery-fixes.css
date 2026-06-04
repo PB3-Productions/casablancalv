@@ -427,12 +427,7 @@ footer img:first-child {
   }
 
   .nav-left {
-    display: block !important; /* Keeps the container alive so the gold button can show */
-  }
-  
-  .nav-left .nav-item,
-  .nav-left .nav-link {
-    display: none !important; /* Hides any leftover desktop links so they don't mess up mobile */
+    display: none !important;
   }
 
   .nav-right,
@@ -569,9 +564,6 @@ footer img:first-child {
   }
 
   .hamburger-btn {
-    display: flex !important; /* Forces the button to un-hide from the base theme */
-    align-items: center !important;
-    justify-content: center !important;
     position: fixed !important;
     right: clamp(.75rem, 3vw, 1.15rem) !important;
     bottom: calc(clamp(.75rem, 3vw, 1.15rem) + env(safe-area-inset-bottom)) !important;
