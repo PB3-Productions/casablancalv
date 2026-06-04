@@ -264,12 +264,7 @@ function injectFinalStyles() {
       .header-container,
       .brand-group,
       .main-logo,
-      .nav-bar-container,
-      .hamburger-btn,
-      #drawer,
-      #drawerOverlay,
-      .drawer,
-      .overlay {
+      .nav-bar-container {
         display: none !important;
         visibility: hidden !important;
         pointer-events: none !important;
