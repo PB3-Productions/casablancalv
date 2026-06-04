@@ -917,9 +917,8 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
     
-    // 1. Load the first image instantly
     const tex0 = await new Promise((resolve) => {
-      loader.load(imageUrls, (texture) => {
+        loader.load(imageUrls[0], (texture) => {
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
         texture.wrapS = THREE.ClampToEdgeWrapping;
@@ -936,7 +935,7 @@ async function startHero() {
     currentIndex = 0;
     
     initWebGL();
-    animateTextIn(validSlides.title);
+    animateTextIn(validSlides[0].title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
