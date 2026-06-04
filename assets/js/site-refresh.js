@@ -840,11 +840,12 @@ function getNextIndex(index) {
 }
 
 function setTexturePair(index) {
-  const nextIndex = getNextIndex(index);
+  // CRASH FIX: Safe mode. We point both slots to the current slide.
+  // The next slide is assigned later ONLY when we are 100% sure it has finished downloading!
   uniforms.uTexture1.value = textures[index];
-  uniforms.uTexture2.value = textures[nextIndex];
+  uniforms.uTexture2.value = textures[index];
   uniforms.uTexture1Size.value = textureSize(textures[index]);
-  uniforms.uTexture2Size.value = textureSize(textures[nextIndex]);
+  uniforms.uTexture2Size.value = textureSize(textures[index]);
 }
 
 function resizeRenderer() {
@@ -881,15 +882,15 @@ function initWebGL() {
   }, false);
 
   uniforms = {
-    uTexture1: { value: textures[0] },
-    uTexture2: { value: textures[getNextIndex(0)] },
-    uTexture1Size: { value: textureSize(textures[0]) },
-    uTexture2Size: { value: textureSize(textures[getNextIndex(0)]) },
+    uTexture1: { value: textures },
+    uTexture2: { value: textures }, // <--- SAFE MODE FIX
+    uTexture1Size: { value: textureSize(textures) },
+    uTexture2Size: { value: textureSize(textures) }, // <--- SAFE MODE FIX
     uResolution: { value: new THREE.Vector2(1, 1) },
     uProgress: { value: 0 },
     uTime: { value: 0 }
   };
-
+   
   const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: false });
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
   resizeRenderer();
