@@ -469,8 +469,8 @@ function initMobileFloatingActions() {
     heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
   }, { passive: true });
 
-    const isInsideHero = () => window.scrollY < heroCutoff;
-    const sync = () => {
+  const isInsideHero = () => window.scrollY < heroCutoff;
+  const sync = () => {
     const hidden = !MOBILE_QUERY.matches || isInsideHero();
     actions.classList.toggle("is-hidden", hidden);
     actions.classList.toggle("is-scrolling", isScrolling);
@@ -733,7 +733,6 @@ function runAdventureScroll() {
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
 
-// Helper to load just one image safely
 function loadSingleTexture(url) {
   return new Promise((resolve) => {
     loader.load(url, (texture) => {
@@ -743,24 +742,20 @@ function loadSingleTexture(url) {
       texture.wrapT = THREE.ClampToEdgeWrapping;
       texture.needsUpdate = true;
       resolve(texture);
-    }, undefined, () => resolve(null)); // If one fails, don't crash the whole site
+    }, undefined, () => resolve(null));
   });
 }
 
 async function loadAllTextures() {
-  // Create empty slots for all our images
   const loadedTextures = new Array(imageUrls.length).fill(null);
   
-  // Wait for the first two images so the site appears instantly
   loadedTextures = await loadSingleTexture(imageUrls);
   if (imageUrls.length > 1) {
     loadedTextures = await loadSingleTexture(imageUrls) || loadedTextures;
   }
   
-  // Load the rest silently in the background
   for (let i = 2; i < imageUrls.length; i++) {
     loadSingleTexture(imageUrls[i]).then(texture => {
-      // NETWORK FAILSAFE: If a background image fails to download, use the first image as a backup so the slider never freezes
       loadedTextures[i] = texture || loadedTextures;
     });
   }
@@ -843,8 +838,6 @@ function getNextIndex(index) {
 function setTexturePair(index) {
   const nextIndex = getNextIndex(index);
   const tex1 = textures[index];
-  
-  // Try to grab the next image. If it's still downloading (null), use tex1 as a safe placeholder
   const tex2 = textures[nextIndex] || tex1;
 
   uniforms.uTexture1.value = tex1;
@@ -876,10 +869,8 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-   // Turn on our "watcher" from Step 1
   heroObserver.observe(stage);
 
-  // The Crash Net: If the phone runs out of memory, fade to the static backup image
   renderer.domElement.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
     stage.classList.remove("is-ready"); 
@@ -888,7 +879,6 @@ function initWebGL() {
 
   uniforms = {
     uTexture1: { value: textures },
-    // Use the second image if it's ready, otherwise safely fallback
     uTexture2: { value: textures[getNextIndex(0)] || textures }, 
     uTexture1Size: { value: textureSize(textures) },
     uTexture2Size: { value: textureSize(textures[getNextIndex(0)] || textures) },
@@ -907,52 +897,34 @@ function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
   const targetIndex = getNextIndex(currentIndex);
 
-  // SPEED CHECK: If the target image is still downloading, wait half a second
   if (!textures[targetIndex]) {
     window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, 500);
     return;
   }
 
-  // Set slot 1 to current, slot 2 to target
   setTexturePair(currentIndex);
-  
   isTransitioning = true;
-  const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
+  
+  if (textSwapTimer) window.clearTimeout(textSwapTimer);
+  animateTextOut();
+  textSwapTimer = window.setTimeout(() => {
+    animateTextIn(slideTitles[targetIndex]);
+  }, (TRANSITION_DURATION / 2) * 1000);
 
-  gsap.to(uniforms.uProgress, {
-    value: 1,
-    duration: 1.8,
-    ease: "power2.inOut",
-    onComplete: () => {
-      // 1. We have successfully slid to the new image!
-      currentIndex = targetIndex;
-      
-      // 2. CRITICAL BOOMERANG FIX:
-      // Update the slots so the engine knows this new image is the "current" one.
-      setTexturePair(currentIndex); 
-      
-      // 3. Now it is safe to reset the progress bar without snapping backwards.
-      uniforms.uProgress.value = 0;
-
-      if (shouldScrollAfterTransition) {
-        const durationMs = 2000;
-        const easeFn = cubicBezier(0.65, 0, 0.35, 1);
-        smoothScrollToElement(document.getElementById("welcome"), durationMs, easeFn, () => {
-          hasScrolledForAdventure = true;
-          runTitleSequence();
-          isTransitioning = false;
-          window.clearTimeout(transitionTimer);
-          transitionTimer = window.setTimeout(transitionToNext, slideDuration);
-        });
-      } else {
-        isTransitioning = false;
-        window.clearTimeout(transitionTimer);
-        transitionTimer = window.setTimeout(transitionToNext, slideDuration);
-      }
+  const completeTransition = () => {
+    currentIndex = targetIndex;
+    setTexturePair(currentIndex);
+    uniforms.uProgress.value = 0;
+    isTransitioning = false;
+    
+    if (shouldRunAdventureScroll(currentIndex, targetIndex)) {
+      runAdventureScroll();
     }
-  });
-}
+    
+    window.clearTimeout(transitionTimer);
+    transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+  };
 
   const gsapRef = window.gsap;
   if (!gsapRef || prefersReducedMotion) {
@@ -970,14 +942,14 @@ function transitionToNext() {
   });
 }
 
-// Creates a "watcher" to see if the hero is on the screen
 let isHeroVisible = true;
 const heroObserver = new IntersectionObserver((entries) => {
-  isHeroVisible = entries.isIntersecting;
-}, { rootMargin: "150px" }); // Keeps it running just slightly off-screen so it's ready
+  if(entries && entries) {
+      isHeroVisible = entries.isIntersecting;
+  }
+}, { rootMargin: "150px" });
 
 function render() {
-  // Only do the heavy math and draw the animation IF the user can see it
   if (isHeroVisible && uniforms && renderer && scene && camera) {
     uniforms.uTime.value += clock.getDelta();
     renderer.render(scene, camera);
@@ -994,7 +966,7 @@ async function startHero() {
     textures = await loadAllTextures();
     currentIndex = 0;
     initWebGL();
-    animateTextIn(slideTitles[0]);
+    animateTextIn(slideTitles);
     render();
     if (textures.length > 1) transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
     window.addEventListener("resize", resizeRenderer, { passive: true });
