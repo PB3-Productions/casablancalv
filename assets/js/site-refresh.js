@@ -731,9 +731,8 @@ function runAdventureScroll() {
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
 
-function loadSingleTexture(url) {
-  return new Promise((resolve) => {
-    if (!url) return resolve(null);
+function loadAllTextures() {
+  return Promise.all(imageUrls.map((url) => new Promise((resolve) => {
     loader.load(url, (texture) => {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
@@ -742,26 +741,7 @@ function loadSingleTexture(url) {
       texture.needsUpdate = true;
       resolve(texture);
     }, undefined, () => resolve(null));
-  });
-}
-
-// 100% BULLETPROOF LOAD LOGIC
-async function loadAllTextures() {
-  // Wait for the first image immediately so we can show the screen
-  const firstTexture = await loadSingleTexture(imageUrls);
-  
-  // Fill the array with the first texture as an indestructible failsafe
-  const loaded = new Array(imageUrls.length).fill(firstTexture);
-  
-  // Then quietly load the rest in the background and swap them in as they finish
-  imageUrls.forEach((url, i) => {
-    if (i === 0) return; // already loaded
-    loadSingleTexture(url).then(tex => {
-      if (tex) loaded[i] = tex;
-    });
-  });
-  
-  return loaded;
+  })));
 }
 
 const vertexShader = `
@@ -839,8 +819,6 @@ function getNextIndex(index) {
 
 function setTexturePair(index) {
   const nextIndex = getNextIndex(index);
-  
-  // Safe mode: textures[index] is guaranteed to be populated now
   uniforms.uTexture1.value = textures[index];
   uniforms.uTexture2.value = textures[nextIndex];
   uniforms.uTexture1Size.value = textureSize(textures[index]);
@@ -891,7 +869,6 @@ function initWebGL() {
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
   resizeRenderer();
   
-  // Only hide the static fallback image if the 3D canvas successfully loaded a texture
   if (textures) {
     stage.classList.add("is-ready");
   }
@@ -899,10 +876,10 @@ function initWebGL() {
 
 function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
-  const targetIndex = getNextIndex(currentIndex);
-
+  
   isTransitioning = true;
-  setTexturePair(currentIndex);
+  const targetIndex = getNextIndex(currentIndex);
+  const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
   
   if (textSwapTimer) window.clearTimeout(textSwapTimer);
   animateTextOut();
@@ -916,7 +893,7 @@ function transitionToNext() {
     uniforms.uProgress.value = 0;
     isTransitioning = false;
     
-    if (shouldRunAdventureScroll(currentIndex, targetIndex)) {
+    if (shouldScrollAfterTransition) {
       runAdventureScroll();
     }
     
