@@ -747,15 +747,19 @@ function loadSingleTexture(url) {
 }
 
 async function loadAllTextures() {
-  const loadedTextures = new Array(imageUrls.length).fill(null);
+  // Create empty slots for all our images
+  let loadedTextures = new Array(imageUrls.length).fill(null);
   
+  // Wait for the first two images so the site appears instantly
   loadedTextures = await loadSingleTexture(imageUrls);
   if (imageUrls.length > 1) {
     loadedTextures = await loadSingleTexture(imageUrls) || loadedTextures;
   }
   
+  // Load the rest silently in the background
   for (let i = 2; i < imageUrls.length; i++) {
     loadSingleTexture(imageUrls[i]).then(texture => {
+      // NETWORK FAILSAFE: If a background image fails to download, use the first image as a backup so the slider never freezes
       loadedTextures[i] = texture || loadedTextures;
     });
   }
