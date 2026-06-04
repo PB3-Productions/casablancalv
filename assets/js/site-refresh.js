@@ -840,12 +840,16 @@ function getNextIndex(index) {
 }
 
 function setTexturePair(index) {
-  // CRASH FIX: Safe mode. We point both slots to the current slide.
-  // The next slide is assigned later ONLY when we are 100% sure it has finished downloading!
-  uniforms.uTexture1.value = textures[index];
-  uniforms.uTexture2.value = textures[index];
-  uniforms.uTexture1Size.value = textureSize(textures[index]);
-  uniforms.uTexture2Size.value = textureSize(textures[index]);
+  const nextIndex = getNextIndex(index);
+  const tex1 = textures[index];
+  
+  // Try to grab the next image. If it's still downloading (null), use tex1 as a safe placeholder
+  const tex2 = textures[nextIndex] || tex1;
+
+  uniforms.uTexture1.value = tex1;
+  uniforms.uTexture2.value = tex2;
+  uniforms.uTexture1Size.value = textureSize(tex1);
+  uniforms.uTexture2Size.value = textureSize(tex2);
 }
 
 function resizeRenderer() {
@@ -883,9 +887,10 @@ function initWebGL() {
 
   uniforms = {
     uTexture1: { value: textures },
-    uTexture2: { value: textures }, // <--- SAFE MODE FIX
+    // Use the second image if it's ready, otherwise safely fallback
+    uTexture2: { value: textures[getNextIndex(0)] || textures }, 
     uTexture1Size: { value: textureSize(textures) },
-    uTexture2Size: { value: textureSize(textures) }, // <--- SAFE MODE FIX
+    uTexture2Size: { value: textureSize(textures[getNextIndex(0)] || textures) },
     uResolution: { value: new THREE.Vector2(1, 1) },
     uProgress: { value: 0 },
     uTime: { value: 0 }
@@ -901,12 +906,15 @@ function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
   const targetIndex = getNextIndex(currentIndex);
   
-  // SPEED CHECK: If the next image is still downloading in the background, pause and try again in half a second
+  // SPEED CHECK: If the target image is still downloading, wait half a second
   if (!textures[targetIndex]) {
     window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, 500);
     return;
   }
+  
+  // THE FIX: Now that we know the next image is downloaded, refresh the slots!
+  setTexturePair(currentIndex);
   
   isTransitioning = true;
   const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
