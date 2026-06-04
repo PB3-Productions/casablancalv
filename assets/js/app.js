@@ -1,21 +1,20 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA LAS VEGAS FRONTEND APPLICATION
-   Purpose: Core page interactions, booking form, gallery, video controls,
-   and final mobile hero/title polish.
+   Purpose: Core navigation, reveals, gallery, video controls, booking form,
+   and analytics only. The protected split-hero override was removed so the
+   WebGL hero in site-refresh.js remains the only hero system.
    ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   const API_BASE_URL = "";
-  const $ = (selector, scope = document) => scope.querySelector(selector);
-  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const analyticsLayer = window.dataLayer || (window.dataLayer = []);
   const trackEvent = (eventName, params = {}) => {
     analyticsLayer.push({ event: eventName, ...params });
     if (typeof window.gtag === "function") window.gtag("event", eventName, params);
   };
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
-  /* =========================================================
-     BLOCK 2 START: HEADER + DRAWER
-     ========================================================= */
+  /* BLOCK 2 START: HEADER + DRAWER */
   const header = $("#site-header");
   const drawer = $("#drawer");
   const overlay = $("#drawerOverlay");
@@ -30,7 +29,7 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   let lastScrollY = Math.max(window.scrollY || 0, 0);
-  let headerTicking = false;
+  let ticking = false;
   const updateHeader = () => {
     const y = Math.max(window.scrollY || 0, 0);
     const delta = y - lastScrollY;
@@ -38,12 +37,11 @@ window.addEventListener("DOMContentLoaded", () => {
     else if (delta > 4) setShrunkHeader(true);
     else if (delta < -4) setShrunkHeader(false);
     lastScrollY = y;
-    headerTicking = false;
+    ticking = false;
   };
-
   window.addEventListener("scroll", () => {
-    if (headerTicking) return;
-    headerTicking = true;
+    if (ticking) return;
+    ticking = true;
     window.requestAnimationFrame(updateHeader);
   }, { passive: true });
   setShrunkHeader(lastScrollY > 24);
@@ -57,7 +55,6 @@ window.addEventListener("DOMContentLoaded", () => {
     drawer?.classList.remove("open");
     overlay?.classList.remove("active");
   };
-
   hamburger?.addEventListener("click", openDrawer);
   closeDrawer?.addEventListener("click", closeDrawerMenu);
   overlay?.addEventListener("click", closeDrawerMenu);
@@ -74,24 +71,21 @@ window.addEventListener("DOMContentLoaded", () => {
     drawerButtons[1].removeAttribute("target");
     drawerButtons[1].removeAttribute("rel");
   }
-  /* =========================================================
-     BLOCK 2 END: HEADER + DRAWER
-     ========================================================= */
+  /* BLOCK 2 END: HEADER + DRAWER */
 
-  /* =========================================================
-     BLOCK 3 START: CONTENT CLEANUP + REVEALS
-     ========================================================= */
+  /* BLOCK 3 START: CONTENT CLEANUP */
   const availabilityIntro = $("#availability .lead.light");
   if (availabilityIntro) {
     availabilityIntro.textContent = "Our team reviews your date window, event type, guest count, and concierge needs personally. We typically respond within 24–48 hours. If you have immediate questions or need to book ASAP, please call and speak with a sales agent.";
   }
-
   const privateEstateProofGrid = $$(".proof-grid").find((grid) => {
     const text = grid.textContent || "";
     return text.includes("Matterport 3D Tour") && text.includes("Calendar-Connected") && text.includes("VIP Concierge Layer");
   });
   privateEstateProofGrid?.remove();
+  /* BLOCK 3 END: CONTENT CLEANUP */
 
+  /* BLOCK 4 START: SCROLL REVEALS */
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -100,13 +94,9 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
   $$(".reveal").forEach((element) => revealObserver.observe(element));
-  /* =========================================================
-     BLOCK 3 END: CONTENT CLEANUP + REVEALS
-     ========================================================= */
+  /* BLOCK 4 END: SCROLL REVEALS */
 
-  /* =========================================================
-     BLOCK 4 START: STRUCTURED GALLERY
-     ========================================================= */
+  /* BLOCK 5 START: STRUCTURED GALLERY */
   let galleryImages = [];
   let galleryIndex = 0;
   const galleryFeatured = $("#galleryFeatured");
@@ -160,13 +150,9 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   lightboxClose?.addEventListener("click", () => lightbox?.classList.remove("active"));
   lightbox?.addEventListener("click", (event) => { if (event.target === lightbox) lightbox.classList.remove("active"); });
-  /* =========================================================
-     BLOCK 4 END: STRUCTURED GALLERY
-     ========================================================= */
+  /* BLOCK 5 END: STRUCTURED GALLERY */
 
-  /* =========================================================
-     BLOCK 5 START: VIDEO CONTROLS
-     ========================================================= */
+  /* BLOCK 6 START: VIDEO CONTROLS */
   const videoShell = $("#estateVideoShell");
   const estateVideo = $("#estateVideo");
   const pauseButton = $("#videoPause");
@@ -187,7 +173,6 @@ window.addEventListener("DOMContentLoaded", () => {
     button.textContent = text;
     return button;
   };
-
   const detachButton = makeVideoButton("videoDetach", "Detach");
   const largeButton = makeVideoButton("videoLarge", "Large");
   if (videoControls) {
@@ -202,7 +187,6 @@ window.addEventListener("DOMContentLoaded", () => {
     clearTimeout(controlsTimer);
     controlsTimer = setTimeout(() => videoShell.classList.add("controls-hidden"), 3000);
   };
-
   const playVideo = () => {
     if (!estateVideo) return;
     if (!videoStarted) {
@@ -218,7 +202,6 @@ window.addEventListener("DOMContentLoaded", () => {
   videoShell?.addEventListener("mousemove", showVideoControls);
   videoShell?.addEventListener("click", showVideoControls);
   videoShell?.addEventListener("touchstart", showVideoControls, { passive: true });
-
   pauseButton?.addEventListener("click", () => {
     showVideoControls();
     if (estateVideo.paused) {
@@ -269,13 +252,9 @@ window.addEventListener("DOMContentLoaded", () => {
     if (pauseButton) pauseButton.textContent = "Play";
     trackEvent("video_hide", { video_name: "Casablanca Las Vegas Estate Tour" });
   });
-  /* =========================================================
-     BLOCK 5 END: VIDEO CONTROLS
-     ========================================================= */
+  /* BLOCK 6 END: VIDEO CONTROLS */
 
-  /* =========================================================
-     BLOCK 6 START: BOOKING CALENDAR + PENDING INQUIRIES
-     ========================================================= */
+  /* BLOCK 7 START: BOOKING CALENDAR + PENDING INQUIRIES */
   const pad = (num) => String(num).padStart(2, "0");
   const toISODate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
   const addDays = (date, days) => { const copy = new Date(date); copy.setDate(copy.getDate() + days); return copy; };
@@ -372,370 +351,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
   $$("a[href^='tel:']").forEach((link) => link.addEventListener("click", () => trackEvent("phone_click", { phone_href: link.getAttribute("href") })));
-  /* =========================================================
-     BLOCK 6 END: BOOKING CALENDAR + PENDING INQUIRIES
-     ========================================================= */
-
-  /* =========================================================
-     BLOCK 7 START: HARD MOBILE HERO STACKING + WAVE TARGET FIX
-     ========================================================= */
-  const WAVE_KEY = "casablancaHeroAdventureWaveV8";
-  const FINAL_POLISH_STYLE_ID = "casablancaFinalPolishPatch";
-  const MOBILE_MEDIA = window.matchMedia("(max-width: 768px)");
-
-  const injectFinalPolishStyles = () => {
-    let style = document.getElementById(FINAL_POLISH_STYLE_ID);
-    if (!style) {
-      style = document.createElement("style");
-      style.id = FINAL_POLISH_STYLE_ID;
-      document.head.appendChild(style);
-    }
-
-    style.textContent = `
-      #welcome .intro-lead,
-      .estate-summary-card .lead,
-      .floorplan-section .lead,
-      #policies .lead,
-      .footer-brand-block .lead,
-      .footer-cta-card p:not(.eyebrow) {
-        text-align: left !important;
-        max-width: min(92vw, 760px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-
-      .footer-brand-block .lead,
-      .footer-cta-card p:not(.eyebrow) {
-        max-width: min(92vw, 30rem) !important;
-      }
-
-      .floorplan-caption {
-        margin: clamp(.65rem, 1.6vw, 1rem) auto 0 !important;
-        text-align: center !important;
-        color: rgba(21, 20, 19, .72) !important;
-        font-family: var(--font-body, Inter, sans-serif) !important;
-        font-size: clamp(.82rem, 1.4vw, .98rem) !important;
-        font-style: italic !important;
-        letter-spacing: .02em !important;
-      }
-
-      @media (max-width: 768px) {
-        .casa-webgl-hero #dynamic-title {
-          width: 100vw !important;
-          max-width: 100vw !important;
-          margin: 0 auto !important;
-          text-align: center !important;
-          transform-origin: center center !important;
-          display: block !important;
-        }
-
-        .casa-webgl-hero #dynamic-title.casa-force-stacked-title {
-          font-size: clamp(3.4rem, 18.5vw, 7.6rem) !important;
-          line-height: .72 !important;
-          letter-spacing: -0.058em !important;
-          transform: none !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-        }
-
-        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .mobile-title-line {
-          display: flex !important;
-          justify-content: center !important;
-          align-items: center !important;
-          flex-wrap: nowrap !important;
-          gap: .11em !important;
-          width: 100% !important;
-          max-width: 100vw !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-          text-align: center !important;
-          white-space: nowrap !important;
-        }
-
-        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .word-container {
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-        }
-
-        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .word {
-          white-space: nowrap !important;
-        }
-
-        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .mobile-title-line + .mobile-title-line {
-          margin-top: clamp(.12rem, .65vh, .34rem) !important;
-        }
-
-        .casa-webgl-hero #dynamic-title.casa-force-stacked-title .mobile-title-line[data-gap="large"] {
-          margin-top: clamp(.52rem, 1.95vh, 1.05rem) !important;
-        }
-
-        #welcome .intro-lead,
-        .estate-summary-card .lead,
-        .floorplan-section .lead,
-        #policies .lead,
-        .footer-brand-block .lead,
-        .footer-cta-card p:not(.eyebrow) {
-          max-width: min(91vw, 34rem) !important;
-        }
-      }
-    `;
-  };
-
-  const addFloorplanCaption = () => {
-    const floorplanCard = document.querySelector(".framed-floorplan");
-    if (!floorplanCard || document.querySelector(".floorplan-caption")) return;
-    const caption = document.createElement("p");
-    caption.className = "floorplan-caption";
-    caption.textContent = "(Actual floorplan)";
-    floorplanCard.insertAdjacentElement("afterend", caption);
-  };
-
-  const stackedTitlePlans = {
-    yournewvegasnight: [
-      { text: "Your", direction: "top" },
-      { text: "New", direction: "top" },
-      { text: "Vegas", direction: "bottom", gap: "large" },
-      { text: "Night", direction: "bottom" }
-    ],
-    yourpersonaloasis: [
-      { text: "Your", direction: "top" },
-      { text: "Personal", direction: "middle", gap: "large" },
-      { text: "Oasis", direction: "bottom", gap: "large" }
-    ],
-    somethingforeveryone: [
-      { text: "Something", direction: "top" },
-      { text: "For", direction: "middle", gap: "large" },
-      { text: "Everyone", direction: "bottom", gap: "large" }
-    ],
-    putyourfeetinthesand: [
-      { text: "Put Your", direction: "top" },
-      { text: "Feet In", direction: "middle", gap: "large" },
-      { text: "The Sand", direction: "bottom", gap: "large" }
-    ]
-  };
-
-  const collapseTitleKey = (text) => (text || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-
-  const makeStackedLine = (lineData) => {
-    const line = document.createElement("span");
-    line.className = `mobile-title-line casa-force-stack-line mobile-title-line-${lineData.direction}`;
-    if (lineData.gap) line.dataset.gap = lineData.gap;
-
-    lineData.text.split(" ").filter(Boolean).forEach((word, wordIndex, words) => {
-      const wordContainer = document.createElement("span");
-      wordContainer.className = "word-container";
-      const wordSpan = document.createElement("span");
-      wordSpan.className = "word";
-
-      Array.from(word).forEach((letter) => {
-        const char = document.createElement("span");
-        char.className = "char";
-        char.textContent = letter;
-        wordSpan.appendChild(char);
-      });
-
-      wordContainer.appendChild(wordSpan);
-      line.appendChild(wordContainer);
-      if (wordIndex < words.length - 1) line.appendChild(document.createTextNode(" "));
-    });
-
-    return line;
-  };
-
-  const animateStackedTitle = (title) => {
-    const gsapRef = window.gsap;
-    const allChars = title.querySelectorAll(".char");
-    title.dataset.stackReady = "false";
-
-    if (!gsapRef || !MOBILE_MEDIA.matches) {
-      allChars.forEach((char) => {
-        char.style.transform = "translateY(0%)";
-        char.style.opacity = "1";
-      });
-      title.dataset.stackReady = "true";
-      return;
-    }
-
-    const topChars = title.querySelectorAll(".mobile-title-line-top .char");
-    const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
-    const bottomChars = title.querySelectorAll(".mobile-title-line-bottom .char");
-
-    gsapRef.killTweensOf(allChars);
-    gsapRef.set(topChars, { y: "-145%", opacity: 0, rotateZ: -4 });
-    gsapRef.set(middleChars, { y: "0%", opacity: 0, scale: 0.92, rotateZ: 0 });
-    gsapRef.set(bottomChars, { y: "145%", opacity: 0, rotateZ: 4 });
-
-    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .62, ease: "expo.out", stagger: { each: .018, from: "start" } });
-    gsapRef.to(middleChars, { opacity: 1, scale: 1, duration: .42, delay: .02, ease: "expo.out", stagger: { each: .012, from: "start" } });
-    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .62, ease: "expo.out", stagger: { each: .018, from: "start" } });
-    window.setTimeout(() => {
-      if (title.isConnected) title.dataset.stackReady = "true";
-    }, 760);
-  };
-
-  const forceMiddleFadeWithExitingWords = () => {
-    if (!MOBILE_MEDIA.matches) return;
-
-    const title = document.getElementById("dynamic-title");
-    if (!title || !title.classList.contains("casa-force-stacked-title")) return;
-    if (title.dataset.stackReady !== "true") return;
-
-    const middleChars = title.querySelectorAll(".mobile-title-line-middle .char");
-    if (!middleChars.length) return;
-
-    const topSample = title.querySelector(".mobile-title-line-top .char");
-    const bottomSample = title.querySelector(".mobile-title-line-bottom .char");
-    const middleSample = middleChars[0];
-    const topOpacity = topSample ? parseFloat(window.getComputedStyle(topSample).opacity || "1") : 1;
-    const bottomOpacity = bottomSample ? parseFloat(window.getComputedStyle(bottomSample).opacity || "1") : 1;
-    const middleOpacity = parseFloat(window.getComputedStyle(middleSample).opacity || "1");
-
-    if (middleOpacity > 0.08 && (topOpacity < 0.86 || bottomOpacity < 0.86)) {
-      const gsapRef = window.gsap;
-      title.dataset.stackReady = "false";
-      if (gsapRef) {
-        gsapRef.killTweensOf(middleChars);
-        gsapRef.to(middleChars, { opacity: 0, scale: 0.92, duration: .16, ease: "power1.out", overwrite: true });
-      } else {
-        middleChars.forEach((char) => { char.style.opacity = "0"; });
-      }
-    }
-  };
-
-  const forceMobileTitleStacking = () => {
-    if (!MOBILE_MEDIA.matches) return;
-
-    const title = document.getElementById("dynamic-title");
-    if (!title) return;
-
-    const currentKey = collapseTitleKey(title.textContent);
-    const plan = stackedTitlePlans[currentKey];
-    if (!plan) return;
-
-    if (title.dataset.forceStackKey === currentKey && title.classList.contains("casa-force-stacked-title") && title.querySelector(".casa-force-stack-line")) return;
-
-    title.dataset.forceStackKey = currentKey;
-    title.dataset.stackReady = "false";
-    title.classList.add("casa-force-stacked-title");
-    title.textContent = "";
-    plan.forEach((lineData) => title.appendChild(makeStackedLine(lineData)));
-    animateStackedTitle(title);
-  };
-
-  const hasWaveRun = () => {
-    try {
-      return window.localStorage.getItem(WAVE_KEY) === "true";
-    } catch (error) {
-      return false;
-    }
-  };
-
-  const markWaveRun = () => {
-    try {
-      window.localStorage.setItem(WAVE_KEY, "true");
-    } catch (error) {}
-  };
-
-  const waveScrollToWelcome = () => {
-    const hero = document.querySelector(".casa-webgl-hero");
-    const welcomeTitle = document.querySelector("#welcome h1");
-    const fallbackTarget = document.getElementById("welcome");
-    const target = welcomeTitle || fallbackTarget;
-    if (!hero || !target || hasWaveRun()) return;
-    if (window.scrollY > (hero.offsetHeight || window.innerHeight) * 1.35) return;
-
-    markWaveRun();
-
-    const startY = window.scrollY || 0;
-    const offset = MOBILE_MEDIA.matches ? -19 : 175;
-    const endY = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
-    const distance = endY - startY;
-    const duration = 1600;
-    const startTime = performance.now();
-    const easeInOutCubic = (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-
-    const step = (now) => {
-      const progress = Math.min(1, (now - startTime) / duration);
-      const eased = easeInOutCubic(progress);
-      window.scrollTo(0, startY + distance * eased);
-      if (progress < 1) window.requestAnimationFrame(step);
-    };
-
-    window.requestAnimationFrame(step);
-  };
-
-  const forceFirstVisitHeroStart = () => {
-    try {
-      if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
-    } catch (error) {}
-
-    if (window.location.hash || hasWaveRun()) return;
-    window.setTimeout(() => window.scrollTo(0, 0), 40);
-    window.setTimeout(() => {
-      if (window.scrollY < window.innerHeight * 1.2) window.scrollTo(0, 0);
-    }, 420);
-  };
-
-  const initHeroWaveObserver = () => {
-    const startedAt = Date.now();
-    let finalBlankTimer = null;
-    let titleObserver = null;
-
-    const attach = () => {
-      const title = document.getElementById("dynamic-title");
-      if (!title || titleObserver) return Boolean(title);
-
-      titleObserver = new MutationObserver(() => {
-        window.requestAnimationFrame(forceMobileTitleStacking);
-        window.requestAnimationFrame(forceMiddleFadeWithExitingWords);
-        const text = (title.textContent || "").trim().replace(/\s+/g, " ");
-        const oldEnough = Date.now() - startedAt > 9000;
-
-        if (oldEnough && text === "" && !hasWaveRun()) {
-          window.clearTimeout(finalBlankTimer);
-          finalBlankTimer = window.setTimeout(waveScrollToWelcome, 1800);
-          return;
-        }
-
-        if (text !== "") window.clearTimeout(finalBlankTimer);
-      });
-
-      titleObserver.observe(title, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["style", "class"] });
-      forceMobileTitleStacking();
-      return true;
-    };
-
-    if (attach()) return;
-    const waitForTitle = window.setInterval(() => {
-      if (attach()) window.clearInterval(waitForTitle);
-    }, 120);
-    window.setTimeout(() => window.clearInterval(waitForTitle), 60000);
-  };
-
-  injectFinalPolishStyles();
-  forceFirstVisitHeroStart();
-  addFloorplanCaption();
-  initHeroWaveObserver();
-
-  const persistentTitleStacker = window.setInterval(() => {
-    forceMobileTitleStacking();
-    forceMiddleFadeWithExitingWords();
-  }, 40);
-  window.setTimeout(() => window.clearInterval(persistentTitleStacker), 300000);
-
-  window.setTimeout(() => {
-    injectFinalPolishStyles();
-    addFloorplanCaption();
-    forceMobileTitleStacking();
-  }, 900);
-
-  window.addEventListener("resize", forceMobileTitleStacking, { passive: true });
-  document.addEventListener("visibilitychange", forceMobileTitleStacking);
-  /* =========================================================
-     BLOCK 7 END: HARD MOBILE HERO STACKING + WAVE TARGET FIX
-     ========================================================= */
+  /* BLOCK 7 END: BOOKING CALENDAR + PENDING INQUIRIES */
 });
 /* =========================================================
    BLOCK 1 END: CASABLANCA LAS VEGAS FRONTEND APPLICATION
