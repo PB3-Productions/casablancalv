@@ -733,8 +733,9 @@ function runAdventureScroll() {
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
 
-function loadAllTextures() {
-  return Promise.all(imageUrls.map((url) => new Promise((resolve, reject) => {
+// Helper to load just one image safely
+function loadSingleTexture(url) {
+  return new Promise((resolve) => {
     loader.load(url, (texture) => {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
@@ -742,8 +743,27 @@ function loadAllTextures() {
       texture.wrapT = THREE.ClampToEdgeWrapping;
       texture.needsUpdate = true;
       resolve(texture);
-    }, undefined, reject);
-  })));
+    }, undefined, () => resolve(null)); // If one fails, don't crash the whole site
+  });
+}
+
+async function loadAllTextures() {
+  // Create empty slots for all our images
+  const loadedTextures = new Array(imageUrls.length).fill(null);
+  
+  // PAGE SPEED FIX: Only wait for the first two images to load so the site appears instantly!
+  loadedTextures = await loadSingleTexture(imageUrls);
+  if (imageUrls.length > 1) {
+    loadedTextures = await loadSingleTexture(imageUrls);
+  }
+  
+  // Load the rest silently in the background without making the user wait
+  for (let i = 2; i < imageUrls.length; i++) {
+    loadSingleTexture(imageUrls[i]).then(texture => {
+      if (texture) loadedTextures[i] = texture;
+    });
+  }
+  return loadedTextures;
 }
 
 const vertexShader = `
@@ -878,8 +898,16 @@ function initWebGL() {
 
 function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
-  isTransitioning = true;
   const targetIndex = getNextIndex(currentIndex);
+  
+  // SPEED CHECK: If the next image is still downloading in the background, pause and try again in half a second
+  if (!textures[targetIndex]) {
+    window.clearTimeout(transitionTimer);
+    transitionTimer = window.setTimeout(transitionToNext, 500);
+    return;
+  }
+  
+  isTransitioning = true;
   const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
 
   uniforms.uTexture1.value = textures[currentIndex];
