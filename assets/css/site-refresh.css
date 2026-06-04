@@ -51,21 +51,21 @@
   }
 
   .nav-bar-container {
-    grid-template-columns: minmax(0, 1fr) clamp(230px, 22vw, 450px) minmax(0, 1fr) !important;
-    min-height: clamp(120px, 8.2vw, 138px) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(250px, 24vw, 500px) minmax(0, 1fr) !important;
+    min-height: clamp(140px, 9.5vw, 160px) !important;
     column-gap: clamp(.5rem, 1vw, 1.2rem) !important;
   }
 
   .site-header.is-scrolled .nav-bar-container {
-    grid-template-columns: minmax(0, 1fr) clamp(180px, 15vw, 280px) minmax(0, 1fr) !important;
-    min-height: clamp(82px, 5.6vw, 98px) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(180px, 16vw, 310px) minmax(0, 1fr) !important;
+    min-height: clamp(90px, 6vw, 110px) !important;
   }
 
   .brand-group {
-    top: 50% !important;
+    top: 55% !important;
     left: 50% !important;
-    width: clamp(220px, 22vw, 450px) !important;
-    height: clamp(108px, 11vw, 220px) !important;
+    width: clamp(240px, 24vw, 500px) !important;
+    height: clamp(120px, 12vw, 250px) !important;
     transform: translate(-50%, -50%) !important;
     z-index: 44 !important;
   }
@@ -73,27 +73,27 @@
   .logo-wrapper {
     top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -40%) !important;
+    transform: translate(-50%, -12%) !important;
   }
 
   .main-logo {
-    width: clamp(218px, 22vw, 440px) !important;
+    width: clamp(240px, 24vw, 484px) !important;
     max-width: none !important;
     height: auto !important;
     filter: drop-shadow(0 13px 20px rgba(0,0,0,.65)) !important;
   }
 
   .site-header.is-scrolled .brand-group {
-    width: clamp(150px, 15vw, 280px) !important;
-    height: clamp(74px, 7.5vw, 140px) !important;
+    width: clamp(165px, 16vw, 310px) !important;
+    height: clamp(80px, 8vw, 155px) !important;
   }
 
   .site-header.is-scrolled .logo-wrapper {
-    transform: translate(-50%, -36%) !important;
+    transform: translate(-50%, -15%) !important;
   }
 
   .site-header.is-scrolled .main-logo {
-    width: clamp(148px, 15vw, 270px) !important;
+    width: clamp(160px, 16vw, 297px) !important;
   }
 
   .nav-left {
