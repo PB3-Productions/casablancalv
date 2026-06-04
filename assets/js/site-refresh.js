@@ -461,10 +461,8 @@ function initMobileFloatingActions() {
   let isScrolling = false;
   let scrollTimer = null;
 
-  // Measure the hero once and remember it
   let heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
   
-  // Only remeasure if they rotate their phone
   window.addEventListener("resize", () => {
     heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
   }, { passive: true });
@@ -694,7 +692,7 @@ function markAdventureScrollRun() {
   try {
     window.localStorage.setItem(ADVENTURE_SCROLL_KEY, "true");
   } catch (error) {
-    // No-op when localStorage is unavailable.
+    // No-op
   }
 }
 
@@ -735,6 +733,7 @@ loader.crossOrigin = "anonymous";
 
 function loadSingleTexture(url) {
   return new Promise((resolve) => {
+    if (!url) return resolve(null);
     loader.load(url, (texture) => {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
@@ -746,24 +745,23 @@ function loadSingleTexture(url) {
   });
 }
 
+// 100% BULLETPROOF LOAD LOGIC
 async function loadAllTextures() {
-  // Create empty slots for all our images
-  let loadedTextures = new Array(imageUrls.length).fill(null);
+  // Wait for the first image immediately so we can show the screen
+  const firstTexture = await loadSingleTexture(imageUrls);
   
-  // Wait for the first two images so the site appears instantly
-  loadedTextures = await loadSingleTexture(imageUrls);
-  if (imageUrls.length > 1) {
-    loadedTextures = await loadSingleTexture(imageUrls) || loadedTextures;
-  }
+  // Fill the array with the first texture as an indestructible failsafe
+  const loaded = new Array(imageUrls.length).fill(firstTexture);
   
-  // Load the rest silently in the background
-  for (let i = 2; i < imageUrls.length; i++) {
-    loadSingleTexture(imageUrls[i]).then(texture => {
-      // NETWORK FAILSAFE: If a background image fails to download, use the first image as a backup so the slider never freezes
-      loadedTextures[i] = texture || loadedTextures;
+  // Then quietly load the rest in the background and swap them in as they finish
+  imageUrls.forEach((url, i) => {
+    if (i === 0) return; // already loaded
+    loadSingleTexture(url).then(tex => {
+      if (tex) loaded[i] = tex;
     });
-  }
-  return loadedTextures;
+  });
+  
+  return loaded;
 }
 
 const vertexShader = `
@@ -841,13 +839,12 @@ function getNextIndex(index) {
 
 function setTexturePair(index) {
   const nextIndex = getNextIndex(index);
-  const tex1 = textures[index];
-  const tex2 = textures[nextIndex] || tex1;
-
-  uniforms.uTexture1.value = tex1;
-  uniforms.uTexture2.value = tex2;
-  uniforms.uTexture1Size.value = textureSize(tex1);
-  uniforms.uTexture2Size.value = textureSize(tex2);
+  
+  // Safe mode: textures[index] is guaranteed to be populated now
+  uniforms.uTexture1.value = textures[index];
+  uniforms.uTexture2.value = textures[nextIndex];
+  uniforms.uTexture1Size.value = textureSize(textures[index]);
+  uniforms.uTexture2Size.value = textureSize(textures[nextIndex]);
 }
 
 function resizeRenderer() {
@@ -878,14 +875,13 @@ function initWebGL() {
   renderer.domElement.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
     stage.classList.remove("is-ready"); 
-    console.warn("Device memory low: Gracefully falling back to static image.");
   }, false);
 
   uniforms = {
     uTexture1: { value: textures },
-    uTexture2: { value: textures[getNextIndex(0)] || textures }, 
+    uTexture2: { value: textures[getNextIndex(0)] }, 
     uTexture1Size: { value: textureSize(textures) },
-    uTexture2Size: { value: textureSize(textures[getNextIndex(0)] || textures) },
+    uTexture2Size: { value: textureSize(textures[getNextIndex(0)]) },
     uResolution: { value: new THREE.Vector2(1, 1) },
     uProgress: { value: 0 },
     uTime: { value: 0 }
@@ -894,21 +890,19 @@ function initWebGL() {
   const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: false });
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
   resizeRenderer();
-  stage.classList.add("is-ready");
+  
+  // Only hide the static fallback image if the 3D canvas successfully loaded a texture
+  if (textures) {
+    stage.classList.add("is-ready");
+  }
 }
 
 function transitionToNext() {
   if (isTransitioning || textures.length < 2) return;
   const targetIndex = getNextIndex(currentIndex);
 
-  if (!textures[targetIndex]) {
-    window.clearTimeout(transitionTimer);
-    transitionTimer = window.setTimeout(transitionToNext, 500);
-    return;
-  }
-
-  setTexturePair(currentIndex);
   isTransitioning = true;
+  setTexturePair(currentIndex);
   
   if (textSwapTimer) window.clearTimeout(textSwapTimer);
   animateTextOut();
