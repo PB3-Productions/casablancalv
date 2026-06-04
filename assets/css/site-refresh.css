@@ -7,7 +7,7 @@
    ========================================================= */
 
 :root {
-  --casa-new-logo: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a20dd265cd41fa7c6b88dfa.webp');
+  --casa-new-logo: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1cc593d7322952d16d78e3.webp');
   --casa-webgl-fallback: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b15.webp');
   --lux-black: #050505;
   --lux-black-2: #0d0b08;
@@ -51,21 +51,21 @@
   }
 
   .nav-bar-container {
-    grid-template-columns: minmax(0, 1fr) clamp(250px, 24vw, 500px) minmax(0, 1fr) !important;
-    min-height: clamp(140px, 9.5vw, 160px) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(230px, 16vw, 305px) minmax(0, 1fr) !important;
+    min-height: clamp(120px, 8.2vw, 138px) !important;
     column-gap: clamp(.5rem, 1vw, 1.2rem) !important;
   }
 
   .site-header.is-scrolled .nav-bar-container {
-    grid-template-columns: minmax(0, 1fr) clamp(180px, 16vw, 310px) minmax(0, 1fr) !important;
-    min-height: clamp(90px, 6vw, 110px) !important;
+    grid-template-columns: minmax(0, 1fr) clamp(180px, 12vw, 230px) minmax(0, 1fr) !important;
+    min-height: clamp(82px, 5.6vw, 98px) !important;
   }
 
   .brand-group {
-    top: 55% !important;
+    top: 50% !important;
     left: 50% !important;
-    width: clamp(240px, 24vw, 500px) !important;
-    height: clamp(120px, 12vw, 250px) !important;
+    width: clamp(220px, 15.5vw, 305px) !important;
+    height: clamp(108px, 7.4vw, 150px) !important;
     transform: translate(-50%, -50%) !important;
     z-index: 44 !important;
   }
@@ -73,27 +73,27 @@
   .logo-wrapper {
     top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -22%) !important;
+    transform: translate(-50%, -40%) !important;
   }
 
   .main-logo {
-    width: clamp(240px, 24vw, 484px) !important;
+    width: clamp(218px, 15.5vw, 300px) !important;
     max-width: none !important;
     height: auto !important;
     filter: drop-shadow(0 13px 20px rgba(0,0,0,.65)) !important;
   }
 
   .site-header.is-scrolled .brand-group {
-    width: clamp(165px, 16vw, 310px) !important;
-    height: clamp(80px, 8vw, 155px) !important;
+    width: clamp(150px, 10.6vw, 205px) !important;
+    height: clamp(74px, 5.1vw, 102px) !important;
   }
 
   .site-header.is-scrolled .logo-wrapper {
-    transform: translate(-50%, -23%) !important;
+    transform: translate(-50%, -36%) !important;
   }
 
   .site-header.is-scrolled .main-logo {
-    width: clamp(160px, 16vw, 297px) !important;
+    width: clamp(148px, 10.5vw, 200px) !important;
   }
 
   .nav-left {
