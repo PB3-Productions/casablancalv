@@ -616,7 +616,12 @@ function animateTextIn(title) {
   if (!titleContainer) return;
   titleContainer.textContent = "";
   titleContainer.style.setProperty("--mobile-title-scale", "1");
-  if (!title || !title.trim()) return;
+
+  // Safety: ensure title is a string (fallback to empty)
+  if (typeof title !== "string") title = String(title || "");
+  if (!title.trim()) return;
+  
+  // … keep the rest of the function exactly as it was
 
   if (MOBILE_QUERY.matches) {
     const [topLine, bottomLine] = splitMobileTitle(title);
@@ -935,9 +940,10 @@ async function startHero() {
     currentIndex = 0;
     
     initWebGL();
-    animateTextIn(validSlides[0].title);
-    render();
-    window.addEventListener("resize", resizeRenderer, { passive: true });
+console.log("Title type:", typeof validSlides[0].title, "| Title value:", validSlides[0].title);
+animateTextIn(validSlides[0].title);
+render();
+window.addEventListener("resize", resizeRenderer, { passive: true });
 
     // 2. Load the rest sequentially in the background
     for (let i = 1; i < imageUrls.length; i++) {
