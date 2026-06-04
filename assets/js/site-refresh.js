@@ -461,8 +461,16 @@ function initMobileFloatingActions() {
   let isScrolling = false;
   let scrollTimer = null;
 
-  const isInsideHero = () => window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.82;
-  const sync = () => {
+  // Measure the hero once and remember it
+  let heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
+  
+  // Only remeasure if they rotate their phone
+  window.addEventListener("resize", () => {
+    heroCutoff = (hero.offsetHeight || window.innerHeight) * 0.82;
+  }, { passive: true });
+
+    const isInsideHero = () => window.scrollY < heroCutoff;
+    const sync = () => {
     const hidden = !MOBILE_QUERY.matches || isInsideHero();
     actions.classList.toggle("is-hidden", hidden);
     actions.classList.toggle("is-scrolling", isScrolling);
@@ -842,6 +850,16 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
+   // Turn on our "watcher" from Step 1
+  heroObserver.observe(stage);
+
+  // The Crash Net: If the phone runs out of memory, fade to the static backup image
+  renderer.domElement.addEventListener('webglcontextlost', (event) => {
+    event.preventDefault();
+    stage.classList.remove("is-ready"); 
+    console.warn("Device memory low: Gracefully falling back to static image.");
+  }, false);
+
   uniforms = {
     uTexture1: { value: textures[0] },
     uTexture2: { value: textures[getNextIndex(0)] },
@@ -901,9 +919,18 @@ function transitionToNext() {
   });
 }
 
+// Creates a "watcher" to see if the hero is on the screen
+let isHeroVisible = true;
+const heroObserver = new IntersectionObserver((entries) => {
+  isHeroVisible = entries.isIntersecting;
+}, { rootMargin: "150px" }); // Keeps it running just slightly off-screen so it's ready
+
 function render() {
-  if (uniforms) uniforms.uTime.value += clock.getDelta();
-  if (renderer && scene && camera) renderer.render(scene, camera);
+  // Only do the heavy math and draw the animation IF the user can see it
+  if (isHeroVisible && uniforms && renderer && scene && camera) {
+    uniforms.uTime.value += clock.getDelta();
+    renderer.render(scene, camera);
+  }
   window.requestAnimationFrame(render);
 }
 
