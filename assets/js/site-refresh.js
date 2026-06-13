@@ -129,6 +129,16 @@ function injectFinalStyles() {
     }
 
     @media (max-width: 768px) {
+      /* AGGRESSIVELY HIDE TOP HEADER, LOGO & BUTTONS */
+      #site-header, .site-header, header, .header-container {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        height: 0 !important;
+        overflow: hidden !important;
+      }
+
       #welcome .title-lg {
         font-size: 2.25rem !important;
         line-height: 1.2 !important;
@@ -252,20 +262,40 @@ function ensureHeroText() {
       .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity, filter; overflow: visible !important; }
       .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; white-space: normal !important; line-height: 1.1 !important; }
       .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.18rem, .9vh, .55rem) !important; }
+      
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
           max-width: 96vw !important;
-          font-size: clamp(2.5rem, 14vw, 4.5rem) !important;
-          line-height: 1.1 !important;
+          font-size: clamp(3.2rem, 16vw, 5.5rem) !important;
+          line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-          padding-bottom: .38em !important;
-          overflow-wrap: break-word !important;
-          word-wrap: break-word !important;
-          white-space: normal !important;
+          padding: 0 0 .38em 0 !important;
+          transform: scale(var(--mobile-title-scale, 1)) !important;
+          transform-origin: center center !important;
         }
-        .casa-webgl-hero .word-container { margin: 0 .07em !important; padding: 0 .01em .08em !important; }
+        .casa-webgl-hero .mobile-title-line {
+          display: flex !important;
+          flex-wrap: wrap !important;
+          justify-content: center !important;
+          align-items: center !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          column-gap: 0.25em !important;
+          row-gap: 0.15em !important;
+          margin-top: 0 !important;
+        }
+        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+          margin-top: 0.15em !important;
+        }
+        .casa-webgl-hero .word-container {
+          margin: 0 !important;
+          padding: 0 !important;
+          display: inline-flex !important;
+        }
+        .casa-webgl-hero .word {
+          white-space: nowrap !important;
+          display: inline-flex !important;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -305,8 +335,8 @@ function splitMobileTitle(title) {
   if (title === "Put Your Feet In the Sand") return ["Put Your", "Feet In the", "Sand"];
   if (title === "Beauty Redefined") return ["Beauty", "", "Redefined"];
   if (title === "Off-Strip Paradise") return ["Off-Strip", "", "Paradise"];
-  if (words.length >= 3) return [words[0], words.slice(1, -1).join(" "), words[words.length - 1]];
-  if (words.length === 2) return [words[0], "", words[1]];
+  if (words.length >= 3) return [words, words.slice(1, -1).join(" "), words[words.length - 1]];
+  if (words.length === 2) return [words, "", words];
   return [title, "", ""];
 }
 
@@ -316,16 +346,9 @@ function fitMobileTitleToViewport() {
   const titleContainer = document.querySelector("#dynamic-title");
   if (!titleContainer) return;
 
-  titleContainer.style.setProperty("--mobile-title-scale", "1");
-
+  // Lock the scale to 1 so the text stays massive and relies on the Flexbox CSS to wrap words securely!
   window.requestAnimationFrame(() => {
-    const lines = Array.from(titleContainer.querySelectorAll(".mobile-title-line"));
-    if (!lines.length) return;
-
-    const maxLineWidth = Math.max(...lines.map((line) => line.scrollWidth));
-    const availableWidth = window.innerWidth * 0.96;
-    const scale = Math.min(1, availableWidth / Math.max(maxLineWidth, 1));
-    titleContainer.style.setProperty("--mobile-title-scale", String(Math.max(0.4, scale)));
+    titleContainer.style.setProperty("--mobile-title-scale", "1");
   });
 }
 
@@ -333,7 +356,7 @@ function animateTextIn(title) {
   const titleContainer = ensureHeroText();
   if (!titleContainer) return;
 
-  if (Array.isArray(title)) title = title[0] || "";
+  if (Array.isArray(title)) title = title || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
 
@@ -531,7 +554,7 @@ function resizeRenderer() {
 
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
-  if (!stage || !validSlides[0]?.texture) return;
+  if (!stage || !validSlides?.texture) return;
 
   scene = new THREE.Scene();
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -540,7 +563,7 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-  const firstTexture = validSlides[0].texture;
+  const firstTexture = validSlides.texture;
   uniforms = {
     uTexture1: { value: firstTexture },
     uTexture2: { value: firstTexture },
@@ -620,14 +643,14 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    const tex0 = await loadHeroTexture(imageUrls[0]);
+    const tex0 = await loadHeroTexture(imageUrls);
     if (!tex0) throw new Error("Primary image failed");
 
-    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
+    validSlides.push({ texture: tex0, title: slideTitles || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides[0].title);
+    animateTextIn(validSlides.title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
