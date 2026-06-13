@@ -254,7 +254,7 @@ function injectFinalStyles() {
     }
 
     @media (max-width: 768px) {
-      /* AGGRESSIVELY HIDE TOP HEADER, LOGO & BUTTONS */
+      /* PERFECT MOBILE HEADER HIDING (CSS ONLY) */
       #site-header,
       .site-header,
       header,
@@ -346,6 +346,15 @@ function injectFinalStyles() {
         max-width: min(92vw, 520px) !important;
         margin-left: auto !important;
         margin-right: auto !important;
+      }
+
+      #welcome .title-lg {
+        font-size: 2.25rem !important;
+        line-height: 1.2 !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
+        padding: 0 10px !important;
       }
     }
   `;
@@ -564,26 +573,30 @@ function ensureHeroText() {
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
+          transform: scale(var(--mobile-title-scale, 1)) !important;
+          transform-origin: center center !important;
         }
-        
-        /* MAGIC FIX: Flexbox forces overlapping words apart safely! */
+
+        /* PURE CSS FLEXBOX MAGIC FOR MOBILE TEXT OVERLAPPING */
         .casa-webgl-hero .mobile-title-line {
           display: flex !important;
           flex-wrap: wrap !important;
           justify-content: center !important;
           align-items: center !important;
           width: 100% !important;
+          max-width: 100% !important;
           column-gap: 0.25em !important;
           row-gap: 0.15em !important;
           margin-top: 0 !important;
         }
-
-        .casa-webgl-hero .word-container { 
-          margin: 0 !important; 
+        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+          margin-top: 0.15em !important;
+        }
+        .casa-webgl-hero .word-container {
+          margin: 0 !important;
           padding: 0 !important;
           display: inline-flex !important;
         }
-
         .casa-webgl-hero .word {
           white-space: nowrap !important;
           display: inline-flex !important;
@@ -631,8 +644,7 @@ function fitMobileTitleToViewport() {
   if (!titleContainer) return;
 
   window.requestAnimationFrame(() => {
-    // Locks the scale to 1 so text stays massive. 
-    // Flexbox CSS will safely drop the overflow to the next line without crashing GSAP!
+    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line.
     titleContainer.style.setProperty("--mobile-title-scale", "1");
   });
 }
@@ -645,7 +657,7 @@ function animateTextIn(title) {
   titleContainer.style.setProperty("--mobile-title-scale", "1");
 
   // Safety: ensure title is a string
-  if (Array.isArray(title)) title = title || "";
+  if (Array.isArray(title)) title = title[0] || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
   if (!title) return;
@@ -657,7 +669,9 @@ function animateTextIn(title) {
     top.className = "mobile-title-line mobile-title-line-top";
     bottom.className = "mobile-title-line mobile-title-line-bottom";
     createWordSpans(topLine, top);
-    createWordSpans(bottomLine, bottom);
+    if (bottomLine) {
+        createWordSpans(bottomLine, bottom);
+    }
     titleContainer.appendChild(top);
     if (bottomLine) titleContainer.appendChild(bottom);
     fitMobileTitleToViewport();
@@ -681,11 +695,14 @@ function animateTextIn(title) {
     const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
     
     gsapRef.killTweensOf(chars);
-    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
-    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
-    
-    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    if (topChars.length) {
+        gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+        gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    }
+    if (bottomChars.length) {
+        gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
+        gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    }
     return;
   }
 
@@ -700,8 +717,11 @@ function animateTextOut() {
   if (!titleContainer || !gsapRef || prefersReducedMotion) return;
 
   if (MOBILE_QUERY.matches) {
-    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-top .char"), { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
-    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-bottom .char"), { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
+    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
+
+    if (topChars.length) gsapRef.to(topChars, { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    if (bottomChars.length) gsapRef.to(bottomChars, { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
     return;
   }
 
@@ -785,21 +805,6 @@ const fragmentShader = `
   }
 `;
 
-function applyTextureSettings(texture) {
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.wrapS = THREE.ClampToEdgeWrapping;
-  texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.needsUpdate = true;
-  return texture;
-}
-
-function loadHeroTexture(url) {
-  return new Promise((resolve) => {
-    loader.load(url, (texture) => resolve(applyTextureSettings(texture)), undefined, () => resolve(null));
-  });
-}
-
 function textureSize(texture) {
   const image = texture && texture.image;
   return new THREE.Vector2(image?.width || 1, image?.height || 1);
@@ -838,7 +843,7 @@ function resizeRenderer() {
 
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
-  if (!stage || !validSlides?.texture) return;
+  if (!stage || !validSlides[0]?.texture) return;
 
   scene = new THREE.Scene();
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -847,7 +852,7 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-  const firstTexture = validSlides.texture;
+  const firstTexture = validSlides[0].texture;
   uniforms = {
     uTexture1: { value: firstTexture },
     uTexture2: { value: firstTexture },
@@ -927,28 +932,51 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    const tex0 = await loadHeroTexture(imageUrls);
+    // Restored your exact working image loading logic!
+    const tex0 = await new Promise((resolve) => {
+        loader.load(imageUrls[0], (texture) => {
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.needsUpdate = true;
+        resolve(texture);
+      }, undefined, () => resolve(null));
+    });
+
     if (!tex0) throw new Error("Primary image failed");
 
-    // Fix applied so the comma-splosion doesn't happen
-    validSlides.push({ texture: tex0, title: slideTitles || "" });
+    // Fix: Only send the first title into the array, not all 9!
+    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides.title);
+    animateTextIn(validSlides[0].title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
+    // Restored your exact working image loading logic for loop!
     for (let i = 1; i < imageUrls.length; i++) {
-      const tex = await loadHeroTexture(imageUrls[i]);
-      if (!tex) continue;
-
-      validSlides.push({ texture: tex, title: slideTitles[i] || "" });
-
-      if (validSlides.length === 2) {
-        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+      const tex = await new Promise((resolve) => {
+        loader.load(imageUrls[i], (texture) => {
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.wrapS = THREE.ClampToEdgeWrapping;
+          texture.wrapT = THREE.ClampToEdgeWrapping;
+          texture.needsUpdate = true;
+          resolve(texture);
+        }, undefined, () => resolve(null));
+      });
+      
+      if (tex) {
+        validSlides.push({ texture: tex, title: slideTitles[i] || "" });
+        
+        if (validSlides.length === 2) {
+          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+        }
       }
     }
+
   } catch (error) {
     console.error("Hero failed to initialize:", error);
     animateTextIn("Luxury Awaits");
@@ -992,7 +1020,18 @@ function runAdventureScroll() {
 
   markAdventureScrollRun();
 
+  const gsapRef = window.gsap;
   const targetTop = Math.max(0, target.getBoundingClientRect().top + window.scrollY);
+
+  if (gsapRef && !prefersReducedMotion) {
+    gsapRef.to(window, {
+      scrollTo: { y: targetTop, autoKill: true },
+      duration: 1.45,
+      ease: "power3.inOut"
+    });
+    return;
+  }
+
   window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? "auto" : "smooth" });
 }
 /* =========================================================
