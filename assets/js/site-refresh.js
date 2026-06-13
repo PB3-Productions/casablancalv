@@ -537,12 +537,8 @@ function ensureHeroText() {
         overflow: visible !important;
       }
       .casa-webgl-hero #dynamic-title {
-        display: flex !important;                /* Stack lines vertically */
-        flex-direction: column !important;
-        align-items: center !important;          /* Horizontal center */
-        justify-content: center !important;      /* Vertical center */
-        gap: clamp(0.42rem, 1.75vh, 1rem) !important;
-        width: auto !important;
+        display: block !important;                /* DESKTOP: normal block flow */
+        width: 100% !important;
         max-width: min(94vw, 1320px) !important;
         margin: 0 auto !important;
         padding: 0.18em 0.06em 0.32em !important;
@@ -579,15 +575,18 @@ function ensureHeroText() {
 
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
+          display: flex !important;               /* Stack lines vertically on mobile only */
+          flex-direction: column !important;
+          align-items: center !important;          /* Horizontal center */
+          justify-content: center !important;      /* Vertical center */
+          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important;
           max-width: 96vw !important;
-          /* DOUBLED FONT SIZE – 2x the original mobile clamp */
-          font-size: clamp(6.4rem, 32vw, 11rem) !important;
+          font-size: clamp(6.4rem, 32vw, 11rem) !important;  /* DOUBLED FONT SIZE */
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
           transform: scale(var(--mobile-title-scale, 1)) !important;
           transform-origin: center center !important;
-          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important; /* tighter between lines on mobile */
         }
       }
     `;
