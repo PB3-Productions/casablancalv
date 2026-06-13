@@ -18,6 +18,10 @@ window.addEventListener("DOMContentLoaded", () => {
   const installHeroTitleSafetyPatch = () => {
     const HERO_TITLE_SIGNATURE = "Off-Strip Paradise";
     const HERO_TITLE_CONFIRMATION = "Put Your Feet In the Sand";
+    const mobileTitleQuery = window.matchMedia("(max-width: 768px)");
+    let internalTitlePatch = false;
+
+    document.body.classList.add("casa-hero-fallback-guard");
 
     if (!Array.prototype.__casablancaHeroTitleToStringPatched) {
       const nativeArrayToString = Array.prototype.toString;
@@ -39,6 +43,150 @@ window.addEventListener("DOMContentLoaded", () => {
       };
     }
 
+    const splitHeroTitleIntoThreeLines = (titleText) => {
+      const words = titleText.split(" ").filter(Boolean);
+      if (titleText === "Something For Everyone") return ["Something", "For", "Everyone"];
+      if (titleText === "Your Personal Oasis") return ["Your", "Personal", "Oasis"];
+      if (titleText === "Modern & Spacious") return ["Modern", "&", "Spacious"];
+      if (titleText === "Your New Vegas Night") return ["Your", "New Vegas", "Night"];
+      if (titleText === "Put Your Feet In the Sand") return ["Put Your", "Feet In the", "Sand"];
+      if (titleText === "Unwind or Entertain") return ["Unwind", "or", "Entertain"];
+      if (words.length >= 3) return [words[0], words.slice(1, -1).join(" "), words[words.length - 1]];
+      if (words.length === 2) return [words[0], "", words[1]];
+      return [titleText, "", ""];
+    };
+
+    const addTitleCharacters = (lineText, lineElement) => {
+      lineText.split(" ").filter(Boolean).forEach((word, index, words) => {
+        const wordContainer = document.createElement("span");
+        wordContainer.className = "word-container";
+
+        const wordSpan = document.createElement("span");
+        wordSpan.className = "word";
+
+        Array.from(word).forEach((letter) => {
+          const char = document.createElement("span");
+          char.className = "char";
+          char.textContent = letter;
+          wordSpan.appendChild(char);
+        });
+
+        wordContainer.appendChild(wordSpan);
+        lineElement.appendChild(wordContainer);
+        if (index < words.length - 1) lineElement.appendChild(document.createTextNode(" "));
+      });
+    };
+
+    const getCleanHeroTitleText = (titleElement) => {
+      const rawText = (titleElement.textContent || "").replace(/\s+/g, " ").trim();
+      if (!rawText) return "";
+      if (rawText.includes(HERO_TITLE_SIGNATURE) && rawText.includes(HERO_TITLE_CONFIRMATION)) {
+        return HERO_TITLE_SIGNATURE;
+      }
+      return rawText;
+    };
+
+    const fitMobileHeroTitle = (titleElement) => {
+      if (!mobileTitleQuery.matches || !titleElement) return;
+      titleElement.style.setProperty("--mobile-title-scale", "1");
+
+      window.requestAnimationFrame(() => {
+        const lines = Array.from(titleElement.querySelectorAll(".mobile-title-line"));
+        if (!lines.length) return;
+        const widestLine = Math.max(...lines.map((line) => line.scrollWidth));
+        const availableWidth = window.innerWidth * 0.96;
+        const scale = Math.min(1, availableWidth / Math.max(widestLine, 1));
+        titleElement.style.setProperty("--mobile-title-scale", String(Math.max(0.56, scale)));
+      });
+    };
+
+    const animateThreeLineMobileTitle = (titleElement) => {
+      const gsapRef = window.gsap;
+      const topChars = titleElement.querySelectorAll(".mobile-title-line-top .char");
+      const middleChars = titleElement.querySelectorAll(".mobile-title-line-middle .char");
+      const bottomChars = titleElement.querySelectorAll(".mobile-title-line-bottom .char");
+
+      if (!gsapRef) {
+        titleElement.querySelectorAll(".char").forEach((char) => {
+          char.style.opacity = "1";
+          char.style.transform = "translate3d(0, 0, 0) scale(1)";
+          char.style.filter = "blur(0px)";
+        });
+        return;
+      }
+
+      gsapRef.killTweensOf(titleElement.querySelectorAll(".char"));
+      gsapRef.set(topChars, { y: "-142%", opacity: 0, rotateZ: -4 });
+      gsapRef.set(middleChars, { opacity: 0, scale: 0.52, z: -220, filter: "blur(18px)" });
+      gsapRef.set(bottomChars, { y: "142%", opacity: 0, rotateZ: 4 });
+
+      gsapRef.to(topChars, {
+        y: "0%",
+        opacity: 1,
+        rotateZ: 0,
+        duration: 0.94,
+        ease: "expo.out",
+        stagger: { each: 0.026, from: "start" }
+      });
+      gsapRef.to(middleChars, {
+        opacity: 1,
+        scale: 1,
+        z: 0,
+        filter: "blur(0px)",
+        duration: 1.06,
+        ease: "expo.out",
+        stagger: { each: 0.032, from: "center" },
+        delay: 0.08
+      });
+      gsapRef.to(bottomChars, {
+        y: "0%",
+        opacity: 1,
+        rotateZ: 0,
+        duration: 0.94,
+        ease: "expo.out",
+        stagger: { each: 0.026, from: "start" },
+        delay: 0.04
+      });
+    };
+
+    const patchMobileHeroTitleLayout = () => {
+      if (internalTitlePatch || !mobileTitleQuery.matches) return;
+
+      const titleElement = document.getElementById("dynamic-title");
+      if (!titleElement) return;
+
+      const cleanTitle = getCleanHeroTitleText(titleElement);
+      if (!cleanTitle) return;
+      if (titleElement.dataset.casaThreeLineTitle === cleanTitle) return;
+
+      const [topLine, middleLine, bottomLine] = splitHeroTitleIntoThreeLines(cleanTitle);
+      internalTitlePatch = true;
+      titleElement.textContent = "";
+      titleElement.dataset.casaThreeLineTitle = cleanTitle;
+      titleElement.style.setProperty("--mobile-title-scale", "1");
+
+      [
+        ["top", topLine],
+        ["middle", middleLine],
+        ["bottom", bottomLine]
+      ].forEach(([position, lineText]) => {
+        if (!lineText) return;
+        const line = document.createElement("span");
+        line.className = `mobile-title-line mobile-title-line-${position}`;
+        addTitleCharacters(lineText, line);
+        titleElement.appendChild(line);
+      });
+
+      fitMobileHeroTitle(titleElement);
+      animateThreeLineMobileTitle(titleElement);
+
+      if (cleanTitle !== HERO_TITLE_SIGNATURE) {
+        document.body.classList.remove("casa-hero-fallback-guard");
+      }
+
+      internalTitlePatch = false;
+    };
+
     const injectHeroTitleLayoutStyles = () => {
       let style = document.getElementById("casablancaHeroTitleSafetyStyles");
       if (!style) {
@@ -48,7 +196,18 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       style.textContent = `
+        .casa-hero-fallback-guard .casa-webgl-stage.is-ready + .hero-fallback {
+          opacity: 1 !important;
+          z-index: 18 !important;
+          pointer-events: none !important;
+        }
+
+        .casa-hero-fallback-guard .casa-webgl-stage {
+          z-index: 4 !important;
+        }
+
         .casa-webgl-hero .hero-text {
+          z-index: 30 !important;
           overflow: hidden !important;
         }
 
@@ -64,6 +223,7 @@ window.addEventListener("DOMContentLoaded", () => {
           text-align: center !important;
           white-space: normal !important;
           overflow: visible !important;
+          perspective: 900px !important;
           transform: scale(var(--mobile-title-scale, 1)) !important;
           transform-origin: center center !important;
         }
@@ -79,16 +239,20 @@ window.addEventListener("DOMContentLoaded", () => {
           text-align: center !important;
           white-space: nowrap !important;
           overflow: visible !important;
+          transform-style: preserve-3d !important;
+        }
+
+        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+          margin-top: clamp(.08rem, .65vh, .32rem) !important;
         }
 
         .casa-webgl-hero .word-container {
           display: inline-flex !important;
           flex: 0 1 auto !important;
           justify-content: center !important;
-          margin-left: .055em !important;
-          margin-right: .055em !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
+          margin-left: .045em !important;
+          margin-right: .045em !important;
+          padding: 0 !important;
           overflow: visible !important;
           vertical-align: top !important;
         }
@@ -100,46 +264,48 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         .casa-webgl-hero .char {
+          display: inline-block !important;
           overflow: visible !important;
+          will-change: transform, opacity, filter !important;
+          transform-style: preserve-3d !important;
         }
 
         @media (max-width: 768px) {
           .casa-webgl-hero .hero-text {
-            padding-left: max(10px, env(safe-area-inset-left)) !important;
-            padding-right: max(10px, env(safe-area-inset-right)) !important;
+            padding-left: max(8px, env(safe-area-inset-left)) !important;
+            padding-right: max(8px, env(safe-area-inset-right)) !important;
           }
 
           .casa-webgl-hero #dynamic-title {
-            max-width: 96vw !important;
-            font-size: clamp(2.35rem, 15.25vw, 6.1rem) !important;
-            line-height: .78 !important;
-            letter-spacing: -0.05em !important;
+            max-width: 97vw !important;
+            font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif !important;
+            font-size: clamp(4.65rem, 30vw, 10rem) !important;
+            line-height: .63 !important;
+            letter-spacing: -0.025em !important;
             padding-left: 0 !important;
             padding-right: 0 !important;
-          }
-
-          .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-            margin-top: clamp(.22rem, 1vh, .54rem) !important;
+            padding-bottom: .24em !important;
           }
         }
 
         @media (max-width: 380px) {
           .casa-webgl-hero #dynamic-title {
-            max-width: 97vw !important;
-            font-size: clamp(2.05rem, 14vw, 4.6rem) !important;
-            letter-spacing: -0.055em !important;
+            max-width: 98vw !important;
+            font-size: clamp(4.25rem, 28vw, 7.8rem) !important;
+            line-height: .64 !important;
+            letter-spacing: -0.035em !important;
           }
 
           .casa-webgl-hero .word-container {
-            margin-left: .038em !important;
-            margin-right: .038em !important;
+            margin-left: .03em !important;
+            margin-right: .03em !important;
           }
         }
 
         @media (max-width: 300px) {
           .casa-webgl-hero #dynamic-title {
-            font-size: clamp(1.78rem, 13.2vw, 3.45rem) !important;
-            letter-spacing: -0.06em !important;
+            font-size: clamp(3.85rem, 26vw, 5.4rem) !important;
+            letter-spacing: -0.045em !important;
           }
         }
       `;
@@ -148,10 +314,11 @@ window.addEventListener("DOMContentLoaded", () => {
     const normalizeFirstHeroTitle = () => {
       const title = document.getElementById("dynamic-title");
       if (!title) return;
-      const currentText = (title.textContent || "").trim();
-      if (currentText.includes("Your New Vegas Night") && currentText.includes(",")) {
+      const currentText = (title.textContent || "").replace(/\s+/g, " ").trim();
+      if (currentText.includes(HERO_TITLE_SIGNATURE) && currentText.includes(HERO_TITLE_CONFIRMATION)) {
         title.textContent = HERO_TITLE_SIGNATURE;
       }
+      patchMobileHeroTitleLayout();
     };
 
     const observeHeroTitle = () => {
@@ -168,6 +335,7 @@ window.addEventListener("DOMContentLoaded", () => {
     window.setTimeout(injectHeroTitleLayoutStyles, 450);
     window.setTimeout(observeHeroTitle, 0);
     window.setTimeout(observeHeroTitle, 900);
+    window.addEventListener("resize", () => fitMobileHeroTitle(document.getElementById("dynamic-title")), { passive: true });
   };
 
   installHeroTitleSafetyPatch();
