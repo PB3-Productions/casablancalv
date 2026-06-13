@@ -362,21 +362,21 @@ function injectFinalStyles() {
 
       #hamburger-btn,
 .hamburger-btn {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  position: fixed !important;
-  top: 16px !important;
-  right: 16px !important;
-  z-index: 9999 !important;
-  width: 48px !important;
-  height: 48px !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: #000 !important;
-  color: #ffd400 !important;
-  border: border: 0.3px solid rgba(255,212,0,0.6);  /* removes the gold frame completely */
+  display: flex ;
+  visibility: visible ;
+  opacity: 1 ;
+  pointer-events: auto ;
+  position: fixed ;
+  top: 16px ;
+  right: 16px ;
+  z-index: 9999 ;
+  width: 48px ;
+  height: 48px ;
+  align-items: center ;
+  justify-content: center ;
+  background: #000 ;
+  color: #ffd400 ;
+  border: border: 1px solid rgba(255,212,0,0.6) !important;  /* removes the gold frame completely */
   border-radius: 8px !important;
   font-size: 1.5rem !important;  /* adjust if needed */
   line-height: 1 !important;
