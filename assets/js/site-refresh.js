@@ -379,25 +379,25 @@ function injectFinalStyles() {
 /* Button itself */
 #hamburger-btn,
 .hamburger-btn {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  position: fixed !important;
-  top: 16px !important;
-  right: 16px !important;
-  z-index: 9999 !important;
-  width: 48px !important;
-  height: 48px !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: #000 !important;
-  color: #ffd400 !important;
+  display: flex ;
+  visibility: visible ;
+  opacity: 1 ;
+  pointer-events: auto ;
+  position: fixed ;
+  top: 16px ;
+  right: 16px ;
+  z-index: 9999 ;
+  width: 48px ;
+  height: 48px ;
+  align-items: center ;
+  justify-content: center ;
+  background: #000 ;
+  color: #ffd400 ;
   border: 0.3px solid rgba(255,212,0,0.6) !important;
   border-radius: 3px !important;
-  line-height: 1 !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  line-height: 1 ;
+  margin: 0 ;
+  padding: 0 ;
 }
  }
   `;
