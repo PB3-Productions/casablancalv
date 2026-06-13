@@ -14,6 +14,11 @@ window.addEventListener("DOMContentLoaded", () => {
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
+  const mobileHeroStabilizer = document.createElement("script");
+  mobileHeroStabilizer.defer = true;
+  mobileHeroStabilizer.src = "/assets/js/hero-mobile-stabilizer.js";
+  document.head.appendChild(mobileHeroStabilizer);
+
   /* BLOCK 2 START: HEADER + DRAWER */
   const header = $("#site-header");
   const drawer = $("#drawer");
