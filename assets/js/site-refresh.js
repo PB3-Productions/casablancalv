@@ -376,9 +376,9 @@ function injectFinalStyles() {
   justify-content: center ;
   background: #000 ;
   color: #ffd400 ;
-  border: border: 1px solid rgba(255,212,0,0.6) !important;  /* removes the gold frame completely */
-  border-radius: 8px !important;
-  font-size: 1.5rem !important;  /* adjust if needed */
+  border: border: 0.5px solid rgba(255,212,0,0.6) !important;  /* removes the gold frame completely */
+  border-radius: 4px !important;
+  font-size: 1.2rem !important;  /* adjust if needed */
   line-height: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
