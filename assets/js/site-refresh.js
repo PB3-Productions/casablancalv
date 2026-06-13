@@ -378,7 +378,7 @@ function injectFinalStyles() {
   color: #ffd400 ;
   border: 0.3px solid rgba(255,212,0,0.6 !important;  /* removes the gold frame completely */
   border-radius: 3px !important;
-  font-size: 1rem !important;  /* adjust if needed */
+  font-size: 0.8rem !important;  /* adjust if needed */
   line-height: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
