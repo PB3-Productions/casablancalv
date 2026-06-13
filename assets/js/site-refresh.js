@@ -537,8 +537,12 @@ function ensureHeroText() {
         overflow: visible !important;
       }
       .casa-webgl-hero #dynamic-title {
-        display: block !important;
-        width: 100% !important;
+        display: flex !important;                /* Stack lines vertically */
+        flex-direction: column !important;
+        align-items: center !important;          /* Horizontal center */
+        justify-content: center !important;      /* Vertical center */
+        gap: clamp(0.42rem, 1.75vh, 1rem) !important;
+        width: auto !important;
         max-width: min(94vw, 1320px) !important;
         margin: 0 auto !important;
         padding: 0.18em 0.06em 0.32em !important;
@@ -563,43 +567,27 @@ function ensureHeroText() {
       }
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
       .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
-      
+
+      .casa-webgl-hero .mobile-title-line {
+        display: block !important;
+        white-space: nowrap !important;          /* One line, no wrapping */
+        width: auto !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        line-height: 1.15 !important;
+      }
+
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
           max-width: 96vw !important;
-          font-size: clamp(3.2rem, 16vw, 5.5rem) !important;
+          /* DOUBLED FONT SIZE – 2x the original mobile clamp */
+          font-size: clamp(6.4rem, 32vw, 11rem) !important;
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
           transform: scale(var(--mobile-title-scale, 1)) !important;
           transform-origin: center center !important;
-        }
-
-        /* PURE CSS FLEXBOX MAGIC FOR MOBILE TEXT OVERLAPPING */
-        .casa-webgl-hero .mobile-title-line {
-          display: flex !important;
-          flex-wrap: wrap !important;
-          justify-content: center !important;
-          align-items: center !important;
-          width: 100% !important;
-          max-width: 100% !important;
-          column-gap: 0.25em !important;
-          row-gap: 0.15em !important;
-          margin-top: 0 !important;
-        }
-        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: 0.15em !important;
-        }
-        .casa-webgl-hero .word-container {
-          margin: 0 !important;
-          padding: 0 !important;
-          display: inline-flex !important;
-        }
-        .casa-webgl-hero .word {
-          white-space: nowrap !important;
-          display: inline-flex !important;
+          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important; /* tighter between lines on mobile */
         }
       }
     `;
@@ -643,9 +631,29 @@ function fitMobileTitleToViewport() {
   const titleContainer = document.querySelector("#dynamic-title");
   if (!titleContainer) return;
 
+  // Two‑frame rAF ensures the DOM layout is fully settled after line insertion
   window.requestAnimationFrame(() => {
-    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line.
-    titleContainer.style.setProperty("--mobile-title-scale", "1");
+    window.requestAnimationFrame(() => {
+      const lines = titleContainer.querySelectorAll(".mobile-title-line");
+      const containerWidth = titleContainer.clientWidth;
+      if (!containerWidth || lines.length === 0) return;
+
+      let minScale = 1;
+      lines.forEach((line) => {
+        // Temporarily remove scaling to measure natural (100%) width
+        const originalTransform = line.style.transform;
+        line.style.transform = "scale(1)";
+        const naturalWidth = line.scrollWidth;
+        if (naturalWidth > 0 && naturalWidth > containerWidth) {
+          const scale = containerWidth / naturalWidth;
+          if (scale < minScale) minScale = scale;
+        }
+        line.style.transform = originalTransform;
+      });
+
+      // Apply the smallest required scale (never larger than 1)
+      titleContainer.style.setProperty("--mobile-title-scale", Math.min(minScale, 1));
+    });
   });
 }
 
