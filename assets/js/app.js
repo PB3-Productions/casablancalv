@@ -14,12 +14,15 @@ window.addEventListener("DOMContentLoaded", () => {
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
-  /* BLOCK 1A START: HERO TITLE SAFETY PATCH */
+  /* BLOCK 1A START: MOBILE HERO TITLE + FIRST-IMAGE SAFETY PATCH */
   const installHeroTitleSafetyPatch = () => {
-    const HERO_TITLE_SIGNATURE = "Off-Strip Paradise";
-    const HERO_TITLE_CONFIRMATION = "Put Your Feet In the Sand";
-    const mobileTitleQuery = window.matchMedia("(max-width: 768px)");
-    let internalTitlePatch = false;
+    const MOBILE_QUERY = window.matchMedia("(max-width: 768px)");
+    const FIRST_TITLE = "Off-Strip Paradise";
+    const LAST_TITLE = "Put Your Feet In the Sand";
+    const FIRST_MOBILE_IMAGE = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e22f8d7322952d1866b94.png";
+
+    let internalPatch = false;
+    let lastRenderedTitle = "";
 
     document.body.classList.add("casa-hero-fallback-guard");
 
@@ -34,14 +37,174 @@ window.addEventListener("DOMContentLoaded", () => {
       Array.prototype.toString = function patchedCasablancaHeroArrayToString() {
         if (
           Array.isArray(this) &&
-          this[0] === HERO_TITLE_SIGNATURE &&
-          this.some((item) => item === HERO_TITLE_CONFIRMATION)
+          this[0] === FIRST_TITLE &&
+          this.some((item) => item === LAST_TITLE)
         ) {
-          return HERO_TITLE_SIGNATURE;
+          return FIRST_TITLE;
         }
         return nativeArrayToString.call(this);
       };
     }
+
+    const injectHeroPatchStyles = () => {
+      let style = document.getElementById("casablancaMobileHeroFinalFixStyles");
+      if (!style) {
+        style = document.createElement("style");
+        style.id = "casablancaMobileHeroFinalFixStyles";
+        document.head.appendChild(style);
+      }
+
+      style.textContent = `
+        @media (max-width: 768px) {
+          .casa-webgl-hero .hero-text,
+          .casa-webgl-hero #dynamic-title {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+          }
+
+          .casa-mobile-hero-fallback-layer {
+            position: absolute !important;
+            inset: 0 !important;
+            z-index: 24 !important;
+            display: block !important;
+            background-image:
+              linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.20)),
+              url('${FIRST_MOBILE_IMAGE}') !important;
+            background-size: cover !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity .55s ease !important;
+            transform: translateZ(0) !important;
+          }
+
+          body.casa-hero-fallback-guard .casa-mobile-hero-fallback-layer {
+            opacity: 1 !important;
+          }
+
+          .casa-mobile-title-fix {
+            position: absolute !important;
+            inset: 0 !important;
+            z-index: 48 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            height: 100% !important;
+            padding: 0 max(7px, env(safe-area-inset-left)) 0 max(7px, env(safe-area-inset-right)) !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+            text-align: center !important;
+            perspective: 980px !important;
+            transform: scale(var(--casa-mobile-title-scale, 1)) !important;
+            transform-origin: center center !important;
+            font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif !important;
+            font-size: clamp(4.55rem, 30vw, 10.4rem) !important;
+            font-weight: 900 !important;
+            line-height: .62 !important;
+            letter-spacing: -0.032em !important;
+            text-transform: uppercase !important;
+            color: #ffd400 !important;
+            text-shadow:
+              0 3px 0 rgba(75, 43, 0, .92),
+              0 7px 16px rgba(0,0,0,.72),
+              0 0 26px rgba(255,212,0,.22) !important;
+          }
+
+          .casa-mobile-title-fix__line {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+            text-align: center !important;
+            transform-style: preserve-3d !important;
+          }
+
+          .casa-mobile-title-fix__line + .casa-mobile-title-fix__line {
+            margin-top: clamp(.08rem, .62vh, .34rem) !important;
+          }
+
+          .casa-mobile-title-fix .word-container {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex: 0 1 auto !important;
+            margin-left: .036em !important;
+            margin-right: .036em !important;
+            padding: 0 !important;
+            overflow: visible !important;
+          }
+
+          .casa-mobile-title-fix .word {
+            display: inline-flex !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+          }
+
+          .casa-mobile-title-fix .char {
+            display: inline-block !important;
+            overflow: visible !important;
+            will-change: transform, opacity, filter !important;
+            transform-style: preserve-3d !important;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .casa-mobile-title-fix {
+            font-size: clamp(4.15rem, 28vw, 7.7rem) !important;
+            line-height: .63 !important;
+            letter-spacing: -0.04em !important;
+          }
+
+          .casa-mobile-title-fix .word-container {
+            margin-left: .026em !important;
+            margin-right: .026em !important;
+          }
+        }
+
+        @media (max-width: 300px) {
+          .casa-mobile-title-fix {
+            font-size: clamp(3.65rem, 26vw, 5.4rem) !important;
+            letter-spacing: -0.052em !important;
+          }
+        }
+      `;
+    };
+
+    const getHero = () => document.querySelector(".casa-webgl-hero");
+
+    const ensureFallbackLayer = () => {
+      const hero = getHero();
+      if (!hero) return null;
+      let layer = hero.querySelector(".casa-mobile-hero-fallback-layer");
+      if (!layer) {
+        layer = document.createElement("div");
+        layer.className = "casa-mobile-hero-fallback-layer";
+        layer.setAttribute("aria-hidden", "true");
+        hero.prepend(layer);
+      }
+      return layer;
+    };
+
+    const ensureMobileTitleOverlay = () => {
+      const hero = getHero();
+      if (!hero) return null;
+      let overlay = hero.querySelector(".casa-mobile-title-fix");
+      if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.className = "casa-mobile-title-fix";
+        overlay.setAttribute("aria-hidden", "true");
+        hero.appendChild(overlay);
+      }
+      return overlay;
+    };
 
     const splitHeroTitleIntoThreeLines = (titleText) => {
       const words = titleText.split(" ").filter(Boolean);
@@ -51,6 +214,8 @@ window.addEventListener("DOMContentLoaded", () => {
       if (titleText === "Your New Vegas Night") return ["Your", "New Vegas", "Night"];
       if (titleText === "Put Your Feet In the Sand") return ["Put Your", "Feet In the", "Sand"];
       if (titleText === "Unwind or Entertain") return ["Unwind", "or", "Entertain"];
+      if (titleText === "Beauty Redefined") return ["Beauty", "", "Redefined"];
+      if (titleText === FIRST_TITLE) return ["Off-Strip", "", "Paradise"];
       if (words.length >= 3) return [words[0], words.slice(1, -1).join(" "), words[words.length - 1]];
       if (words.length === 2) return [words[0], "", words[1]];
       return [titleText, "", ""];
@@ -77,37 +242,36 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    const getCleanHeroTitleText = (titleElement) => {
-      const rawText = (titleElement.textContent || "").replace(/\s+/g, " ").trim();
+    const getCleanHeroTitleText = () => {
+      const dynamicTitle = document.getElementById("dynamic-title");
+      const rawText = (dynamicTitle?.textContent || "").replace(/\s+/g, " ").trim();
       if (!rawText) return "";
-      if (rawText.includes(HERO_TITLE_SIGNATURE) && rawText.includes(HERO_TITLE_CONFIRMATION)) {
-        return HERO_TITLE_SIGNATURE;
-      }
+      if (rawText.includes(FIRST_TITLE) && rawText.includes(LAST_TITLE)) return FIRST_TITLE;
       return rawText;
     };
 
-    const fitMobileHeroTitle = (titleElement) => {
-      if (!mobileTitleQuery.matches || !titleElement) return;
-      titleElement.style.setProperty("--mobile-title-scale", "1");
+    const fitMobileTitle = (overlay) => {
+      if (!MOBILE_QUERY.matches || !overlay) return;
+      overlay.style.setProperty("--casa-mobile-title-scale", "1");
 
       window.requestAnimationFrame(() => {
-        const lines = Array.from(titleElement.querySelectorAll(".mobile-title-line"));
+        const lines = Array.from(overlay.querySelectorAll(".casa-mobile-title-fix__line"));
         if (!lines.length) return;
         const widestLine = Math.max(...lines.map((line) => line.scrollWidth));
-        const availableWidth = window.innerWidth * 0.96;
+        const availableWidth = window.innerWidth * 0.965;
         const scale = Math.min(1, availableWidth / Math.max(widestLine, 1));
-        titleElement.style.setProperty("--mobile-title-scale", String(Math.max(0.56, scale)));
+        overlay.style.setProperty("--casa-mobile-title-scale", String(Math.max(0.42, scale)));
       });
     };
 
-    const animateThreeLineMobileTitle = (titleElement) => {
+    const animateMobileTitle = (overlay) => {
       const gsapRef = window.gsap;
-      const topChars = titleElement.querySelectorAll(".mobile-title-line-top .char");
-      const middleChars = titleElement.querySelectorAll(".mobile-title-line-middle .char");
-      const bottomChars = titleElement.querySelectorAll(".mobile-title-line-bottom .char");
+      const topChars = overlay.querySelectorAll(".casa-mobile-title-fix__line--top .char");
+      const middleChars = overlay.querySelectorAll(".casa-mobile-title-fix__line--middle .char");
+      const bottomChars = overlay.querySelectorAll(".casa-mobile-title-fix__line--bottom .char");
 
       if (!gsapRef) {
-        titleElement.querySelectorAll(".char").forEach((char) => {
+        overlay.querySelectorAll(".char").forEach((char) => {
           char.style.opacity = "1";
           char.style.transform = "translate3d(0, 0, 0) scale(1)";
           char.style.filter = "blur(0px)";
@@ -115,9 +279,9 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      gsapRef.killTweensOf(titleElement.querySelectorAll(".char"));
+      gsapRef.killTweensOf(overlay.querySelectorAll(".char"));
       gsapRef.set(topChars, { y: "-142%", opacity: 0, rotateZ: -4 });
-      gsapRef.set(middleChars, { opacity: 0, scale: 0.52, z: -220, filter: "blur(18px)" });
+      gsapRef.set(middleChars, { opacity: 0, scale: 0.48, z: -260, filter: "blur(20px)" });
       gsapRef.set(bottomChars, { y: "142%", opacity: 0, rotateZ: 4 });
 
       gsapRef.to(topChars, {
@@ -128,16 +292,18 @@ window.addEventListener("DOMContentLoaded", () => {
         ease: "expo.out",
         stagger: { each: 0.026, from: "start" }
       });
+
       gsapRef.to(middleChars, {
         opacity: 1,
         scale: 1,
         z: 0,
         filter: "blur(0px)",
-        duration: 1.06,
+        duration: 1.08,
         ease: "expo.out",
         stagger: { each: 0.032, from: "center" },
         delay: 0.08
       });
+
       gsapRef.to(bottomChars, {
         y: "0%",
         opacity: 1,
@@ -149,22 +315,18 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    const patchMobileHeroTitleLayout = () => {
-      if (internalTitlePatch || !mobileTitleQuery.matches) return;
+    const renderMobileHeroTitle = (titleText) => {
+      if (!MOBILE_QUERY.matches || internalPatch || !titleText) return;
+      const overlay = ensureMobileTitleOverlay();
+      if (!overlay) return;
+      if (lastRenderedTitle === titleText && overlay.childElementCount) return;
 
-      const titleElement = document.getElementById("dynamic-title");
-      if (!titleElement) return;
+      internalPatch = true;
+      lastRenderedTitle = titleText;
+      overlay.textContent = "";
+      overlay.style.setProperty("--casa-mobile-title-scale", "1");
 
-      const cleanTitle = getCleanHeroTitleText(titleElement);
-      if (!cleanTitle) return;
-      if (titleElement.dataset.casaThreeLineTitle === cleanTitle) return;
-
-      const [topLine, middleLine, bottomLine] = splitHeroTitleIntoThreeLines(cleanTitle);
-      internalTitlePatch = true;
-      titleElement.textContent = "";
-      titleElement.dataset.casaThreeLineTitle = cleanTitle;
-      titleElement.style.setProperty("--mobile-title-scale", "1");
-
+      const [topLine, middleLine, bottomLine] = splitHeroTitleIntoThreeLines(titleText);
       [
         ["top", topLine],
         ["middle", middleLine],
@@ -172,174 +334,52 @@ window.addEventListener("DOMContentLoaded", () => {
       ].forEach(([position, lineText]) => {
         if (!lineText) return;
         const line = document.createElement("span");
-        line.className = `mobile-title-line mobile-title-line-${position}`;
+        line.className = `casa-mobile-title-fix__line casa-mobile-title-fix__line--${position}`;
         addTitleCharacters(lineText, line);
-        titleElement.appendChild(line);
+        overlay.appendChild(line);
       });
 
-      fitMobileHeroTitle(titleElement);
-      animateThreeLineMobileTitle(titleElement);
+      fitMobileTitle(overlay);
+      animateMobileTitle(overlay);
 
-      if (cleanTitle !== HERO_TITLE_SIGNATURE) {
-        document.body.classList.remove("casa-hero-fallback-guard");
+      if (titleText !== FIRST_TITLE) {
+        window.setTimeout(() => document.body.classList.remove("casa-hero-fallback-guard"), 450);
+      } else {
+        document.body.classList.add("casa-hero-fallback-guard");
       }
 
-      internalTitlePatch = false;
+      internalPatch = false;
     };
 
-    const injectHeroTitleLayoutStyles = () => {
-      let style = document.getElementById("casablancaHeroTitleSafetyStyles");
-      if (!style) {
-        style = document.createElement("style");
-        style.id = "casablancaHeroTitleSafetyStyles";
-        document.head.appendChild(style);
-      }
-
-      style.textContent = `
-        .casa-hero-fallback-guard .casa-webgl-stage.is-ready + .hero-fallback {
-          opacity: 1 !important;
-          z-index: 18 !important;
-          pointer-events: none !important;
-        }
-
-        .casa-hero-fallback-guard .casa-webgl-stage {
-          z-index: 4 !important;
-        }
-
-        .casa-webgl-hero .hero-text {
-          z-index: 30 !important;
-          overflow: hidden !important;
-        }
-
-        .casa-webgl-hero #dynamic-title {
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: center !important;
-          justify-content: center !important;
-          width: 100% !important;
-          max-width: min(94vw, 1320px) !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-          text-align: center !important;
-          white-space: normal !important;
-          overflow: visible !important;
-          perspective: 900px !important;
-          transform: scale(var(--mobile-title-scale, 1)) !important;
-          transform-origin: center center !important;
-        }
-
-        .casa-webgl-hero .mobile-title-line {
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          width: 100% !important;
-          max-width: 100% !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-          text-align: center !important;
-          white-space: nowrap !important;
-          overflow: visible !important;
-          transform-style: preserve-3d !important;
-        }
-
-        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: clamp(.08rem, .65vh, .32rem) !important;
-        }
-
-        .casa-webgl-hero .word-container {
-          display: inline-flex !important;
-          flex: 0 1 auto !important;
-          justify-content: center !important;
-          margin-left: .045em !important;
-          margin-right: .045em !important;
-          padding: 0 !important;
-          overflow: visible !important;
-          vertical-align: top !important;
-        }
-
-        .casa-webgl-hero .word {
-          display: inline-flex !important;
-          white-space: nowrap !important;
-          overflow: visible !important;
-        }
-
-        .casa-webgl-hero .char {
-          display: inline-block !important;
-          overflow: visible !important;
-          will-change: transform, opacity, filter !important;
-          transform-style: preserve-3d !important;
-        }
-
-        @media (max-width: 768px) {
-          .casa-webgl-hero .hero-text {
-            padding-left: max(8px, env(safe-area-inset-left)) !important;
-            padding-right: max(8px, env(safe-area-inset-right)) !important;
-          }
-
-          .casa-webgl-hero #dynamic-title {
-            max-width: 97vw !important;
-            font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif !important;
-            font-size: clamp(4.65rem, 30vw, 10rem) !important;
-            line-height: .63 !important;
-            letter-spacing: -0.025em !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            padding-bottom: .24em !important;
-          }
-        }
-
-        @media (max-width: 380px) {
-          .casa-webgl-hero #dynamic-title {
-            max-width: 98vw !important;
-            font-size: clamp(4.25rem, 28vw, 7.8rem) !important;
-            line-height: .64 !important;
-            letter-spacing: -0.035em !important;
-          }
-
-          .casa-webgl-hero .word-container {
-            margin-left: .03em !important;
-            margin-right: .03em !important;
-          }
-        }
-
-        @media (max-width: 300px) {
-          .casa-webgl-hero #dynamic-title {
-            font-size: clamp(3.85rem, 26vw, 5.4rem) !important;
-            letter-spacing: -0.045em !important;
-          }
-        }
-      `;
-    };
-
-    const normalizeFirstHeroTitle = () => {
-      const title = document.getElementById("dynamic-title");
-      if (!title) return;
-      const currentText = (title.textContent || "").replace(/\s+/g, " ").trim();
-      if (currentText.includes(HERO_TITLE_SIGNATURE) && currentText.includes(HERO_TITLE_CONFIRMATION)) {
-        title.textContent = HERO_TITLE_SIGNATURE;
-      }
-      patchMobileHeroTitleLayout();
+    const syncHeroTitle = () => {
+      injectHeroPatchStyles();
+      ensureFallbackLayer();
+      const titleText = getCleanHeroTitleText();
+      if (!titleText) return;
+      renderMobileHeroTitle(titleText);
     };
 
     const observeHeroTitle = () => {
-      const hero = document.querySelector(".casa-webgl-hero");
-      if (!hero || hero.dataset.heroTitleSafetyObserved === "true") return;
-      hero.dataset.heroTitleSafetyObserved = "true";
-      const observer = new MutationObserver(normalizeFirstHeroTitle);
+      const hero = getHero();
+      if (!hero || hero.dataset.mobileHeroFinalFixObserved === "true") return;
+      hero.dataset.mobileHeroFinalFixObserved = "true";
+      const observer = new MutationObserver(syncHeroTitle);
       observer.observe(hero, { childList: true, subtree: true, characterData: true });
-      normalizeFirstHeroTitle();
+      syncHeroTitle();
     };
 
-    injectHeroTitleLayoutStyles();
-    window.setTimeout(injectHeroTitleLayoutStyles, 0);
-    window.setTimeout(injectHeroTitleLayoutStyles, 450);
+    injectHeroPatchStyles();
+    ensureFallbackLayer();
     window.setTimeout(observeHeroTitle, 0);
-    window.setTimeout(observeHeroTitle, 900);
-    window.addEventListener("resize", () => fitMobileHeroTitle(document.getElementById("dynamic-title")), { passive: true });
+    window.setTimeout(syncHeroTitle, 120);
+    window.setTimeout(syncHeroTitle, 500);
+    window.setTimeout(syncHeroTitle, 1100);
+    window.setInterval(syncHeroTitle, 1250);
+    window.addEventListener("resize", () => fitMobileTitle(document.querySelector(".casa-mobile-title-fix")), { passive: true });
   };
 
   installHeroTitleSafetyPatch();
-  /* BLOCK 1A END: HERO TITLE SAFETY PATCH */
+  /* BLOCK 1A END: MOBILE HERO TITLE + FIRST-IMAGE SAFETY PATCH */
 
   /* BLOCK 2 START: HEADER + DRAWER */
   const header = $("#site-header");
