@@ -377,9 +377,9 @@ function injectFinalStyles() {
         justify-content: center;
         background: #000;
         color: #ffd400;
-        border: 0.5px solid rgba(255,212,0,0.6);
+        border: 0.3px solid rgba(255,212,0,0.6);
         border-radius: 8px;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         line-height: 1;
         margin: 0;
         padding: 0;
