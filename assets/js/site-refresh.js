@@ -364,7 +364,7 @@ function injectFinalStyles() {
 .hamburger-btn,
 #hamburger-btn *,
 .hamburger-btn * {
-  font-size: 1rem !important;        /* adjust to your preferred size */
+  font-size: 0.6rem !important;        /* adjust to your preferred size */
 }
 
       #hamburger-btn,
