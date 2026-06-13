@@ -254,7 +254,8 @@ function injectFinalStyles() {
     }
 
     @media (max-width: 768px) {
-      /* PERFECT MOBILE HEADER HIDING (CSS ONLY) */
+      /* MOBILE HEADER HIDING – uses visibility instead of display:none
+         so the fixed hamburger button can still render */
       #site-header,
       .site-header,
       header,
@@ -262,12 +263,15 @@ function injectFinalStyles() {
       .brand-group,
       .main-logo,
       .nav-bar-container {
-        display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
         pointer-events: none !important;
         height: 0 !important;
+        min-height: 0 !important;
         overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
       }
 
       body {
@@ -357,7 +361,7 @@ function injectFinalStyles() {
         padding: 0 10px !important;
       }
 
-      /* ===== NEW: SHOW ONLY THE HAMBURGER MENU BUTTON ===== */
+      /* HAMBURGER BUTTON – gold on black, fixed top‑right, visible because its ancestors only use visibility:hidden */
       #hamburger-btn,
       .hamburger-btn {
         display: flex !important;
