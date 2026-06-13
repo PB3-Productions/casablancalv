@@ -359,6 +359,13 @@ function injectFinalStyles() {
         white-space: normal !important;
         padding: 0 10px !important;
       }
+      
+      #hamburger-btn,
+.hamburger-btn,
+#hamburger-btn *,
+.hamburger-btn * {
+  font-size: 1rem !important;        /* adjust to your preferred size */
+}
 
       #hamburger-btn,
 .hamburger-btn {
