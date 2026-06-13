@@ -251,10 +251,10 @@ function injectFinalStyles() {
       #policies .policy-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       }
+      line-height: 1.1 !important;
     }
 
     @media (max-width: 768px) {
-      /* PERFECT MOBILE HEADER HIDING (CSS ONLY) */
       #site-header,
       .site-header,
       header,
@@ -370,23 +370,6 @@ function injectFinalStyles() {
    BLOCK 4 START: CONTENT + MOBILE CTA HELPERS
    ========================================================= */
 function removeLegacyHeroConflicts() {
-  const approvedHero = document.querySelector(".casa-webgl-hero");
-  const main = document.querySelector("main");
-  if (!main || !approvedHero) return;
-
-  Array.from(main.querySelectorAll("section.hero")).forEach((section) => {
-    if (section !== approvedHero) section.remove();
-  });
-
-  Array.from(document.querySelectorAll(".hero-content, .hero-copy, .hero-grid, .intro-panel")).forEach((node) => {
-    if (!approvedHero.contains(node)) node.remove();
-  });
-
-  if (main.firstElementChild !== approvedHero) main.insertBefore(approvedHero, main.firstElementChild);
-
-  const welcome = document.getElementById("welcome");
-  if (welcome && approvedHero.nextElementSibling !== welcome) main.insertBefore(welcome, approvedHero.nextElementSibling);
-
   document.querySelectorAll(".legacy-hero, .old-hero, .hero-split, .hero-panel").forEach((node) => node.remove());
 }
 
@@ -450,50 +433,28 @@ function patchContentFlow() {
 }
 
 function ensureMobileFloatingActions() {
-  let actions = document.querySelector(".mobile-floating-actions");
-  if (actions) return actions;
+  if (document.getElementById("mobileFloatingActions")) return;
 
-  actions = document.createElement("div");
-  actions.className = "mobile-floating-actions is-hidden";
-  actions.setAttribute("aria-label", "Mobile booking actions");
-  actions.innerHTML = `
-    <div class="mobile-floating-actions__inner">
-      <a class="btn btn-gold" href="#availability">Check Availability</a>
-      <a class="btn btn-outline" href="tel:6167457148">Speak to Agent</a>
-    </div>
+  const wrapper = document.createElement("div");
+  wrapper.id = "mobileFloatingActions";
+  wrapper.className = "mobile-floating-actions";
+  wrapper.innerHTML = `
+    <a href="#availability" aria-label="Check Casablanca Las Vegas availability">Availability</a>
+    <a href="tel:6167457148" aria-label="Call Casablanca Las Vegas sales agent">Call</a>
   `;
-  document.body.appendChild(actions);
-  return actions;
+  document.body.appendChild(wrapper);
 }
 
 function initMobileFloatingActions() {
-  const actions = ensureMobileFloatingActions();
-  const hero = document.querySelector(".casa-webgl-hero");
-  if (!actions || !hero) return;
+  const actions = document.getElementById("mobileFloatingActions");
+  if (!actions) return;
 
-  let isScrolling = false;
-  let scrollTimer = null;
-
-  const isInsideHero = () => window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.82;
-  const sync = () => {
-    const hidden = !MOBILE_QUERY.matches || isInsideHero();
-    actions.classList.toggle("is-hidden", hidden);
-    actions.classList.toggle("is-scrolling", isScrolling);
-    actions.classList.toggle("is-visible", MOBILE_QUERY.matches && !hidden);
+  const update = () => {
+    actions.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.35);
   };
 
-  window.addEventListener("scroll", () => {
-    isScrolling = true;
-    sync();
-    window.clearTimeout(scrollTimer);
-    scrollTimer = window.setTimeout(() => {
-      isScrolling = false;
-      sync();
-    }, 3000);
-  }, { passive: true });
-
-  window.addEventListener("resize", sync, { passive: true });
-  sync();
+  update();
+  window.addEventListener("scroll", update, { passive: true });
 }
 /* =========================================================
    BLOCK 4 END: CONTENT + MOBILE CTA HELPERS
@@ -565,20 +526,27 @@ function ensureHeroText() {
       .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
       .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
       .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
-      
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
           max-width: 96vw !important;
-          font-size: clamp(3.2rem, 16vw, 5.5rem) !important;
+          /* ENLARGED MOBILE TEXT */
+          font-size: clamp(6.4rem, 32vw, 11rem) !important; 
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
-          padding: 0 0 .38em 0 !important;
-          transform: scale(var(--mobile-title-scale, 1)) !important;
-          transform-origin: center center !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          padding-bottom: .38em !important;
+          /* PERFECT CENTERING */
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important;
+          align-items: center !important;
+          /* Tighter gap between rows */
+          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important;
         }
-
-        /* PURE CSS FLEXBOX MAGIC FOR MOBILE TEXT OVERLAPPING */
+        
         .casa-webgl-hero .mobile-title-line {
+          /* FLEX WRAP PREVENTS OVERLAPPING ("Modern & Spacious" fix) */
           display: flex !important;
           flex-wrap: wrap !important;
           justify-content: center !important;
@@ -589,17 +557,20 @@ function ensureHeroText() {
           row-gap: 0.15em !important;
           margin-top: 0 !important;
         }
-        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: 0.15em !important;
-        }
-        .casa-webgl-hero .word-container {
-          margin: 0 !important;
+
+        .casa-webgl-hero .word-container { 
+          margin: 0 !important; 
           padding: 0 !important;
           display: inline-flex !important;
         }
+
         .casa-webgl-hero .word {
           white-space: nowrap !important;
           display: inline-flex !important;
+        }
+
+        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+          margin-top: 0.15em !important;
         }
       }
     `;
@@ -643,8 +614,9 @@ function fitMobileTitleToViewport() {
   const titleContainer = document.querySelector("#dynamic-title");
   if (!titleContainer) return;
 
+  // We are locking the scale here so the text stays large and relies on 
+  // our new Flexbox CSS to wrap words securely without crashing GSAP!
   window.requestAnimationFrame(() => {
-    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line.
     titleContainer.style.setProperty("--mobile-title-scale", "1");
   });
 }
@@ -656,8 +628,8 @@ function animateTextIn(title) {
   titleContainer.textContent = "";
   titleContainer.style.setProperty("--mobile-title-scale", "1");
 
-  // Safety: ensure title is a string
-  if (Array.isArray(title)) title = title[0] || "";
+  // Safety: ensure title is a string (fallback to empty)
+  if (Array.isArray(title)) title = title || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
   if (!title) return;
@@ -681,10 +653,9 @@ function animateTextIn(title) {
 
   const gsapRef = window.gsap;
   const chars = titleContainer.querySelectorAll(".char");
-  
   if (prefersReducedMotion || !gsapRef) {
     chars.forEach((char) => {
-      char.style.transform = "translateY(0%) scale(1)";
+      char.style.transform = "translateY(0%)";
       char.style.opacity = "1";
     });
     return;
@@ -693,16 +664,13 @@ function animateTextIn(title) {
   if (MOBILE_QUERY.matches) {
     const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
     const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
-    
+
     gsapRef.killTweensOf(chars);
-    if (topChars.length) {
-        gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
-        gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    }
-    if (bottomChars.length) {
-        gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
-        gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    }
+    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
+
+    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
     return;
   }
 
@@ -717,20 +685,17 @@ function animateTextOut() {
   if (!titleContainer || !gsapRef || prefersReducedMotion) return;
 
   if (MOBILE_QUERY.matches) {
-    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
-    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
-
-    if (topChars.length) gsapRef.to(topChars, { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
-    if (bottomChars.length) gsapRef.to(bottomChars, { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-top .char"), { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-bottom .char"), { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
     return;
   }
 
   gsapRef.to(titleContainer.querySelectorAll(".char"), { y: "-112%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
 }
+
 /* =========================================================
    BLOCK 5 END: HERO TEXT
    ========================================================= */
-
 
 /* =========================================================
    BLOCK 6 START: WEBGL HERO
@@ -805,6 +770,21 @@ const fragmentShader = `
   }
 `;
 
+function applyTextureSettings(texture) {
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function loadHeroTexture(url) {
+  return new Promise((resolve) => {
+    loader.load(url, (texture) => resolve(applyTextureSettings(texture)), undefined, () => resolve(null));
+  });
+}
+
 function textureSize(texture) {
   const image = texture && texture.image;
   return new THREE.Vector2(image?.width || 1, image?.height || 1);
@@ -843,7 +823,7 @@ function resizeRenderer() {
 
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
-  if (!stage || !validSlides[0]?.texture) return;
+  if (!stage || !validSlides?.texture) return;
 
   scene = new THREE.Scene();
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -852,7 +832,7 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-  const firstTexture = validSlides[0].texture;
+  const firstTexture = validSlides.texture;
   uniforms = {
     uTexture1: { value: firstTexture },
     uTexture2: { value: firstTexture },
@@ -932,48 +912,25 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    // Restored your exact working image loading logic!
-    const tex0 = await new Promise((resolve) => {
-        loader.load(imageUrls[0], (texture) => {
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.needsUpdate = true;
-        resolve(texture);
-      }, undefined, () => resolve(null));
-    });
-
+    const tex0 = await loadHeroTexture(imageUrls);
     if (!tex0) throw new Error("Primary image failed");
 
-    // Fix: Only send the first title into the array, not all 9!
-    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
+    validSlides.push({ texture: tex0, title: slideTitles || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides[0].title);
+    animateTextIn(validSlides.title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
-    // Restored your exact working image loading logic for loop!
     for (let i = 1; i < imageUrls.length; i++) {
-      const tex = await new Promise((resolve) => {
-        loader.load(imageUrls[i], (texture) => {
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          texture.wrapS = THREE.ClampToEdgeWrapping;
-          texture.wrapT = THREE.ClampToEdgeWrapping;
-          texture.needsUpdate = true;
-          resolve(texture);
-        }, undefined, () => resolve(null));
-      });
-      
-      if (tex) {
-        validSlides.push({ texture: tex, title: slideTitles[i] || "" });
-        
-        if (validSlides.length === 2) {
-          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-        }
+      const tex = await loadHeroTexture(imageUrls[i]);
+      if (!tex) continue;
+
+      validSlides.push({ texture: tex, title: slideTitles[i] || "" });
+
+      if (validSlides.length === 2) {
+        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
       }
     }
 
