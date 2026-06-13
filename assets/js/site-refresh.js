@@ -360,31 +360,30 @@ function injectFinalStyles() {
         padding: 0 10px !important;
       }
 
-      /* The gold-on-black hamburger button – now visible permanently */
       #hamburger-btn,
-      .hamburger-btn {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        position: fixed !important;
-        top: 16px;
-        right: 16px;
-        z-index: 9999;
-        width: 48px;
-        height: 48px;
-        align-items: center;
-        justify-content: center;
-        background: #000;
-        color: #ffd400;
-        border: 0.3px solid rgba(255,212,0,0.6);
-        border-radius: 4px;
-        font-size: 1.2rem;
-        line-height: 1;
-        margin: 0;
-        padding: 0;
-      }
-    }
+.hamburger-btn {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  z-index: 9999 !important;
+  width: 48px !important;
+  height: 48px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000 !important;
+  color: #ffd400 !important;
+  border: border: 0.3px solid rgba(255,212,0,0.6);  /* removes the gold frame completely */
+  border-radius: 8px !important;
+  font-size: 1.5rem !important;  /* adjust if needed */
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+ }
   `;
 
   document.head.appendChild(style);
