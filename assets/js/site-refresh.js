@@ -360,32 +360,41 @@ function injectFinalStyles() {
         padding: 0 10px !important;
       }
       
-      #hamburger-btn,
+     /* Base button & children */
+#hamburger-btn,
 .hamburger-btn,
 #hamburger-btn *,
 .hamburger-btn * {
-  font-size: 0.6rem !important;        /* adjust to your preferred size */
+  font-size: 0.8rem !important;        /* change this value to your preference */
 }
 
-      #hamburger-btn,
+/* Target pseudo-elements explicitly */
+#hamburger-btn::before,
+#hamburger-btn::after,
+.hamburger-btn::before,
+.hamburger-btn::after {
+  font-size: 0.8rem !important;        /* same size as above */
+}
+
+/* Button itself */
+#hamburger-btn,
 .hamburger-btn {
-  display: flex ;
-  visibility: visible ;
-  opacity: 1 ;
-  pointer-events: auto ;
-  position: fixed ;
-  top: 16px ;
-  right: 16px ;
-  z-index: 9999 ;
-  width: 48px ;
-  height: 48px ;
-  align-items: center ;
-  justify-content: center ;
-  background: #000 ;
-  color: #ffd400 ;
-  border: 0.3px solid rgba(255,212,0,0.6) !important;  /* removes the gold frame completely */
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  z-index: 9999 !important;
+  width: 48px !important;
+  height: 48px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000 !important;
+  color: #ffd400 !important;
+  border: 0.3px solid rgba(255,212,0,0.6) !important;
   border-radius: 3px !important;
-  font-size: 0.8rem !important;  /* adjust if needed */
   line-height: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
