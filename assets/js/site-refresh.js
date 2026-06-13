@@ -247,21 +247,10 @@ function injectFinalStyles() {
       margin-right: .16em !important;
     }
 
-    .casa-webgl-hero .mobile-title-line {
-      display: block !important;
-      width: 100% !important;
-      overflow: visible !important;
-    }
-
-    .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-      margin-top: clamp(.35rem, 1.55vh, .9rem) !important;
-    }
-
     @media (max-width: 1200px) {
       #policies .policy-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       }
-      line-height: 1.1 !important;
     }
 
     @media (max-width: 768px) {
@@ -275,7 +264,10 @@ function injectFinalStyles() {
       .nav-bar-container {
         display: none !important;
         visibility: hidden !important;
+        opacity: 0 !important;
         pointer-events: none !important;
+        height: 0 !important;
+        overflow: hidden !important;
       }
 
       body {
@@ -571,21 +563,17 @@ function ensureHeroText() {
       }
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
       .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; white-space: normal !important; line-height: 1.1 !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.18rem, .9vh, .55rem) !important; }
+      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
+      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
       
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
           max-width: 96vw !important;
-          font-size: clamp(2.8rem, 15vw, 4.8rem) !important; /* Enlarged text */
+          font-size: clamp(3.2rem, 16vw, 5.5rem) !important;
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
-          display: flex !important;
-          flex-direction: column !important; /* Perfect vertical centering */
-          justify-content: center !important;
-          align-items: center !important;
-          transform: scale(1) !important; /* Keeps text large */
+          transform: scale(var(--mobile-title-scale, 1)) !important;
           transform-origin: center center !important;
         }
 
@@ -593,25 +581,22 @@ function ensureHeroText() {
         .casa-webgl-hero .mobile-title-line {
           display: flex !important;
           flex-wrap: wrap !important;
-          justify-content: center !important; /* Perfect horizontal centering */
+          justify-content: center !important;
           align-items: center !important;
           width: 100% !important;
           max-width: 100% !important;
           column-gap: 0.25em !important;
-          row-gap: 0.15em !important; /* Safely drops overflow words */
+          row-gap: 0.15em !important;
           margin-top: 0 !important;
         }
-
         .casa-webgl-hero .mobile-title-line + .mobile-title-line {
           margin-top: 0.15em !important;
         }
-
         .casa-webgl-hero .word-container {
           margin: 0 !important;
           padding: 0 !important;
           display: inline-flex !important;
         }
-
         .casa-webgl-hero .word {
           white-space: nowrap !important;
           display: inline-flex !important;
@@ -672,7 +657,7 @@ function animateTextIn(title) {
   titleContainer.style.setProperty("--mobile-title-scale", "1");
 
   // Safety: ensure title is a string
-  if (Array.isArray(title)) title = title || "";
+  if (Array.isArray(title)) title = title[0] || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
   if (!title) return;
@@ -820,21 +805,6 @@ const fragmentShader = `
   }
 `;
 
-function applyTextureSettings(texture) {
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.wrapS = THREE.ClampToEdgeWrapping;
-  texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.needsUpdate = true;
-  return texture;
-}
-
-function loadHeroTexture(url) {
-  return new Promise((resolve) => {
-    loader.load(url, (texture) => resolve(applyTextureSettings(texture)), undefined, () => resolve(null));
-  });
-}
-
 function textureSize(texture) {
   const image = texture && texture.image;
   return new THREE.Vector2(image?.width || 1, image?.height || 1);
@@ -873,7 +843,7 @@ function resizeRenderer() {
 
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
-  if (!stage || !validSlides?.texture) return;
+  if (!stage || !validSlides[0]?.texture) return;
 
   scene = new THREE.Scene();
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -882,7 +852,7 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-  const firstTexture = validSlides.texture;
+  const firstTexture = validSlides[0].texture;
   uniforms = {
     uTexture1: { value: firstTexture },
     uTexture2: { value: firstTexture },
@@ -962,8 +932,9 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
+    // Restored your exact working image loading logic!
     const tex0 = await new Promise((resolve) => {
-        loader.load(imageUrls, (texture) => {
+        loader.load(imageUrls[0], (texture) => {
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
         texture.wrapS = THREE.ClampToEdgeWrapping;
@@ -975,14 +946,16 @@ async function startHero() {
 
     if (!tex0) throw new Error("Primary image failed");
 
-    validSlides.push({ texture: tex0, title: slideTitles || "" });
+    // Fix: Only send the first title into the array, not all 9!
+    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides.title);
+    animateTextIn(validSlides[0].title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
+    // Restored your exact working image loading logic for loop!
     for (let i = 1; i < imageUrls.length; i++) {
       const tex = await new Promise((resolve) => {
         loader.load(imageUrls[i], (texture) => {
