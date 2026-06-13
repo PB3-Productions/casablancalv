@@ -254,8 +254,7 @@ function injectFinalStyles() {
     }
 
     @media (max-width: 768px) {
-      /* MOBILE HEADER HIDING – uses visibility instead of display:none
-         so the fixed hamburger button can still render */
+      /* Hide the header without using opacity so the fixed hamburger can stay visible */
       #site-header,
       .site-header,
       header,
@@ -264,7 +263,6 @@ function injectFinalStyles() {
       .main-logo,
       .nav-bar-container {
         visibility: hidden !important;
-        opacity: 0 !important;
         pointer-events: none !important;
         height: 0 !important;
         min-height: 0 !important;
@@ -272,6 +270,7 @@ function injectFinalStyles() {
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
+        /* NO opacity:0 – that kills fixed children */
       }
 
       body {
@@ -361,7 +360,7 @@ function injectFinalStyles() {
         padding: 0 10px !important;
       }
 
-      /* HAMBURGER BUTTON – gold on black, fixed top‑right, visible because its ancestors only use visibility:hidden */
+      /* The gold-on-black hamburger button – now visible permanently */
       #hamburger-btn,
       .hamburger-btn {
         display: flex !important;
