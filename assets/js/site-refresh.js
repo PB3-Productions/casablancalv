@@ -568,17 +568,11 @@ function ensureHeroText() {
       
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
-          max-width: 98vw !important;
-          font-size: clamp(4rem, 19vw, 6.8rem) !important; /* MUCH LARGER TEXT */
-          line-height: 1.05 !important; /* Tighter to compensate for massive text */
+          max-width: 96vw !important;
+          font-size: clamp(3rem, 16vw, 5.2rem) !important; /* MUCH LARGER TEXT */
+          line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
-          transform: scale(var(--mobile-title-scale, 1)) !important;
-          transform-origin: center center !important;
-          display: flex !important;
-          flex-direction: column !important; /* PERFECT VERTICAL STACKING */
-          justify-content: center !important;
-          align-items: center !important;
         }
 
         /* PURE CSS FLEXBOX MAGIC FOR MOBILE TEXT OVERLAPPING */
@@ -589,16 +583,16 @@ function ensureHeroText() {
           align-items: center !important;
           width: 100% !important;
           max-width: 100% !important;
-          column-gap: 0.2em !important; /* Perfect horizontal word spacing */
-          row-gap: 0.1em !important; /* Tighter vertical gap if words wrap naturally */
+          column-gap: 0.25em !important;
+          row-gap: 0.15em !important;
           margin-top: 0 !important;
-          text-align: center !important;
+          padding-bottom: 0.15em !important;
         }
         .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: 0.12em !important; /* Perfect spacing between top/bottom lines */
+          margin-top: 0.15em !important;
         }
         .casa-webgl-hero .word-container {
-          margin: 0 !important;
+          margin: 0 0.12em !important;
           padding: 0 !important;
           display: inline-flex !important;
         }
@@ -649,8 +643,13 @@ function fitMobileTitleToViewport() {
   if (!titleContainer) return;
 
   window.requestAnimationFrame(() => {
-    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line without crashing GSAP!
-    titleContainer.style.setProperty("--mobile-title-scale", "1");
+    const lines = Array.from(titleContainer.querySelectorAll(".mobile-title-line"));
+    if (!lines.length) return;
+
+    const maxLineWidth = Math.max(...lines.map((line) => line.scrollWidth));
+    const availableWidth = window.innerWidth * 0.96;
+    const scale = Math.min(1, availableWidth / Math.max(maxLineWidth, 1));
+    titleContainer.style.setProperty("--mobile-title-scale", String(Math.max(0.65, scale)));
   });
 }
 
@@ -955,7 +954,6 @@ async function startHero() {
     const tex0 = await loadHeroTexture(imageUrls);
     if (!tex0) throw new Error("Primary image failed");
 
-    // Reverted the safe load logic!
     validSlides.push({ texture: tex0, title: slideTitles || "" });
     currentIndex = 0;
 
