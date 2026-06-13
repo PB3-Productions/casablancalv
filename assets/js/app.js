@@ -14,6 +14,165 @@ window.addEventListener("DOMContentLoaded", () => {
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
+  /* BLOCK 1A START: HERO TITLE SAFETY PATCH */
+  const installHeroTitleSafetyPatch = () => {
+    const HERO_TITLE_SIGNATURE = "Off-Strip Paradise";
+    const HERO_TITLE_CONFIRMATION = "Put Your Feet In the Sand";
+
+    if (!Array.prototype.__casablancaHeroTitleToStringPatched) {
+      const nativeArrayToString = Array.prototype.toString;
+      Object.defineProperty(Array.prototype, "__casablancaHeroTitleToStringPatched", {
+        value: true,
+        configurable: false,
+        enumerable: false,
+        writable: false
+      });
+      Array.prototype.toString = function patchedCasablancaHeroArrayToString() {
+        if (
+          Array.isArray(this) &&
+          this[0] === HERO_TITLE_SIGNATURE &&
+          this.some((item) => item === HERO_TITLE_CONFIRMATION)
+        ) {
+          return HERO_TITLE_SIGNATURE;
+        }
+        return nativeArrayToString.call(this);
+      };
+    }
+
+    const injectHeroTitleLayoutStyles = () => {
+      let style = document.getElementById("casablancaHeroTitleSafetyStyles");
+      if (!style) {
+        style = document.createElement("style");
+        style.id = "casablancaHeroTitleSafetyStyles";
+        document.head.appendChild(style);
+      }
+
+      style.textContent = `
+        .casa-webgl-hero .hero-text {
+          overflow: hidden !important;
+        }
+
+        .casa-webgl-hero #dynamic-title {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 100% !important;
+          max-width: min(94vw, 1320px) !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          text-align: center !important;
+          white-space: normal !important;
+          overflow: visible !important;
+          transform: scale(var(--mobile-title-scale, 1)) !important;
+          transform-origin: center center !important;
+        }
+
+        .casa-webgl-hero .mobile-title-line {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          text-align: center !important;
+          white-space: nowrap !important;
+          overflow: visible !important;
+        }
+
+        .casa-webgl-hero .word-container {
+          display: inline-flex !important;
+          flex: 0 1 auto !important;
+          justify-content: center !important;
+          margin-left: .055em !important;
+          margin-right: .055em !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          overflow: visible !important;
+          vertical-align: top !important;
+        }
+
+        .casa-webgl-hero .word {
+          display: inline-flex !important;
+          white-space: nowrap !important;
+          overflow: visible !important;
+        }
+
+        .casa-webgl-hero .char {
+          overflow: visible !important;
+        }
+
+        @media (max-width: 768px) {
+          .casa-webgl-hero .hero-text {
+            padding-left: max(10px, env(safe-area-inset-left)) !important;
+            padding-right: max(10px, env(safe-area-inset-right)) !important;
+          }
+
+          .casa-webgl-hero #dynamic-title {
+            max-width: 96vw !important;
+            font-size: clamp(2.35rem, 15.25vw, 6.1rem) !important;
+            line-height: .78 !important;
+            letter-spacing: -0.05em !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+          }
+
+          .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+            margin-top: clamp(.22rem, 1vh, .54rem) !important;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .casa-webgl-hero #dynamic-title {
+            max-width: 97vw !important;
+            font-size: clamp(2.05rem, 14vw, 4.6rem) !important;
+            letter-spacing: -0.055em !important;
+          }
+
+          .casa-webgl-hero .word-container {
+            margin-left: .038em !important;
+            margin-right: .038em !important;
+          }
+        }
+
+        @media (max-width: 300px) {
+          .casa-webgl-hero #dynamic-title {
+            font-size: clamp(1.78rem, 13.2vw, 3.45rem) !important;
+            letter-spacing: -0.06em !important;
+          }
+        }
+      `;
+    };
+
+    const normalizeFirstHeroTitle = () => {
+      const title = document.getElementById("dynamic-title");
+      if (!title) return;
+      const currentText = (title.textContent || "").trim();
+      if (currentText.includes("Your New Vegas Night") && currentText.includes(",")) {
+        title.textContent = HERO_TITLE_SIGNATURE;
+      }
+    };
+
+    const observeHeroTitle = () => {
+      const hero = document.querySelector(".casa-webgl-hero");
+      if (!hero || hero.dataset.heroTitleSafetyObserved === "true") return;
+      hero.dataset.heroTitleSafetyObserved = "true";
+      const observer = new MutationObserver(normalizeFirstHeroTitle);
+      observer.observe(hero, { childList: true, subtree: true, characterData: true });
+      normalizeFirstHeroTitle();
+    };
+
+    injectHeroTitleLayoutStyles();
+    window.setTimeout(injectHeroTitleLayoutStyles, 0);
+    window.setTimeout(injectHeroTitleLayoutStyles, 450);
+    window.setTimeout(observeHeroTitle, 0);
+    window.setTimeout(observeHeroTitle, 900);
+  };
+
+  installHeroTitleSafetyPatch();
+  /* BLOCK 1A END: HERO TITLE SAFETY PATCH */
+
   /* BLOCK 2 START: HEADER + DRAWER */
   const header = $("#site-header");
   const drawer = $("#drawer");
