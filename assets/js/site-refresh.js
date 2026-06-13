@@ -356,6 +356,31 @@ function injectFinalStyles() {
         white-space: normal !important;
         padding: 0 10px !important;
       }
+
+      /* ===== NEW: SHOW ONLY THE HAMBURGER MENU BUTTON ===== */
+      #hamburger-btn,
+      .hamburger-btn {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        position: fixed !important;
+        top: 16px;
+        right: 16px;
+        z-index: 9999;
+        width: 48px;
+        height: 48px;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        color: #ffd400;
+        border: 2px solid #ffd400;
+        border-radius: 8px;
+        font-size: 1.5rem;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+      }
     }
   `;
 
