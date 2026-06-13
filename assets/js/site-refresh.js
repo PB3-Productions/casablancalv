@@ -378,7 +378,7 @@ function injectFinalStyles() {
         background: #000;
         color: #ffd400;
         border: 0.3px solid rgba(255,212,0,0.6);
-        border-radius: 8px;
+        border-radius: 4px;
         font-size: 1.2rem;
         line-height: 1;
         margin: 0;
