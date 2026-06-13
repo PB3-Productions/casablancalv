@@ -124,13 +124,144 @@ function injectFinalStyles() {
       gap: clamp(.85rem, 1.6vw, 1.15rem) !important;
     }
 
+    .hero-intro-buttons .btn,
+    .footer-button-row .btn {
+      width: min(270px, 100%) !important;
+      min-width: min(270px, 100%) !important;
+    }
+
+    .media-card.framed-floorplan,
+    .framed-floorplan,
+    .media-card.framed-map-card,
+    .framed-map-card {
+      padding: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+    }
+
+    .framed-floorplan::before,
+    .framed-floorplan::after,
+    .framed-map-card::before,
+    .framed-map-card::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    .framed-floorplan img,
+    .framed-map-card img {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      object-fit: contain !important;
+      cursor: zoom-in !important;
+    }
+
+    #policies .site-shell > .grid-2 {
+      display: block !important;
+    }
+
+    #policies .site-shell > .grid-2 > .reveal:first-child {
+      max-width: 980px !important;
+      margin: 0 auto clamp(1.4rem, 3vw, 2.4rem) !important;
+      text-align: center !important;
+    }
+
+    #policies .site-shell > .grid-2 > .reveal:first-child .eyebrow,
+    #policies .site-shell > .grid-2 > .reveal:first-child h2,
+    #policies .site-shell > .grid-2 > .reveal:first-child .lead {
+      text-align: center !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    #policies .policy-grid {
+      display: grid !important;
+      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+      gap: clamp(.7rem, 1vw, 1rem) !important;
+      align-items: stretch !important;
+    }
+
+    #policies .policy-grid .mini-card {
+      padding: clamp(1rem, 1.2vw, 1.35rem) !important;
+    }
+
+    #policies .policy-grid .mini-card h3 {
+      font-size: clamp(.95rem, 1vw, 1.12rem) !important;
+    }
+
+    #policies .policy-grid .mini-card p {
+      font-size: clamp(.84rem, .9vw, .98rem) !important;
+      line-height: 1.55 !important;
+    }
+
+    .mobile-floating-actions {
+      position: fixed;
+      left: 50%;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+      z-index: 80;
+      display: none;
+      width: min(86vw, 320px);
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .36s ease, transform .36s ease;
+    }
+
+    .mobile-floating-actions__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .78rem;
+    }
+
+    .mobile-floating-actions .btn {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 47px !important;
+      padding: .72rem .82rem !important;
+      border-radius: 999px !important;
+      font-size: clamp(.76rem, 3.1vw, .91rem) !important;
+      letter-spacing: .095em !important;
+      line-height: 1.08 !important;
+      white-space: nowrap !important;
+      justify-content: center !important;
+      text-align: center !important;
+    }
+
+    .mobile-floating-actions.is-visible:not(.is-hidden):not(.is-scrolling) {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+    }
+
     .casa-webgl-hero #dynamic-title {
       line-height: 1.1 !important;
     }
 
+    .casa-webgl-hero .word-container {
+      margin-left: .16em !important;
+      margin-right: .16em !important;
+    }
+
+    @media (max-width: 1200px) {
+      #policies .policy-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+    }
+
     @media (max-width: 768px) {
       /* AGGRESSIVELY HIDE TOP HEADER, LOGO & BUTTONS */
-      #site-header, .site-header, header, .header-container {
+      #site-header,
+      .site-header,
+      header,
+      .header-container,
+      .brand-group,
+      .main-logo,
+      .nav-bar-container {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
@@ -139,13 +270,82 @@ function injectFinalStyles() {
         overflow: hidden !important;
       }
 
-      #welcome .title-lg {
-        font-size: 2.25rem !important;
-        line-height: 1.2 !important;
-        overflow-wrap: break-word !important;
-        word-wrap: break-word !important;
-        white-space: normal !important;
-        padding: 0 10px !important;
+      body {
+        padding-top: 0 !important;
+        overflow-x: hidden !important;
+      }
+
+      .mobile-floating-actions {
+        display: block !important;
+      }
+
+      main p,
+      main .lead,
+      main .mini-card p,
+      main .price-card p,
+      main .count,
+      main .status-note,
+      main .badge,
+      main li,
+      main .feature-list span:not(.gold-svg-icon) {
+        text-align: left !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .hero-intro-section .intro-lead,
+      .estate-summary-card .lead,
+      .floorplan-section .lead,
+      #policies .lead,
+      #availability .lead,
+      .footer-cta-card p,
+      .footer-brand-block p {
+        max-width: min(91vw, 34rem) !important;
+      }
+
+      .hero-intro-section .title-lg,
+      .estate-summary-card .title-lg,
+      .floorplan-section .title-lg,
+      #policies .title-lg,
+      #availability .title-lg {
+        text-align: center !important;
+      }
+
+      .hero-intro-buttons {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: .85rem !important;
+        max-width: min(86vw, 320px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .hero-intro-buttons .btn,
+      .footer-button-row .btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 48px !important;
+        padding-left: .82rem !important;
+        padding-right: .82rem !important;
+        font-size: clamp(.76rem, 3.08vw, .91rem) !important;
+        letter-spacing: .086em !important;
+        line-height: 1.08 !important;
+      }
+
+      .footer-button-row {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: .85rem !important;
+        max-width: min(86vw, 320px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      #policies .policy-grid {
+        grid-template-columns: 1fr !important;
+        max-width: min(92vw, 520px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
       }
     }
   `;
@@ -161,37 +361,130 @@ function injectFinalStyles() {
    BLOCK 4 START: CONTENT + MOBILE CTA HELPERS
    ========================================================= */
 function removeLegacyHeroConflicts() {
+  const approvedHero = document.querySelector(".casa-webgl-hero");
+  const main = document.querySelector("main");
+  if (!main || !approvedHero) return;
+
+  Array.from(main.querySelectorAll("section.hero")).forEach((section) => {
+    if (section !== approvedHero) section.remove();
+  });
+
+  Array.from(document.querySelectorAll(".hero-content, .hero-copy, .hero-grid, .intro-panel")).forEach((node) => {
+    if (!approvedHero.contains(node)) node.remove();
+  });
+
+  if (main.firstElementChild !== approvedHero) main.insertBefore(approvedHero, main.firstElementChild);
+
+  const welcome = document.getElementById("welcome");
+  if (welcome && approvedHero.nextElementSibling !== welcome) main.insertBefore(welcome, approvedHero.nextElementSibling);
+
   document.querySelectorAll(".legacy-hero, .old-hero, .hero-split, .hero-panel").forEach((node) => node.remove());
 }
 
 function patchContentFlow() {
   injectFinalStyles();
   removeLegacyHeroConflicts();
+
+  document.getElementById("matterport")?.remove();
+  document.querySelectorAll('a[href="#matterport"]').forEach((link) => link.remove());
+
+  const welcome = document.querySelector("#welcome .narrow-shell");
+  if (welcome) {
+    let introButtons = welcome.querySelector(".intro-button-row");
+    if (!introButtons) {
+      introButtons = document.createElement("div");
+      introButtons.className = "intro-button-row hero-intro-buttons";
+      welcome.appendChild(introButtons);
+    }
+    introButtons.innerHTML = `
+      <a class="btn btn-gold" href="#availability">Check Available Dates</a>
+      <a class="btn btn-outline" href="#video-tour">View the Estate Tour</a>
+    `;
+  }
+
+  const summaryCard = document.querySelector(".estate-summary-card");
+  if (summaryCard) {
+    const cardTitle = summaryCard.querySelector("h2");
+    const cardLead = summaryCard.querySelector(".lead");
+    if (cardTitle) cardTitle.textContent = "A Private Las Vegas Estate Designed for Groups, Events & VIP Stays";
+    if (cardLead) {
+      cardLead.textContent = "A private, high-end estate for guests who want the space of a luxury residence, the discretion of a private booking team, and the service layer of a VIP concierge experience. Casablanca Las Vegas is positioned for elevated group stays, private retreats, productions, professional networking events, weddings, and premium day events close to the Strip without placing the exact address in front of every casual browser.";
+    }
+    summaryCard.querySelector(".intro-button-row")?.remove();
+  }
+
+  const availabilityHeading = document.querySelector("#availability h2");
+  if (availabilityHeading) availabilityHeading.textContent = "Check Dates For Availability";
+
+  const footerExploreTitle = document.querySelector(".footer-links-card h3");
+  if (footerExploreTitle) footerExploreTitle.textContent = "Explore";
+
+  document.querySelectorAll(".btn").forEach((button) => {
+    const text = (button.textContent || "").trim().toLowerCase();
+    if (text.includes("check your dates")) button.textContent = "Check Available Dates";
+  });
+
+  const floorplanImage = document.querySelector(".framed-floorplan img");
+  if (floorplanImage) {
+    floorplanImage.src = FLOORPLAN_IMAGE;
+    floorplanImage.srcset = `${FLOORPLAN_IMAGE} 1600w`;
+    floorplanImage.sizes = "(max-width: 900px) 100vw, 72vw";
+    floorplanImage.alt = "Updated Casablanca Las Vegas estate floorplan showing sleeping layout and room flow";
+  }
+
+  document.querySelectorAll(".concierge-option").forEach((card) => {
+    card.removeAttribute("href");
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.addEventListener("click", (event) => event.preventDefault());
+  });
 }
 
 function ensureMobileFloatingActions() {
-  if (document.getElementById("mobileFloatingActions")) return;
+  let actions = document.querySelector(".mobile-floating-actions");
+  if (actions) return actions;
 
-  const wrapper = document.createElement("div");
-  wrapper.id = "mobileFloatingActions";
-  wrapper.className = "mobile-floating-actions";
-  wrapper.innerHTML = `
-    <a href="#availability" aria-label="Check Casablanca Las Vegas availability">Availability</a>
-    <a href="tel:6167457148" aria-label="Call Casablanca Las Vegas sales agent">Call</a>
+  actions = document.createElement("div");
+  actions.className = "mobile-floating-actions is-hidden";
+  actions.setAttribute("aria-label", "Mobile booking actions");
+  actions.innerHTML = `
+    <div class="mobile-floating-actions__inner">
+      <a class="btn btn-gold" href="#availability">Check Availability</a>
+      <a class="btn btn-outline" href="tel:6167457148">Speak to Agent</a>
+    </div>
   `;
-  document.body.appendChild(wrapper);
+  document.body.appendChild(actions);
+  return actions;
 }
 
 function initMobileFloatingActions() {
-  const actions = document.getElementById("mobileFloatingActions");
-  if (!actions) return;
+  const actions = ensureMobileFloatingActions();
+  const hero = document.querySelector(".casa-webgl-hero");
+  if (!actions || !hero) return;
 
-  const update = () => {
-    actions.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.35);
+  let isScrolling = false;
+  let scrollTimer = null;
+
+  const isInsideHero = () => window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.82;
+  const sync = () => {
+    const hidden = !MOBILE_QUERY.matches || isInsideHero();
+    actions.classList.toggle("is-hidden", hidden);
+    actions.classList.toggle("is-scrolling", isScrolling);
+    actions.classList.toggle("is-visible", MOBILE_QUERY.matches && !hidden);
   };
 
-  update();
-  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("scroll", () => {
+    isScrolling = true;
+    sync();
+    window.clearTimeout(scrollTimer);
+    scrollTimer = window.setTimeout(() => {
+      isScrolling = false;
+      sync();
+    }, 3000);
+  }, { passive: true });
+
+  window.addEventListener("resize", sync, { passive: true });
+  sync();
 }
 /* =========================================================
    BLOCK 4 END: CONTENT + MOBILE CTA HELPERS
@@ -209,7 +502,8 @@ function ensureHeroText() {
   if (!heroText) {
     heroText = document.createElement("div");
     heroText.className = "hero-text";
-    heroText.innerHTML = `<h2 id="dynamic-title" aria-live="polite"></h2>`;
+    heroText.setAttribute("aria-live", "polite");
+    heroText.innerHTML = `<h1 id="dynamic-title"></h1>`;
     hero.appendChild(heroText);
   }
 
@@ -259,9 +553,9 @@ function ensureHeroText() {
         overflow: visible !important;
       }
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
-      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity, filter; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; white-space: normal !important; line-height: 1.1 !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.18rem, .9vh, .55rem) !important; }
+      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
+      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
+      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
       
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
@@ -270,28 +564,26 @@ function ensureHeroText() {
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
-          transform: scale(var(--mobile-title-scale, 1)) !important;
-          transform-origin: center center !important;
         }
+        
+        /* MAGIC FIX: Flexbox forces overlapping words apart safely! */
         .casa-webgl-hero .mobile-title-line {
           display: flex !important;
           flex-wrap: wrap !important;
           justify-content: center !important;
           align-items: center !important;
           width: 100% !important;
-          max-width: 100% !important;
           column-gap: 0.25em !important;
           row-gap: 0.15em !important;
           margin-top: 0 !important;
         }
-        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: 0.15em !important;
-        }
-        .casa-webgl-hero .word-container {
-          margin: 0 !important;
+
+        .casa-webgl-hero .word-container { 
+          margin: 0 !important; 
           padding: 0 !important;
           display: inline-flex !important;
         }
+
         .casa-webgl-hero .word {
           white-space: nowrap !important;
           display: inline-flex !important;
@@ -327,17 +619,9 @@ function createWordSpans(text, container) {
 
 function splitMobileTitle(title) {
   const words = title.split(" ").filter(Boolean);
-  if (title === "Something For Everyone") return ["Something", "For", "Everyone"];
-  if (title === "Your Personal Oasis") return ["Your", "Personal", "Oasis"];
-  if (title === "Modern & Spacious") return ["Modern", "&", "Spacious"];
-  if (title === "Your New Vegas Night") return ["Your", "New Vegas", "Night"];
-  if (title === "Unwind or Entertain") return ["Unwind", "or", "Entertain"];
-  if (title === "Put Your Feet In the Sand") return ["Put Your", "Feet In the", "Sand"];
-  if (title === "Beauty Redefined") return ["Beauty", "", "Redefined"];
-  if (title === "Off-Strip Paradise") return ["Off-Strip", "", "Paradise"];
-  if (words.length >= 3) return [words, words.slice(1, -1).join(" "), words[words.length - 1]];
-  if (words.length === 2) return [words, "", words];
-  return [title, "", ""];
+  if (words.length <= 1) return [title, ""];
+  const splitIndex = title === "Put Your Feet In the Sand" ? 3 : Math.ceil(words.length / 2);
+  return [words.slice(0, splitIndex).join(" "), words.slice(splitIndex).join(" ")];
 }
 
 function fitMobileTitleToViewport() {
@@ -346,8 +630,9 @@ function fitMobileTitleToViewport() {
   const titleContainer = document.querySelector("#dynamic-title");
   if (!titleContainer) return;
 
-  // Locks the scale to 1 so text stays massive and Flexbox handles wrapping safely
   window.requestAnimationFrame(() => {
+    // Locks the scale to 1 so text stays massive. 
+    // Flexbox CSS will safely drop the overflow to the next line without crashing GSAP!
     titleContainer.style.setProperty("--mobile-title-scale", "1");
   });
 }
@@ -356,23 +641,25 @@ function animateTextIn(title) {
   const titleContainer = ensureHeroText();
   if (!titleContainer) return;
 
+  titleContainer.textContent = "";
+  titleContainer.style.setProperty("--mobile-title-scale", "1");
+
+  // Safety: ensure title is a string
   if (Array.isArray(title)) title = title || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
-
-  titleContainer.textContent = "";
-  titleContainer.style.setProperty("--mobile-title-scale", "1");
   if (!title) return;
 
   if (MOBILE_QUERY.matches) {
-    const [topLine, middleLine, bottomLine] = splitMobileTitle(title);
-    [["top", topLine], ["middle", middleLine], ["bottom", bottomLine]].forEach(([position, lineText]) => {
-      if (!lineText) return;
-      const line = document.createElement("span");
-      line.className = `mobile-title-line mobile-title-line-${position}`;
-      createWordSpans(lineText, line);
-      titleContainer.appendChild(line);
-    });
+    const [topLine, bottomLine] = splitMobileTitle(title);
+    const top = document.createElement("span");
+    const bottom = document.createElement("span");
+    top.className = "mobile-title-line mobile-title-line-top";
+    bottom.className = "mobile-title-line mobile-title-line-bottom";
+    createWordSpans(topLine, top);
+    createWordSpans(bottomLine, bottom);
+    titleContainer.appendChild(top);
+    if (bottomLine) titleContainer.appendChild(bottom);
     fitMobileTitleToViewport();
   } else {
     createWordSpans(title, titleContainer);
@@ -380,40 +667,29 @@ function animateTextIn(title) {
 
   const gsapRef = window.gsap;
   const chars = titleContainer.querySelectorAll(".char");
+  
   if (prefersReducedMotion || !gsapRef) {
     chars.forEach((char) => {
       char.style.transform = "translateY(0%) scale(1)";
       char.style.opacity = "1";
-      char.style.filter = "blur(0px)";
     });
     return;
   }
 
   if (MOBILE_QUERY.matches) {
     const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
-    const middleChars = titleContainer.querySelectorAll(".mobile-title-line-middle .char");
     const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
-
+    
     gsapRef.killTweensOf(chars);
+    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
     
-    // Safety check so GSAP doesn't crash on 2-line titles!
-    if (topChars.length) {
-      gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
-      gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    }
-    
-    if (middleChars.length) {
-      gsapRef.set(middleChars, { opacity: 0, scale: 0.55, z: -220, filter: "blur(18px)" });
-      gsapRef.to(middleChars, { opacity: 1, scale: 1, z: 0, filter: "blur(0px)", duration: 1.02, ease: "expo.out", stagger: { each: .03, from: "center" }, delay: .08 });
-    }
-    
-    if (bottomChars.length) {
-      gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
-      gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" }, delay: .04 });
-    }
+    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
     return;
   }
 
+  gsapRef.killTweensOf(chars);
   gsapRef.set(chars, { y: "112%", opacity: 0, rotateZ: 5 });
   gsapRef.to(chars, { y: "0%", opacity: 1, rotateZ: 0, duration: .82, ease: "expo.out", stagger: { each: .024, from: "start" } });
 }
@@ -424,14 +700,8 @@ function animateTextOut() {
   if (!titleContainer || !gsapRef || prefersReducedMotion) return;
 
   if (MOBILE_QUERY.matches) {
-    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
-    const middleChars = titleContainer.querySelectorAll(".mobile-title-line-middle .char");
-    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
-
-    // Safety checks for exiting animations
-    if (topChars.length) gsapRef.to(topChars, { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
-    if (middleChars.length) gsapRef.to(middleChars, { opacity: 0, scale: 0.55, filter: "blur(18px)", duration: .42, ease: "power2.in", stagger: { each: .014, from: "center" } });
-    if (bottomChars.length) gsapRef.to(bottomChars, { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-top .char"), { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-bottom .char"), { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
     return;
   }
 
@@ -660,6 +930,7 @@ async function startHero() {
     const tex0 = await loadHeroTexture(imageUrls);
     if (!tex0) throw new Error("Primary image failed");
 
+    // Fix applied so the comma-splosion doesn't happen
     validSlides.push({ texture: tex0, title: slideTitles || "" });
     currentIndex = 0;
 
