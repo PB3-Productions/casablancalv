@@ -1,13 +1,34 @@
 /* =========================================================
    CASABLANCA MOBILE HERO TITLE PATCH
-   Purpose: Enforce mobile line-height, font-size, wrap behavior, and
-   lower viewport scale floor after site-refresh.js injects hero styles.
+   Purpose: Enforce mobile line-height, font-size, wrap behavior, lower
+   viewport scale floor, and correct the first-slide title-array bug.
    ========================================================= */
 (function () {
   const mobileQuery = window.matchMedia("(max-width: 768px)");
   const firstTitle = "Off-Strip Paradise";
   const lastTitle = "Put Your Feet In the Sand";
   let syncTimer = null;
+
+  if (!Array.prototype.__casablancaFirstHeroTitlePatch) {
+    const nativeArrayToString = Array.prototype.toString;
+    Object.defineProperty(Array.prototype, "__casablancaFirstHeroTitlePatch", {
+      value: true,
+      configurable: false,
+      enumerable: false,
+      writable: false
+    });
+
+    Array.prototype.toString = function casablancaFirstHeroTitleToString() {
+      if (
+        Array.isArray(this) &&
+        this[0] === firstTitle &&
+        this.some((item) => item === lastTitle)
+      ) {
+        return firstTitle;
+      }
+      return nativeArrayToString.call(this);
+    };
+  }
 
   function isMobile() {
     return mobileQuery.matches;
@@ -18,11 +39,29 @@
     document.body.classList.remove("casa-mobile-hero-guard");
   }
 
+  function getTitleElement() {
+    return document.getElementById("dynamic-title");
+  }
+
   function getCleanTitleText() {
-    const title = document.getElementById("dynamic-title");
+    const title = getTitleElement();
     const text = (title?.textContent || "").replace(/\s+/g, " ").trim();
     if (!text) return "";
     if (text.includes(firstTitle) && text.includes(lastTitle)) return firstTitle;
+    return text;
+  }
+
+  function normalizeOverloadedFirstTitle() {
+    const title = getTitleElement();
+    if (!title) return "";
+
+    const text = (title.textContent || "").replace(/\s+/g, " ").trim();
+    if (text.includes(firstTitle) && text.includes(lastTitle)) {
+      title.textContent = firstTitle;
+      title.style.setProperty("--mobile-title-scale", "1");
+      return firstTitle;
+    }
+
     return text;
   }
 
@@ -101,7 +140,7 @@
   function relaxMobileScaleFloor() {
     if (!isMobile()) return;
 
-    const title = document.getElementById("dynamic-title");
+    const title = getTitleElement();
     if (!title) return;
 
     window.requestAnimationFrame(() => {
@@ -119,6 +158,7 @@
 
     removePreviousOverlayPatch();
     ensureStyleIsLast();
+    normalizeOverloadedFirstTitle();
 
     const currentTitle = getCleanTitleText();
     document.body.classList.toggle("casa-mobile-first-slide", currentTitle === firstTitle);
@@ -141,7 +181,8 @@
 
   syncMobileHeroTitlePatch();
   window.setTimeout(startObserver, 0);
-  window.setTimeout(syncMobileHeroTitlePatch, 100);
+  window.setTimeout(syncMobileHeroTitlePatch, 80);
+  window.setTimeout(syncMobileHeroTitlePatch, 180);
   window.setTimeout(syncMobileHeroTitlePatch, 450);
   window.setTimeout(syncMobileHeroTitlePatch, 1000);
   window.setTimeout(syncMobileHeroTitlePatch, 1800);
