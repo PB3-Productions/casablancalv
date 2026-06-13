@@ -251,7 +251,6 @@ function injectFinalStyles() {
       #policies .policy-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       }
-      line-height: 1.1 !important;
     }
 
     @media (max-width: 768px) {
@@ -370,6 +369,23 @@ function injectFinalStyles() {
    BLOCK 4 START: CONTENT + MOBILE CTA HELPERS
    ========================================================= */
 function removeLegacyHeroConflicts() {
+  const approvedHero = document.querySelector(".casa-webgl-hero");
+  const main = document.querySelector("main");
+  if (!main || !approvedHero) return;
+
+  Array.from(main.querySelectorAll("section.hero")).forEach((section) => {
+    if (section !== approvedHero) section.remove();
+  });
+
+  Array.from(document.querySelectorAll(".hero-content, .hero-copy, .hero-grid, .intro-panel")).forEach((node) => {
+    if (!approvedHero.contains(node)) node.remove();
+  });
+
+  if (main.firstElementChild !== approvedHero) main.insertBefore(approvedHero, main.firstElementChild);
+
+  const welcome = document.getElementById("welcome");
+  if (welcome && approvedHero.nextElementSibling !== welcome) main.insertBefore(welcome, approvedHero.nextElementSibling);
+
   document.querySelectorAll(".legacy-hero, .old-hero, .hero-split, .hero-panel").forEach((node) => node.remove());
 }
 
@@ -472,8 +488,7 @@ function ensureHeroText() {
   if (!heroText) {
     heroText = document.createElement("div");
     heroText.className = "hero-text";
-    heroText.setAttribute("aria-live", "polite");
-    heroText.innerHTML = `<h1 id="dynamic-title"></h1>`;
+    heroText.innerHTML = `<h2 id="dynamic-title" aria-live="polite"></h2>`;
     hero.appendChild(heroText);
   }
 
@@ -498,8 +513,12 @@ function ensureHeroText() {
         overflow: visible !important;
       }
       .casa-webgl-hero #dynamic-title {
-        display: block !important;
-        width: 100% !important;
+        display: flex !important;                /* Stack lines vertically */
+        flex-direction: column !important;
+        align-items: center !important;          /* Horizontal center */
+        justify-content: center !important;      /* Vertical center */
+        gap: clamp(0.42rem, 1.75vh, 1rem) !important;
+        width: auto !important;
         max-width: min(94vw, 1320px) !important;
         margin: 0 auto !important;
         padding: 0.18em 0.06em 0.32em !important;
@@ -523,54 +542,26 @@ function ensureHeroText() {
         overflow: visible !important;
       }
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
-      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
+      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity, filter; overflow: visible !important; }
+      .casa-webgl-hero .mobile-title-line {
+        display: block !important;
+        white-space: nowrap !important;          /* One line, no wrapping */
+        width: auto !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        line-height: 1.15 !important;
+      }
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
           max-width: 96vw !important;
-          /* ENLARGED MOBILE TEXT */
-          font-size: clamp(6.4rem, 32vw, 11rem) !important; 
+          /* DOUBLED FONT SIZE – 2x the original mobile clamp */
+          font-size: clamp(6.4rem, 32vw, 11rem) !important;
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-          padding-bottom: .38em !important;
-          /* PERFECT CENTERING */
-          display: flex !important;
-          flex-direction: column !important;
-          justify-content: center !important;
-          align-items: center !important;
-          /* Tighter gap between rows */
-          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important;
-        }
-        
-        .casa-webgl-hero .mobile-title-line {
-          /* FLEX WRAP PREVENTS OVERLAPPING ("Modern & Spacious" fix) */
-          display: flex !important;
-          flex-wrap: wrap !important;
-          justify-content: center !important;
-          align-items: center !important;
-          width: 100% !important;
-          max-width: 100% !important;
-          column-gap: 0.25em !important;
-          row-gap: 0.15em !important;
-          margin-top: 0 !important;
-        }
-
-        .casa-webgl-hero .word-container { 
-          margin: 0 !important; 
-          padding: 0 !important;
-          display: inline-flex !important;
-        }
-
-        .casa-webgl-hero .word {
-          white-space: nowrap !important;
-          display: inline-flex !important;
-        }
-
-        .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: 0.15em !important;
+          padding: 0 0 .38em 0 !important;
+          transform: scale(var(--mobile-title-scale, 1)) !important;
+          transform-origin: center center !important;
+          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important; /* tighter between lines on mobile */
         }
       }
     `;
@@ -603,21 +594,44 @@ function createWordSpans(text, container) {
 
 function splitMobileTitle(title) {
   const words = title.split(" ").filter(Boolean);
-  if (words.length <= 1) return [title, ""];
-  const splitIndex = title === "Put Your Feet In the Sand" ? 3 : Math.ceil(words.length / 2);
-  return [words.slice(0, splitIndex).join(" "), words.slice(splitIndex).join(" ")];
+  if (title === "Something For Everyone") return ["Something", "For", "Everyone"];
+  if (title === "Your Personal Oasis") return ["Your", "Personal", "Oasis"];
+  if (title === "Modern & Spacious") return ["Modern", "&", "Spacious"];
+  if (title === "Your New Vegas Night") return ["Your", "New Vegas", "Night"];
+  if (title === "Unwind or Entertain") return ["Unwind", "or", "Entertain"];
+  if (title === "Put Your Feet In the Sand") return ["Put Your", "Feet In the", "Sand"];
+  if (title === "Beauty Redefined") return ["Beauty", "", "Redefined"];
+  if (title === "Off-Strip Paradise") return ["Off-Strip", "", "Paradise"];
+  if (words.length >= 3) return [words[0], words.slice(1, -1).join(" "), words[words.length - 1]];
+  if (words.length === 2) return [words[0], "", words[1]];
+  return [title, "", ""];
 }
 
 function fitMobileTitleToViewport() {
   if (!MOBILE_QUERY.matches) return;
-
   const titleContainer = document.querySelector("#dynamic-title");
   if (!titleContainer) return;
-
-  // We are locking the scale here so the text stays large and relies on 
-  // our new Flexbox CSS to wrap words securely without crashing GSAP!
+  // Two‑frame rAF ensures the DOM layout is fully settled after line insertion
   window.requestAnimationFrame(() => {
-    titleContainer.style.setProperty("--mobile-title-scale", "1");
+    window.requestAnimationFrame(() => {
+      const lines = titleContainer.querySelectorAll(".mobile-title-line");
+      const containerWidth = titleContainer.clientWidth;
+      if (!containerWidth || lines.length === 0) return;
+      let minScale = 1;
+      lines.forEach((line) => {
+        // Temporarily remove scaling to measure natural (100%) width
+        const originalTransform = line.style.transform;
+        line.style.transform = "scale(1)";
+        const naturalWidth = line.scrollWidth;
+        if (naturalWidth > 0 && naturalWidth > containerWidth) {
+          const scale = containerWidth / naturalWidth;
+          if (scale < minScale) minScale = scale;
+        }
+        line.style.transform = originalTransform;
+      });
+      // Apply the smallest required scale (never larger than 1)
+      titleContainer.style.setProperty("--mobile-title-scale", Math.min(minScale, 1).toString());
+    });
   });
 }
 
@@ -625,27 +639,23 @@ function animateTextIn(title) {
   const titleContainer = ensureHeroText();
   if (!titleContainer) return;
 
-  titleContainer.textContent = "";
-  titleContainer.style.setProperty("--mobile-title-scale", "1");
-
-  // Safety: ensure title is a string (fallback to empty)
-  if (Array.isArray(title)) title = title || "";
+  if (Array.isArray(title)) title = title[0] || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
+
+  titleContainer.textContent = "";
+  titleContainer.style.setProperty("--mobile-title-scale", "1");
   if (!title) return;
 
   if (MOBILE_QUERY.matches) {
-    const [topLine, bottomLine] = splitMobileTitle(title);
-    const top = document.createElement("span");
-    const bottom = document.createElement("span");
-    top.className = "mobile-title-line mobile-title-line-top";
-    bottom.className = "mobile-title-line mobile-title-line-bottom";
-    createWordSpans(topLine, top);
-    if (bottomLine) {
-        createWordSpans(bottomLine, bottom);
-    }
-    titleContainer.appendChild(top);
-    if (bottomLine) titleContainer.appendChild(bottom);
+    const [topLine, middleLine, bottomLine] = splitMobileTitle(title);
+    [["top", topLine], ["middle", middleLine], ["bottom", bottomLine]].forEach(([position, lineText]) => {
+      if (!lineText) return;
+      const line = document.createElement("span");
+      line.className = `mobile-title-line mobile-title-line-${position}`;
+      createWordSpans(lineText, line);
+      titleContainer.appendChild(line);
+    });
     fitMobileTitleToViewport();
   } else {
     createWordSpans(title, titleContainer);
@@ -655,26 +665,38 @@ function animateTextIn(title) {
   const chars = titleContainer.querySelectorAll(".char");
   if (prefersReducedMotion || !gsapRef) {
     chars.forEach((char) => {
-      char.style.transform = "translateY(0%)";
+      char.style.transform = "translateY(0%) scale(1)";
       char.style.opacity = "1";
+      char.style.filter = "blur(0px)";
     });
     return;
   }
 
   if (MOBILE_QUERY.matches) {
     const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
+    const middleChars = titleContainer.querySelectorAll(".mobile-title-line-middle .char");
     const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
 
     gsapRef.killTweensOf(chars);
-    gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
-    gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
-
-    gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    
+    // Safety checks to prevent GSAP from crashing on missing lines!
+    if (topChars.length) {
+        gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+        gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    }
+    
+    if (middleChars.length) {
+        gsapRef.set(middleChars, { opacity: 0, scale: 0.55, z: -220, filter: "blur(18px)" });
+        gsapRef.to(middleChars, { opacity: 1, scale: 1, z: 0, filter: "blur(0px)", duration: 1.02, ease: "expo.out", stagger: { each: .03, from: "center" }, delay: .08 });
+    }
+    
+    if (bottomChars.length) {
+        gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
+        gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" }, delay: .04 });
+    }
     return;
   }
 
-  gsapRef.killTweensOf(chars);
   gsapRef.set(chars, { y: "112%", opacity: 0, rotateZ: 5 });
   gsapRef.to(chars, { y: "0%", opacity: 1, rotateZ: 0, duration: .82, ease: "expo.out", stagger: { each: .024, from: "start" } });
 }
@@ -685,17 +707,23 @@ function animateTextOut() {
   if (!titleContainer || !gsapRef || prefersReducedMotion) return;
 
   if (MOBILE_QUERY.matches) {
-    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-top .char"), { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
-    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-bottom .char"), { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
+    const middleChars = titleContainer.querySelectorAll(".mobile-title-line-middle .char");
+    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
+
+    // Safety checks to prevent GSAP from crashing on exit!
+    if (topChars.length) gsapRef.to(topChars, { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    if (middleChars.length) gsapRef.to(middleChars, { opacity: 0, scale: 0.55, filter: "blur(18px)", duration: .42, ease: "power2.in", stagger: { each: .014, from: "center" } });
+    if (bottomChars.length) gsapRef.to(bottomChars, { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
     return;
   }
 
   gsapRef.to(titleContainer.querySelectorAll(".char"), { y: "-112%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
 }
-
 /* =========================================================
    BLOCK 5 END: HERO TEXT
    ========================================================= */
+
 
 /* =========================================================
    BLOCK 6 START: WEBGL HERO
@@ -823,7 +851,7 @@ function resizeRenderer() {
 
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
-  if (!stage || !validSlides?.texture) return;
+  if (!stage || !validSlides[0]?.texture) return;
 
   scene = new THREE.Scene();
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -832,7 +860,7 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-  const firstTexture = validSlides.texture;
+  const firstTexture = validSlides[0].texture;
   uniforms = {
     uTexture1: { value: firstTexture },
     uTexture2: { value: firstTexture },
@@ -912,14 +940,14 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    const tex0 = await loadHeroTexture(imageUrls);
+    const tex0 = await loadHeroTexture(imageUrls[0]);
     if (!tex0) throw new Error("Primary image failed");
 
-    validSlides.push({ texture: tex0, title: slideTitles || "" });
+    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides.title);
+    animateTextIn(validSlides[0].title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
@@ -933,7 +961,6 @@ async function startHero() {
         transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
       }
     }
-
   } catch (error) {
     console.error("Hero failed to initialize:", error);
     animateTextIn("Luxury Awaits");
@@ -977,18 +1004,7 @@ function runAdventureScroll() {
 
   markAdventureScrollRun();
 
-  const gsapRef = window.gsap;
   const targetTop = Math.max(0, target.getBoundingClientRect().top + window.scrollY);
-
-  if (gsapRef && !prefersReducedMotion) {
-    gsapRef.to(window, {
-      scrollTo: { y: targetTop, autoKill: true },
-      duration: 1.45,
-      ease: "power3.inOut"
-    });
-    return;
-  }
-
   window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? "auto" : "smooth" });
 }
 /* =========================================================
