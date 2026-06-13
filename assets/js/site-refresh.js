@@ -568,13 +568,17 @@ function ensureHeroText() {
       
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
-          max-width: 96vw !important;
-          font-size: clamp(3.2rem, 16vw, 5.5rem) !important;
-          line-height: 1.15 !important;
+          max-width: 98vw !important;
+          font-size: clamp(4rem, 19vw, 6.8rem) !important; /* MUCH LARGER TEXT */
+          line-height: 1.05 !important; /* Tighter to compensate for massive text */
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
           transform: scale(var(--mobile-title-scale, 1)) !important;
           transform-origin: center center !important;
+          display: flex !important;
+          flex-direction: column !important; /* PERFECT VERTICAL STACKING */
+          justify-content: center !important;
+          align-items: center !important;
         }
 
         /* PURE CSS FLEXBOX MAGIC FOR MOBILE TEXT OVERLAPPING */
@@ -585,12 +589,13 @@ function ensureHeroText() {
           align-items: center !important;
           width: 100% !important;
           max-width: 100% !important;
-          column-gap: 0.25em !important;
-          row-gap: 0.15em !important;
+          column-gap: 0.2em !important; /* Perfect horizontal word spacing */
+          row-gap: 0.1em !important; /* Tighter vertical gap if words wrap naturally */
           margin-top: 0 !important;
+          text-align: center !important;
         }
         .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-          margin-top: 0.15em !important;
+          margin-top: 0.12em !important; /* Perfect spacing between top/bottom lines */
         }
         .casa-webgl-hero .word-container {
           margin: 0 !important;
@@ -644,7 +649,7 @@ function fitMobileTitleToViewport() {
   if (!titleContainer) return;
 
   window.requestAnimationFrame(() => {
-    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line.
+    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line without crashing GSAP!
     titleContainer.style.setProperty("--mobile-title-scale", "1");
   });
 }
@@ -657,7 +662,7 @@ function animateTextIn(title) {
   titleContainer.style.setProperty("--mobile-title-scale", "1");
 
   // Safety: ensure title is a string
-  if (Array.isArray(title)) title = title[0] || "";
+  if (Array.isArray(title)) title = title || "";
   if (typeof title !== "string") title = String(title || "");
   title = title.trim();
   if (!title) return;
@@ -805,6 +810,21 @@ const fragmentShader = `
   }
 `;
 
+function applyTextureSettings(texture) {
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function loadHeroTexture(url) {
+  return new Promise((resolve) => {
+    loader.load(url, (texture) => resolve(applyTextureSettings(texture)), undefined, () => resolve(null));
+  });
+}
+
 function textureSize(texture) {
   const image = texture && texture.image;
   return new THREE.Vector2(image?.width || 1, image?.height || 1);
@@ -843,7 +863,7 @@ function resizeRenderer() {
 
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
-  if (!stage || !validSlides[0]?.texture) return;
+  if (!stage || !validSlides?.texture) return;
 
   scene = new THREE.Scene();
   camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -852,7 +872,7 @@ function initWebGL() {
   stage.innerHTML = "";
   stage.appendChild(renderer.domElement);
 
-  const firstTexture = validSlides[0].texture;
+  const firstTexture = validSlides.texture;
   uniforms = {
     uTexture1: { value: firstTexture },
     uTexture2: { value: firstTexture },
@@ -932,48 +952,26 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    // Restored your exact working image loading logic!
-    const tex0 = await new Promise((resolve) => {
-        loader.load(imageUrls[0], (texture) => {
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.needsUpdate = true;
-        resolve(texture);
-      }, undefined, () => resolve(null));
-    });
-
+    const tex0 = await loadHeroTexture(imageUrls);
     if (!tex0) throw new Error("Primary image failed");
 
-    // Fix: Only send the first title into the array, not all 9!
-    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
+    // Reverted the safe load logic!
+    validSlides.push({ texture: tex0, title: slideTitles || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides[0].title);
+    animateTextIn(validSlides.title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
-    // Restored your exact working image loading logic for loop!
     for (let i = 1; i < imageUrls.length; i++) {
-      const tex = await new Promise((resolve) => {
-        loader.load(imageUrls[i], (texture) => {
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          texture.wrapS = THREE.ClampToEdgeWrapping;
-          texture.wrapT = THREE.ClampToEdgeWrapping;
-          texture.needsUpdate = true;
-          resolve(texture);
-        }, undefined, () => resolve(null));
-      });
-      
-      if (tex) {
-        validSlides.push({ texture: tex, title: slideTitles[i] || "" });
-        
-        if (validSlides.length === 2) {
-          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-        }
+      const tex = await loadHeroTexture(imageUrls[i]);
+      if (!tex) continue;
+
+      validSlides.push({ texture: tex, title: slideTitles[i] || "" });
+
+      if (validSlides.length === 2) {
+        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
       }
     }
 
