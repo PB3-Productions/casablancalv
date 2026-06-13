@@ -1,7 +1,7 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA SITE REFRESH JS
-   Purpose: Final hero, mobile layout, mobile CTA, floorplan, Matterport,
-   policy layout, lightbox overrides, and first-visit hero wave scroll.
+   Purpose: Final hero, mobile layout, floorplan/Matterport helpers,
+   lightbox overrides, and first-visit hero wave scroll.
    ========================================================= */
 
 import * as THREE from "https://unpkg.com/three@0.128.0/build/three.module.js";
@@ -67,7 +67,7 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 let activeSlides = [];
 let imageUrls = [];
 let slideTitles = [];
-let validSlides = []; // Exclusively holds fully downloaded, crash-proof textures
+let validSlides = [];
 let currentIndex = 0;
 let renderer;
 let scene;
@@ -91,9 +91,14 @@ function refreshActiveSlides() {
       seen.add(slide.image);
       return true;
     });
+
   imageUrls = activeSlides.map((slide) => slide.image);
   slideTitles = activeSlides.map((slide) => slide.title);
 }
+/* =========================================================
+   BLOCK 2 END: HERO SLIDES
+   ========================================================= */
+
 
 /* =========================================================
    BLOCK 3 START: FINAL OVERRIDE STYLES
@@ -119,372 +124,72 @@ function injectFinalStyles() {
       gap: clamp(.85rem, 1.6vw, 1.15rem) !important;
     }
 
-    .hero-intro-buttons .btn,
-    .footer-button-row .btn {
-      width: min(270px, 100%) !important;
-      min-width: min(270px, 100%) !important;
-    }
-
-    .media-card.framed-floorplan,
-    .framed-floorplan,
-    .media-card.framed-map-card,
-    .framed-map-card {
-      padding: 0 !important;
-      background: transparent !important;
-      border: 0 !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      overflow: visible !important;
-    }
-
-    .framed-floorplan::before,
-    .framed-floorplan::after,
-    .framed-map-card::before,
-    .framed-map-card::after {
-      display: none !important;
-      content: none !important;
-    }
-
-    .framed-floorplan img,
-    .framed-map-card img {
-      display: block !important;
-      width: 100% !important;
-      height: auto !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      object-fit: contain !important;
-      cursor: zoom-in !important;
-    }
-
-    #policies .site-shell > .grid-2 {
-      display: block !important;
-    }
-
-    #policies .site-shell > .grid-2 > .reveal:first-child {
-      max-width: 980px !important;
-      margin: 0 auto clamp(1.4rem, 3vw, 2.4rem) !important;
-      text-align: center !important;
-    }
-
-    #policies .site-shell > .grid-2 > .reveal:first-child .eyebrow,
-    #policies .site-shell > .grid-2 > .reveal:first-child h2,
-    #policies .site-shell > .grid-2 > .reveal:first-child .lead {
-      text-align: center !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
-    }
-
-    #policies .policy-grid {
-      display: grid !important;
-      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-      gap: clamp(.7rem, 1vw, 1rem) !important;
-      align-items: stretch !important;
-    }
-
-    #policies .policy-grid .mini-card {
-      padding: clamp(1rem, 1.2vw, 1.35rem) !important;
-    }
-
-    #policies .policy-grid .mini-card h3 {
-      font-size: clamp(.95rem, 1vw, 1.12rem) !important;
-    }
-
-    #policies .policy-grid .mini-card p {
-      font-size: clamp(.84rem, .9vw, .98rem) !important;
-      line-height: 1.55 !important;
-    }
-
-    .mobile-floating-actions {
-      position: fixed;
-      left: 50%;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-      z-index: 80;
-      display: none;
-      width: min(86vw, 320px);
-      transform: translate(-50%, 18px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .36s ease, transform .36s ease;
-    }
-
-    .mobile-floating-actions__inner {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: .78rem;
-    }
-
-    .mobile-floating-actions .btn {
-      width: 100% !important;
-      min-width: 0 !important;
-      min-height: 47px !important;
-      padding: .72rem .82rem !important;
-      border-radius: 999px !important;
-      font-size: clamp(.76rem, 3.1vw, .91rem) !important;
-      letter-spacing: .095em !important;
-      line-height: 1.08 !important;
-      white-space: nowrap !important;
-      justify-content: center !important;
-      text-align: center !important;
-    }
-
-    .mobile-floating-actions.is-visible:not(.is-hidden):not(.is-scrolling) {
-      opacity: 1;
-      transform: translate(-50%, 0);
-      pointer-events: auto;
-    }
-
     .casa-webgl-hero #dynamic-title {
-      line-height: .74 !important;
-    }
-
-    .casa-webgl-hero .word-container {
-      margin-left: .16em !important;
-      margin-right: .16em !important;
-    }
-
-    .casa-webgl-hero .mobile-title-line {
-      display: block !important;
-      width: 100% !important;
-      overflow: visible !important;
-    }
-
-    .casa-webgl-hero .mobile-title-line + .mobile-title-line {
-      margin-top: clamp(.35rem, 1.55vh, .9rem) !important;
-    }
-
-    @media (max-width: 1200px) {
-      #policies .policy-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-      }
+      line-height: 1.1 !important;
     }
 
     @media (max-width: 768px) {
-      #site-header,
-      .site-header,
-      .header-container,
-      .brand-group,
-      .main-logo,
-      .nav-bar-container {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-      }
-
-      body {
-        padding-top: 0 !important;
-        overflow-x: hidden !important;
-      }
-
-      .mobile-floating-actions {
-        display: block !important;
-      }
-
-      main p,
-      main .lead,
-      main .mini-card p,
-      main .price-card p,
-      main .count,
-      main .status-note,
-      main .badge,
-      main li,
-      main .feature-list span:not(.gold-svg-icon) {
-        text-align: left !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-
-      .hero-intro-section .intro-lead,
-      .estate-summary-card .lead,
-      .floorplan-section .lead,
-      #policies .lead,
-      #availability .lead,
-      .footer-cta-card p,
-      .footer-brand-block p {
-        max-width: min(91vw, 34rem) !important;
-      }
-
-      .hero-intro-section .title-lg,
-      .estate-summary-card .title-lg,
-      .floorplan-section .title-lg,
-      #policies .title-lg,
-      #availability .title-lg {
-        text-align: center !important;
-      }
-
-      .hero-intro-buttons {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: .85rem !important;
-        max-width: min(86vw, 320px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-
-      .hero-intro-buttons .btn,
-      .footer-button-row .btn {
-        width: 100% !important;
-        min-width: 0 !important;
-        min-height: 48px !important;
-        padding-left: .82rem !important;
-        padding-right: .82rem !important;
-        font-size: clamp(.76rem, 3.08vw, .91rem) !important;
-        letter-spacing: .086em !important;
-        line-height: 1.08 !important;
-      }
-
-      .footer-button-row {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: .85rem !important;
-        max-width: min(86vw, 320px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-
-      #policies .policy-grid {
-        grid-template-columns: 1fr !important;
-        max-width: min(92vw, 520px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+      #welcome .title-lg {
+        font-size: 2.25rem !important;
+        line-height: 1.2 !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+        white-space: normal !important;
+        padding: 0 10px !important;
       }
     }
   `;
+
   document.head.appendChild(style);
 }
+/* =========================================================
+   BLOCK 3 END: FINAL OVERRIDE STYLES
+   ========================================================= */
+
 
 /* =========================================================
-   BLOCK 4 START: DOM PATCHES
+   BLOCK 4 START: CONTENT + MOBILE CTA HELPERS
    ========================================================= */
 function removeLegacyHeroConflicts() {
-  const approvedHero = document.querySelector(".casa-webgl-hero");
-  const main = document.querySelector("main");
-  if (!main || !approvedHero) return;
-
-  Array.from(main.querySelectorAll("section.hero")).forEach((section) => {
-    if (section !== approvedHero) section.remove();
-  });
-
-  Array.from(document.querySelectorAll(".hero-content, .hero-copy, .hero-grid, .intro-panel")).forEach((node) => {
-    if (!approvedHero.contains(node)) node.remove();
-  });
-
-  if (main.firstElementChild !== approvedHero) main.insertBefore(approvedHero, main.firstElementChild);
-
-  const welcome = document.getElementById("welcome");
-  if (welcome && approvedHero.nextElementSibling !== welcome) main.insertBefore(welcome, approvedHero.nextElementSibling);
+  document.querySelectorAll(".legacy-hero, .old-hero, .hero-split, .hero-panel").forEach((node) => node.remove());
 }
 
 function patchContentFlow() {
   injectFinalStyles();
   removeLegacyHeroConflicts();
-
-  document.getElementById("matterport")?.remove();
-  document.querySelectorAll('a[href="#matterport"]').forEach((link) => link.remove());
-
-  const welcome = document.querySelector("#welcome .narrow-shell");
-  if (welcome) {
-    let introButtons = welcome.querySelector(".intro-button-row");
-    if (!introButtons) {
-      introButtons = document.createElement("div");
-      introButtons.className = "intro-button-row hero-intro-buttons";
-      welcome.appendChild(introButtons);
-    }
-    introButtons.innerHTML = `
-      <a class="btn btn-gold" href="#availability">Check Available Dates</a>
-      <a class="btn btn-outline" href="#video-tour">View the Estate Tour</a>
-    `;
-  }
-
-  const summaryCard = document.querySelector(".estate-summary-card");
-  if (summaryCard) {
-    const cardTitle = summaryCard.querySelector("h2");
-    const cardLead = summaryCard.querySelector(".lead");
-    if (cardTitle) cardTitle.textContent = "A Private Las Vegas Estate Designed for Groups, Events & VIP Stays";
-    if (cardLead) {
-      cardLead.textContent = "A private, high-end estate for guests who want the space of a luxury residence, the discretion of a private booking team, and the service layer of a VIP concierge experience. Casablanca Las Vegas is positioned for elevated group stays, private retreats, productions, professional networking events, weddings, and premium day events close to the Strip without placing the exact address in front of every casual browser.";
-    }
-    summaryCard.querySelector(".intro-button-row")?.remove();
-  }
-
-  const availabilityHeading = document.querySelector("#availability h2");
-  if (availabilityHeading) availabilityHeading.textContent = "Check Dates For Availability";
-
-  const footerExploreTitle = document.querySelector(".footer-links-card h3");
-  if (footerExploreTitle) footerExploreTitle.textContent = "Explore";
-
-  document.querySelectorAll(".btn").forEach((button) => {
-    const text = (button.textContent || "").trim().toLowerCase();
-    if (text.includes("check your dates")) button.textContent = "Check Available Dates";
-  });
-
-  const floorplanImage = document.querySelector(".framed-floorplan img");
-  if (floorplanImage) {
-    floorplanImage.src = FLOORPLAN_IMAGE;
-    floorplanImage.srcset = `${FLOORPLAN_IMAGE} 1600w`;
-    floorplanImage.sizes = "(max-width: 900px) 100vw, 72vw";
-    floorplanImage.alt = "Updated Casablanca Las Vegas estate floorplan showing sleeping layout and room flow";
-  }
-
-  document.querySelectorAll(".concierge-option").forEach((card) => {
-    card.removeAttribute("href");
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.addEventListener("click", (event) => event.preventDefault());
-  });
 }
 
-/* =========================================================
-   BLOCK 5 START: MOBILE FLOATING CTA BUTTONS
-   ========================================================= */
 function ensureMobileFloatingActions() {
-  let actions = document.querySelector(".mobile-floating-actions");
-  if (actions) return actions;
+  if (document.getElementById("mobileFloatingActions")) return;
 
-  actions = document.createElement("div");
-  actions.className = "mobile-floating-actions is-hidden";
-  actions.setAttribute("aria-label", "Mobile booking actions");
-  actions.innerHTML = `
-    <div class="mobile-floating-actions__inner">
-      <a class="btn btn-gold" href="#availability">Check Availability</a>
-      <a class="btn btn-outline" href="tel:6167457148">Speak to Agent</a>
-    </div>
+  const wrapper = document.createElement("div");
+  wrapper.id = "mobileFloatingActions";
+  wrapper.className = "mobile-floating-actions";
+  wrapper.innerHTML = `
+    <a href="#availability" aria-label="Check Casablanca Las Vegas availability">Availability</a>
+    <a href="tel:6167457148" aria-label="Call Casablanca Las Vegas sales agent">Call</a>
   `;
-  document.body.appendChild(actions);
-  return actions;
+  document.body.appendChild(wrapper);
 }
 
 function initMobileFloatingActions() {
-  const actions = ensureMobileFloatingActions();
-  const hero = document.querySelector(".casa-webgl-hero");
-  if (!actions || !hero) return;
+  const actions = document.getElementById("mobileFloatingActions");
+  if (!actions) return;
 
-  let isScrolling = false;
-  let scrollTimer = null;
-
-  const isInsideHero = () => window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.82;
-  const sync = () => {
-    const hidden = !MOBILE_QUERY.matches || isInsideHero();
-    actions.classList.toggle("is-hidden", hidden);
-    actions.classList.toggle("is-scrolling", isScrolling);
-    actions.classList.toggle("is-visible", MOBILE_QUERY.matches && !hidden);
+  const update = () => {
+    actions.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.35);
   };
 
-  window.addEventListener("scroll", () => {
-    isScrolling = true;
-    sync();
-    window.clearTimeout(scrollTimer);
-    scrollTimer = window.setTimeout(() => {
-      isScrolling = false;
-      sync();
-    }, 3000);
-  }, { passive: true });
-
-  window.addEventListener("resize", sync, { passive: true });
-  sync();
+  update();
+  window.addEventListener("scroll", update, { passive: true });
 }
+/* =========================================================
+   BLOCK 4 END: CONTENT + MOBILE CTA HELPERS
+   ========================================================= */
+
 
 /* =========================================================
-   BLOCK 6 START: HERO TITLE TEXT
+   BLOCK 5 START: HERO TEXT
    ========================================================= */
 function ensureHeroText() {
   const hero = document.querySelector(".casa-webgl-hero");
@@ -494,8 +199,7 @@ function ensureHeroText() {
   if (!heroText) {
     heroText = document.createElement("div");
     heroText.className = "hero-text";
-    heroText.setAttribute("aria-live", "polite");
-    heroText.innerHTML = `<h1 id="dynamic-title"></h1>`;
+    heroText.innerHTML = `<h2 id="dynamic-title" aria-live="polite"></h2>`;
     hero.appendChild(heroText);
   }
 
@@ -528,7 +232,7 @@ function ensureHeroText() {
         color: #ffd400 !important;
         font-size: clamp(2.35rem, 8vw, 7.25rem) !important;
         font-weight: 900 !important;
-        line-height: .74 !important;
+        line-height: 1.1 !important;
         letter-spacing: -0.045em !important;
         text-align: center !important;
         text-wrap: balance !important;
@@ -545,20 +249,23 @@ function ensureHeroText() {
         overflow: visible !important;
       }
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
-      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
+      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity, filter; overflow: visible !important; }
+      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; white-space: normal !important; line-height: 1.1 !important; }
+      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.18rem, .9vh, .55rem) !important; }
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
-          max-width: 98vw !important;
-          font-size: clamp(4rem, 22vw, 8.8rem) !important;
-          line-height: .72 !important;
-          letter-spacing: -0.062em !important;
+          max-width: 96vw !important;
+          font-size: clamp(2.5rem, 14vw, 4.5rem) !important;
+          line-height: 1.1 !important;
+          letter-spacing: -0.04em !important;
           padding-left: 0 !important;
           padding-right: 0 !important;
           padding-bottom: .38em !important;
+          overflow-wrap: break-word !important;
+          word-wrap: break-word !important;
+          white-space: normal !important;
         }
-        .casa-webgl-hero .word-container { margin: 0 .07em !important; }
+        .casa-webgl-hero .word-container { margin: 0 .07em !important; padding: 0 .01em .08em !important; }
       }
     `;
     document.head.appendChild(style);
@@ -571,14 +278,17 @@ function createWordSpans(text, container) {
   text.split(" ").filter(Boolean).forEach((word, index, words) => {
     const wordContainer = document.createElement("span");
     wordContainer.className = "word-container";
+
     const wordSpan = document.createElement("span");
     wordSpan.className = "word";
+
     Array.from(word).forEach((letter) => {
       const char = document.createElement("span");
       char.className = "char";
       char.textContent = letter;
       wordSpan.appendChild(char);
     });
+
     wordContainer.appendChild(wordSpan);
     container.appendChild(wordContainer);
     if (index < words.length - 1) container.appendChild(document.createTextNode(" "));
@@ -587,9 +297,17 @@ function createWordSpans(text, container) {
 
 function splitMobileTitle(title) {
   const words = title.split(" ").filter(Boolean);
-  if (words.length <= 1) return [title, ""];
-  const splitIndex = title === "Put Your Feet In the Sand" ? 3 : Math.ceil(words.length / 2);
-  return [words.slice(0, splitIndex).join(" "), words.slice(splitIndex).join(" ")];
+  if (title === "Something For Everyone") return ["Something", "For", "Everyone"];
+  if (title === "Your Personal Oasis") return ["Your", "Personal", "Oasis"];
+  if (title === "Modern & Spacious") return ["Modern", "&", "Spacious"];
+  if (title === "Your New Vegas Night") return ["Your", "New Vegas", "Night"];
+  if (title === "Unwind or Entertain") return ["Unwind", "or", "Entertain"];
+  if (title === "Put Your Feet In the Sand") return ["Put Your", "Feet In the", "Sand"];
+  if (title === "Beauty Redefined") return ["Beauty", "", "Redefined"];
+  if (title === "Off-Strip Paradise") return ["Off-Strip", "", "Paradise"];
+  if (words.length >= 3) return [words[0], words.slice(1, -1).join(" "), words[words.length - 1]];
+  if (words.length === 2) return [words[0], "", words[1]];
+  return [title, "", ""];
 }
 
 function fitMobileTitleToViewport() {
@@ -607,32 +325,31 @@ function fitMobileTitleToViewport() {
     const maxLineWidth = Math.max(...lines.map((line) => line.scrollWidth));
     const availableWidth = window.innerWidth * 0.96;
     const scale = Math.min(1, availableWidth / Math.max(maxLineWidth, 1));
-    titleContainer.style.setProperty("--mobile-title-scale", String(Math.max(0.62, scale)));
+    titleContainer.style.setProperty("--mobile-title-scale", String(Math.max(0.4, scale)));
   });
 }
 
 function animateTextIn(title) {
   const titleContainer = ensureHeroText();
   if (!titleContainer) return;
+
+  if (Array.isArray(title)) title = title[0] || "";
+  if (typeof title !== "string") title = String(title || "");
+  title = title.trim();
+
   titleContainer.textContent = "";
   titleContainer.style.setProperty("--mobile-title-scale", "1");
-
-  // Safety: ensure title is a string (fallback to empty)
-  if (typeof title !== "string") title = String(title || "");
-  if (!title.trim()) return;
-  
-  // … keep the rest of the function exactly as it was
+  if (!title) return;
 
   if (MOBILE_QUERY.matches) {
-    const [topLine, bottomLine] = splitMobileTitle(title);
-    const top = document.createElement("span");
-    const bottom = document.createElement("span");
-    top.className = "mobile-title-line mobile-title-line-top";
-    bottom.className = "mobile-title-line mobile-title-line-bottom";
-    createWordSpans(topLine, top);
-    createWordSpans(bottomLine, bottom);
-    titleContainer.appendChild(top);
-    if (bottomLine) titleContainer.appendChild(bottom);
+    const [topLine, middleLine, bottomLine] = splitMobileTitle(title);
+    [["top", topLine], ["middle", middleLine], ["bottom", bottomLine]].forEach(([position, lineText]) => {
+      if (!lineText) return;
+      const line = document.createElement("span");
+      line.className = `mobile-title-line mobile-title-line-${position}`;
+      createWordSpans(lineText, line);
+      titleContainer.appendChild(line);
+    });
     fitMobileTitleToViewport();
   } else {
     createWordSpans(title, titleContainer);
@@ -642,19 +359,26 @@ function animateTextIn(title) {
   const chars = titleContainer.querySelectorAll(".char");
   if (prefersReducedMotion || !gsapRef) {
     chars.forEach((char) => {
-      char.style.transform = "translateY(0%)";
+      char.style.transform = "translateY(0%) scale(1)";
       char.style.opacity = "1";
+      char.style.filter = "blur(0px)";
     });
     return;
   }
 
   if (MOBILE_QUERY.matches) {
     const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
+    const middleChars = titleContainer.querySelectorAll(".mobile-title-line-middle .char");
     const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
+
+    gsapRef.killTweensOf(chars);
     gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
+    gsapRef.set(middleChars, { opacity: 0, scale: 0.55, z: -220, filter: "blur(18px)" });
     gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
+
     gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
+    gsapRef.to(middleChars, { opacity: 1, scale: 1, z: 0, filter: "blur(0px)", duration: 1.02, ease: "expo.out", stagger: { each: .03, from: "center" }, delay: .08 });
+    gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" }, delay: .04 });
     return;
   }
 
@@ -669,12 +393,263 @@ function animateTextOut() {
 
   if (MOBILE_QUERY.matches) {
     gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-top .char"), { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+    gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-middle .char"), { opacity: 0, scale: 0.55, filter: "blur(18px)", duration: .42, ease: "power2.in", stagger: { each: .014, from: "center" } });
     gsapRef.to(titleContainer.querySelectorAll(".mobile-title-line-bottom .char"), { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
     return;
   }
 
   gsapRef.to(titleContainer.querySelectorAll(".char"), { y: "-112%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
 }
+/* =========================================================
+   BLOCK 5 END: HERO TEXT
+   ========================================================= */
+
+
+/* =========================================================
+   BLOCK 6 START: WEBGL HERO
+   ========================================================= */
+const loader = new THREE.TextureLoader();
+loader.crossOrigin = "anonymous";
+
+const vertexShader = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const fragmentShader = `
+  precision highp float;
+  uniform sampler2D uTexture1;
+  uniform sampler2D uTexture2;
+  uniform vec2 uTexture1Size;
+  uniform vec2 uTexture2Size;
+  uniform vec2 uResolution;
+  uniform float uProgress;
+  uniform float uTime;
+  varying vec2 vUv;
+
+  float hash(float n) { return fract(sin(n) * 43758.5453123); }
+
+  vec2 coverUv(vec2 uv, vec2 imageSize, vec2 resolution) {
+    vec2 centeredUv = uv - 0.5;
+    float screenAspect = resolution.x / resolution.y;
+    float imageAspect = imageSize.x / imageSize.y;
+    if (screenAspect < imageAspect) centeredUv.x *= screenAspect / imageAspect;
+    else centeredUv.y *= imageAspect / screenAspect;
+    return centeredUv + 0.5;
+  }
+
+  vec4 sampleWithSoftClamp(sampler2D textureMap, vec2 uv) {
+    return texture2D(textureMap, clamp(uv, vec2(0.001), vec2(0.999)));
+  }
+
+  void main() {
+    vec2 baseUv = vUv;
+    vec2 uv1 = coverUv(baseUv, uTexture1Size, uResolution);
+    vec2 uv2 = coverUv(baseUv, uTexture2Size, uResolution);
+    float transitionStrength = sin(uProgress * 3.14159265);
+    float band = 0.28;
+    float revealLine = uProgress * (1.0 + band * 2.0) - band;
+    float revealNoise = sin(baseUv.y * 15.0 + uTime * 1.65) * 0.035 * transitionStrength + sin(baseUv.y * 43.0 - uTime * 2.05) * 0.018 * transitionStrength;
+    float revealMask = 1.0 - smoothstep(revealLine - band, revealLine + band, baseUv.x + revealNoise);
+    float sliceCount = 20.0;
+    float sliceIndex = floor(baseUv.y * sliceCount);
+    float sliceRandom = hash(sliceIndex + 11.0);
+    float sliceOffset = (sliceRandom - 0.5) * 0.12 * transitionStrength;
+    float verticalWave = sin(baseUv.y * 34.0 + uTime * 2.2) * 0.034 * transitionStrength;
+    float horizontalWave = cos(baseUv.x * 24.0 - uTime * 1.65) * 0.018 * transitionStrength;
+    vec2 displacement = vec2(verticalWave + sliceOffset, horizontalWave);
+    vec2 directionalPull = vec2((revealMask - 0.5) * 0.16, 0.0) * transitionStrength;
+    vec2 distortedUv1 = uv1 + displacement + directionalPull;
+    vec2 distortedUv2 = uv2 - displacement - directionalPull;
+    vec4 color1 = sampleWithSoftClamp(uTexture1, distortedUv1);
+    vec4 color2 = sampleWithSoftClamp(uTexture2, distortedUv2);
+    vec4 finalColor = mix(color1, color2, revealMask);
+    float splitStrength = 0.01 * transitionStrength;
+    vec4 redShift = sampleWithSoftClamp(uTexture2, distortedUv2 + vec2(splitStrength, 0.0));
+    vec4 blueShift = sampleWithSoftClamp(uTexture1, distortedUv1 - vec2(splitStrength, 0.0));
+    finalColor.r = mix(finalColor.r, redShift.r, transitionStrength * 0.24);
+    finalColor.b = mix(finalColor.b, blueShift.b, transitionStrength * 0.18);
+    float vignette = smoothstep(0.94, 0.20, distance(baseUv, vec2(0.5)));
+    finalColor.rgb *= mix(0.76, 1.0, vignette);
+    gl_FragColor = finalColor;
+  }
+`;
+
+function applyTextureSettings(texture) {
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function loadHeroTexture(url) {
+  return new Promise((resolve) => {
+    loader.load(url, (texture) => resolve(applyTextureSettings(texture)), undefined, () => resolve(null));
+  });
+}
+
+function textureSize(texture) {
+  const image = texture && texture.image;
+  return new THREE.Vector2(image?.width || 1, image?.height || 1);
+}
+
+function getNextIndex(index) {
+  if (validSlides.length <= 1) return index;
+  return (index + 1) % validSlides.length;
+}
+
+function setTexturePair(index) {
+  const nextIndex = getNextIndex(index);
+  const tex1 = validSlides[index]?.texture;
+  const tex2 = validSlides[nextIndex]?.texture || tex1;
+  if (!tex1 || !uniforms) return;
+
+  uniforms.uTexture1.value = tex1;
+  uniforms.uTexture2.value = tex2;
+  uniforms.uTexture1Size.value = textureSize(tex1);
+  uniforms.uTexture2Size.value = textureSize(tex2);
+}
+
+function resizeRenderer() {
+  const stage = document.getElementById("casaWebglHero");
+  if (!renderer || !uniforms || !stage) return;
+
+  const rect = stage.getBoundingClientRect();
+  const width = Math.max(1, rect.width || window.innerWidth);
+  const height = Math.max(1, rect.height || window.innerHeight);
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(width, height, false);
+  uniforms.uResolution.value.set(width, height);
+  fitMobileTitleToViewport();
+}
+
+function initWebGL() {
+  const stage = document.getElementById("casaWebglHero");
+  if (!stage || !validSlides[0]?.texture) return;
+
+  scene = new THREE.Scene();
+  camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  camera.position.z = 1;
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
+  stage.innerHTML = "";
+  stage.appendChild(renderer.domElement);
+
+  const firstTexture = validSlides[0].texture;
+  uniforms = {
+    uTexture1: { value: firstTexture },
+    uTexture2: { value: firstTexture },
+    uTexture1Size: { value: textureSize(firstTexture) },
+    uTexture2Size: { value: textureSize(firstTexture) },
+    uResolution: { value: new THREE.Vector2(1, 1) },
+    uProgress: { value: 0 },
+    uTime: { value: 0 }
+  };
+
+  const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: false });
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
+  resizeRenderer();
+  stage.classList.add("is-ready");
+}
+
+function transitionToNext() {
+  if (isTransitioning || validSlides.length < 2 || !uniforms) return;
+
+  isTransitioning = true;
+  const targetIndex = getNextIndex(currentIndex);
+  setTexturePair(currentIndex);
+
+  const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
+
+  if (textSwapTimer) window.clearTimeout(textSwapTimer);
+  animateTextOut();
+  textSwapTimer = window.setTimeout(() => {
+    animateTextIn(validSlides[targetIndex].title);
+  }, (TRANSITION_DURATION / 2) * 1000);
+
+  const completeTransition = () => {
+    currentIndex = targetIndex;
+    const currentTexture = validSlides[currentIndex].texture;
+    uniforms.uTexture1.value = currentTexture;
+    uniforms.uTexture2.value = currentTexture;
+    uniforms.uTexture1Size.value = textureSize(currentTexture);
+    uniforms.uTexture2Size.value = textureSize(currentTexture);
+    uniforms.uProgress.value = 0;
+    isTransitioning = false;
+
+    if (shouldScrollAfterTransition) runAdventureScroll();
+
+    window.clearTimeout(transitionTimer);
+    transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+  };
+
+  const gsapRef = window.gsap;
+  if (!gsapRef || prefersReducedMotion) {
+    uniforms.uProgress.value = 1;
+    completeTransition();
+    return;
+  }
+
+  gsapRef.killTweensOf(uniforms.uProgress);
+  gsapRef.to(uniforms.uProgress, {
+    value: 1,
+    duration: TRANSITION_DURATION,
+    ease: "power3.inOut",
+    onComplete: completeTransition
+  });
+}
+
+function render() {
+  if (uniforms && renderer && scene && camera) {
+    uniforms.uTime.value += clock.getDelta();
+    renderer.render(scene, camera);
+  }
+  window.requestAnimationFrame(render);
+}
+
+async function startHero() {
+  if (heroStarted) return;
+  heroStarted = true;
+
+  try {
+    refreshActiveSlides();
+    ensureHeroText();
+
+    const tex0 = await loadHeroTexture(imageUrls[0]);
+    if (!tex0) throw new Error("Primary image failed");
+
+    validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
+    currentIndex = 0;
+
+    initWebGL();
+    animateTextIn(validSlides[0].title);
+    render();
+    window.addEventListener("resize", resizeRenderer, { passive: true });
+
+    for (let i = 1; i < imageUrls.length; i++) {
+      const tex = await loadHeroTexture(imageUrls[i]);
+      if (!tex) continue;
+
+      validSlides.push({ texture: tex, title: slideTitles[i] || "" });
+
+      if (validSlides.length === 2) {
+        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+      }
+    }
+  } catch (error) {
+    console.error("Hero failed to initialize:", error);
+    animateTextIn("Luxury Awaits");
+  }
+}
+/* =========================================================
+   BLOCK 6 END: WEBGL HERO
+   ========================================================= */
+
 
 /* =========================================================
    BLOCK 7 START: FIRST-VISIT HERO WAVE SCROLL
@@ -709,273 +684,16 @@ function runAdventureScroll() {
 
   markAdventureScrollRun();
 
-  const gsapRef = window.gsap;
   const targetTop = Math.max(0, target.getBoundingClientRect().top + window.scrollY);
-
-  if (gsapRef && !prefersReducedMotion) {
-    gsapRef.to(window, {
-      scrollTo: { y: targetTop, autoKill: true },
-      duration: 1.45,
-      ease: "power3.inOut"
-    });
-    return;
-  }
-
   window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? "auto" : "smooth" });
 }
-
 /* =========================================================
-   BLOCK 8 START: WEBGL HERO
+   BLOCK 7 END: FIRST-VISIT HERO WAVE SCROLL
    ========================================================= */
-const loader = new THREE.TextureLoader();
-loader.crossOrigin = "anonymous";
 
-const vertexShader = `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const fragmentShader = `
-  precision highp float;
-  uniform sampler2D uTexture1;
-  uniform sampler2D uTexture2;
-  uniform vec2 uTexture1Size;
-  uniform vec2 uTexture2Size;
-  uniform vec2 uResolution;
-  uniform float uProgress;
-  uniform float uTime;
-  varying vec2 vUv;
-  float hash(float n) { return fract(sin(n) * 43758.5453123); }
-  vec2 coverUv(vec2 uv, vec2 imageSize, vec2 resolution) {
-    vec2 centeredUv = uv - 0.5;
-    float screenAspect = resolution.x / resolution.y;
-    float imageAspect = imageSize.x / imageSize.y;
-    if (screenAspect < imageAspect) centeredUv.x *= screenAspect / imageAspect;
-    else centeredUv.y *= imageAspect / screenAspect;
-    return centeredUv + 0.5;
-  }
-  vec4 sampleWithSoftClamp(sampler2D textureMap, vec2 uv) {
-    return texture2D(textureMap, clamp(uv, vec2(0.001), vec2(0.999)));
-  }
-  void main() {
-    vec2 baseUv = vUv;
-    vec2 uv1 = coverUv(baseUv, uTexture1Size, uResolution);
-    vec2 uv2 = coverUv(baseUv, uTexture2Size, uResolution);
-    float transitionStrength = sin(uProgress * 3.14159265);
-    float band = 0.28;
-    float revealLine = uProgress * (1.0 + band * 2.0) - band;
-    float revealNoise = sin(baseUv.y * 15.0 + uTime * 1.65) * 0.035 * transitionStrength + sin(baseUv.y * 43.0 - uTime * 2.05) * 0.018 * transitionStrength;
-    float revealMask = 1.0 - smoothstep(revealLine - band, revealLine + band, baseUv.x + revealNoise);
-    float sliceCount = 20.0;
-    float sliceIndex = floor(baseUv.y * sliceCount);
-    float sliceRandom = hash(sliceIndex + 11.0);
-    float sliceOffset = (sliceRandom - 0.5) * 0.12 * transitionStrength;
-    float verticalWave = sin(baseUv.y * 34.0 + uTime * 2.2) * 0.034 * transitionStrength;
-    float horizontalWave = cos(baseUv.x * 24.0 - uTime * 1.65) * 0.018 * transitionStrength;
-    vec2 displacement = vec2(verticalWave + sliceOffset, horizontalWave);
-    vec2 directionalPull = vec2((revealMask - 0.5) * 0.16, 0.0) * transitionStrength;
-    vec2 distortedUv1 = uv1 + displacement + directionalPull;
-    vec2 distortedUv2 = uv2 - displacement - directionalPull;
-    vec4 color1 = sampleWithSoftClamp(uTexture1, distortedUv1);
-    vec4 color2 = sampleWithSoftClamp(uTexture2, distortedUv2);
-    vec4 finalColor = mix(color1, color2, revealMask);
-    float splitStrength = 0.01 * transitionStrength;
-    vec4 redShift = sampleWithSoftClamp(uTexture2, distortedUv2 + vec2(splitStrength, 0.0));
-    vec4 blueShift = sampleWithSoftClamp(uTexture1, distortedUv1 - vec2(splitStrength, 0.0));
-    finalColor.r = mix(finalColor.r, redShift.r, transitionStrength * 0.24);
-    finalColor.b = mix(finalColor.b, blueShift.b, transitionStrength * 0.18);
-    float vignette = smoothstep(0.94, 0.20, distance(baseUv, vec2(0.5)));
-    finalColor.rgb *= mix(0.76, 1.0, vignette);
-    gl_FragColor = finalColor;
-  }
-`;
-
-function textureSize(texture) {
-  const image = texture && texture.image;
-  return new THREE.Vector2(image?.width || 1, image?.height || 1);
-}
-
-function getNextIndex(index) {
-  if (validSlides.length <= 1) return index;
-  return (index + 1) % validSlides.length;
-}
-
-function setTexturePair(index) {
-  const nextIndex = getNextIndex(index);
-  const tex1 = validSlides[index].texture;
-  const tex2 = validSlides[nextIndex].texture;
-
-  uniforms.uTexture1.value = tex1;
-  uniforms.uTexture2.value = tex2;
-  uniforms.uTexture1Size.value = textureSize(tex1);
-  uniforms.uTexture2Size.value = textureSize(tex2);
-}
-
-function resizeRenderer() {
-  const stage = document.getElementById("casaWebglHero");
-  if (!renderer || !uniforms || !stage) return;
-  const rect = stage.getBoundingClientRect();
-  const width = Math.max(1, rect.width || window.innerWidth);
-  const height = Math.max(1, rect.height || window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(width, height, false);
-  uniforms.uResolution.value.set(width, height);
-  fitMobileTitleToViewport();
-}
-
-function initWebGL() {
-  const stage = document.getElementById("casaWebglHero");
-  if (!stage) return;
-
-  scene = new THREE.Scene();
-  camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-  camera.position.z = 1;
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
-  stage.innerHTML = "";
-  stage.appendChild(renderer.domElement);
-
-  uniforms = {
-    uTexture1: { value: validSlides.texture },
-    uTexture2: { value: validSlides.texture }, 
-    uTexture1Size: { value: textureSize(validSlides.texture) },
-    uTexture2Size: { value: textureSize(validSlides.texture) },
-    uResolution: { value: new THREE.Vector2(1, 1) },
-    uProgress: { value: 0 },
-    uTime: { value: 0 }
-  };
-   
-  const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: false });
-  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2, 1, 1), material));
-  resizeRenderer();
-  
-  stage.classList.add("is-ready");
-}
-
-function transitionToNext() {
-  if (isTransitioning || validSlides.length < 2) return;
-  
-  isTransitioning = true;
-  const targetIndex = getNextIndex(currentIndex);
-  
-  // Snap the slots in place before we begin animating
-  setTexturePair(currentIndex);
-  
-  const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
-  
-  if (textSwapTimer) window.clearTimeout(textSwapTimer);
-  animateTextOut();
-  textSwapTimer = window.setTimeout(() => {
-    animateTextIn(validSlides[targetIndex].title);
-  }, (TRANSITION_DURATION / 2) * 1000);
-
-  const completeTransition = () => {
-    currentIndex = targetIndex;
-    
-    // Snap both slots to the new image to prevent boomeranging
-    uniforms.uTexture1.value = validSlides[currentIndex].texture;
-    uniforms.uTexture2.value = validSlides[currentIndex].texture;
-    uniforms.uProgress.value = 0;
-    
-    isTransitioning = false;
-    
-    if (shouldScrollAfterTransition) {
-      runAdventureScroll();
-    }
-    
-    window.clearTimeout(transitionTimer);
-    transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-  };
-
-  const gsapRef = window.gsap;
-  if (!gsapRef || prefersReducedMotion) {
-    uniforms.uProgress.value = 1;
-    completeTransition();
-    return;
-  }
-
-  gsapRef.killTweensOf(uniforms.uProgress);
-  gsapRef.to(uniforms.uProgress, {
-    value: 1,
-    duration: TRANSITION_DURATION,
-    ease: "power3.inOut",
-    onComplete: completeTransition
-  });
-}
-
-function render() {
-  if (uniforms && renderer && scene && camera) {
-    uniforms.uTime.value += clock.getDelta();
-    renderer.render(scene, camera);
-  }
-  window.requestAnimationFrame(render);
-}
-
-// 100% BULLETPROOF LOAD LOGIC
-async function startHero() {
-  if (heroStarted) return;
-  heroStarted = true;
-  
-  try {
-    refreshActiveSlides();
-    ensureHeroText();
-    
-    const tex0 = await new Promise((resolve) => {
-        loader.load(imageUrls[0], (texture) => {
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.needsUpdate = true;
-        resolve(texture);
-      }, undefined, () => resolve(null));
-    });
-
-    if (!tex0) throw new Error("Primary image failed");
-
-    // Add it to our "safe" array
-    validSlides.push({ texture: tex0, title: slideTitles });
-    currentIndex = 0;
-    
-    initWebGL();
-console.log("Title type:", typeof validSlides[0].title, "| Title value:", validSlides[0].title);
-animateTextIn(validSlides[0].title);
-render();
-window.addEventListener("resize", resizeRenderer, { passive: true });
-
-    // 2. Load the rest sequentially in the background
-    for (let i = 1; i < imageUrls.length; i++) {
-      const tex = await new Promise((resolve) => {
-        loader.load(imageUrls[i], (texture) => {
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          texture.wrapS = THREE.ClampToEdgeWrapping;
-          texture.wrapT = THREE.ClampToEdgeWrapping;
-          texture.needsUpdate = true;
-          resolve(texture);
-        }, undefined, () => resolve(null));
-      });
-      
-      if (tex) {
-        validSlides.push({ texture: tex, title: slideTitles[i] });
-        
-        // Start the slider the exact moment the 2nd image finishes downloading
-        if (validSlides.length === 2) {
-          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-        }
-      }
-    }
-
-  } catch (error) {
-    console.error("Hero failed to initialize:", error);
-    animateTextIn("Luxury Awaits");
-  }
-}
 
 /* =========================================================
-   BLOCK 9 START: LIGHTBOX + SPLIT ANIMATION
+   BLOCK 8 START: LIGHTBOX + SPLIT ANIMATION
    ========================================================= */
 function initMapAndFloorplanLightbox() {
   const lightbox = document.getElementById("galleryLightbox");
@@ -985,15 +703,17 @@ function initMapAndFloorplanLightbox() {
   if (!lightbox || !lightboxImage || !zoomImages.length) return;
 
   const openImage = (image) => {
-    lightboxImage.src = image.currentSrc || image.src;
+    lightboxImage.src = image.currentSrc || image.src || FLOORPLAN_IMAGE;
     lightboxImage.alt = image.alt || "Casablanca Las Vegas estate image";
     lightbox.classList.add("active");
     document.body.style.overflow = "hidden";
   };
+
   const closeImage = () => {
     lightbox.classList.remove("active");
     document.body.style.overflow = "";
   };
+
   zoomImages.forEach((image) => {
     image.setAttribute("tabindex", "0");
     image.setAttribute("role", "button");
@@ -1005,6 +725,7 @@ function initMapAndFloorplanLightbox() {
       }
     });
   });
+
   lightboxClose?.addEventListener("click", closeImage);
   lightbox.addEventListener("click", (event) => { if (event.target === lightbox) closeImage(); });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape" && lightbox.classList.contains("active")) closeImage(); });
@@ -1013,14 +734,17 @@ function initMapAndFloorplanLightbox() {
 function initSplitMergeAnimation() {
   const gsapRef = window.gsap;
   if (!gsapRef || prefersReducedMotion) return;
+
   const left = document.querySelector(".split-half-left");
   const right = document.querySelector(".split-half-right");
   const section = document.querySelector(".split-merge-section");
   if (!left || !right || !section) return;
+
   const runTween = () => {
     gsapRef.fromTo(left, { x: "-18vw", opacity: .35 }, { x: 0, opacity: 1, duration: 1.15, ease: "power3.out" });
     gsapRef.fromTo(right, { x: "18vw", opacity: .35 }, { x: 0, opacity: 1, duration: 1.15, ease: "power3.out" });
   };
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -1028,11 +752,16 @@ function initSplitMergeAnimation() {
       observer.disconnect();
     });
   }, { threshold: .28 });
+
   observer.observe(section);
 }
+/* =========================================================
+   BLOCK 8 END: LIGHTBOX + SPLIT ANIMATION
+   ========================================================= */
+
 
 /* =========================================================
-   BLOCK 10 START: INIT
+   BLOCK 9 START: INIT
    ========================================================= */
 function initCasablancaRefresh() {
   patchContentFlow();
@@ -1051,3 +780,6 @@ if (document.readyState === "loading") {
 }
 
 window.addEventListener("load", removeLegacyHeroConflicts, { once: true });
+/* =========================================================
+   BLOCK 9 END: INIT
+   ========================================================= */
