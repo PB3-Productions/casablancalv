@@ -247,10 +247,21 @@ function injectFinalStyles() {
       margin-right: .16em !important;
     }
 
+    .casa-webgl-hero .mobile-title-line {
+      display: block !important;
+      width: 100% !important;
+      overflow: visible !important;
+    }
+
+    .casa-webgl-hero .mobile-title-line + .mobile-title-line {
+      margin-top: clamp(.35rem, 1.55vh, .9rem) !important;
+    }
+
     @media (max-width: 1200px) {
       #policies .policy-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       }
+      line-height: 1.1 !important;
     }
 
     @media (max-width: 768px) {
@@ -264,10 +275,7 @@ function injectFinalStyles() {
       .nav-bar-container {
         display: none !important;
         visibility: hidden !important;
-        opacity: 0 !important;
         pointer-events: none !important;
-        height: 0 !important;
-        overflow: hidden !important;
       }
 
       body {
@@ -563,39 +571,47 @@ function ensureHeroText() {
       }
       .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
       .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; overflow: visible !important; }
-      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.42rem, 1.75vh, 1rem) !important; }
+      .casa-webgl-hero .mobile-title-line { display: block !important; width: 100% !important; max-width: 100% !important; overflow: visible !important; white-space: normal !important; line-height: 1.1 !important; }
+      .casa-webgl-hero .mobile-title-line + .mobile-title-line { margin-top: clamp(.18rem, .9vh, .55rem) !important; }
       
       @media (max-width: 768px) {
         .casa-webgl-hero #dynamic-title {
           max-width: 96vw !important;
-          font-size: clamp(3rem, 16vw, 5.2rem) !important; /* MUCH LARGER TEXT */
+          font-size: clamp(2.8rem, 15vw, 4.8rem) !important; /* Enlarged text */
           line-height: 1.15 !important;
           letter-spacing: -0.04em !important;
           padding: 0 0 .38em 0 !important;
+          display: flex !important;
+          flex-direction: column !important; /* Perfect vertical centering */
+          justify-content: center !important;
+          align-items: center !important;
+          transform: scale(1) !important; /* Keeps text large */
+          transform-origin: center center !important;
         }
 
         /* PURE CSS FLEXBOX MAGIC FOR MOBILE TEXT OVERLAPPING */
         .casa-webgl-hero .mobile-title-line {
           display: flex !important;
           flex-wrap: wrap !important;
-          justify-content: center !important;
+          justify-content: center !important; /* Perfect horizontal centering */
           align-items: center !important;
           width: 100% !important;
           max-width: 100% !important;
           column-gap: 0.25em !important;
-          row-gap: 0.15em !important;
+          row-gap: 0.15em !important; /* Safely drops overflow words */
           margin-top: 0 !important;
-          padding-bottom: 0.15em !important;
         }
+
         .casa-webgl-hero .mobile-title-line + .mobile-title-line {
           margin-top: 0.15em !important;
         }
+
         .casa-webgl-hero .word-container {
-          margin: 0 0.12em !important;
+          margin: 0 !important;
           padding: 0 !important;
           display: inline-flex !important;
         }
+
         .casa-webgl-hero .word {
           white-space: nowrap !important;
           display: inline-flex !important;
@@ -643,13 +659,8 @@ function fitMobileTitleToViewport() {
   if (!titleContainer) return;
 
   window.requestAnimationFrame(() => {
-    const lines = Array.from(titleContainer.querySelectorAll(".mobile-title-line"));
-    if (!lines.length) return;
-
-    const maxLineWidth = Math.max(...lines.map((line) => line.scrollWidth));
-    const availableWidth = window.innerWidth * 0.96;
-    const scale = Math.min(1, availableWidth / Math.max(maxLineWidth, 1));
-    titleContainer.style.setProperty("--mobile-title-scale", String(Math.max(0.65, scale)));
+    // Math locked to 1. This guarantees text stays huge and forces the CSS Flexbox to safely wrap words to the next line.
+    titleContainer.style.setProperty("--mobile-title-scale", "1");
   });
 }
 
@@ -951,7 +962,17 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    const tex0 = await loadHeroTexture(imageUrls);
+    const tex0 = await new Promise((resolve) => {
+        loader.load(imageUrls, (texture) => {
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.needsUpdate = true;
+        resolve(texture);
+      }, undefined, () => resolve(null));
+    });
+
     if (!tex0) throw new Error("Primary image failed");
 
     validSlides.push({ texture: tex0, title: slideTitles || "" });
@@ -963,13 +984,23 @@ async function startHero() {
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
     for (let i = 1; i < imageUrls.length; i++) {
-      const tex = await loadHeroTexture(imageUrls[i]);
-      if (!tex) continue;
-
-      validSlides.push({ texture: tex, title: slideTitles[i] || "" });
-
-      if (validSlides.length === 2) {
-        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+      const tex = await new Promise((resolve) => {
+        loader.load(imageUrls[i], (texture) => {
+          texture.minFilter = THREE.LinearFilter;
+          texture.magFilter = THREE.LinearFilter;
+          texture.wrapS = THREE.ClampToEdgeWrapping;
+          texture.wrapT = THREE.ClampToEdgeWrapping;
+          texture.needsUpdate = true;
+          resolve(texture);
+        }, undefined, () => resolve(null));
+      });
+      
+      if (tex) {
+        validSlides.push({ texture: tex, title: slideTitles[i] || "" });
+        
+        if (validSlides.length === 2) {
+          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
+        }
       }
     }
 
