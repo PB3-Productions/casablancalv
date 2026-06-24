@@ -1,55 +1,57 @@
 /* =========================================================
    BLOCK 1 START: CASABLANCA SITE REFRESH JS
-   Purpose: Final hero, mobile layout, floorplan/Matterport helpers,
-   lightbox overrides, and first-visit hero wave scroll.
+   Purpose: Clean Mediterranean refresh: simple fading hero, no yellow
+   hero lettering, lighter cream/ivory sections, floating mobile nav,
+   tighter desktop nav, and updated Casablanca logo.
    ========================================================= */
 
 import * as THREE from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
 /* =========================================================
-   BLOCK 2 START: HERO SLIDES
+   BLOCK 2 START: HERO SLIDES + BRAND CONSTANTS
    ========================================================= */
 const MOBILE_QUERY = window.matchMedia("(max-width: 768px)");
+const NEW_LOGO_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a20dd265cd41fa7c6b88dfa.webp";
 const HERO_SLIDES = [
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b15.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e22f8d7322952d1866b94.png",
-    title: "Off-Strip Paradise"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabbff82912d65b40a8f.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e22f8bb0618436a527c7d.png",
-    title: "Your New Vegas Night"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb8acf4e863e398382.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5d7a282a51721af02845.webp",
-    title: "Beauty Redefined"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabbff82912d65b40a8e.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5de4ff82912d65e10a7c.webp",
-    title: "Your Personal Oasis"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabd045e32379f1bec11.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e5fa4d7322952d18a1007.webp",
-    title: "Unwind or Entertain"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2d0cf258f15ece4451fc.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2d515a3e6e89b62c63c9.webp",
-    title: "Modern & Spacious"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b14.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2e4fff82912d65ddfa4c.webp",
-    title: "Something For Everyone"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabbd53fc25488ce16d3.webp",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1e2dabf563bf237f8c12f5.webp",
-    title: "Put Your Feet In the Sand"
+    title: ""
   },
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1fbffa9e7a0d5a8b40bfe9.jpg",
@@ -58,8 +60,8 @@ const HERO_SLIDES = [
   }
 ];
 
-const HOLD_DURATION = 1.98;
-const TRANSITION_DURATION = 1.72;
+const HOLD_DURATION = 2.55;
+const TRANSITION_DURATION = 1.2;
 const FLOORPLAN_IMAGE = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1f8bc1098539f71824b491.webp";
 const ADVENTURE_SCROLL_KEY = "casablancaHeroAdventureScrollComplete";
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -75,7 +77,6 @@ let camera;
 let uniforms;
 let clock = new THREE.Clock();
 let transitionTimer = null;
-let textSwapTimer = null;
 let isTransitioning = false;
 let heroStarted = false;
 
@@ -84,7 +85,7 @@ function refreshActiveSlides() {
   activeSlides = HERO_SLIDES
     .map((slide) => ({
       image: MOBILE_QUERY.matches && slide.mobileImage ? slide.mobileImage : slide.image,
-      title: slide.title
+      title: slide.title || ""
     }))
     .filter((slide) => {
       if (seen.has(slide.image)) return false;
@@ -96,693 +97,555 @@ function refreshActiveSlides() {
   slideTitles = activeSlides.map((slide) => slide.title);
 }
 /* =========================================================
-   BLOCK 2 END: HERO SLIDES
+   BLOCK 2 END: HERO SLIDES + BRAND CONSTANTS
    ========================================================= */
 
 
 /* =========================================================
-   BLOCK 3 START: FINAL OVERRIDE STYLES
+   BLOCK 3 START: MEDITERRANEAN VISUAL REFRESH STYLES
    ========================================================= */
 function injectFinalStyles() {
-  if (document.getElementById("casablancaFinalMobileStyles")) return;
+  if (document.getElementById("casablancaMediterraneanRefreshStyles")) return;
 
   const style = document.createElement("style");
-  style.id = "casablancaFinalMobileStyles";
+  style.id = "casablancaMediterraneanRefreshStyles";
   style.textContent = `
-    #matterport,
-    .drawer-nav a[href="#matterport"] {
-      display: none !important;
+    :root {
+      --casa-new-logo: url('${NEW_LOGO_URL}');
+      --casa-ivory: #fffaf0;
+      --casa-cream: #f6efe3;
+      --casa-sand: #eadcc8;
+      --casa-stone: #d8c7ad;
+      --casa-ink: #1b1712;
+      --casa-muted: #665f55;
+      --casa-green: #0d3a2f;
+      --casa-green-2: #153f35;
+      --casa-bronze: #a8752c;
+      --casa-bronze-light: #c79a50;
+      --casa-border: rgba(168,117,44,.26);
+      --lux-black: var(--casa-cream) !important;
+      --lux-black-2: var(--casa-ivory) !important;
+      --lux-card: var(--casa-ivory) !important;
+      --lux-gold: var(--casa-bronze) !important;
+      --lux-gold-light: var(--casa-bronze-light) !important;
     }
 
-    .btn {
-      padding-left: clamp(.78rem, 1.35vw, 1.05rem) !important;
-      padding-right: clamp(.78rem, 1.35vw, 1.05rem) !important;
+    html,
+    body {
+      background: var(--casa-cream) !important;
+      color: var(--casa-ink) !important;
     }
 
-    .intro-button-row,
-    .footer-button-row {
-      gap: clamp(.85rem, 1.6vw, 1.15rem) !important;
+    body {
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(199,154,80,.16), transparent 34rem),
+        linear-gradient(180deg, var(--casa-ivory) 0%, var(--casa-cream) 100%) !important;
     }
 
-    .hero-intro-buttons .btn,
-    .footer-button-row .btn {
-      width: min(270px, 100%) !important;
-      min-width: min(270px, 100%) !important;
-    }
-
-    .media-card.framed-floorplan,
-    .framed-floorplan,
-    .media-card.framed-map-card,
-    .framed-map-card {
-      padding: 0 !important;
-      background: transparent !important;
-      border: 0 !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      overflow: visible !important;
-    }
-
-    .framed-floorplan::before,
-    .framed-floorplan::after,
-    .framed-map-card::before,
-    .framed-map-card::after {
-      display: none !important;
-      content: none !important;
-    }
-
-    .framed-floorplan img,
-    .framed-map-card img {
-      display: block !important;
-      width: 100% !important;
-      height: auto !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
+    .main-logo,
+    .drawer-logo,
+    .footer-brand-block img,
+    .site-footer-luxury img,
+    .logo-wrapper img {
+      content: var(--casa-new-logo) !important;
       object-fit: contain !important;
-      cursor: zoom-in !important;
     }
 
-    #policies .site-shell > .grid-2 {
-      display: block !important;
+    .casa-webgl-hero .hero-text,
+    .casa-webgl-hero #dynamic-title,
+    .casa-hero-slide-title,
+    .casa-mobile-title-stabilizer {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
 
-    #policies .site-shell > .grid-2 > .reveal:first-child {
-      max-width: 980px !important;
-      margin: 0 auto clamp(1.4rem, 3vw, 2.4rem) !important;
-      text-align: center !important;
+    .casa-webgl-hero {
+      background: var(--casa-cream) !important;
     }
 
-    #policies .site-shell > .grid-2 > .reveal:first-child .eyebrow,
-    #policies .site-shell > .grid-2 > .reveal:first-child h2,
-    #policies .site-shell > .grid-2 > .reveal:first-child .lead {
-      text-align: center !important;
-      margin-left: auto !important;
-      margin-right: auto !important;
+    .casa-webgl-stage,
+    .casa-webgl-stage canvas {
+      background: var(--casa-cream) !important;
     }
 
-    #policies .policy-grid {
-      display: grid !important;
-      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-      gap: clamp(.7rem, 1vw, 1rem) !important;
-      align-items: stretch !important;
+    .casa-webgl-hero::after {
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.30) 0%, rgba(0,0,0,.08) 42%, rgba(0,0,0,.08) 100%),
+        linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.02) 52%, rgba(0,0,0,.10)) !important;
     }
 
-    #policies .policy-grid .mini-card {
-      padding: clamp(1rem, 1.2vw, 1.35rem) !important;
+    .hero-intro-section,
+    .private-estate-card-section,
+    .pricing-black-section,
+    .concierge-luxury-section,
+    section.bg-dark,
+    .section.bg-dark {
+      background: var(--casa-cream) !important;
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(168,117,44,.10), transparent 34rem),
+        linear-gradient(180deg, var(--casa-ivory), var(--casa-cream)) !important;
+      color: var(--casa-ink) !important;
     }
 
-    #policies .policy-grid .mini-card h3 {
-      font-size: clamp(.95rem, 1vw, 1.12rem) !important;
+    .section.bg-cream,
+    .section.bg-ivory,
+    .map-positioning-section,
+    .floorplan-section {
+      background: var(--casa-ivory) !important;
+      color: var(--casa-ink) !important;
     }
 
-    #policies .policy-grid .mini-card p {
-      font-size: clamp(.84rem, .9vw, .98rem) !important;
-      line-height: 1.55 !important;
+    .lead,
+    .lead.light,
+    .section.bg-dark .lead,
+    .section.bg-dark .lead.light,
+    .hero-intro-section .intro-lead,
+    .concierge-luxury-section .lead.light,
+    .pricing-black-section .lead.light {
+      color: rgba(27,23,18,.72) !important;
+    }
+
+    .title-lg,
+    .title-md,
+    .font-display,
+    h1,
+    h2,
+    h3 {
+      color: var(--casa-ink) !important;
+    }
+
+    .eyebrow,
+    .eyebrow.center {
+      color: var(--casa-bronze) !important;
+      letter-spacing: .18em !important;
+    }
+
+    .card-dark,
+    .mini-card,
+    .price-card,
+    .estate-summary-card,
+    .policy-grid .mini-card,
+    .concierge-option {
+      background: rgba(255,250,240,.94) !important;
+      color: var(--casa-ink) !important;
+      border: 1px solid var(--casa-border) !important;
+      box-shadow: 0 28px 70px rgba(63,47,28,.12), inset 0 1px 0 rgba(255,255,255,.7) !important;
+    }
+
+    .card-dark p,
+    .mini-card p,
+    .price-card .count,
+    .policy-grid p,
+    .concierge-option p {
+      color: rgba(27,23,18,.70) !important;
+    }
+
+    .btn,
+    .btn-gold,
+    .drawer-actions .btn,
+    .intro-button-row .btn,
+    .footer-button-row .btn {
+      border-radius: 0 !important;
+      letter-spacing: .14em !important;
+      box-shadow: none !important;
+    }
+
+    .btn-gold,
+    .drawer-actions .btn-gold {
+      background: var(--casa-green) !important;
+      color: var(--casa-ivory) !important;
+      border: 1px solid var(--casa-green) !important;
+    }
+
+    .btn-outline,
+    .drawer-actions .btn-outline {
+      background: transparent !important;
+      color: var(--casa-green) !important;
+      border: 1px solid rgba(13,58,47,.55) !important;
+    }
+
+    .trust-strip .badge,
+    .badge {
+      background: rgba(255,250,240,.86) !important;
+      color: var(--casa-green) !important;
+      border: 1px solid var(--casa-border) !important;
+    }
+
+    .gold-svg-icon {
+      position: relative !important;
+      width: 2.85rem !important;
+      height: 2.85rem !important;
+      min-width: 2.85rem !important;
+      display: inline-grid !important;
+      place-items: center !important;
+      border-radius: 999px !important;
+      color: var(--casa-bronze) !important;
+      background: rgba(255,250,240,.92) !important;
+      border: 1px solid rgba(168,117,44,.34) !important;
+      box-shadow: 0 12px 28px rgba(63,47,28,.10), inset 0 1px 0 rgba(255,255,255,.8) !important;
+    }
+
+    .gold-svg-icon svg {
+      display: none !important;
+    }
+
+    .gold-svg-icon::before {
+      content: "";
+      width: 1.16rem;
+      height: .86rem;
+      border: 2px solid currentColor;
+      border-bottom: 0;
+      border-radius: 999px 999px 0 0;
+      transform: translateY(.08rem);
+    }
+
+    .gold-svg-icon::after {
+      content: "";
+      position: absolute;
+      width: 1.28rem;
+      height: 2px;
+      background: currentColor;
+      bottom: .72rem;
+      opacity: .9;
+    }
+
+    .site-header,
+    .site-header.is-scrolled {
+      background: rgba(255,250,240,.92) !important;
+      background-image: linear-gradient(180deg, rgba(255,253,247,.96), rgba(246,239,227,.91)) !important;
+      border-bottom: 1px solid rgba(168,117,44,.24) !important;
+      box-shadow: 0 18px 42px rgba(58,40,18,.12) !important;
+      backdrop-filter: blur(18px) saturate(1.06) !important;
+    }
+
+    .nav-link {
+      color: var(--casa-green) !important;
+      border: 1px solid rgba(168,117,44,.30) !important;
+      background: rgba(255,250,240,.62) !important;
+      border-radius: 999px !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: var(--casa-ivory) !important;
+      background: var(--casa-green) !important;
+      border-color: var(--casa-green) !important;
+    }
+
+    .hamburger-btn,
+    .close-btn {
+      color: var(--casa-green) !important;
+      background: rgba(255,250,240,.78) !important;
+      border: 1px solid rgba(168,117,44,.34) !important;
+      box-shadow: 0 10px 24px rgba(63,47,28,.10) !important;
+    }
+
+    .drawer {
+      background: rgba(255,250,240,.98) !important;
+      color: var(--casa-ink) !important;
+      border: 1px solid var(--casa-border) !important;
+      box-shadow: 0 30px 90px rgba(63,47,28,.22) !important;
+    }
+
+    .drawer-nav a {
+      color: var(--casa-green) !important;
+      border-bottom-color: rgba(168,117,44,.18) !important;
+    }
+
+    .overlay.active {
+      background: rgba(27,23,18,.28) !important;
+      backdrop-filter: blur(4px) !important;
     }
 
     .mobile-floating-actions {
-      position: fixed;
-      left: 50%;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-      z-index: 80;
-      display: none;
-      width: min(86vw, 320px);
-      transform: translate(-50%, 18px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .36s ease, transform .36s ease;
+      display: none !important;
     }
 
-    .mobile-floating-actions__inner {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: .78rem;
+    .site-footer,
+    .site-footer-luxury {
+      background: var(--casa-green) !important;
+      color: var(--casa-ivory) !important;
     }
 
-    .mobile-floating-actions .btn {
-      width: 100% !important;
-      min-width: 0 !important;
-      min-height: 47px !important;
-      padding: .72rem .82rem !important;
-      border-radius: 999px !important;
-      font-size: clamp(.76rem, 3.1vw, .91rem) !important;
-      letter-spacing: .095em !important;
-      line-height: 1.08 !important;
-      white-space: nowrap !important;
-      justify-content: center !important;
-      text-align: center !important;
-    }
-
-    .mobile-floating-actions.is-visible:not(.is-hidden):not(.is-scrolling) {
-      opacity: 1;
-      transform: translate(-50%, 0);
-      pointer-events: auto;
-    }
-
-    .casa-webgl-hero #dynamic-title {
-      line-height: 1.1 !important;
-    }
-
-    .casa-webgl-hero .word-container {
-      margin-left: .16em !important;
-      margin-right: .16em !important;
-    }
-
-    @media (max-width: 1200px) {
-      #policies .policy-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-      }
-    }
-
-    @media (max-width: 768px) {
-      /* Hide the header without using opacity so the fixed hamburger can stay visible */
-      #site-header,
+    @media (min-width: 1024px) {
       .site-header,
-      header,
       .header-container,
-      .brand-group,
-      .main-logo,
       .nav-bar-container {
-        visibility: hidden !important;
-        pointer-events: none !important;
-        height: 0 !important;
-        min-height: 0 !important;
-        overflow: hidden !important;
+        overflow: visible !important;
+      }
+
+      .site-header {
+        min-height: clamp(88px, 6vw, 108px) !important;
+      }
+
+      .header-container {
+        max-width: min(1540px, calc(100% - 4vw)) !important;
+        margin-inline: auto !important;
+      }
+
+      .nav-bar-container {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) clamp(176px, 13vw, 230px) minmax(0, 1fr) !important;
+        align-items: center !important;
+        column-gap: clamp(.38rem, .75vw, .9rem) !important;
+        min-height: clamp(88px, 6vw, 108px) !important;
+      }
+
+      .brand-group {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        width: clamp(168px, 12.5vw, 225px) !important;
+        height: clamp(82px, 6vw, 112px) !important;
+        transform: translate(-50%, -46%) !important;
+        z-index: 44 !important;
+        pointer-events: auto !important;
+      }
+
+      .logo-wrapper {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        display: grid !important;
+        place-items: center !important;
+        transform: none !important;
+      }
+
+      .main-logo {
+        width: clamp(165px, 12.5vw, 220px) !important;
+        max-width: none !important;
+        height: auto !important;
+        filter: drop-shadow(0 12px 16px rgba(63,47,28,.18)) !important;
+      }
+
+      .nav-left,
+      .nav-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: clamp(.38rem, .65vw, .72rem) !important;
         margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        /* NO opacity:0 – that kills fixed children */
       }
 
-      body {
-        padding-top: 0 !important;
-        overflow-x: hidden !important;
+      .nav-left {
+        grid-column: 1 !important;
+        justify-self: end !important;
+        padding-right: clamp(.2rem, .5vw, .65rem) !important;
       }
 
-      .mobile-floating-actions {
+      .nav-right {
+        grid-column: 3 !important;
+        justify-self: start !important;
+        padding-left: clamp(.2rem, .5vw, .65rem) !important;
+      }
+
+      .nav-link {
+        min-width: auto !important;
+        padding: .78rem clamp(.82rem, 1.05vw, 1.2rem) !important;
+        font-size: clamp(.64rem, .62vw, .78rem) !important;
+        letter-spacing: .12em !important;
+      }
+
+      .hamburger-btn {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 1023px) {
+      .site-header,
+      .site-header.is-scrolled {
+        position: fixed !important;
+        top: max(10px, env(safe-area-inset-top)) !important;
+        left: 12px !important;
+        right: 12px !important;
+        width: auto !important;
+        min-height: 66px !important;
+        border-radius: 999px !important;
+        border: 1px solid rgba(168,117,44,.28) !important;
+        z-index: 999 !important;
+        overflow: visible !important;
+      }
+
+      .header-container {
+        min-height: 66px !important;
+        padding: 0 .85rem 0 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+
+      .brand-group {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: clamp(135px, 42vw, 172px) !important;
+        height: auto !important;
+        transform: none !important;
+        z-index: 2 !important;
+      }
+
+      .logo-wrapper {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
         display: block !important;
+        transform: none !important;
       }
 
-      main p,
-      main .lead,
-      main .mini-card p,
-      main .price-card p,
-      main .count,
-      main .status-note,
-      main .badge,
-      main li,
-      main .feature-list span:not(.gold-svg-icon) {
-        text-align: left !important;
+      .main-logo {
+        width: clamp(132px, 40vw, 168px) !important;
+        max-width: 100% !important;
+        height: auto !important;
+        filter: drop-shadow(0 8px 10px rgba(63,47,28,.16)) !important;
+      }
+
+      .nav-bar-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        width: auto !important;
+        min-height: 0 !important;
         margin-left: auto !important;
-        margin-right: auto !important;
       }
 
-      .hero-intro-section .intro-lead,
-      .estate-summary-card .lead,
-      .floorplan-section .lead,
-      #policies .lead,
-      #availability .lead,
-      .footer-cta-card p,
-      .footer-brand-block p {
-        max-width: min(91vw, 34rem) !important;
+      .nav-list,
+      .nav-left,
+      .nav-right {
+        display: none !important;
       }
 
-      .hero-intro-section .title-lg,
-      .estate-summary-card .title-lg,
-      .floorplan-section .title-lg,
-      #policies .title-lg,
-      #availability .title-lg {
-        text-align: center !important;
+      .hamburger-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 46px !important;
+        height: 46px !important;
+        min-width: 46px !important;
+        border-radius: 999px !important;
+        font-size: 1.55rem !important;
+        line-height: 1 !important;
       }
 
-      .hero-intro-buttons {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: .85rem !important;
-        max-width: min(86vw, 320px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+      .drawer {
+        position: fixed !important;
+        top: calc(max(10px, env(safe-area-inset-top)) + 76px) !important;
+        right: 12px !important;
+        left: auto !important;
+        width: min(390px, calc(100vw - 24px)) !important;
+        height: auto !important;
+        max-height: calc(100svh - 102px) !important;
+        border-radius: 28px !important;
+        overflow-y: auto !important;
+        transform: translate3d(110%, 0, 0) !important;
       }
 
-      .hero-intro-buttons .btn,
-      .footer-button-row .btn {
-        width: 100% !important;
-        min-width: 0 !important;
-        min-height: 48px !important;
-        padding-left: .82rem !important;
-        padding-right: .82rem !important;
-        font-size: clamp(.76rem, 3.08vw, .91rem) !important;
-        letter-spacing: .086em !important;
-        line-height: 1.08 !important;
+      .drawer.open {
+        transform: translate3d(0, 0, 0) !important;
       }
 
-      .footer-button-row {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: .85rem !important;
-        max-width: min(86vw, 320px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+      .drawer-header {
+        padding: 1.05rem 1.05rem .5rem !important;
       }
 
-      #policies .policy-grid {
-        grid-template-columns: 1fr !important;
-        max-width: min(92vw, 520px) !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
+      .drawer-logo {
+        width: clamp(150px, 48vw, 205px) !important;
+        height: auto !important;
       }
 
-      #welcome .title-lg {
-        font-size: 2.25rem !important;
-        line-height: 1.2 !important;
-        overflow-wrap: break-word !important;
-        word-wrap: break-word !important;
-        white-space: normal !important;
-        padding: 0 10px !important;
+      .drawer-nav {
+        padding: .25rem 1.2rem 1.1rem !important;
       }
-      
-     /* Base button & children */
-#hamburger-btn,
-.hamburger-btn,
-#hamburger-btn *,
-.hamburger-btn * {
-  font-size: 0.8rem !important;        /* change this value to your preference */
-}
 
-/* Target pseudo-elements explicitly */
-#hamburger-btn::before,
-#hamburger-btn::after,
-.hamburger-btn::before,
-.hamburger-btn::after {
-  font-size: 0.8rem !important;        /* same size as above */
-}
+      .drawer-actions {
+        padding: 0 1.2rem 1.25rem !important;
+      }
 
-/* Button itself */
-#hamburger-btn,
-.hamburger-btn {
-  display: flex ;
-  visibility: visible ;
-  opacity: 1 ;
-  pointer-events: auto ;
-  position: fixed ;
-  top: 16px ;
-  right: 16px ;
-  z-index: 9999 ;
-  width: 48px ;
-  height: 48px ;
-  align-items: center ;
-  justify-content: center ;
-  background: #000 ;
-  color: #ffd400 ;
-  border: 0.3px solid rgba(255,212,0,0.6) !important;
-  border-radius: 3px !important;
-  line-height: 1 ;
-  margin: 0 ;
-  padding: 0 ;
- }
+      .casa-webgl-hero {
+        min-height: 88svh !important;
+        height: 88svh !important;
+      }
+
+      .casa-webgl-hero .hero-picture,
+      .casa-webgl-hero .hero-picture img,
+      .casa-webgl-hero .hero-fallback img {
+        min-height: 88svh !important;
+      }
+    }
   `;
 
   document.head.appendChild(style);
 }
 /* =========================================================
-   BLOCK 3 END: FINAL OVERRIDE STYLES
+   BLOCK 3 END: MEDITERRANEAN VISUAL REFRESH STYLES
    ========================================================= */
 
 
 /* =========================================================
-   BLOCK 4 START: CONTENT + MOBILE CTA HELPERS
+   BLOCK 4 START: PAGE HELPERS
    ========================================================= */
+function syncLogoImages() {
+  document
+    .querySelectorAll(".main-logo, .drawer-logo, .footer-brand-block img, .site-footer-luxury img, .logo-wrapper img")
+    .forEach((image) => {
+      image.setAttribute("src", NEW_LOGO_URL);
+      image.setAttribute("srcset", `${NEW_LOGO_URL} 800w`);
+      image.setAttribute("sizes", "(max-width: 768px) 42vw, 220px");
+      image.setAttribute("alt", "Casablanca Las Vegas");
+    });
+}
+
 function removeLegacyHeroConflicts() {
-  const approvedHero = document.querySelector(".casa-webgl-hero");
-  const main = document.querySelector("main");
-  if (!main || !approvedHero) return;
-
-  Array.from(main.querySelectorAll("section.hero")).forEach((section) => {
-    if (section !== approvedHero) section.remove();
-  });
-
-  Array.from(document.querySelectorAll(".hero-content, .hero-copy, .hero-grid, .intro-panel")).forEach((node) => {
-    if (!approvedHero.contains(node)) node.remove();
-  });
-
-  if (main.firstElementChild !== approvedHero) main.insertBefore(approvedHero, main.firstElementChild);
-
-  const welcome = document.getElementById("welcome");
-  if (welcome && approvedHero.nextElementSibling !== welcome) main.insertBefore(welcome, approvedHero.nextElementSibling);
-
-  document.querySelectorAll(".legacy-hero, .old-hero, .hero-split, .hero-panel").forEach((node) => node.remove());
+  document.querySelectorAll(".legacy-hero, .old-hero, .hero-split, .hero-panel, .casa-mobile-title-stabilizer").forEach((node) => node.remove());
 }
 
 function patchContentFlow() {
   injectFinalStyles();
+  syncLogoImages();
   removeLegacyHeroConflicts();
-
-  document.getElementById("matterport")?.remove();
-  document.querySelectorAll('a[href="#matterport"]').forEach((link) => link.remove());
-
-  const welcome = document.querySelector("#welcome .narrow-shell");
-  if (welcome) {
-    let introButtons = welcome.querySelector(".intro-button-row");
-    if (!introButtons) {
-      introButtons = document.createElement("div");
-      introButtons.className = "intro-button-row hero-intro-buttons";
-      welcome.appendChild(introButtons);
-    }
-    introButtons.innerHTML = `
-      <a class="btn btn-gold" href="#availability">Check Available Dates</a>
-      <a class="btn btn-outline" href="#video-tour">View the Estate Tour</a>
-    `;
-  }
-
-  const summaryCard = document.querySelector(".estate-summary-card");
-  if (summaryCard) {
-    const cardTitle = summaryCard.querySelector("h2");
-    const cardLead = summaryCard.querySelector(".lead");
-    if (cardTitle) cardTitle.textContent = "A Private Las Vegas Estate Designed for Groups, Events & VIP Stays";
-    if (cardLead) {
-      cardLead.textContent = "A private, high-end estate for guests who want the space of a luxury residence, the discretion of a private booking team, and the service layer of a VIP concierge experience. Casablanca Las Vegas is positioned for elevated group stays, private retreats, productions, professional networking events, weddings, and premium day events close to the Strip without placing the exact address in front of every casual browser.";
-    }
-    summaryCard.querySelector(".intro-button-row")?.remove();
-  }
-
-  const availabilityHeading = document.querySelector("#availability h2");
-  if (availabilityHeading) availabilityHeading.textContent = "Check Dates For Availability";
-
-  const footerExploreTitle = document.querySelector(".footer-links-card h3");
-  if (footerExploreTitle) footerExploreTitle.textContent = "Explore";
-
-  document.querySelectorAll(".btn").forEach((button) => {
-    const text = (button.textContent || "").trim().toLowerCase();
-    if (text.includes("check your dates")) button.textContent = "Check Available Dates";
-  });
-
-  const floorplanImage = document.querySelector(".framed-floorplan img");
-  if (floorplanImage) {
-    floorplanImage.src = FLOORPLAN_IMAGE;
-    floorplanImage.srcset = `${FLOORPLAN_IMAGE} 1600w`;
-    floorplanImage.sizes = "(max-width: 900px) 100vw, 72vw";
-    floorplanImage.alt = "Updated Casablanca Las Vegas estate floorplan showing sleeping layout and room flow";
-  }
-
-  document.querySelectorAll(".concierge-option").forEach((card) => {
-    card.removeAttribute("href");
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.addEventListener("click", (event) => event.preventDefault());
-  });
 }
 
 function ensureMobileFloatingActions() {
-  let actions = document.querySelector(".mobile-floating-actions");
-  if (actions) return actions;
-
-  actions = document.createElement("div");
-  actions.className = "mobile-floating-actions is-hidden";
-  actions.setAttribute("aria-label", "Mobile booking actions");
-  actions.innerHTML = `
-    <div class="mobile-floating-actions__inner">
-      <a class="btn btn-gold" href="#availability">Check Availability</a>
-      <a class="btn btn-outline" href="tel:6167457148">Speak to Agent</a>
-    </div>
-  `;
-  document.body.appendChild(actions);
-  return actions;
+  const existing = document.getElementById("mobileFloatingActions");
+  if (existing) existing.remove();
 }
 
 function initMobileFloatingActions() {
-  const actions = ensureMobileFloatingActions();
-  const hero = document.querySelector(".casa-webgl-hero");
-  if (!actions || !hero) return;
-
-  let isScrolling = false;
-  let scrollTimer = null;
-
-  const isInsideHero = () => window.scrollY < (hero.offsetHeight || window.innerHeight) * 0.82;
-  const sync = () => {
-    const hidden = !MOBILE_QUERY.matches || isInsideHero();
-    actions.classList.toggle("is-hidden", hidden);
-    actions.classList.toggle("is-scrolling", isScrolling);
-    actions.classList.toggle("is-visible", MOBILE_QUERY.matches && !hidden);
-  };
-
-  window.addEventListener("scroll", () => {
-    isScrolling = true;
-    sync();
-    window.clearTimeout(scrollTimer);
-    scrollTimer = window.setTimeout(() => {
-      isScrolling = false;
-      sync();
-    }, 3000);
-  }, { passive: true });
-
-  window.addEventListener("resize", sync, { passive: true });
-  sync();
+  ensureMobileFloatingActions();
 }
 /* =========================================================
-   BLOCK 4 END: CONTENT + MOBILE CTA HELPERS
+   BLOCK 4 END: PAGE HELPERS
    ========================================================= */
 
 
 /* =========================================================
-   BLOCK 5 START: HERO TEXT
+   BLOCK 5 START: HERO TEXT REMOVAL
    ========================================================= */
 function ensureHeroText() {
-  const hero = document.querySelector(".casa-webgl-hero");
-  if (!hero) return null;
-
-  let heroText = hero.querySelector(".hero-text");
-  if (!heroText) {
-    heroText = document.createElement("div");
-    heroText.className = "hero-text";
-    heroText.setAttribute("aria-live", "polite");
-    heroText.innerHTML = `<h1 id="dynamic-title"></h1>`;
-    hero.appendChild(heroText);
-  }
-
-  if (!document.getElementById("exactUploadedHeroTextStyles")) {
-    const style = document.createElement("style");
-    style.id = "exactUploadedHeroTextStyles";
-    style.textContent = `
-      .casa-hero-slide-title { display: none !important; }
-      .casa-webgl-hero .hero-text {
-        position: absolute !important;
-        inset: 0 !important;
-        z-index: 20 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-        min-height: 100dvh !important;
-        padding: clamp(22px, 5vw, 88px) !important;
-        box-sizing: border-box !important;
-        text-align: center !important;
-        pointer-events: none !important;
-        overflow: visible !important;
-      }
-      .casa-webgl-hero #dynamic-title {
-        display: block !important;                /* DESKTOP: normal block flow */
-        width: 100% !important;
-        max-width: min(94vw, 1320px) !important;
-        margin: 0 auto !important;
-        padding: 0.18em 0.06em 0.32em !important;
-        color: #ffd400 !important;
-        font-size: clamp(2.35rem, 8vw, 7.25rem) !important;
-        font-weight: 900 !important;
-        line-height: 1.1 !important;
-        letter-spacing: -0.045em !important;
-        text-align: center !important;
-        text-wrap: balance !important;
-        overflow: visible !important;
-        transform: scale(var(--mobile-title-scale, 1));
-        transform-origin: center center;
-        text-shadow: 0 3px 7px rgba(0,0,0,.72), 0 10px 24px rgba(0,0,0,.54), 0 0 24px rgba(255,212,0,.16) !important;
-      }
-      .casa-webgl-hero .word-container {
-        display: inline-flex !important;
-        vertical-align: top !important;
-        margin: 0 .16em !important;
-        padding: .04em .02em .12em !important;
-        overflow: visible !important;
-      }
-      .casa-webgl-hero .word { display: inline-flex !important; white-space: nowrap !important; overflow: visible !important; }
-      .casa-webgl-hero .char { display: inline-block !important; transform: translateY(115%); opacity: 0; will-change: transform, opacity; overflow: visible !important; }
-
-      .casa-webgl-hero .mobile-title-line {
-        display: block !important;
-        white-space: nowrap !important;          /* One line, no wrapping */
-        width: auto !important;
-        max-width: 100% !important;
-        overflow: visible !important;
-        line-height: 1.15 !important;
-      }
-
-      @media (max-width: 768px) {
-        .casa-webgl-hero #dynamic-title {
-          display: flex !important;               /* Stack lines vertically on mobile only */
-          flex-direction: column !important;
-          align-items: center !important;          /* Horizontal center */
-          justify-content: center !important;      /* Vertical center */
-          gap: clamp(0.2rem, 1.2vh, 0.6rem) !important;
-          max-width: 96vw !important;
-          font-size: clamp(6.4rem, 32vw, 11rem) !important;  /* DOUBLED FONT SIZE */
-          line-height: 1.15 !important;
-          letter-spacing: -0.04em !important;
-          padding: 0 0 .38em 0 !important;
-          transform: scale(var(--mobile-title-scale, 1)) !important;
-          transform-origin: center center !important;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  return heroText.querySelector("#dynamic-title");
-}
-
-function createWordSpans(text, container) {
-  text.split(" ").filter(Boolean).forEach((word, index, words) => {
-    const wordContainer = document.createElement("span");
-    wordContainer.className = "word-container";
-
-    const wordSpan = document.createElement("span");
-    wordSpan.className = "word";
-
-    Array.from(word).forEach((letter) => {
-      const char = document.createElement("span");
-      char.className = "char";
-      char.textContent = letter;
-      wordSpan.appendChild(char);
-    });
-
-    wordContainer.appendChild(wordSpan);
-    container.appendChild(wordContainer);
-    if (index < words.length - 1) container.appendChild(document.createTextNode(" "));
-  });
-}
-
-function splitMobileTitle(title) {
-  const words = title.split(" ").filter(Boolean);
-  if (words.length <= 1) return [title, ""];
-  const splitIndex = title === "Put Your Feet In the Sand" ? 3 : Math.ceil(words.length / 2);
-  return [words.slice(0, splitIndex).join(" "), words.slice(splitIndex).join(" ")];
+  document.querySelectorAll(".casa-webgl-hero .hero-text, #dynamic-title, .casa-hero-slide-title, .casa-mobile-title-stabilizer").forEach((node) => node.remove());
+  return null;
 }
 
 function fitMobileTitleToViewport() {
-  if (!MOBILE_QUERY.matches) return;
-
-  const titleContainer = document.querySelector("#dynamic-title");
-  if (!titleContainer) return;
-
-  // Two‑frame rAF ensures the DOM layout is fully settled after line insertion
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      const lines = titleContainer.querySelectorAll(".mobile-title-line");
-      const containerWidth = titleContainer.clientWidth;
-      if (!containerWidth || lines.length === 0) return;
-
-      let minScale = 1;
-      lines.forEach((line) => {
-        // Temporarily remove scaling to measure natural (100%) width
-        const originalTransform = line.style.transform;
-        line.style.transform = "scale(1)";
-        const naturalWidth = line.scrollWidth;
-        if (naturalWidth > 0 && naturalWidth > containerWidth) {
-          const scale = containerWidth / naturalWidth;
-          if (scale < minScale) minScale = scale;
-        }
-        line.style.transform = originalTransform;
-      });
-
-      // Apply the smallest required scale (never larger than 1)
-      titleContainer.style.setProperty("--mobile-title-scale", Math.min(minScale, 1));
-    });
-  });
+  return null;
 }
 
-function animateTextIn(title) {
-  const titleContainer = ensureHeroText();
-  if (!titleContainer) return;
-
-  titleContainer.textContent = "";
-  titleContainer.style.setProperty("--mobile-title-scale", "1");
-
-  // Safety: ensure title is a string
-  if (Array.isArray(title)) title = title[0] || "";
-  if (typeof title !== "string") title = String(title || "");
-  title = title.trim();
-  if (!title) return;
-
-  if (MOBILE_QUERY.matches) {
-    const [topLine, bottomLine] = splitMobileTitle(title);
-    const top = document.createElement("span");
-    const bottom = document.createElement("span");
-    top.className = "mobile-title-line mobile-title-line-top";
-    bottom.className = "mobile-title-line mobile-title-line-bottom";
-    createWordSpans(topLine, top);
-    if (bottomLine) {
-        createWordSpans(bottomLine, bottom);
-    }
-    titleContainer.appendChild(top);
-    if (bottomLine) titleContainer.appendChild(bottom);
-    fitMobileTitleToViewport();
-  } else {
-    createWordSpans(title, titleContainer);
-  }
-
-  const gsapRef = window.gsap;
-  const chars = titleContainer.querySelectorAll(".char");
-  
-  if (prefersReducedMotion || !gsapRef) {
-    chars.forEach((char) => {
-      char.style.transform = "translateY(0%) scale(1)";
-      char.style.opacity = "1";
-    });
-    return;
-  }
-
-  if (MOBILE_QUERY.matches) {
-    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
-    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
-    
-    gsapRef.killTweensOf(chars);
-    if (topChars.length) {
-        gsapRef.set(topChars, { y: "-135%", opacity: 0, rotateZ: -5 });
-        gsapRef.to(topChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    }
-    if (bottomChars.length) {
-        gsapRef.set(bottomChars, { y: "135%", opacity: 0, rotateZ: 5 });
-        gsapRef.to(bottomChars, { y: "0%", opacity: 1, rotateZ: 0, duration: .9, ease: "expo.out", stagger: { each: .026, from: "start" } });
-    }
-    return;
-  }
-
-  gsapRef.killTweensOf(chars);
-  gsapRef.set(chars, { y: "112%", opacity: 0, rotateZ: 5 });
-  gsapRef.to(chars, { y: "0%", opacity: 1, rotateZ: 0, duration: .82, ease: "expo.out", stagger: { each: .024, from: "start" } });
+function animateTextIn() {
+  ensureHeroText();
 }
 
 function animateTextOut() {
-  const titleContainer = document.querySelector("#dynamic-title");
-  const gsapRef = window.gsap;
-  if (!titleContainer || !gsapRef || prefersReducedMotion) return;
-
-  if (MOBILE_QUERY.matches) {
-    const topChars = titleContainer.querySelectorAll(".mobile-title-line-top .char");
-    const bottomChars = titleContainer.querySelectorAll(".mobile-title-line-bottom .char");
-
-    if (topChars.length) gsapRef.to(topChars, { y: "-135%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
-    if (bottomChars.length) gsapRef.to(bottomChars, { y: "135%", opacity: 0, rotateZ: 5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
-    return;
-  }
-
-  gsapRef.to(titleContainer.querySelectorAll(".char"), { y: "-112%", opacity: 0, rotateZ: -5, duration: .42, ease: "power2.in", stagger: { each: .014, from: "start" } });
+  ensureHeroText();
 }
 /* =========================================================
-   BLOCK 5 END: HERO TEXT
+   BLOCK 5 END: HERO TEXT REMOVAL
    ========================================================= */
 
 
 /* =========================================================
-   BLOCK 6 START: WEBGL HERO
+   BLOCK 6 START: SIMPLE FADE WEBGL HERO
    ========================================================= */
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
@@ -806,8 +669,6 @@ const fragmentShader = `
   uniform float uTime;
   varying vec2 vUv;
 
-  float hash(float n) { return fract(sin(n) * 43758.5453123); }
-
   vec2 coverUv(vec2 uv, vec2 imageSize, vec2 resolution) {
     vec2 centeredUv = uv - 0.5;
     float screenAspect = resolution.x / resolution.y;
@@ -817,42 +678,32 @@ const fragmentShader = `
     return centeredUv + 0.5;
   }
 
-  vec4 sampleWithSoftClamp(sampler2D textureMap, vec2 uv) {
-    return texture2D(textureMap, clamp(uv, vec2(0.001), vec2(0.999)));
+  vec4 sampleCover(sampler2D textureMap, vec2 uv, vec2 imageSize, vec2 resolution) {
+    return texture2D(textureMap, clamp(coverUv(uv, imageSize, resolution), vec2(0.001), vec2(0.999)));
   }
 
   void main() {
-    vec2 baseUv = vUv;
-    vec2 uv1 = coverUv(baseUv, uTexture1Size, uResolution);
-    vec2 uv2 = coverUv(baseUv, uTexture2Size, uResolution);
-    float transitionStrength = sin(uProgress * 3.14159265);
-    float band = 0.28;
-    float revealLine = uProgress * (1.0 + band * 2.0) - band;
-    float revealNoise = sin(baseUv.y * 15.0 + uTime * 1.65) * 0.035 * transitionStrength + sin(baseUv.y * 43.0 - uTime * 2.05) * 0.018 * transitionStrength;
-    float revealMask = 1.0 - smoothstep(revealLine - band, revealLine + band, baseUv.x + revealNoise);
-    float sliceCount = 20.0;
-    float sliceIndex = floor(baseUv.y * sliceCount);
-    float sliceRandom = hash(sliceIndex + 11.0);
-    float sliceOffset = (sliceRandom - 0.5) * 0.12 * transitionStrength;
-    float verticalWave = sin(baseUv.y * 34.0 + uTime * 2.2) * 0.034 * transitionStrength;
-    float horizontalWave = cos(baseUv.x * 24.0 - uTime * 1.65) * 0.018 * transitionStrength;
-    vec2 displacement = vec2(verticalWave + sliceOffset, horizontalWave);
-    vec2 directionalPull = vec2((revealMask - 0.5) * 0.16, 0.0) * transitionStrength;
-    vec2 distortedUv1 = uv1 + displacement + directionalPull;
-    vec2 distortedUv2 = uv2 - displacement - directionalPull;
-    vec4 color1 = sampleWithSoftClamp(uTexture1, distortedUv1);
-    vec4 color2 = sampleWithSoftClamp(uTexture2, distortedUv2);
-    vec4 finalColor = mix(color1, color2, revealMask);
-    float splitStrength = 0.01 * transitionStrength;
-    vec4 redShift = sampleWithSoftClamp(uTexture2, distortedUv2 + vec2(splitStrength, 0.0));
-    vec4 blueShift = sampleWithSoftClamp(uTexture1, distortedUv1 - vec2(splitStrength, 0.0));
-    finalColor.r = mix(finalColor.r, redShift.r, transitionStrength * 0.24);
-    finalColor.b = mix(finalColor.b, blueShift.b, transitionStrength * 0.18);
-    float vignette = smoothstep(0.94, 0.20, distance(baseUv, vec2(0.5)));
-    finalColor.rgb *= mix(0.76, 1.0, vignette);
-    gl_FragColor = finalColor;
+    vec4 color1 = sampleCover(uTexture1, vUv, uTexture1Size, uResolution);
+    vec4 color2 = sampleCover(uTexture2, vUv, uTexture2Size, uResolution);
+    float fade = smoothstep(0.0, 1.0, uProgress);
+    gl_FragColor = mix(color1, color2, fade);
   }
 `;
+
+function applyTextureSettings(texture) {
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.wrapS = THREE.ClampToEdgeWrapping;
+  texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function loadHeroTexture(url) {
+  return new Promise((resolve) => {
+    loader.load(url, (texture) => resolve(applyTextureSettings(texture)), undefined, () => resolve(null));
+  });
+}
 
 function textureSize(texture) {
   const image = texture && texture.image;
@@ -887,7 +738,6 @@ function resizeRenderer() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(width, height, false);
   uniforms.uResolution.value.set(width, height);
-  fitMobileTitleToViewport();
 }
 
 function initWebGL() {
@@ -927,12 +777,6 @@ function transitionToNext() {
 
   const shouldScrollAfterTransition = shouldRunAdventureScroll(currentIndex, targetIndex);
 
-  if (textSwapTimer) window.clearTimeout(textSwapTimer);
-  animateTextOut();
-  textSwapTimer = window.setTimeout(() => {
-    animateTextIn(validSlides[targetIndex].title);
-  }, (TRANSITION_DURATION / 2) * 1000);
-
   const completeTransition = () => {
     currentIndex = targetIndex;
     const currentTexture = validSlides[currentIndex].texture;
@@ -960,7 +804,7 @@ function transitionToNext() {
   gsapRef.to(uniforms.uProgress, {
     value: 1,
     duration: TRANSITION_DURATION,
-    ease: "power3.inOut",
+    ease: "power2.inOut",
     onComplete: completeTransition
   });
 }
@@ -981,58 +825,32 @@ async function startHero() {
     refreshActiveSlides();
     ensureHeroText();
 
-    // Restored your exact working image loading logic!
-    const tex0 = await new Promise((resolve) => {
-        loader.load(imageUrls[0], (texture) => {
-        texture.minFilter = THREE.LinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.needsUpdate = true;
-        resolve(texture);
-      }, undefined, () => resolve(null));
-    });
-
+    const tex0 = await loadHeroTexture(imageUrls[0]);
     if (!tex0) throw new Error("Primary image failed");
 
-    // Fix: Only send the first title into the array, not all 9!
     validSlides.push({ texture: tex0, title: slideTitles[0] || "" });
     currentIndex = 0;
 
     initWebGL();
-    animateTextIn(validSlides[0].title);
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
 
-    // Restored your exact working image loading logic for loop!
     for (let i = 1; i < imageUrls.length; i++) {
-      const tex = await new Promise((resolve) => {
-        loader.load(imageUrls[i], (texture) => {
-          texture.minFilter = THREE.LinearFilter;
-          texture.magFilter = THREE.LinearFilter;
-          texture.wrapS = THREE.ClampToEdgeWrapping;
-          texture.wrapT = THREE.ClampToEdgeWrapping;
-          texture.needsUpdate = true;
-          resolve(texture);
-        }, undefined, () => resolve(null));
-      });
-      
-      if (tex) {
-        validSlides.push({ texture: tex, title: slideTitles[i] || "" });
-        
-        if (validSlides.length === 2) {
-          transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-        }
+      const tex = await loadHeroTexture(imageUrls[i]);
+      if (!tex) continue;
+
+      validSlides.push({ texture: tex, title: slideTitles[i] || "" });
+
+      if (validSlides.length === 2) {
+        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
       }
     }
-
   } catch (error) {
     console.error("Hero failed to initialize:", error);
-    animateTextIn("Luxury Awaits");
   }
 }
 /* =========================================================
-   BLOCK 6 END: WEBGL HERO
+   BLOCK 6 END: SIMPLE FADE WEBGL HERO
    ========================================================= */
 
 
@@ -1069,18 +887,7 @@ function runAdventureScroll() {
 
   markAdventureScrollRun();
 
-  const gsapRef = window.gsap;
   const targetTop = Math.max(0, target.getBoundingClientRect().top + window.scrollY);
-
-  if (gsapRef && !prefersReducedMotion) {
-    gsapRef.to(window, {
-      scrollTo: { y: targetTop, autoKill: true },
-      duration: 1.45,
-      ease: "power3.inOut"
-    });
-    return;
-  }
-
   window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? "auto" : "smooth" });
 }
 /* =========================================================
@@ -1167,6 +974,8 @@ function initCasablancaRefresh() {
   initMapAndFloorplanLightbox();
   initSplitMergeAnimation();
   startHero();
+  window.setTimeout(syncLogoImages, 250);
+  window.setTimeout(syncLogoImages, 1000);
 }
 
 if (document.readyState === "loading") {
