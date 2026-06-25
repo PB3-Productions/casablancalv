@@ -8,13 +8,20 @@
   document.querySelectorAll(".casa-mobile-title-stabilizer").forEach((node) => node.remove());
   document.body.classList.remove("casa-mobile-hero-guard", "casa-mobile-first-slide");
 
-  function loadPolishFixes() {
-    if (document.getElementById("casablancaPolishFixScript")) return;
+  function loadScriptOnce(id, src) {
+    if (document.getElementById(id)) return;
     const script = document.createElement("script");
-    script.id = "casablancaPolishFixScript";
+    script.id = id;
     script.defer = true;
-    script.src = "/assets/js/casablanca-polish-fixes.js";
+    script.src = src;
     document.head.appendChild(script);
+  }
+
+  function loadPolishFixes() {
+    loadScriptOnce("casablancaPolishFixScript", "/assets/js/casablanca-polish-fixes.js");
+    window.setTimeout(() => {
+      loadScriptOnce("casablancaFinalSpacingFixScript", "/assets/js/casablanca-final-spacing-fixes.js");
+    }, 120);
   }
 
   loadPolishFixes();
