@@ -1,26 +1,63 @@
 /* =========================================================
    CASABLANCA MOBILE NAV FINAL OVERRIDE
-   Purpose: Last-load mobile header authority. Removes the old floating
-   oval/capsule nav treatment, keeps the new full-width bar sticky/fixed,
-   equalizes logo + hamburger sizing, and prevents the drawer from showing
-   until the hamburger is clicked.
+   Purpose: Last-load mobile header authority. Keeps the full-width
+   mobile nav stable, prevents repeated hamburger DOM rewrites/blipping,
+   equalizes logo + hamburger sizing, and keeps the drawer closed until
+   the hamburger is clicked.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
   let didInitialDrawerClose = false;
+  const nativeInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+
+  function setInnerHTML(element, html) {
+    if (!element || !nativeInnerHTML?.set) return;
+    nativeInnerHTML.set.call(element, html);
+  }
+
+  function lockHamburgerInnerHTML(button) {
+    if (!button || button.dataset.casaHamburgerLocked === "true" || !nativeInnerHTML?.get || !nativeInnerHTML?.set) return;
+
+    Object.defineProperty(button, "innerHTML", {
+      configurable: true,
+      enumerable: false,
+      get() {
+        return nativeInnerHTML.get.call(this);
+      },
+      set(value) {
+        const incoming = String(value || "");
+        const alreadyCorrect = this.querySelectorAll(".hamburger-line").length === 3;
+        const isAnotherHamburgerRewrite = incoming.includes("hamburger-stack") || incoming.includes("hamburger-line");
+
+        if (alreadyCorrect && isAnotherHamburgerRewrite) return;
+        nativeInnerHTML.set.call(this, value);
+      }
+    });
+
+    button.dataset.casaHamburgerLocked = "true";
+  }
 
   function buildSingleHamburger() {
     document.querySelectorAll("#hamburger-btn, .hamburger-btn").forEach((button) => {
+      if (!button) return;
+
       button.setAttribute("aria-label", "Open Casablanca Las Vegas menu");
       button.setAttribute("title", "Open menu");
-      button.textContent = "";
-      button.innerHTML = `
-        <span class="hamburger-stack" aria-hidden="true">
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-        </span>
-      `;
+      button.classList.add("casa-locked-hamburger");
+
+      const hasCorrectMarkup = button.querySelectorAll(".hamburger-line").length === 3;
+      if (!hasCorrectMarkup) {
+        button.textContent = "";
+        setInnerHTML(button, `
+          <span class="hamburger-stack" aria-hidden="true">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </span>
+        `);
+      }
+
+      lockHamburgerInnerHTML(button);
     });
   }
 
@@ -37,6 +74,7 @@
     if (!style) {
       style = document.createElement("style");
       style.id = STYLE_ID;
+      document.head.appendChild(style);
     }
 
     style.textContent = `
@@ -49,7 +87,6 @@
           padding-top: 82px !important;
         }
 
-        /* One mobile header only: full-width, sticky/fixed, no old oval shell. */
         #site-header,
         .site-header,
         #site-header.is-scrolled,
@@ -75,6 +112,9 @@
           overflow: hidden !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
           backdrop-filter: blur(12px) saturate(1.03) !important;
           -webkit-backdrop-filter: blur(12px) saturate(1.03) !important;
           z-index: 99999 !important;
@@ -114,6 +154,9 @@
           overflow: hidden !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
         }
@@ -160,6 +203,9 @@
           overflow: hidden !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
           z-index: 2 !important;
         }
 
@@ -189,6 +235,9 @@
           overflow: hidden !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
           filter: none !important;
         }
 
@@ -227,6 +276,9 @@
           overflow: hidden !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
         }
 
         #site-header .nav-bar-container::before,
@@ -266,6 +318,11 @@
           overflow: hidden !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
+          will-change: auto !important;
+          contain: layout paint style !important;
         }
 
         #hamburger-btn::before,
@@ -284,6 +341,8 @@
           height: 18px !important;
           min-width: 24px !important;
           min-height: 18px !important;
+          max-width: 24px !important;
+          max-height: 18px !important;
           display: flex !important;
           flex-direction: column !important;
           align-items: center !important;
@@ -293,6 +352,9 @@
           padding: 0 !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
         }
 
         #hamburger-btn .hamburger-line,
@@ -301,6 +363,7 @@
           width: 24px !important;
           height: 3px !important;
           min-height: 3px !important;
+          max-height: 3px !important;
           margin: 0 !important;
           padding: 0 !important;
           border-radius: 999px !important;
@@ -308,6 +371,9 @@
           box-shadow: none !important;
           transform: none !important;
           translate: none !important;
+          scale: 1 !important;
+          animation: none !important;
+          transition: none !important;
         }
 
         #drawerOverlay,
@@ -407,15 +473,25 @@
         }
       }
     `;
+  }
 
-    if (style.parentNode) style.parentNode.removeChild(style);
-    document.head.appendChild(style);
+  function observeHamburger() {
+    const header = document.querySelector("#site-header, .site-header");
+    if (!header || header.dataset.casaHamburgerObserver === "true") return;
+
+    const observer = new MutationObserver(() => {
+      window.requestAnimationFrame(buildSingleHamburger);
+    });
+
+    observer.observe(header, { childList: true, subtree: true });
+    header.dataset.casaHamburgerObserver = "true";
   }
 
   function run() {
     closeDrawerAtStartupOnly();
     buildSingleHamburger();
     installStyles();
+    observeHamburger();
   }
 
   run();
@@ -424,5 +500,4 @@
   window.setTimeout(run, 400);
   window.setTimeout(run, 900);
   window.setTimeout(run, 1600);
-  window.setInterval(run, 700);
 })();
