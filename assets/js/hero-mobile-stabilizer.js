@@ -22,6 +22,9 @@
     window.setTimeout(() => {
       loadScriptOnce("casablancaFinalSpacingFixScript", "/assets/js/casablanca-final-spacing-fixes.js");
     }, 120);
+    window.setTimeout(() => {
+      loadScriptOnce("casablancaMobileNavFinalScript", "/assets/js/casablanca-mobile-nav-final.js");
+    }, 260);
   }
 
   loadPolishFixes();
