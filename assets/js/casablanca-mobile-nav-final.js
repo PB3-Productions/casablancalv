@@ -1,72 +1,105 @@
 /* =========================================================
    CASABLANCA MOBILE NAV FINAL OVERRIDE
-   Purpose: Last-load mobile header authority. Keeps the full-width
-   mobile nav stable, prevents repeated hamburger DOM rewrites/blipping,
-   equalizes logo + hamburger sizing, and keeps the drawer closed until
-   the hamburger is clicked.
+   Purpose: Mobile-only standalone nav. This intentionally hides the
+   original site-header on mobile so no legacy hamburger/menu layer can sit
+   behind the new button or cause the enlarge/shrink blip.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
-  let didInitialDrawerClose = false;
-  const nativeInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
+  const NAV_ID = "casaMobileNavFinalBar";
+  const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eec33e2763b2eec1f94f4.svg";
 
-  function setInnerHTML(element, html) {
-    if (!element || !nativeInnerHTML?.set) return;
-    nativeInnerHTML.set.call(element, html);
+  function getDrawer() {
+    return document.getElementById("drawer") || document.querySelector(".drawer");
   }
 
-  function lockHamburgerInnerHTML(button) {
-    if (!button || button.dataset.casaHamburgerLocked === "true" || !nativeInnerHTML?.get || !nativeInnerHTML?.set) return;
-
-    Object.defineProperty(button, "innerHTML", {
-      configurable: true,
-      enumerable: false,
-      get() {
-        return nativeInnerHTML.get.call(this);
-      },
-      set(value) {
-        const incoming = String(value || "");
-        const alreadyCorrect = this.querySelectorAll(".hamburger-line").length === 3;
-        const isAnotherHamburgerRewrite = incoming.includes("hamburger-stack") || incoming.includes("hamburger-line");
-
-        if (alreadyCorrect && isAnotherHamburgerRewrite) return;
-        nativeInnerHTML.set.call(this, value);
-      }
-    });
-
-    button.dataset.casaHamburgerLocked = "true";
+  function getOverlay() {
+    return document.getElementById("drawerOverlay") || document.querySelector(".overlay");
   }
 
-  function buildSingleHamburger() {
-    document.querySelectorAll("#hamburger-btn, .hamburger-btn").forEach((button) => {
-      if (!button) return;
-
-      button.setAttribute("aria-label", "Open Casablanca Las Vegas menu");
-      button.setAttribute("title", "Open menu");
-      button.classList.add("casa-locked-hamburger");
-
-      const hasCorrectMarkup = button.querySelectorAll(".hamburger-line").length === 3;
-      if (!hasCorrectMarkup) {
-        button.textContent = "";
-        setInnerHTML(button, `
-          <span class="hamburger-stack" aria-hidden="true">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-          </span>
-        `);
-      }
-
-      lockHamburgerInnerHTML(button);
-    });
-  }
-
-  function closeDrawerAtStartupOnly() {
-    if (didInitialDrawerClose) return;
-    didInitialDrawerClose = true;
-    document.getElementById("drawer")?.classList.remove("open");
-    document.getElementById("drawerOverlay")?.classList.remove("active");
+  function closeDrawer() {
+    const drawer = getDrawer();
+    const overlay = getOverlay();
+    drawer?.classList.remove("open");
+    overlay?.classList.remove("active");
     document.body.classList.remove("drawer-open", "nav-open", "menu-open");
+
+    const button = document.getElementById("casaMobileMenuButton");
+    if (button) button.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleDrawer() {
+    const drawer = getDrawer();
+    const overlay = getOverlay();
+    if (!drawer) return;
+
+    const isOpening = !drawer.classList.contains("open");
+    drawer.classList.toggle("open", isOpening);
+    overlay?.classList.toggle("active", isOpening);
+    document.body.classList.toggle("drawer-open", isOpening);
+
+    const button = document.getElementById("casaMobileMenuButton");
+    if (button) button.setAttribute("aria-expanded", isOpening ? "true" : "false");
+  }
+
+  function buildMobileNav() {
+    let nav = document.getElementById(NAV_ID);
+    if (!nav) {
+      nav = document.createElement("header");
+      nav.id = NAV_ID;
+      nav.setAttribute("aria-label", "Casablanca Las Vegas mobile navigation");
+      nav.innerHTML = `
+        <a class="casa-mobile-logo-link" href="#top" aria-label="Casablanca Las Vegas home">
+          <img class="casa-mobile-logo-img" src="${LOGO_SVG_URL}" alt="Casablanca Las Vegas" width="512" height="512" decoding="async" />
+        </a>
+        <div class="casa-mobile-nav-spacer" aria-hidden="true"></div>
+        <button class="casa-mobile-menu-button" id="casaMobileMenuButton" type="button" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+          <span class="casa-mobile-menu-lines" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      `;
+      document.body.prepend(nav);
+    }
+
+    const logo = nav.querySelector(".casa-mobile-logo-img");
+    if (logo) {
+      logo.src = LOGO_SVG_URL;
+      logo.alt = "Casablanca Las Vegas";
+    }
+
+    const button = nav.querySelector("#casaMobileMenuButton");
+    if (button && button.dataset.casaStandaloneReady !== "true") {
+      button.dataset.casaStandaloneReady = "true";
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleDrawer();
+      });
+    }
+  }
+
+  function bindCloseHandlers() {
+    const overlay = getOverlay();
+    if (overlay && overlay.dataset.casaStandaloneCloseReady !== "true") {
+      overlay.dataset.casaStandaloneCloseReady = "true";
+      overlay.addEventListener("click", closeDrawer);
+    }
+
+    document.querySelectorAll(".close-btn, .drawer-nav a, .drawer-actions a").forEach((node) => {
+      if (node.dataset.casaStandaloneCloseReady === "true") return;
+      node.dataset.casaStandaloneCloseReady = "true";
+      node.addEventListener("click", closeDrawer);
+    });
+
+    if (document.body.dataset.casaEscapeCloseReady !== "true") {
+      document.body.dataset.casaEscapeCloseReady = "true";
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeDrawer();
+      });
+    }
   }
 
   function installStyles() {
@@ -78,234 +111,138 @@
     }
 
     style.textContent = `
+      #${NAV_ID} {
+        display: none;
+      }
+
       @media (max-width: 1023px) {
+        :root {
+          --casa-mobile-nav-height: 92px;
+          --casa-mobile-nav-size: 68px;
+          --casa-mobile-nav-pad-x: 18px;
+        }
+
         html {
-          scroll-padding-top: 82px !important;
+          scroll-padding-top: var(--casa-mobile-nav-height) !important;
         }
 
         body {
-          padding-top: 82px !important;
+          padding-top: var(--casa-mobile-nav-height) !important;
         }
 
+        /* Hide the original mobile header entirely. This removes the second
+           hidden/legacy hamburger layer that was causing the blip. */
         #site-header,
-        .site-header,
-        #site-header.is-scrolled,
-        .site-header.is-scrolled {
+        .site-header {
+          display: none !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          opacity: 0 !important;
+        }
+
+        #${NAV_ID} {
           position: fixed !important;
           top: 0 !important;
           left: 0 !important;
           right: 0 !important;
           bottom: auto !important;
+          z-index: 2147483000 !important;
           width: 100vw !important;
-          max-width: 100vw !important;
-          height: 82px !important;
-          min-height: 82px !important;
-          max-height: 82px !important;
+          height: var(--casa-mobile-nav-height) !important;
+          min-height: var(--casa-mobile-nav-height) !important;
+          max-height: var(--casa-mobile-nav-height) !important;
+          display: grid !important;
+          grid-template-columns: var(--casa-mobile-nav-size) minmax(0, 1fr) var(--casa-mobile-nav-size) !important;
+          align-items: center !important;
+          gap: 0 !important;
+          padding: 0 var(--casa-mobile-nav-pad-x) !important;
           margin: 0 !important;
-          padding: 0 !important;
-          border-radius: 0 !important;
           border: 0 !important;
           border-bottom: 1px solid rgba(185, 138, 56, .28) !important;
+          border-radius: 0 !important;
           background: rgba(255, 250, 240, .995) !important;
           background-image: linear-gradient(180deg, #fffdf7 0%, #f6efe3 100%) !important;
           box-shadow: 0 12px 28px rgba(58, 40, 18, .13) !important;
-          overflow: hidden !important;
+          overflow: visible !important;
           transform: none !important;
           translate: none !important;
           scale: 1 !important;
           animation: none !important;
           transition: none !important;
-          backdrop-filter: blur(12px) saturate(1.03) !important;
-          -webkit-backdrop-filter: blur(12px) saturate(1.03) !important;
-          z-index: 99999 !important;
+          contain: layout paint style !important;
+          box-sizing: border-box !important;
         }
 
-        #site-header::before,
-        #site-header::after,
-        .site-header::before,
-        .site-header::after {
-          content: none !important;
-          display: none !important;
+        #${NAV_ID},
+        #${NAV_ID} *,
+        #${NAV_ID} *::before,
+        #${NAV_ID} *::after {
+          box-sizing: border-box !important;
+          animation: none !important;
+          transition: none !important;
         }
 
-        #site-header .header-container,
-        .site-header .header-container,
-        #site-header.is-scrolled .header-container,
-        .site-header.is-scrolled .header-container {
-          position: relative !important;
-          inset: auto !important;
-          width: 100% !important;
-          max-width: 100% !important;
-          height: 82px !important;
-          min-height: 82px !important;
-          max-height: 82px !important;
-          margin: 0 !important;
-          padding: 0 16px !important;
+        .casa-mobile-logo-link,
+        .casa-mobile-menu-button {
+          width: var(--casa-mobile-nav-size) !important;
+          height: var(--casa-mobile-nav-size) !important;
+          min-width: var(--casa-mobile-nav-size) !important;
+          min-height: var(--casa-mobile-nav-size) !important;
+          max-width: var(--casa-mobile-nav-size) !important;
+          max-height: var(--casa-mobile-nav-size) !important;
           display: grid !important;
-          grid-template-columns: 56px minmax(0, 1fr) 56px !important;
-          align-items: center !important;
-          justify-content: normal !important;
-          column-gap: 0 !important;
-          border: 0 !important;
-          border-radius: 0 !important;
-          background: transparent !important;
-          background-image: none !important;
-          box-shadow: none !important;
-          overflow: hidden !important;
+          place-items: center !important;
+          align-self: center !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          border-radius: 50% !important;
+          overflow: visible !important;
           transform: none !important;
           translate: none !important;
           scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
+          contain: layout paint style !important;
         }
 
-        #site-header .header-container::before,
-        #site-header .header-container::after,
-        .site-header .header-container::before,
-        .site-header .header-container::after {
-          content: none !important;
-          display: none !important;
-        }
-
-        .nav-list,
-        .nav-left,
-        .nav-right,
-        .desktop-nav,
-        .desktop-only {
-          display: none !important;
-        }
-
-        #site-header .brand-group,
-        .site-header .brand-group,
-        #site-header.is-scrolled .brand-group,
-        .site-header.is-scrolled .brand-group {
+        .casa-mobile-logo-link {
           grid-column: 1 !important;
           justify-self: start !important;
-          align-self: center !important;
-          position: relative !important;
-          top: auto !important;
-          left: auto !important;
-          right: auto !important;
-          bottom: auto !important;
-          width: 56px !important;
-          height: 56px !important;
-          min-width: 56px !important;
-          min-height: 56px !important;
-          max-width: 56px !important;
-          max-height: 56px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border-radius: 50% !important;
+          text-decoration: none !important;
           background: transparent !important;
+          border: 0 !important;
           box-shadow: none !important;
-          overflow: hidden !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
-          z-index: 2 !important;
         }
 
-        #site-header .logo-wrapper,
-        .site-header .logo-wrapper,
-        #site-header.is-scrolled .logo-wrapper,
-        .site-header.is-scrolled .logo-wrapper,
-        #site-header .main-logo,
-        .site-header .main-logo,
-        #site-header.is-scrolled .main-logo,
-        .site-header.is-scrolled .main-logo {
-          position: relative !important;
-          inset: auto !important;
+        .casa-mobile-logo-img {
           display: block !important;
-          width: 56px !important;
-          height: 56px !important;
-          min-width: 56px !important;
-          min-height: 56px !important;
-          max-width: 56px !important;
-          max-height: 56px !important;
+          width: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          height: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          min-width: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          min-height: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          max-width: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          max-height: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          object-fit: contain !important;
+          object-position: center !important;
           margin: 0 !important;
           padding: 0 !important;
+          border: 0 !important;
           border-radius: 50% !important;
-          object-fit: contain !important;
           background: transparent !important;
           box-shadow: none !important;
-          overflow: hidden !important;
           transform: none !important;
           translate: none !important;
           scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
           filter: none !important;
         }
 
-        #site-header .logo-wrapper,
-        .site-header .logo-wrapper,
-        #site-header.is-scrolled .logo-wrapper,
-        .site-header.is-scrolled .logo-wrapper {
-          display: grid !important;
-          place-items: center !important;
+        .casa-mobile-nav-spacer {
+          grid-column: 2 !important;
+          min-width: 0 !important;
+          height: 1px !important;
         }
 
-        #site-header .nav-bar-container,
-        .site-header .nav-bar-container,
-        #site-header.is-scrolled .nav-bar-container,
-        .site-header.is-scrolled .nav-bar-container {
+        .casa-mobile-menu-button {
           grid-column: 3 !important;
           justify-self: end !important;
-          align-self: center !important;
-          position: relative !important;
-          inset: auto !important;
-          width: 56px !important;
-          height: 56px !important;
-          min-width: 56px !important;
-          min-height: 56px !important;
-          max-width: 56px !important;
-          max-height: 56px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          display: grid !important;
-          place-items: center !important;
-          border: 0 !important;
-          border-radius: 0 !important;
-          background: transparent !important;
-          background-image: none !important;
-          box-shadow: none !important;
-          overflow: hidden !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
-        }
-
-        #site-header .nav-bar-container::before,
-        #site-header .nav-bar-container::after,
-        .site-header .nav-bar-container::before,
-        .site-header .nav-bar-container::after {
-          content: none !important;
-          display: none !important;
-        }
-
-        #hamburger-btn,
-        .hamburger-btn,
-        #site-header.is-scrolled #hamburger-btn,
-        .site-header.is-scrolled .hamburger-btn {
-          position: relative !important;
-          inset: auto !important;
-          display: grid !important;
-          place-items: center !important;
-          width: 56px !important;
-          height: 56px !important;
-          min-width: 56px !important;
-          min-height: 56px !important;
-          max-width: 56px !important;
-          max-height: 56px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border-radius: 50% !important;
           border: 2px solid #050504 !important;
           background: #050504 !important;
           background-image: none !important;
@@ -315,34 +252,22 @@
           letter-spacing: 0 !important;
           text-indent: 0 !important;
           box-shadow: none !important;
-          overflow: hidden !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
-          will-change: auto !important;
-          contain: layout paint style !important;
+          cursor: pointer !important;
+          appearance: none !important;
+          -webkit-appearance: none !important;
         }
 
-        #hamburger-btn::before,
-        #hamburger-btn::after,
-        .hamburger-btn::before,
-        .hamburger-btn::after {
+        .casa-mobile-menu-button::before,
+        .casa-mobile-menu-button::after {
           content: none !important;
           display: none !important;
         }
 
-        #hamburger-btn .hamburger-stack,
-        .hamburger-btn .hamburger-stack {
-          position: relative !important;
-          z-index: 5 !important;
-          width: 24px !important;
-          height: 18px !important;
-          min-width: 24px !important;
-          min-height: 18px !important;
-          max-width: 24px !important;
-          max-height: 18px !important;
+        .casa-mobile-menu-lines {
+          width: 27px !important;
+          height: 20px !important;
+          min-width: 27px !important;
+          min-height: 20px !important;
           display: flex !important;
           flex-direction: column !important;
           align-items: center !important;
@@ -350,30 +275,18 @@
           gap: 0 !important;
           margin: 0 !important;
           padding: 0 !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
         }
 
-        #hamburger-btn .hamburger-line,
-        .hamburger-btn .hamburger-line {
+        .casa-mobile-menu-lines span {
           display: block !important;
-          width: 24px !important;
+          width: 27px !important;
           height: 3px !important;
           min-height: 3px !important;
-          max-height: 3px !important;
-          margin: 0 !important;
-          padding: 0 !important;
           border-radius: 999px !important;
           background: #fffaf0 !important;
           box-shadow: none !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          animation: none !important;
-          transition: none !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
         #drawerOverlay,
@@ -393,17 +306,18 @@
         #drawer,
         .drawer {
           position: fixed !important;
-          top: 94px !important;
-          right: 16px !important;
+          top: calc(var(--casa-mobile-nav-height) + 12px) !important;
+          right: var(--casa-mobile-nav-pad-x) !important;
           left: auto !important;
-          width: min(390px, calc(100vw - 32px)) !important;
-          max-height: calc(100svh - 110px) !important;
+          width: min(390px, calc(100vw - (var(--casa-mobile-nav-pad-x) * 2))) !important;
+          max-height: calc(100svh - var(--casa-mobile-nav-height) - 28px) !important;
           border-radius: 28px !important;
           opacity: 0 !important;
           visibility: hidden !important;
           pointer-events: none !important;
           transform: translate3d(0, -12px, 0) scale(.98) !important;
           transition: opacity .22s ease, transform .22s ease, visibility .22s ease !important;
+          z-index: 2147482999 !important;
         }
 
         #drawer.open,
@@ -416,88 +330,31 @@
       }
 
       @media (max-width: 360px) {
-        html {
-          scroll-padding-top: 78px !important;
-        }
-
-        body {
-          padding-top: 78px !important;
-        }
-
-        #site-header,
-        .site-header,
-        #site-header.is-scrolled,
-        .site-header.is-scrolled,
-        #site-header .header-container,
-        .site-header .header-container,
-        #site-header.is-scrolled .header-container,
-        .site-header.is-scrolled .header-container {
-          height: 78px !important;
-          min-height: 78px !important;
-          max-height: 78px !important;
-        }
-
-        #site-header .brand-group,
-        .site-header .brand-group,
-        #site-header.is-scrolled .brand-group,
-        .site-header.is-scrolled .brand-group,
-        #site-header .logo-wrapper,
-        .site-header .logo-wrapper,
-        #site-header.is-scrolled .logo-wrapper,
-        .site-header.is-scrolled .logo-wrapper,
-        #site-header .main-logo,
-        .site-header .main-logo,
-        #site-header.is-scrolled .main-logo,
-        .site-header.is-scrolled .main-logo,
-        #site-header .nav-bar-container,
-        .site-header .nav-bar-container,
-        #site-header.is-scrolled .nav-bar-container,
-        .site-header.is-scrolled .nav-bar-container,
-        #hamburger-btn,
-        .hamburger-btn,
-        #site-header.is-scrolled #hamburger-btn,
-        .site-header.is-scrolled .hamburger-btn {
-          width: 52px !important;
-          height: 52px !important;
-          min-width: 52px !important;
-          min-height: 52px !important;
-          max-width: 52px !important;
-          max-height: 52px !important;
-        }
-
-        #drawer,
-        .drawer {
-          top: 90px !important;
-          right: 14px !important;
-          width: min(390px, calc(100vw - 28px)) !important;
+        :root {
+          --casa-mobile-nav-height: 88px;
+          --casa-mobile-nav-size: 64px;
+          --casa-mobile-nav-pad-x: 16px;
         }
       }
     `;
   }
 
-  function observeHamburger() {
-    const header = document.querySelector("#site-header, .site-header");
-    if (!header || header.dataset.casaHamburgerObserver === "true") return;
-
-    const observer = new MutationObserver(() => {
-      window.requestAnimationFrame(buildSingleHamburger);
-    });
-
-    observer.observe(header, { childList: true, subtree: true });
-    header.dataset.casaHamburgerObserver = "true";
-  }
-
   function run() {
-    closeDrawerAtStartupOnly();
-    buildSingleHamburger();
+    buildMobileNav();
+    closeDrawer();
+    bindCloseHandlers();
     installStyles();
-    observeHamburger();
   }
 
-  run();
-  window.setTimeout(run, 50);
-  window.setTimeout(run, 150);
-  window.setTimeout(run, 400);
-  window.setTimeout(run, 900);
-  window.setTimeout(run, 1600);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run, { once: true });
+  } else {
+    run();
+  }
+
+  window.addEventListener("load", () => {
+    buildMobileNav();
+    bindCloseHandlers();
+    installStyles();
+  }, { once: true });
 })();
