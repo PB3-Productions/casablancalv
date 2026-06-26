@@ -18,7 +18,7 @@ const HERO_SLIDES = [
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea4275aefbd076b97fd36.png"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea3fea24b71f0b2f265ad.png",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3edcca5aefbd076ba45f4b.png",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea427e2763b2eec10ccc6.png"
   },
   {
@@ -38,7 +38,7 @@ const HERO_SLIDES = [
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea42714a2b82bfeea3e4c.png"
   },
   {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eba0c163e40d86262d729.png",
+    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3edcca14a2b82bfef65739.png",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eba0c163e40d86262d724.png"
   }
 ];
