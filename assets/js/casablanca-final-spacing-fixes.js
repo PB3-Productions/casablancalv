@@ -1,9 +1,19 @@
 /* =========================================================
    CASABLANCA FINAL SPACING FIXES
-   Purpose: Left-centered paragraph alignment for selected content blocks
-   and full-width mobile nav balance with equal logo/hamburger sizing.
+   Purpose: Left-centered paragraph alignment, full-width mobile nav,
+   and drawer/default mobile header cleanup.
    ========================================================= */
 (function () {
+  let didInitialDrawerReset = false;
+
+  function closeDrawerOnFirstPaint() {
+    if (didInitialDrawerReset) return;
+    didInitialDrawerReset = true;
+    document.getElementById("drawer")?.classList.remove("open");
+    document.getElementById("drawerOverlay")?.classList.remove("active");
+    document.body.classList.remove("drawer-open", "nav-open", "menu-open");
+  }
+
   function installFinalSpacingStyles() {
     let style = document.getElementById("casablancaFinalSpacingFixes");
     if (!style) {
@@ -73,7 +83,7 @@
 
       /* =========================================================
          FULL-WIDTH FLOATING MOBILE NAV
-         Logo and hamburger are exactly the same visual size.
+         This removes the old rounded/capsule nav layer completely.
       ========================================================== */
       @media (max-width: 1023px) {
         body {
@@ -92,7 +102,7 @@
           max-height: 82px !important;
           padding: 0 !important;
           margin: 0 !important;
-          border-radius: 0 0 22px 22px !important;
+          border-radius: 0 !important;
           background: rgba(255,250,240,.992) !important;
           background-image: linear-gradient(180deg, rgba(255,253,247,.995), rgba(246,239,227,.98)) !important;
           border: 0 !important;
@@ -102,6 +112,16 @@
           transform: none !important;
           backdrop-filter: blur(12px) !important;
           z-index: 9999 !important;
+        }
+
+        .site-header::before,
+        .site-header::after,
+        .header-container::before,
+        .header-container::after,
+        .nav-bar-container::before,
+        .nav-bar-container::after {
+          content: none !important;
+          display: none !important;
         }
 
         .header-container,
@@ -120,6 +140,12 @@
           overflow: hidden !important;
           position: relative !important;
           transform: none !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+          background-image: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
         }
 
         .nav-list,
@@ -151,6 +177,8 @@
           overflow: hidden !important;
           pointer-events: auto !important;
           border-radius: 50% !important;
+          background: transparent !important;
+          box-shadow: none !important;
         }
 
         .logo-wrapper,
@@ -205,6 +233,11 @@
           padding: 0 !important;
           transform: none !important;
           overflow: hidden !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+          background-image: none !important;
+          box-shadow: none !important;
         }
 
         #hamburger-btn,
@@ -220,6 +253,7 @@
           border-radius: 50% !important;
           border: 2px solid rgba(12,12,11,.96) !important;
           background: #050504 !important;
+          background-image: none !important;
           color: transparent !important;
           box-shadow: none !important;
           padding: 0 !important;
@@ -275,8 +309,20 @@
           transform: none !important;
         }
 
-        .drawer,
-        .drawer.open {
+        .overlay {
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+
+        .overlay.active {
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
+        }
+
+        .drawer {
+          position: fixed !important;
           top: 94px !important;
           right: 16px !important;
           left: auto !important;
@@ -284,6 +330,18 @@
           max-height: calc(100svh - 110px) !important;
           border-radius: 28px !important;
           background: rgba(255,250,240,.985) !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          transform: translate3d(0, -12px, 0) scale(.98) !important;
+          transition: opacity .22s ease, transform .22s ease, visibility .22s ease !important;
+        }
+
+        .drawer.open {
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
+          transform: translate3d(0, 0, 0) scale(1) !important;
         }
       }
 
@@ -328,8 +386,7 @@
           max-height: 52px !important;
         }
 
-        .drawer,
-        .drawer.open {
+        .drawer {
           top: 90px !important;
           right: 14px !important;
           width: min(390px, calc(100vw - 28px)) !important;
@@ -340,6 +397,7 @@
     document.head.appendChild(style);
   }
 
+  closeDrawerOnFirstPaint();
   installFinalSpacingStyles();
   window.setTimeout(installFinalSpacingStyles, 60);
   window.setTimeout(installFinalSpacingStyles, 180);
