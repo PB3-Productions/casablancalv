@@ -88,7 +88,7 @@
       overlay.addEventListener("click", closeDrawer);
     }
 
-    document.querySelectorAll(".close-btn, .drawer-nav a, .drawer-actions a").forEach((node) => {
+    document.querySelectorAll(".close-btn, .drawer-close, .drawer-nav a, .drawer-actions a").forEach((node) => {
       if (node.dataset.casaStandaloneCloseReady === "true") return;
       node.dataset.casaStandaloneCloseReady = "true";
       node.addEventListener("click", closeDrawer);
@@ -117,8 +117,9 @@
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 92px;
-          --casa-mobile-nav-size: 68px;
+          --casa-mobile-nav-height: 94px;
+          --casa-mobile-nav-size: 72px;
+          --casa-mobile-logo-size: 70px;
           --casa-mobile-nav-pad-x: 18px;
         }
 
@@ -169,7 +170,7 @@
           scale: 1 !important;
           animation: none !important;
           transition: none !important;
-          contain: layout paint style !important;
+          contain: layout style !important;
           box-sizing: border-box !important;
         }
 
@@ -200,7 +201,7 @@
           transform: none !important;
           translate: none !important;
           scale: 1 !important;
-          contain: layout paint style !important;
+          contain: none !important;
         }
 
         .casa-mobile-logo-link {
@@ -214,12 +215,12 @@
 
         .casa-mobile-logo-img {
           display: block !important;
-          width: calc(var(--casa-mobile-nav-size) + 8px) !important;
-          height: calc(var(--casa-mobile-nav-size) + 8px) !important;
-          min-width: calc(var(--casa-mobile-nav-size) + 8px) !important;
-          min-height: calc(var(--casa-mobile-nav-size) + 8px) !important;
-          max-width: calc(var(--casa-mobile-nav-size) + 8px) !important;
-          max-height: calc(var(--casa-mobile-nav-size) + 8px) !important;
+          width: var(--casa-mobile-logo-size) !important;
+          height: var(--casa-mobile-logo-size) !important;
+          min-width: var(--casa-mobile-logo-size) !important;
+          min-height: var(--casa-mobile-logo-size) !important;
+          max-width: var(--casa-mobile-logo-size) !important;
+          max-height: var(--casa-mobile-logo-size) !important;
           object-fit: contain !important;
           object-position: center !important;
           margin: 0 !important;
@@ -232,6 +233,7 @@
           translate: none !important;
           scale: 1 !important;
           filter: none !important;
+          clip-path: none !important;
         }
 
         .casa-mobile-nav-spacer {
@@ -327,12 +329,61 @@
           pointer-events: auto !important;
           transform: translate3d(0, 0, 0) scale(1) !important;
         }
+
+        #drawer .close-btn,
+        #drawer .drawer-close,
+        .drawer .close-btn,
+        .drawer .drawer-close,
+        .close-btn {
+          color: #1b1712 !important;
+          background: rgba(255, 250, 240, .96) !important;
+          border: 1px solid rgba(185, 138, 56, .36) !important;
+          box-shadow: 0 8px 20px rgba(58, 40, 18, .12) !important;
+          text-shadow: none !important;
+        }
+
+        /* Lightbox close button clears the sticky mobile nav. */
+        #lightboxClose,
+        .lightbox-close {
+          position: fixed !important;
+          top: calc(var(--casa-mobile-nav-height) + 16px) !important;
+          right: 18px !important;
+          z-index: 2147483001 !important;
+          color: #1b1712 !important;
+          background: rgba(255, 250, 240, .96) !important;
+          border: 1px solid rgba(185, 138, 56, .38) !important;
+          box-shadow: 0 10px 24px rgba(0, 0, 0, .18) !important;
+          text-shadow: none !important;
+        }
+
+        /* Availability review badges. Inline styles are overridden here. */
+        #availability .trust-strip .badge,
+        #availability .badge,
+        .trust-strip .badge {
+          color: #1b1712 !important;
+          background: rgba(255, 250, 240, .92) !important;
+          border: 1px solid rgba(185, 138, 56, .34) !important;
+          box-shadow: 0 10px 24px rgba(58, 40, 18, .10) !important;
+          text-shadow: none !important;
+        }
+
+        /* Footer Explore heading and links must stay readable on cream. */
+        .site-footer-luxury .footer-links-card h3,
+        .site-footer-luxury .footer-links-card a,
+        .footer-links-card h3,
+        .footer-links-card a,
+        footer .footer-links-card h3,
+        footer .footer-links-card a {
+          color: #0d3a2f !important;
+          text-shadow: none !important;
+        }
       }
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 88px;
-          --casa-mobile-nav-size: 64px;
+          --casa-mobile-nav-height: 90px;
+          --casa-mobile-nav-size: 68px;
+          --casa-mobile-logo-size: 66px;
           --casa-mobile-nav-pad-x: 16px;
         }
       }
