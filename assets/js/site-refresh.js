@@ -1,16 +1,15 @@
 /* =========================================================
    CASABLANCA SITE REFRESH JS
-   Purpose: Updated desktop/mobile hero images, simple fade transitions,
-   no hero lettering, refreshed logo handling, and privacy-safe helpers.
+   Purpose: Single current hero system, current logo/meta helpers, privacy
+   cleanup, and simple fade-only transitions. Legacy hero lettering and the
+   seventh slide are intentionally omitted.
    ========================================================= */
 
 import * as THREE from "https://unpkg.com/three@0.128.0/build/three.module.js";
 
-/* =========================================================
-   BLOCK 1 START: BRAND + HERO SLIDES
-   ========================================================= */
 const MOBILE_QUERY = window.matchMedia("(max-width: 768px)");
-const NEW_LOGO_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a20dd265cd41fa7c6b88dfa.webp";
+const NEW_LOGO_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eec33e2763b2eec1f94f4.svg";
+const SOCIAL_HERO_IMAGE = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea3fea24b71f0b2f265b2.png";
 
 const HERO_SLIDES = [
   {
@@ -36,30 +35,17 @@ const HERO_SLIDES = [
   {
     image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea3fed50c4ff184d80d63.png",
     mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea42714a2b82bfeea3e4c.png"
-  },
-  {
-    image: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3edcca14a2b82bfef65739.png",
-    mobileImage: "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eba0c163e40d86262d724.png"
   }
 ];
 
 const HOLD_DURATION = 2.55;
 const TRANSITION_DURATION = 1.2;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-/* =========================================================
-   BLOCK 1 END: BRAND + HERO SLIDES
-   ========================================================= */
 
-
-/* =========================================================
-   BLOCK 2 START: GLOBAL HELPERS
-   ========================================================= */
 function getActiveSlides() {
   const seen = new Set();
   return HERO_SLIDES
-    .map((slide) => ({
-      image: MOBILE_QUERY.matches && slide.mobileImage ? slide.mobileImage : slide.image
-    }))
+    .map((slide) => ({ image: MOBILE_QUERY.matches && slide.mobileImage ? slide.mobileImage : slide.image }))
     .filter((slide) => {
       if (!slide.image || seen.has(slide.image)) return false;
       seen.add(slide.image);
@@ -67,13 +53,25 @@ function getActiveSlides() {
     });
 }
 
+function setMeta(selector, value) {
+  const tag = document.querySelector(selector);
+  if (tag) tag.setAttribute("content", value);
+}
+
+function syncMetaPreview() {
+  setMeta("meta[property='og:image']", SOCIAL_HERO_IMAGE);
+  setMeta("meta[name='twitter:image']", SOCIAL_HERO_IMAGE);
+  setMeta("meta[name='description']", "Explore Casablanca Las Vegas, an ultra-private luxury estate near the Las Vegas Strip with resort pool, 6 luxury suites, concierge add-ons, event pricing, estate tour, and VIP booking support.");
+  setMeta("meta[name='twitter:description']", "Ultra-private Las Vegas luxury estate with resort-style outdoor space, 6 luxury suites, concierge add-ons, and guided availability review.");
+}
+
 function syncLogos() {
   document
     .querySelectorAll(".main-logo, .drawer-logo, .footer-brand-block img, .site-footer-luxury img, .logo-wrapper img")
     .forEach((image) => {
       image.src = NEW_LOGO_URL;
-      image.srcset = `${NEW_LOGO_URL} 800w`;
-      image.sizes = "(max-width: 1023px) 56px, 390px";
+      image.srcset = `${NEW_LOGO_URL} 512w`;
+      image.sizes = "(max-width: 1023px) 104px, 300px";
       image.alt = "Casablanca Las Vegas";
     });
 }
@@ -90,6 +88,15 @@ function removeHeroText() {
     .forEach((node) => node.remove());
 }
 
+function updateVisibleCopy() {
+  document.body.innerHTML = document.body.innerHTML
+    .replace(/10 possible bedrooms/gi, "6 luxury suites")
+    .replace(/10 Possible Bedrooms/g, "6 Luxury Suites")
+    .replace(/Possible Bedrooms/g, "Luxury Suites")
+    .replace(/>10<\/b><span>Luxury Suites<\/span>/g, ">6</b><span>Luxury Suites</span>")
+    .replace(/~5 Mi/g, "5 Mi");
+}
+
 function updateHeroFallback(firstImage) {
   const picture = document.querySelector(".casa-webgl-hero .hero-fallback");
   const source = picture?.querySelector("source");
@@ -100,48 +107,31 @@ function updateHeroFallback(firstImage) {
     img.srcset = `${firstImage} 1920w`;
   }
 }
-/* =========================================================
-   BLOCK 2 END: GLOBAL HELPERS
-   ========================================================= */
 
-
-/* =========================================================
-   BLOCK 3 START: CSS OVERRIDES
-   ========================================================= */
 function injectRefreshStyles() {
   let style = document.getElementById("casablancaSiteRefreshStyles");
   if (!style) {
     style = document.createElement("style");
     style.id = "casablancaSiteRefreshStyles";
+    document.head.appendChild(style);
   }
 
   style.textContent = `
     :root {
       --casa-new-logo: url('${NEW_LOGO_URL}');
+      --casa-hero-first: url('${SOCIAL_HERO_IMAGE}');
       --casa-ivory: #fffaf0;
       --casa-cream: #f6efe3;
-      --casa-sand: #eadcc8;
       --casa-ink: #1b1712;
       --casa-text: #30291f;
       --casa-green: #0d3a2f;
       --casa-bronze: #a8752c;
       --casa-border: rgba(168,117,44,.26);
-      --lux-black: var(--casa-cream) !important;
-      --lux-black-2: var(--casa-ivory) !important;
-      --lux-card: var(--casa-ivory) !important;
-      --lux-gold: var(--casa-bronze) !important;
     }
 
-    html,
-    body {
+    html, body {
       background: var(--casa-cream) !important;
       color: var(--casa-ink) !important;
-    }
-
-    body {
-      background-image:
-        radial-gradient(circle at 50% 0%, rgba(199,154,80,.16), transparent 34rem),
-        linear-gradient(180deg, var(--casa-ivory) 0%, var(--casa-cream) 100%) !important;
     }
 
     .main-logo,
@@ -163,19 +153,22 @@ function injectRefreshStyles() {
       pointer-events: none !important;
     }
 
-    .casa-webgl-hero {
-      background: var(--casa-cream) !important;
-    }
-
+    .casa-webgl-hero,
     .casa-webgl-stage,
     .casa-webgl-stage canvas {
       background: var(--casa-cream) !important;
     }
 
-    .casa-webgl-hero::after {
-      background:
-        linear-gradient(90deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,.04) 45%, rgba(0,0,0,.06) 100%),
-        linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02) 52%, rgba(0,0,0,.08)) !important;
+    .casa-webgl-hero .hero-fallback img {
+      content: var(--casa-hero-first) !important;
+    }
+
+    #matterport,
+    .drawer-nav a[href="#matterport"],
+    .nav-link[href="#matterport"] {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
 
     .hero-intro-section,
@@ -185,9 +178,7 @@ function injectRefreshStyles() {
     section.bg-dark,
     .section.bg-dark {
       background: var(--casa-cream) !important;
-      background-image:
-        radial-gradient(circle at 50% 0%, rgba(168,117,44,.10), transparent 34rem),
-        linear-gradient(180deg, var(--casa-ivory), var(--casa-cream)) !important;
+      background-image: radial-gradient(circle at 50% 0%, rgba(168,117,44,.10), transparent 34rem), linear-gradient(180deg, var(--casa-ivory), var(--casa-cream)) !important;
       color: var(--casa-ink) !important;
     }
 
@@ -199,36 +190,16 @@ function injectRefreshStyles() {
       color: var(--casa-ink) !important;
     }
 
-    #matterport,
-    .drawer-nav a[href="#matterport"],
-    .nav-link[href="#matterport"] {
-      display: none !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-    }
-
-    .lead,
-    .lead.light,
-    .section.bg-dark .lead,
-    .section.bg-dark .lead.light,
-    p,
-    li {
+    .lead, .lead.light, p, li {
       color: var(--casa-text) !important;
     }
 
-    .title-lg,
-    .title-md,
-    .font-display,
-    h1,
-    h2,
-    h3 {
+    .title-lg, .title-md, .font-display, h1, h2, h3 {
       color: var(--casa-ink) !important;
     }
 
-    .eyebrow,
-    .eyebrow.center {
+    .eyebrow, .eyebrow.center {
       color: var(--casa-bronze) !important;
-      letter-spacing: .18em !important;
     }
 
     .card-dark,
@@ -243,32 +214,19 @@ function injectRefreshStyles() {
       box-shadow: 0 28px 70px rgba(63,47,28,.12), inset 0 1px 0 rgba(255,255,255,.7) !important;
     }
 
-    .site-footer,
-    .site-footer-luxury,
-    footer {
+    .site-footer, .site-footer-luxury, footer {
       background: #f1e5d2 !important;
       background-image: linear-gradient(180deg, #fffaf0, #eadcc8) !important;
       color: var(--casa-ink) !important;
       border-top: 1px solid rgba(185,138,56,.28) !important;
     }
 
-    .site-footer *,
-    .site-footer-luxury *,
-    footer * {
+    .site-footer *, .site-footer-luxury *, footer * {
       color: var(--casa-ink) !important;
     }
   `;
-
-  document.head.appendChild(style);
 }
-/* =========================================================
-   BLOCK 3 END: CSS OVERRIDES
-   ========================================================= */
 
-
-/* =========================================================
-   BLOCK 4 START: SIMPLE FADE WEBGL HERO
-   ========================================================= */
 let activeSlides = [];
 let validSlides = [];
 let currentIndex = 0;
@@ -279,7 +237,6 @@ let uniforms;
 let transitionTimer = null;
 let isTransitioning = false;
 let heroStarted = false;
-const clock = new THREE.Clock();
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "anonymous";
 
@@ -317,8 +274,7 @@ const fragmentShader = `
   void main() {
     vec4 color1 = sampleCover(uTexture1, vUv, uTexture1Size, uResolution);
     vec4 color2 = sampleCover(uTexture2, vUv, uTexture2Size, uResolution);
-    float fade = smoothstep(0.0, 1.0, uProgress);
-    gl_FragColor = mix(color1, color2, fade);
+    gl_FragColor = mix(color1, color2, smoothstep(0.0, 1.0, uProgress));
   }
 `;
 
@@ -360,18 +316,6 @@ function getNextIndex(index) {
   return (index + 1) % validSlides.length;
 }
 
-function setTexturePair(index) {
-  const nextIndex = getNextIndex(index);
-  const tex1 = validSlides[index]?.texture;
-  const tex2 = validSlides[nextIndex]?.texture || tex1;
-  if (!tex1 || !uniforms) return;
-
-  uniforms.uTexture1.value = tex1;
-  uniforms.uTexture2.value = tex2;
-  uniforms.uTexture1Size.value = textureSize(tex1);
-  uniforms.uTexture2Size.value = textureSize(tex2);
-}
-
 function initWebGL() {
   const stage = document.getElementById("casaWebglHero");
   if (!stage || !validSlides[0]?.texture) return;
@@ -399,9 +343,19 @@ function initWebGL() {
   stage.classList.add("is-ready");
 }
 
+function setTexturePair(index) {
+  const nextIndex = getNextIndex(index);
+  const tex1 = validSlides[index]?.texture;
+  const tex2 = validSlides[nextIndex]?.texture || tex1;
+  if (!tex1 || !uniforms) return;
+  uniforms.uTexture1.value = tex1;
+  uniforms.uTexture2.value = tex2;
+  uniforms.uTexture1Size.value = textureSize(tex1);
+  uniforms.uTexture2Size.value = textureSize(tex2);
+}
+
 function transitionToNext() {
   if (isTransitioning || validSlides.length < 2 || !uniforms) return;
-
   isTransitioning = true;
   const targetIndex = getNextIndex(currentIndex);
   setTexturePair(currentIndex);
@@ -415,7 +369,6 @@ function transitionToNext() {
     uniforms.uTexture2Size.value = textureSize(currentTexture);
     uniforms.uProgress.value = 0;
     isTransitioning = false;
-
     window.clearTimeout(transitionTimer);
     transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
   };
@@ -437,27 +390,21 @@ function transitionToNext() {
 }
 
 function render() {
-  if (uniforms && renderer && scene && camera) {
-    clock.getDelta();
-    renderer.render(scene, camera);
-  }
+  if (uniforms && renderer && scene && camera) renderer.render(scene, camera);
   window.requestAnimationFrame(render);
 }
 
 async function startHero() {
   if (heroStarted) return;
   heroStarted = true;
-
   activeSlides = getActiveSlides();
   updateHeroFallback(activeSlides[0]?.image);
 
   try {
     const firstTexture = await loadHeroTexture(activeSlides[0]?.image);
     if (!firstTexture) throw new Error("Primary image failed");
-
     validSlides.push({ texture: firstTexture });
     currentIndex = 0;
-
     initWebGL();
     render();
     window.addEventListener("resize", resizeRenderer, { passive: true });
@@ -466,23 +413,13 @@ async function startHero() {
       const texture = await loadHeroTexture(activeSlides[i].image);
       if (!texture) continue;
       validSlides.push({ texture });
-
-      if (validSlides.length === 2) {
-        transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
-      }
+      if (validSlides.length === 2) transitionTimer = window.setTimeout(transitionToNext, HOLD_DURATION * 1000);
     }
   } catch (error) {
     console.error("Hero failed to initialize:", error);
   }
 }
-/* =========================================================
-   BLOCK 4 END: SIMPLE FADE WEBGL HERO
-   ========================================================= */
 
-
-/* =========================================================
-   BLOCK 5 START: LIGHTBOX + SMALL ANIMATIONS
-   ========================================================= */
 function initMapAndFloorplanLightbox() {
   const lightbox = document.getElementById("galleryLightbox");
   const lightboxImage = document.getElementById("lightboxImage");
@@ -522,46 +459,37 @@ function initMapAndFloorplanLightbox() {
 function initSplitMergeAnimation() {
   const gsapRef = window.gsap;
   if (!gsapRef || prefersReducedMotion) return;
-
   const left = document.querySelector(".split-half-left");
   const right = document.querySelector(".split-half-right");
   const section = document.querySelector(".split-merge-section");
   if (!left || !right || !section) return;
 
-  const runTween = () => {
-    gsapRef.fromTo(left, { x: "-18vw", opacity: .35 }, { x: 0, opacity: 1, duration: 1.15, ease: "power3.out" });
-    gsapRef.fromTo(right, { x: "18vw", opacity: .35 }, { x: 0, opacity: 1, duration: 1.15, ease: "power3.out" });
-  };
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      runTween();
+      gsapRef.fromTo(left, { x: "-18vw", opacity: .35 }, { x: 0, opacity: 1, duration: 1.15, ease: "power3.out" });
+      gsapRef.fromTo(right, { x: "18vw", opacity: .35 }, { x: 0, opacity: 1, duration: 1.15, ease: "power3.out" });
       observer.disconnect();
     });
   }, { threshold: .28 });
-
   observer.observe(section);
 }
-/* =========================================================
-   BLOCK 5 END: LIGHTBOX + SMALL ANIMATIONS
-   ========================================================= */
 
-
-/* =========================================================
-   BLOCK 6 START: INIT
-   ========================================================= */
 function initCasablancaRefresh() {
+  syncMetaPreview();
   injectRefreshStyles();
   syncLogos();
   removePrivateMatterport();
   removeHeroText();
+  updateVisibleCopy();
   initMapAndFloorplanLightbox();
   initSplitMergeAnimation();
   startHero();
 
-  window.setTimeout(syncLogos, 250);
-  window.setTimeout(syncLogos, 1000);
+  window.setTimeout(() => {
+    syncLogos();
+    removeHeroText();
+  }, 250);
 }
 
 if (document.readyState === "loading") {
@@ -571,11 +499,10 @@ if (document.readyState === "loading") {
 }
 
 window.addEventListener("load", () => {
+  syncMetaPreview();
+  syncLogos();
   removePrivateMatterport();
   removeHeroText();
 }, { once: true });
 
 MOBILE_QUERY.addEventListener?.("change", () => window.location.reload());
-/* =========================================================
-   BLOCK 6 END: INIT
-   ========================================================= */
