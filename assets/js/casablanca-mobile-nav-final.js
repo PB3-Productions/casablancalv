@@ -112,6 +112,38 @@
     style.textContent = `
       #${NAV_ID} { display: none; }
 
+      @media (min-width: 1024px) {
+        #site-header .brand-group,
+        #site-header.site-header.is-scrolled .brand-group {
+          top: 50% !important;
+          left: 50% !important;
+          width: clamp(220px, 15.5vw, 305px) !important;
+          height: clamp(108px, 7.4vw, 150px) !important;
+          transform: translate(-50%, -50%) !important;
+          transition: none !important;
+        }
+
+        #site-header .logo-wrapper,
+        #site-header.site-header.is-scrolled .logo-wrapper {
+          position: absolute !important;
+          top: 50% !important;
+          left: 50% !important;
+          display: block !important;
+          width: clamp(218px, 15.5vw, 300px) !important;
+          height: clamp(128px, 8.8vw, 170px) !important;
+          transform: translate(-50%, -50%) !important;
+          transition: none !important;
+        }
+
+        #site-header .logo-wrapper::before,
+        #site-header.site-header.is-scrolled .logo-wrapper::before {
+          width: 100% !important;
+          height: 100% !important;
+          background-position: center !important;
+          background-size: contain !important;
+        }
+      }
+
       @media (max-width: 1023px) {
         :root {
           --casa-mobile-nav-height: 114px;
