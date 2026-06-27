@@ -1,8 +1,8 @@
 /* =========================================================
    CASABLANCA MOBILE NAV FINAL OVERRIDE
-   Purpose: Mobile-only standalone nav. This intentionally hides the
-   original site-header on mobile so no legacy hamburger/menu layer can sit
-   behind the new button or cause the enlarge/shrink blip.
+   Purpose: Mobile-only standalone nav. Original site-header is hidden on
+   mobile. The replacement uses no sticky bar background: centered logo only
+   with a plain three-line hamburger at the right.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
@@ -52,7 +52,6 @@
         <a class="casa-mobile-logo-link" href="#top" aria-label="Casablanca Las Vegas home">
           <img class="casa-mobile-logo-img" src="${LOGO_SVG_URL}" alt="Casablanca Las Vegas" width="512" height="512" decoding="async" />
         </a>
-        <div class="casa-mobile-nav-spacer" aria-hidden="true"></div>
         <button class="casa-mobile-menu-button" id="casaMobileMenuButton" type="button" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
           <span class="casa-mobile-menu-lines" aria-hidden="true">
             <span></span>
@@ -111,28 +110,20 @@
     }
 
     style.textContent = `
-      #${NAV_ID} {
-        display: none;
-      }
+      #${NAV_ID} { display: none; }
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 94px;
-          --casa-mobile-nav-size: 72px;
-          --casa-mobile-logo-size: 70px;
-          --casa-mobile-nav-pad-x: 18px;
+          --casa-mobile-nav-height: 114px;
+          --casa-mobile-logo-size: 104px;
+          --casa-mobile-menu-width: 82px;
+          --casa-mobile-menu-right: 22px;
+          --casa-mobile-menu-top: 34px;
         }
 
-        html {
-          scroll-padding-top: var(--casa-mobile-nav-height) !important;
-        }
+        html { scroll-padding-top: 0 !important; }
+        body { padding-top: 0 !important; }
 
-        body {
-          padding-top: var(--casa-mobile-nav-height) !important;
-        }
-
-        /* Hide the original mobile header entirely. This removes the second
-           hidden/legacy hamburger layer that was causing the blip. */
         #site-header,
         .site-header {
           display: none !important;
@@ -146,71 +137,48 @@
           top: 0 !important;
           left: 0 !important;
           right: 0 !important;
-          bottom: auto !important;
           z-index: 2147483000 !important;
           width: 100vw !important;
           height: var(--casa-mobile-nav-height) !important;
           min-height: var(--casa-mobile-nav-height) !important;
-          max-height: var(--casa-mobile-nav-height) !important;
-          display: grid !important;
-          grid-template-columns: var(--casa-mobile-nav-size) minmax(0, 1fr) var(--casa-mobile-nav-size) !important;
-          align-items: center !important;
-          gap: 0 !important;
-          padding: 0 var(--casa-mobile-nav-pad-x) !important;
+          display: block !important;
+          padding: 0 !important;
           margin: 0 !important;
           border: 0 !important;
-          border-bottom: 1px solid rgba(185, 138, 56, .28) !important;
-          border-radius: 0 !important;
-          background: rgba(255, 250, 240, .995) !important;
-          background-image: linear-gradient(180deg, #fffdf7 0%, #f6efe3 100%) !important;
-          box-shadow: 0 12px 28px rgba(58, 40, 18, .13) !important;
+          background: transparent !important;
+          background-image: none !important;
+          box-shadow: none !important;
+          pointer-events: none !important;
           overflow: visible !important;
           transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
           animation: none !important;
           transition: none !important;
-          contain: layout style !important;
           box-sizing: border-box !important;
         }
 
-        #${NAV_ID},
-        #${NAV_ID} *,
-        #${NAV_ID} *::before,
-        #${NAV_ID} *::after {
+        #${NAV_ID}, #${NAV_ID} *, #${NAV_ID} *::before, #${NAV_ID} *::after {
           box-sizing: border-box !important;
           animation: none !important;
           transition: none !important;
-        }
-
-        .casa-mobile-logo-link,
-        .casa-mobile-menu-button {
-          width: var(--casa-mobile-nav-size) !important;
-          height: var(--casa-mobile-nav-size) !important;
-          min-width: var(--casa-mobile-nav-size) !important;
-          min-height: var(--casa-mobile-nav-size) !important;
-          max-width: var(--casa-mobile-nav-size) !important;
-          max-height: var(--casa-mobile-nav-size) !important;
-          display: grid !important;
-          place-items: center !important;
-          align-self: center !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border-radius: 50% !important;
-          overflow: visible !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          contain: none !important;
         }
 
         .casa-mobile-logo-link {
-          grid-column: 1 !important;
-          justify-self: start !important;
-          text-decoration: none !important;
-          background: transparent !important;
+          position: absolute !important;
+          top: 8px !important;
+          left: 50% !important;
+          width: var(--casa-mobile-logo-size) !important;
+          height: var(--casa-mobile-logo-size) !important;
+          transform: translateX(-50%) !important;
+          display: grid !important;
+          place-items: center !important;
+          margin: 0 !important;
+          padding: 0 !important;
           border: 0 !important;
+          background: transparent !important;
           box-shadow: none !important;
+          pointer-events: auto !important;
+          overflow: visible !important;
+          text-decoration: none !important;
         }
 
         .casa-mobile-logo-img {
@@ -229,50 +197,48 @@
           border-radius: 50% !important;
           background: transparent !important;
           box-shadow: none !important;
-          transform: none !important;
-          translate: none !important;
-          scale: 1 !important;
-          filter: none !important;
           clip-path: none !important;
-        }
-
-        .casa-mobile-nav-spacer {
-          grid-column: 2 !important;
-          min-width: 0 !important;
-          height: 1px !important;
+          transform: none !important;
+          filter: drop-shadow(0 8px 14px rgba(0,0,0,.26)) !important;
         }
 
         .casa-mobile-menu-button {
-          grid-column: 3 !important;
-          justify-self: end !important;
-          border: 2px solid #050504 !important;
-          background: #050504 !important;
+          position: absolute !important;
+          top: var(--casa-mobile-menu-top) !important;
+          right: var(--casa-mobile-menu-right) !important;
+          width: var(--casa-mobile-menu-width) !important;
+          height: 48px !important;
+          display: grid !important;
+          place-items: center !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+          background: transparent !important;
           background-image: none !important;
           color: transparent !important;
           font-size: 0 !important;
           line-height: 0 !important;
-          letter-spacing: 0 !important;
-          text-indent: 0 !important;
           box-shadow: none !important;
           cursor: pointer !important;
           appearance: none !important;
           -webkit-appearance: none !important;
+          pointer-events: auto !important;
+          overflow: visible !important;
+          transform: none !important;
         }
 
         .casa-mobile-menu-button::before,
-        .casa-mobile-menu-button::after {
-          content: none !important;
-          display: none !important;
-        }
+        .casa-mobile-menu-button::after { content: none !important; display: none !important; }
 
         .casa-mobile-menu-lines {
-          width: 27px !important;
-          height: 20px !important;
-          min-width: 27px !important;
-          min-height: 20px !important;
+          width: 74px !important;
+          height: 42px !important;
+          min-width: 74px !important;
+          min-height: 42px !important;
           display: flex !important;
           flex-direction: column !important;
-          align-items: center !important;
+          align-items: stretch !important;
           justify-content: space-between !important;
           gap: 0 !important;
           margin: 0 !important;
@@ -281,12 +247,12 @@
 
         .casa-mobile-menu-lines span {
           display: block !important;
-          width: 27px !important;
-          height: 3px !important;
-          min-height: 3px !important;
+          width: 74px !important;
+          height: 9px !important;
+          min-height: 9px !important;
           border-radius: 999px !important;
-          background: #fffaf0 !important;
-          box-shadow: none !important;
+          background: #0b0b0a !important;
+          box-shadow: 0 2px 6px rgba(255,255,255,.18) !important;
           margin: 0 !important;
           padding: 0 !important;
         }
@@ -308,11 +274,11 @@
         #drawer,
         .drawer {
           position: fixed !important;
-          top: calc(var(--casa-mobile-nav-height) + 12px) !important;
-          right: var(--casa-mobile-nav-pad-x) !important;
+          top: 118px !important;
+          right: 16px !important;
           left: auto !important;
-          width: min(390px, calc(100vw - (var(--casa-mobile-nav-pad-x) * 2))) !important;
-          max-height: calc(100svh - var(--casa-mobile-nav-height) - 28px) !important;
+          width: min(390px, calc(100vw - 32px)) !important;
+          max-height: calc(100svh - 136px) !important;
           border-radius: 28px !important;
           opacity: 0 !important;
           visibility: hidden !important;
@@ -342,11 +308,10 @@
           text-shadow: none !important;
         }
 
-        /* Lightbox close button clears the sticky mobile nav. */
         #lightboxClose,
         .lightbox-close {
           position: fixed !important;
-          top: calc(var(--casa-mobile-nav-height) + 16px) !important;
+          top: 124px !important;
           right: 18px !important;
           z-index: 2147483001 !important;
           color: #1b1712 !important;
@@ -356,7 +321,6 @@
           text-shadow: none !important;
         }
 
-        /* Availability review badges. Inline styles are overridden here. */
         #availability .trust-strip .badge,
         #availability .badge,
         .trust-strip .badge {
@@ -367,7 +331,6 @@
           text-shadow: none !important;
         }
 
-        /* Footer Explore heading and links must stay readable on cream. */
         .site-footer-luxury .footer-links-card h3,
         .site-footer-luxury .footer-links-card a,
         .footer-links-card h3,
@@ -381,11 +344,17 @@
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 90px;
-          --casa-mobile-nav-size: 68px;
-          --casa-mobile-logo-size: 66px;
-          --casa-mobile-nav-pad-x: 16px;
+          --casa-mobile-nav-height: 108px;
+          --casa-mobile-logo-size: 96px;
+          --casa-mobile-menu-width: 72px;
+          --casa-mobile-menu-right: 16px;
+          --casa-mobile-menu-top: 32px;
         }
+
+        .casa-mobile-menu-lines,
+        .casa-mobile-menu-lines span { width: 64px !important; }
+        .casa-mobile-menu-lines { height: 36px !important; min-height: 36px !important; }
+        .casa-mobile-menu-lines span { height: 8px !important; min-height: 8px !important; }
       }
     `;
   }
