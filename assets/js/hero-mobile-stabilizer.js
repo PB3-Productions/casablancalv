@@ -1,11 +1,11 @@
 /* =========================================================
-   CASABLANCA MOBILE HERO TITLE PATCH — DISABLED
-   Yellow hero title overlays have been intentionally removed from both
-   desktop and mobile. This compatibility hook now loads the final polish
-   fixes after the main refresh script.
+   CASABLANCA MOBILE NAV LOADER
+   Purpose: Legacy hero-title patches are disabled. This file now loads only
+   the standalone mobile nav, preventing old polish/spacing override scripts
+   from flashing legacy content before the final layout settles.
    ========================================================= */
 (function () {
-  document.querySelectorAll(".casa-mobile-title-stabilizer").forEach((node) => node.remove());
+  document.querySelectorAll(".casa-mobile-title-stabilizer, .casa-hero-slide-title").forEach((node) => node.remove());
   document.body.classList.remove("casa-mobile-hero-guard", "casa-mobile-first-slide");
 
   function loadScriptOnce(id, src) {
@@ -17,16 +17,5 @@
     document.head.appendChild(script);
   }
 
-  function loadPolishFixes() {
-    loadScriptOnce("casablancaPolishFixScript", "/assets/js/casablanca-polish-fixes.js");
-    window.setTimeout(() => {
-      loadScriptOnce("casablancaFinalSpacingFixScript", "/assets/js/casablanca-final-spacing-fixes.js");
-    }, 120);
-    window.setTimeout(() => {
-      loadScriptOnce("casablancaMobileNavFinalScript", "/assets/js/casablanca-mobile-nav-final.js");
-    }, 260);
-  }
-
-  loadPolishFixes();
-  window.setTimeout(loadPolishFixes, 250);
+  loadScriptOnce("casablancaMobileNavFinalScript", "/assets/js/casablanca-mobile-nav-final.js");
 })();
