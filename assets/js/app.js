@@ -13,11 +13,14 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+  const isMobileViewport = window.matchMedia("(max-width: 1023px)").matches;
 
-  const mobileHeroStabilizer = document.createElement("script");
-  mobileHeroStabilizer.defer = true;
-  mobileHeroStabilizer.src = "/assets/js/hero-mobile-stabilizer.js";
-  document.head.appendChild(mobileHeroStabilizer);
+  if (!document.getElementById("casablancaMobileNavFinalScript")) {
+    const mobileHeroStabilizer = document.createElement("script");
+    mobileHeroStabilizer.defer = true;
+    mobileHeroStabilizer.src = "/assets/js/hero-mobile-stabilizer.js";
+    document.head.appendChild(mobileHeroStabilizer);
+  }
 
   /* BLOCK 2 START: HEADER + DRAWER */
   const header = $("#site-header");
@@ -27,29 +30,31 @@ window.addEventListener("DOMContentLoaded", () => {
   const closeDrawer = $("#close-drawer");
 
   const setShrunkHeader = (shouldShrink) => {
-    if (!header) return;
+    if (!header || isMobileViewport) return;
     header.classList.toggle("is-scrolled", shouldShrink);
     header.style.backgroundColor = shouldShrink ? "#050505" : "";
     header.style.backgroundImage = shouldShrink ? "linear-gradient(180deg, rgba(5,5,5,.99), rgba(10,10,10,.96))" : "";
   };
 
-  let lastScrollY = Math.max(window.scrollY || 0, 0);
-  let ticking = false;
-  const updateHeader = () => {
-    const y = Math.max(window.scrollY || 0, 0);
-    const delta = y - lastScrollY;
-    if (y <= 24) setShrunkHeader(false);
-    else if (delta > 4) setShrunkHeader(true);
-    else if (delta < -4) setShrunkHeader(false);
-    lastScrollY = y;
-    ticking = false;
-  };
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(updateHeader);
-  }, { passive: true });
-  setShrunkHeader(lastScrollY > 24);
+  if (!isMobileViewport) {
+    let lastScrollY = Math.max(window.scrollY || 0, 0);
+    let ticking = false;
+    const updateHeader = () => {
+      const y = Math.max(window.scrollY || 0, 0);
+      const delta = y - lastScrollY;
+      if (y <= 24) setShrunkHeader(false);
+      else if (delta > 4) setShrunkHeader(true);
+      else if (delta < -4) setShrunkHeader(false);
+      lastScrollY = y;
+      ticking = false;
+    };
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateHeader);
+    }, { passive: true });
+    setShrunkHeader(lastScrollY > 24);
+  }
 
   const openDrawer = () => {
     drawer?.classList.add("open");
@@ -259,105 +264,83 @@ window.addEventListener("DOMContentLoaded", () => {
   });
   /* BLOCK 6 END: VIDEO CONTROLS */
 
-  /* BLOCK 7 START: BOOKING CALENDAR + PENDING INQUIRIES */
-  const pad = (num) => String(num).padStart(2, "0");
-  const toISODate = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-  const addDays = (date, days) => { const copy = new Date(date); copy.setDate(copy.getDate() + days); return copy; };
-  const setStatus = (elementId, message, tone = "") => {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    el.textContent = message;
-    el.classList.remove("status-ok", "status-warn", "status-error");
-    if (tone) el.classList.add(`status-${tone}`);
-  };
-  const formatRangePayload = (selectedDates) => {
-    if (!selectedDates || selectedDates.length < 2) return null;
-    const checkIn = toISODate(selectedDates[0]);
-    const checkOut = toISODate(selectedDates[1]);
-    if (checkIn === checkOut) return null;
-    return { checkIn, checkOut };
-  };
-  let flatpickrInstance = null;
-  let formStarted = false;
+  /* BLOCK 7 START: BOOKING FORM */
+  const bookingForm = $("#bookingForm");
+  const stayRange = $("#stayRange");
+  const calendarStatus = $("#calendarStatus");
+  const formStatus = $("#formStatus");
+  const submitBooking = $("#submitBooking");
+  const checkIn = $("#checkIn");
+  const checkOut = $("#checkOut");
 
-  async function loadUnavailableDates() {
-    const today = new Date();
-    const start = toISODate(today);
-    const end = toISODate(addDays(today, 365));
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/bookings?start=${start}&end=${end}`, { method: "GET", headers: { "Accept": "application/json" } });
-      if (!response.ok) throw new Error(`Calendar endpoint returned ${response.status}`);
-      const data = await response.json();
-      const disabled = Array.isArray(data.unavailable) ? data.unavailable.map((range) => ({ from: range.start, to: range.end })) : [];
-      setStatus("calendarStatus", disabled.length ? `${disabled.length} approved unavailable date block(s) loaded.` : "Availability calendar loaded. No approved blocked dates found.", "ok");
-      return disabled;
-    } catch (error) {
-      console.error("Calendar load failed:", error);
-      setStatus("calendarStatus", "Calendar API is not available right now. Please submit an inquiry and we will verify dates manually.", "warn");
-      return [];
-    }
-  }
+  const setCalendarStatus = (message, type = "warn") => {
+    if (!calendarStatus) return;
+    calendarStatus.textContent = message;
+    calendarStatus.className = `status-note status-${type}`;
+  };
 
-  async function initBookingCalendar() {
-    const disabledRanges = await loadUnavailableDates();
-    if (flatpickrInstance) flatpickrInstance.destroy();
-    flatpickrInstance = flatpickr("#stayRange", {
+  const initFlatpickr = (blockedDates = []) => {
+    if (!stayRange || typeof flatpickr !== "function") return;
+    flatpickr(stayRange, {
       mode: "range",
       minDate: "today",
       dateFormat: "Y-m-d",
-      disable: disabledRanges,
-      showMonths: window.innerWidth >= 768 ? 2 : 1,
+      disable: blockedDates,
       onChange: (selectedDates) => {
-        const payload = formatRangePayload(selectedDates);
-        document.getElementById("checkIn").value = payload ? payload.checkIn : "";
-        document.getElementById("checkOut").value = payload ? payload.checkOut : "";
-        if (payload) trackEvent("date_select", payload);
+        if (selectedDates[0]) checkIn.value = selectedDates[0].toISOString().slice(0, 10);
+        if (selectedDates[1]) checkOut.value = selectedDates[1].toISOString().slice(0, 10);
+        trackEvent("date_range_selected");
       }
     });
-  }
-  if (window.flatpickr) initBookingCalendar();
+  };
 
-  const bookingForm = $("#bookingForm");
-  const submitButton = $("#submitBooking");
-  bookingForm?.addEventListener("input", () => {
-    if (!formStarted) {
-      formStarted = true;
-      trackEvent("form_start", { form_name: "vip_booking_inquiry" });
-    }
-  });
+  fetch(`${API_BASE_URL}/api/bookings`)
+    .then((response) => response.ok ? response.json() : Promise.reject(new Error("Calendar unavailable")))
+    .then((data) => {
+      const unavailable = Array.isArray(data.unavailableDates) ? data.unavailableDates : [];
+      initFlatpickr(unavailable);
+      setCalendarStatus("Live calendar connected. Approved holds are blocked automatically.", "ok");
+    })
+    .catch(() => {
+      initFlatpickr([]);
+      setCalendarStatus("Calendar connection unavailable. Submit your dates and our team will verify manually.", "warn");
+    });
+
   bookingForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!bookingForm.checkValidity()) {
+      bookingForm.reportValidity();
+      return;
+    }
+    if (formStatus) {
+      formStatus.textContent = "Submitting private inquiry...";
+      formStatus.className = "status-note status-warn";
+    }
+    submitBooking?.setAttribute("disabled", "disabled");
     const payload = Object.fromEntries(new FormData(bookingForm).entries());
-    if (!payload.checkIn || !payload.checkOut) return setStatus("formStatus", "Please select a valid check-in and check-out range.", "error");
-    if (!payload.name || !payload.email || !payload.guestCount || !payload.eventType) return setStatus("formStatus", "Please complete the required fields before submitting.", "error");
-    submitButton.disabled = true;
-    submitButton.textContent = "Submitting...";
-    setStatus("formStatus", "Sending your private inquiry for concierge review...", "warn");
     try {
       const response = await fetch(`${API_BASE_URL}/api/bookings`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || `Booking endpoint returned ${response.status}`);
-      setStatus("formStatus", "Success. Your request was submitted as pending. Our private booking team will verify availability and follow up within 24–48 hours.", "ok");
-      trackEvent("form_submit", { form_name: "vip_booking_inquiry", status: "pending", event_type: payload.eventType });
+      if (!response.ok || !data.success) throw new Error(data.error || "Submission failed");
+      if (formStatus) {
+        formStatus.textContent = "Inquiry received. Our team will review availability and follow up shortly.";
+        formStatus.className = "status-note status-ok";
+      }
       bookingForm.reset();
-      flatpickrInstance?.clear();
-      await initBookingCalendar();
+      trackEvent("booking_inquiry_submitted", { inquiry_type: payload.eventType || "unknown" });
     } catch (error) {
-      console.error("Booking submit failed:", error);
-      setStatus("formStatus", error.message || "Something went wrong. Please try again.", "error");
-      trackEvent("form_submit_error", { form_name: "vip_booking_inquiry", error: error.message || "unknown" });
+      if (formStatus) {
+        formStatus.textContent = "We could not submit this automatically. Please call the sales agent or try again.";
+        formStatus.className = "status-note status-error";
+      }
+      console.error(error);
     } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = "Submit Private Inquiry";
+      submitBooking?.removeAttribute("disabled");
     }
   });
-  $$("a[href^='tel:']").forEach((link) => link.addEventListener("click", () => trackEvent("phone_click", { phone_href: link.getAttribute("href") })));
-  /* BLOCK 7 END: BOOKING CALENDAR + PENDING INQUIRIES */
+  /* BLOCK 7 END: BOOKING FORM */
 });
-/* =========================================================
-   BLOCK 1 END: CASABLANCA LAS VEGAS FRONTEND APPLICATION
-   ========================================================= */
