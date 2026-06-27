@@ -1,14 +1,12 @@
 /* =========================================================
-   BLOCK 1 START: CASABLANCA SITE REFRESH OVERRIDES
-   Purpose: Final desktop/mobile refinements for the black luxury nav,
-   Oscar-style WebGL hero, yellow hero slide titles, below-hero content flow,
-   map/floorplan zoom, gold icons, concierge cards, Matterport privacy,
-   and footer CTA.
+   CASABLANCA SITE REFRESH CSS
+   Purpose: Current final-state styling only. Legacy yellow hero titles,
+   old WebGL fallback assets, and mobile capsule nav styling are removed.
    ========================================================= */
 
 :root {
-  --casa-new-logo: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1cc593d7322952d16d78e3.webp');
-  --casa-webgl-fallback: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a1baabb5a3e6e89b6028b15.webp');
+  --casa-new-logo: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eec33e2763b2eec1f94f4.svg');
+  --casa-webgl-fallback: url('https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea3fea24b71f0b2f265b2.png');
   --lux-black: #050505;
   --lux-black-2: #0d0b08;
   --lux-card: #fffaf0;
@@ -19,13 +17,12 @@
 }
 
 /* =========================================================
-   BLOCK 2 START: BLACK LUXURY NAV + SMALLER BADGE OVERHANG
+   DESKTOP NAV
    ========================================================= */
 .site-header,
 .site-header.is-scrolled {
   background-color: var(--lux-black) !important;
-  background-image: none !important;
-  background: linear-gradient(180deg, #070707 0%, #030303 100%) !important;
+  background-image: linear-gradient(180deg, #070707 0%, #030303 100%) !important;
   border-bottom: 1px solid rgba(255, 226, 138, .16) !important;
   box-shadow: 0 14px 36px rgba(0,0,0,.66), inset 0 -1px 0 rgba(255,255,255,.035) !important;
 }
@@ -43,7 +40,7 @@
   display: none !important;
 }
 
-@media (min-width: 1023px) {
+@media (min-width: 1024px) {
   .site-header,
   .header-container,
   .nav-bar-container {
@@ -96,22 +93,25 @@
     width: clamp(148px, 10.5vw, 200px) !important;
   }
 
-  .nav-left {
-    justify-self: end !important;
-    margin: 0 !important;
-  }
+  .nav-left { justify-self: end !important; margin: 0 !important; }
+  .nav-right { justify-self: start !important; margin: 0 !important; }
+}
 
-  .nav-right {
-    justify-self: start !important;
-    margin: 0 !important;
+/* =========================================================
+   MOBILE: OLD HEADER HIDDEN BEFORE JS LOADS
+   ========================================================= */
+@media (max-width: 1023px) {
+  #site-header,
+  .site-header {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 }
-/* =========================================================
-   BLOCK 2 END: BLACK LUXURY NAV + SMALLER BADGE OVERHANG
-   ========================================================= */
 
 /* =========================================================
-   BLOCK 3 START: OSCAR-STYLE WEBGL HERO + YELLOW SLIDE TITLES
+   LIGHTWEIGHT FADE HERO
    ========================================================= */
 .casa-webgl-hero {
   position: relative !important;
@@ -121,7 +121,7 @@
   height: 100svh !important;
   margin: 0 !important;
   overflow: hidden !important;
-  background: #000 !important;
+  background: #f6efe3 !important;
   isolation: isolate;
 }
 
@@ -129,22 +129,30 @@
   position: absolute !important;
   inset: 0 !important;
   z-index: 4 !important;
-  background: #000 !important;
+  background: #f6efe3 !important;
   opacity: 0;
-  transition: opacity 700ms ease;
+  transition: opacity 420ms ease;
 }
 
 .casa-webgl-stage.is-ready {
   opacity: 1;
 }
 
-.casa-webgl-stage canvas {
-  position: absolute !important;
-  inset: 0 !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  background: #000 !important;
+.casa-fade-hero-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: none;
+  transition: opacity 1200ms ease-in-out;
+}
+
+.casa-fade-hero-layer.is-active {
+  opacity: 1;
 }
 
 .casa-webgl-hero .hero-fallback {
@@ -152,7 +160,7 @@
   inset: 0 !important;
   z-index: 1 !important;
   opacity: 1;
-  transition: opacity 700ms ease;
+  transition: opacity 420ms ease;
 }
 
 .casa-webgl-stage.is-ready + .hero-fallback {
@@ -172,7 +180,7 @@
   content: var(--casa-webgl-fallback) !important;
   object-fit: cover !important;
   object-position: center !important;
-  filter: saturate(1.06) contrast(1.04) brightness(.92) !important;
+  filter: saturate(1.06) contrast(1.04) brightness(.94) !important;
 }
 
 .casa-webgl-hero::after {
@@ -182,58 +190,8 @@
   z-index: 5;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 38%, transparent 0%, rgba(0,0,0,.08) 42%, rgba(0,0,0,.36) 100%),
-    linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.04) 48%, rgba(0,0,0,.28));
-}
-
-.casa-hero-slide-title {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(3.2rem, 7vw, 6.2rem);
-  z-index: 7;
-  width: min(1180px, calc(100% - clamp(2rem, 8vw, 8rem)));
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: .02em;
-  color: #ffdf37;
-  font-family: var(--font-title, Arial, sans-serif) !important;
-  font-size: clamp(2rem, 5.8vw, 6.2rem);
-  font-weight: 900;
-  line-height: .9;
-  letter-spacing: .045em;
-  text-align: center;
-  text-transform: uppercase;
-  text-shadow:
-    0 2px 0 rgba(77, 45, 0, .96),
-    0 0 12px rgba(255, 223, 55, .5),
-    0 16px 42px rgba(0,0,0,.82);
-  pointer-events: none;
-  opacity: 0;
-}
-
-.casa-hero-slide-title span {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(1.25em) rotateX(38deg);
-  transition:
-    opacity .55s ease,
-    transform .72s cubic-bezier(.16, 1, .3, 1);
-  transition-delay: calc(var(--char-index) * 42ms);
-}
-
-.casa-hero-slide-title.is-active {
-  opacity: 1;
-}
-
-.casa-hero-slide-title.is-active span {
-  opacity: 1;
-  transform: translateY(0) rotateX(0deg);
-}
-
-.casa-hero-slide-title.is-hidden {
-  opacity: 0 !important;
+    linear-gradient(90deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.02) 45%, rgba(0,0,0,.04) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.02) 52%, rgba(0,0,0,.08));
 }
 
 .casa-webgl-hero .hero-text,
@@ -242,8 +200,13 @@
 .casa-webgl-hero .hero-copy,
 .casa-webgl-hero .intro-panel,
 .casa-webgl-hero .hero-content,
-.casa-webgl-hero .hero-grid {
+.casa-webgl-hero .hero-grid,
+.casa-hero-slide-title,
+.casa-mobile-title-stabilizer {
   display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 main > section.hero:not(.casa-webgl-hero),
@@ -253,75 +216,107 @@ main > section.hero:not(.casa-webgl-hero),
 .hero-panel,
 .hero-content:not(.casa-webgl-hero .hero-content),
 .hero-copy:not(.casa-webgl-hero .hero-copy),
-.intro-panel:not(.casa-webgl-hero .intro-panel) {
+.intro-panel:not(.casa-webgl-hero .intro-panel),
+#matterport,
+.drawer-nav a[href="#matterport"],
+.nav-link[href="#matterport"] {
   display: none !important;
 }
-/* =========================================================
-   BLOCK 3 END: OSCAR-STYLE WEBGL HERO + YELLOW SLIDE TITLES
-   ========================================================= */
 
 /* =========================================================
-   BLOCK 4 START: BELOW-HERO COPY FLOW + BUTTON PLACEMENT
+   PAGE COLOR SYSTEM
+   ========================================================= */
+.hero-intro-section,
+.private-estate-card-section,
+.pricing-black-section,
+.concierge-luxury-section,
+section.bg-dark,
+.section.bg-dark {
+  background: #f6efe3 !important;
+  background-image: radial-gradient(circle at 50% 0%, rgba(168,117,44,.10), transparent 34rem), linear-gradient(180deg, #fffaf0, #f6efe3) !important;
+  color: #1b1712 !important;
+}
+
+.section.bg-cream,
+.section.bg-ivory,
+.map-positioning-section,
+.floorplan-section {
+  background: #fffaf0 !important;
+  color: #1b1712 !important;
+}
+
+.lead,
+.lead.light,
+p,
+li {
+  color: #30291f !important;
+}
+
+.title-lg,
+.title-md,
+.font-display,
+h1,
+h2,
+h3 {
+  color: #1b1712 !important;
+}
+
+.eyebrow,
+.eyebrow.center {
+  color: #a8752c !important;
+  letter-spacing: .18em !important;
+}
+
+.card-dark,
+.mini-card,
+.price-card,
+.estate-summary-card,
+.policy-grid .mini-card,
+.concierge-option {
+  background: rgba(255,250,240,.94) !important;
+  color: #1b1712 !important;
+  border: 1px solid rgba(168,117,44,.26) !important;
+  box-shadow: 0 28px 70px rgba(63,47,28,.12), inset 0 1px 0 rgba(255,255,255,.7) !important;
+}
+
+/* =========================================================
+   CONTENT FLOW
    ========================================================= */
 .hero-intro-section {
   display: block !important;
-  background: #050505 !important;
-  background-image: radial-gradient(circle at 50% 0%, rgba(215,173,69,.12), transparent 30rem) !important;
   padding-top: clamp(4.5rem, 8vw, 7rem) !important;
   padding-bottom: clamp(3.2rem, 6.5vw, 5.8rem) !important;
-  color: var(--bg-ivory) !important;
 }
 
 .hero-intro-section .narrow-shell {
   display: block !important;
-  text-align: center !important;
-  max-width: min(1180px, calc(100% - clamp(1.25rem, 6vw, 6rem))) !important;
+  text-align: left !important;
+  max-width: min(980px, calc(100% - clamp(1.25rem, 6vw, 6rem))) !important;
+  margin-inline: auto !important;
 }
 
 .hero-intro-section .title-lg {
   max-width: 1120px !important;
   margin: 0 auto !important;
-  text-align: center !important;
+  text-align: left !important;
   font-size: clamp(2.25rem, 5.4vw, 5.25rem) !important;
-  line-height: .94 !important;
+  line-height: .98 !important;
 }
 
 .hero-intro-section .intro-lead {
-  max-width: 980px !important;
+  max-width: 930px !important;
   margin: clamp(1.1rem, 2.4vw, 1.8rem) auto 0 !important;
-  text-align: center !important;
-  color: rgba(255,253,247,.78) !important;
-}
-
-.hero-intro-section .intro-button-row {
-  margin-top: clamp(1.5rem, 3vw, 2.25rem) !important;
-  margin-bottom: 0 !important;
-}
-
-.hero-intro-buttons .btn {
-  width: min(318px, 100%) !important;
-  min-width: min(318px, 100%) !important;
+  text-align: left !important;
 }
 
 .estate-summary-card > .intro-button-row {
   display: none !important;
 }
 
-.private-estate-card-section {
-  background: #050505 !important;
-  padding-top: clamp(2.4rem, 5vw, 4.5rem) !important;
-}
-
-.estate-summary-card {
-  background: rgba(255, 250, 240, .97) !important;
-  color: #111 !important;
-  border: 1px solid rgba(255, 226, 138, .36) !important;
-  box-shadow: 0 36px 120px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.48) inset !important;
-}
-
+.estate-summary-card,
 .estate-summary-card .title-lg,
 .estate-summary-card .lead {
-  text-align: center !important;
+  text-align: left !important;
   margin-inline: auto !important;
 }
 
@@ -329,12 +324,9 @@ main > section.hero:not(.casa-webgl-hero),
   color: rgba(21,20,19,.76) !important;
   max-width: 1020px !important;
 }
-/* =========================================================
-   BLOCK 4 END: BELOW-HERO COPY FLOW + BUTTON PLACEMENT
-   ========================================================= */
 
 /* =========================================================
-   BLOCK 5 START: GOLD SVG ICON SYSTEM
+   GOLD ICON SYSTEM
    ========================================================= */
 .gold-svg-icon {
   width: 2.65rem;
@@ -347,23 +339,13 @@ main > section.hero:not(.casa-webgl-hero),
   background:
     radial-gradient(circle at 50% 0%, rgba(255,255,255,.35), transparent 38%),
     linear-gradient(135deg, #7c4e0c, #fff0a6 26%, #c09128 48%, #6b4108 72%, #f7d977);
-  box-shadow:
-    0 0 18px rgba(255, 220, 118, .38),
-    0 10px 24px rgba(0,0,0,.35),
-    inset 0 0 0 1px rgba(255,255,255,.36);
+  box-shadow: 0 0 18px rgba(255, 220, 118, .38), 0 10px 24px rgba(0,0,0,.22), inset 0 0 0 1px rgba(255,255,255,.36);
 }
 
 .gold-svg-icon svg {
   width: 1.24rem;
   height: 1.24rem;
   fill: #17100a;
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,.28));
-}
-
-.icon-card,
-.concierge-option {
-  position: relative;
-  overflow: hidden;
 }
 
 .icon-card .gold-svg-icon,
@@ -388,18 +370,10 @@ main > section.hero:not(.casa-webgl-hero),
 .luxury-feature-list li::before {
   display: none !important;
 }
-/* =========================================================
-   BLOCK 5 END: GOLD SVG ICON SYSTEM
-   ========================================================= */
 
 /* =========================================================
-   BLOCK 6 START: MAP + FLOORPLAN CLEAN FRAMELESS ZOOM
+   MAP/FLOORPLAN/LIGHTBOX
    ========================================================= */
-.map-positioning-section,
-.floorplan-section {
-  background: #f7f2e8 !important;
-}
-
 .media-card.framed-map-card,
 .media-card.framed-floorplan,
 .framed-map-card,
@@ -410,13 +384,6 @@ main > section.hero:not(.casa-webgl-hero),
   box-shadow: none !important;
   border-radius: 0 !important;
   overflow: visible !important;
-}
-
-.framed-map-card.parallax-media,
-.framed-floorplan.parallax-media,
-.parallax-media.framed-map-card {
-  min-height: 0 !important;
-  height: auto !important;
 }
 
 .framed-map-card::before,
@@ -440,10 +407,6 @@ main > section.hero:not(.casa-webgl-hero),
   cursor: zoom-in !important;
 }
 
-.framed-map-card img {
-  max-height: none !important;
-}
-
 .floorplan-section .floorplan-grid {
   display: block !important;
   text-align: center !important;
@@ -452,14 +415,13 @@ main > section.hero:not(.casa-webgl-hero),
 .floorplan-section .floorplan-grid > .reveal:first-child {
   max-width: 920px !important;
   margin: 0 auto clamp(1.5rem, 3vw, 2.25rem) !important;
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .floorplan-section .floorplan-grid > .reveal:first-child .lead,
 .floorplan-section .floorplan-grid > .reveal:first-child h2,
 .floorplan-section .floorplan-grid > .reveal:first-child .eyebrow {
-  text-align: center !important;
-  margin-inline: auto !important;
+  text-align: left !important;
 }
 
 .framed-floorplan {
@@ -467,329 +429,40 @@ main > section.hero:not(.casa-webgl-hero),
   margin: 0 auto !important;
 }
 
-.framed-floorplan img {
-  max-height: none !important;
-}
 /* =========================================================
-   BLOCK 6 END: MAP + FLOORPLAN CLEAN FRAMELESS ZOOM
+   FOOTER / FORM READABILITY
    ========================================================= */
-
-/* =========================================================
-   BLOCK 7 START: SPLIT MERGE + GALLERY + MATTERPORT
-   ========================================================= */
-.split-merge-section {
-  overflow: hidden;
+.site-footer,
+.site-footer-luxury,
+footer {
+  background: #f1e5d2 !important;
+  background-image: linear-gradient(180deg, #fffaf0, #eadcc8) !important;
+  color: #1b1712 !important;
+  border-top: 1px solid rgba(185,138,56,.28) !important;
 }
 
-.split-half {
-  will-change: transform, opacity;
+.site-footer *,
+.site-footer-luxury *,
+footer * {
+  color: #1b1712 !important;
 }
 
-.split-merge-grid {
-  position: relative;
-}
-
-.split-merge-grid::before {
-  content: "";
-  position: absolute;
-  inset: -2rem;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, rgba(215,173,69,.14), transparent 40rem);
-  opacity: .7;
-}
-
-.gallery-heading-centered {
-  text-align: center !important;
-  max-width: 980px;
-  margin: 0 auto clamp(1.5rem, 4vw, 2.75rem);
-}
-
-.gallery-heading-centered .title-lg {
-  text-align: center !important;
-  margin: 1rem auto 0;
-}
-
-.matterport-shell {
-  border: 1px solid var(--lux-border) !important;
-  box-shadow: 0 26px 90px rgba(0,0,0,.46), 0 0 0 1px rgba(255,255,255,.05) inset !important;
-  background: #050505 !important;
-}
-/* =========================================================
-   BLOCK 7 END: SPLIT MERGE + GALLERY + MATTERPORT
-   ========================================================= */
-
-/* =========================================================
-   BLOCK 8 START: PRICING + FAQ BLACK SECTIONS
-   ========================================================= */
-.pricing-black-section,
-.faq-dark-section {
-  background: #050505 !important;
-}
-
-.pricing-black-section .price-card,
-.faq-dark-section .mini-card {
-  background: var(--lux-card) !important;
-  color: #151413 !important;
-  border: 1px solid rgba(215,173,69,.2) !important;
-  box-shadow: 0 18px 50px rgba(0,0,0,.26), inset 0 0 0 1px rgba(255,255,255,.56) !important;
-}
-
-.pricing-black-section .price-card h3,
-.faq-dark-section .mini-card h3 {
-  color: #111 !important;
-}
-
-.pricing-black-section .price-card p,
-.faq-dark-section .mini-card p,
-.pricing-black-section .count {
-  color: rgba(21,20,19,.72) !important;
-}
-/* =========================================================
-   BLOCK 8 END: PRICING + FAQ BLACK SECTIONS
-   ========================================================= */
-
-/* =========================================================
-   BLOCK 9 START: CONCIERGE READABILITY + GOLD GLOW
-   ========================================================= */
-.concierge-option {
-  display: block;
-  color: #151413 !important;
-  cursor: pointer;
-  border: 1px solid rgba(255,226,138,.28) !important;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(255,226,138,.14), transparent 12rem),
-    linear-gradient(145deg, rgba(255,253,247,.98), rgba(242,234,219,.96)) !important;
-  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, filter .28s ease;
-}
-
-.concierge-option::after {
-  content: "";
-  position: absolute;
-  top: -70%;
-  left: -90%;
-  width: 55%;
-  height: 240%;
-  transform: rotate(18deg);
-  background: linear-gradient(115deg, transparent, rgba(255,255,255,.74), transparent);
-  opacity: 0;
-  transition: left .75s ease, opacity .25s ease;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-.concierge-option h3 {
-  color: var(--lux-gold-deep) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.55), 0 0 16px rgba(215,173,69,.22) !important;
-}
-
-.concierge-option p,
-.bg-dark .concierge-option p {
-  color: rgba(21,20,19,.74) !important;
-}
-
-.concierge-option:hover,
-.concierge-option:focus-visible {
-  transform: translateY(-6px);
-  border-color: rgba(255,226,138,.62) !important;
-  box-shadow: 0 0 0 1px rgba(255,226,138,.2), 0 0 34px rgba(215,173,69,.36), 0 28px 70px rgba(0,0,0,.38) !important;
-  outline: none;
-}
-
-.concierge-option:hover::after,
-.concierge-option:focus-visible::after {
-  left: 138%;
-  opacity: .9;
-}
-/* =========================================================
-   BLOCK 9 END: CONCIERGE READABILITY + GOLD GLOW
-   ========================================================= */
-
-/* =========================================================
-   BLOCK 10 START: AVAILABILITY + FOOTER POLISH
-   ========================================================= */
-#availability .eyebrow {
-  text-align: center !important;
-}
-
-.site-footer-luxury {
-  background:
-    radial-gradient(circle at 18% 20%, rgba(215,173,69,.14), transparent 24rem),
-    radial-gradient(circle at 86% 70%, rgba(255,240,166,.09), transparent 22rem),
-    linear-gradient(180deg, #080808, #020202) !important;
-  border-top: 1px solid rgba(255,226,138,.18);
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1fr minmax(420px, .95fr) 1fr;
-  gap: clamp(1rem, 3vw, 2rem);
-  align-items: stretch;
-}
-
-.footer-brand-block,
-.footer-cta-card,
-.footer-links-card {
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(255,226,138,.14);
-  background: rgba(255,255,255,.045);
-  box-shadow: 0 24px 70px rgba(0,0,0,.32);
-  padding: clamp(1.25rem, 3vw, 2.25rem);
-}
-
-.footer-brand-block img {
-  width: min(300px, 72vw) !important;
-  height: auto;
-  display: block;
-  margin: 0 auto 1rem;
-  filter: drop-shadow(0 14px 22px rgba(0,0,0,.5));
-}
-
-.footer-cta-card {
-  text-align: center !important;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-}
-
-.footer-cta-card p,
+.site-footer-luxury .footer-links-card h3,
+.site-footer-luxury .footer-links-card a,
+.footer-links-card h3,
 .footer-links-card a,
-.footer-brand-block p {
-  color: rgba(255,253,247,.76) !important;
-  text-align: center !important;
+footer .footer-links-card h3,
+footer .footer-links-card a {
+  color: #0d3a2f !important;
+  text-shadow: none !important;
 }
 
-.footer-button-row {
-  width: 100%;
-  justify-content: center !important;
+#availability .trust-strip .badge,
+#availability .badge,
+.trust-strip .badge {
+  color: #1b1712 !important;
+  background: rgba(255, 250, 240, .92) !important;
+  border: 1px solid rgba(185, 138, 56, .34) !important;
+  box-shadow: 0 10px 24px rgba(58, 40, 18, .10) !important;
+  text-shadow: none !important;
 }
-
-.footer-button-row .btn {
-  width: min(250px, 100%) !important;
-  min-width: min(250px, 100%) !important;
-}
-
-.footer-links-card {
-  display: grid;
-  gap: .7rem;
-  align-content: start;
-  text-align: center !important;
-  justify-items: center !important;
-}
-
-.footer-links-card h3 {
-  color: var(--lux-gold-light) !important;
-  margin: 0 auto .25rem !important;
-  text-align: center !important;
-  width: 100%;
-}
-
-.footer-links-card a {
-  width: min(250px, 100%);
-  padding: .62rem .75rem;
-  border-radius: 999px;
-  background: rgba(255,255,255,.045);
-  border: 1px solid rgba(255,255,255,.08);
-  transition: background .2s ease, color .2s ease, border-color .2s ease;
-}
-
-.footer-links-card a:hover,
-.footer-links-card a:focus-visible {
-  color: var(--lux-gold-light) !important;
-  border-color: rgba(255,226,138,.34);
-  background: rgba(255,226,138,.08);
-  outline: none;
-}
-/* =========================================================
-   BLOCK 10 END: AVAILABILITY + FOOTER POLISH
-   ========================================================= */
-
-/* =========================================================
-   BLOCK 11 START: FINAL SPACING AUDIT
-   ========================================================= */
-.section {
-  padding-block: clamp(4.5rem, 8.5vw, 8rem);
-}
-
-.bg-dark + .bg-dark {
-  border-top: 1px solid rgba(255,255,255,.04);
-}
-
-@media (max-width: 1022px) {
-  .site-header,
-  .site-header.is-scrolled {
-    background: linear-gradient(180deg, #070707 0%, #030303 100%) !important;
-    background-image: none !important;
-  }
-
-  .casa-webgl-hero,
-  .casa-webgl-hero .hero-picture img,
-  .casa-webgl-hero .hero-fallback img {
-    min-height: 100svh !important;
-    height: 100svh !important;
-  }
-
-  .casa-hero-slide-title {
-    bottom: clamp(2.4rem, 11vw, 4.8rem);
-    width: min(94vw, 760px);
-    font-size: clamp(1.55rem, 10vw, 3.7rem);
-    letter-spacing: .03em;
-  }
-
-  .hero-intro-section .title-lg {
-    font-size: clamp(1.8rem, 9vw, 3.4rem) !important;
-  }
-
-  .intro-button-row .btn,
-  .footer-button-row .btn {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .luxury-feature-list li {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .luxury-feature-list .gold-svg-icon {
-    margin-inline: auto;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-brand-block,
-  .footer-cta-card,
-  .footer-links-card {
-    text-align: center;
-  }
-
-  .footer-brand-block img {
-    margin-inline: auto;
-  }
-}
-
-@media (max-width: 620px) {
-  .section {
-    padding-block: clamp(3.4rem, 14vw, 5rem);
-  }
-
-  .estate-summary-card,
-  .footer-brand-block,
-  .footer-cta-card,
-  .footer-links-card {
-    border-radius: 1.3rem;
-  }
-
-  .private-estate-card-section .title-lg,
-  .gallery-heading-centered .title-lg {
-    font-size: clamp(1.7rem, 9vw, 2.65rem) !important;
-  }
-}
-/* =========================================================
-   BLOCK 11 END: FINAL SPACING AUDIT
-   ========================================================= */
-
-/* =========================================================
-   BLOCK 1 END: CASABLANCA SITE REFRESH OVERRIDES
-   ========================================================= */
