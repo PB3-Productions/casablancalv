@@ -27,6 +27,88 @@
        BLOCK 2 START: CRITICAL FIRST-PAINT GUARDS
        ========================================================= -->
   <style>
+    @media (min-width: 1024px) {
+      #site-header.site-header {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 1000;
+        min-height: clamp(120px, 8.2vw, 138px);
+        background: linear-gradient(180deg, #070707 0%, #030303 100%);
+        border-bottom: 1px solid rgba(255, 226, 138, .16);
+        box-shadow: 0 14px 36px rgba(0,0,0,.66), inset 0 -1px 0 rgba(255,255,255,.035);
+        overflow: visible;
+      }
+      #site-header .header-container {
+        max-width: 1440px;
+        min-height: clamp(120px, 8.2vw, 138px);
+        margin-inline: auto;
+        padding-inline: clamp(.9rem, 3vw, 2rem);
+        position: relative;
+      }
+      #site-header .brand-group {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: clamp(220px, 15.5vw, 305px);
+        height: clamp(108px, 7.4vw, 150px);
+        transform: translate(-50%, -50%);
+        z-index: 44;
+        pointer-events: none;
+      }
+      #site-header .logo-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: block;
+        width: clamp(218px, 15.5vw, 300px);
+        height: clamp(128px, 8.8vw, 170px);
+        transform: translate(-50%, -50%);
+        pointer-events: auto;
+      }
+      #site-header .main-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+      #site-header .nav-bar-container {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(230px, 16vw, 305px) minmax(0, 1fr);
+        min-height: clamp(120px, 8.2vw, 138px);
+        column-gap: clamp(.5rem, 1vw, 1.2rem);
+        align-items: center;
+      }
+      #site-header .nav-list {
+        display: flex;
+        align-items: center;
+        gap: clamp(.8rem, 1.8vw, 1.9rem);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      #site-header .nav-left { justify-self: end; }
+      #site-header .nav-right { justify-self: start; }
+      #site-header .nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: clamp(126px, 8vw, 156px);
+        min-height: 44px;
+        padding: .75rem 1rem;
+        border-radius: 999px;
+        color: #fff0a6;
+        background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.03) 36%, rgba(0,0,0,0) 37%), linear-gradient(180deg, #151512 0%, #020202 70%, #0a0907 100%);
+        border: 1px solid rgba(215,173,69,.76);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 0 18px rgba(255,226,138,.38);
+        font: 800 .78rem/1 Inter, system-ui, sans-serif;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+        text-decoration: none;
+        white-space: nowrap;
+        text-shadow: 0 1px 0 rgba(0,0,0,.9), 0 0 8px rgba(255,226,138,.35);
+      }
+      #site-header .hamburger-btn { display: none; }
+    }
     @media (max-width: 1023px) {
       #site-header,
       .site-header {
@@ -271,7 +353,7 @@
           <div class="proof-grid refined-proof-grid" style="margin-top:1.5rem;">
             <div class="mini-card icon-card"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17h16M6 17a6 6 0 0 1 12 0M12 5v2M9 7l1 1M15 7l-1 1"/></svg></span><h3>Discreet Arrival</h3><p>General location context is available publicly while exact access details stay protected for qualified booking conversations.</p></div>
             <div class="mini-card icon-card"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18V9l6-4 6 4v9M9 18v-6h6v6"/></svg></span><h3>Private Estate Scale</h3><p>Large indoor and outdoor zones support retreats, events, productions, and premium private stays.</p></div>
-            <div class="mini-card icon-card"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 11h14M7 11v8h10v-8M9 8h6M10 5h4v3"/></svg></span><h3>Guided Review</h3><p>Booking support helps confirm dates, use case, guest count, service needs, and approval requirements.</p></div>
+            <div class="mini-card icon-card"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14v14H5V5Zm4 4h6M9 13h6M7 9l1 1 2-2M7 13l1 1 2-2"/></svg></span><h3>Guided Review</h3><p>Booking support helps confirm dates, use case, guest count, service needs, and approval requirements.</p></div>
           </div>
         </div>
       </div>
@@ -293,8 +375,8 @@
           </div>
           <div class="card-dark p-card reveal split-half split-half-right">
             <ul class="feature-list luxury-feature-list">
-              <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17h16M6 17a6 6 0 0 1 12 0M12 5v2M9 7l1 1M15 7l-1 1"/></svg></span><span>Approximately 6,991 square feet of living area with substantial indoor gathering space.</span></li>
-              <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17c3 0 3-2 6-2s3 2 6 2 3-2 6-2M5 12h14M7 12a5 5 0 0 1 10 0"/></svg></span><span>Resort-style pool, spa, waterfall feature, private yard, courtyard, and landscaped grounds.</span></li>
+              <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6l5-2 6 2 5-2v14l-5 2-6-2-5 2V6Zm5-2v14M15 6v14"/></svg></span><span>Approximately 6,991 square feet of living area with substantial indoor gathering space.</span></li>
+              <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 16c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 20c3 0 3-2 6-2s3 2 6 2 3-2 6-2M5 11h14M7 11a5 5 0 0 1 10 0"/></svg></span><span>Resort-style pool, spa, waterfall feature, private yard, courtyard, and landscaped grounds.</span></li>
               <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 18V9l6-4 6 4v9M9 18v-6h6v6"/></svg></span><span>Balcony, circular driveway, deck, covered patio, private exterior zones, and full fencing.</span></li>
               <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 7h14M7 7v12h10V7M9 11h6M9 15h6"/></svg></span><span>Kitchen information includes custom cabinets, granite countertops, island, and pantry.</span></li>
               <li><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3M5 11h14v9H5z"/></svg></span><span>Security system, controlled review process, and private booking support for qualified inquiries.</span></li>
@@ -422,7 +504,7 @@
           <p class="lead light">All concierge services are provided by <a href="https://cityvipconcierge.com/" target="_blank" rel="noopener" style="color:var(--gold); font-weight:900;">City VIP Concierge</a>. Add-ons are coordinated separately from base estate pricing and may require additional approvals, vendors, staffing, insurance, or lead time.</p>
         </div>
         <div class="concierge-grid">
-          <a class="mini-card concierge-option reveal" href="#availability"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 11h14M7 11v8h10v-8M9 8h6M10 5h4v3"/></svg></span><h3>Private Chef</h3><p>Chef dinners, plated meals, casual poolside dining, or specialty menu support.</p></a>
+          <a class="mini-card concierge-option reveal" href="#availability"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 11a4 4 0 0 1 3.8-4A5 5 0 0 1 19 9a3.5 3.5 0 0 1-1 6.8V20H7v-4.2A3.5 3.5 0 0 1 6 11Zm3 5h8M9 20h8"/></svg></span><h3>Private Chef</h3><p>Chef dinners, plated meals, casual poolside dining, or specialty menu support.</p></a>
           <a class="mini-card concierge-option reveal" href="#availability"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 11h14l-1.5-4.5h-11L5 11Zm-2 2h18v6h-2v2h-3v-2H8v2H5v-2H3v-6Zm4 3.5h.01M17 16.5h.01"/></svg></span><h3>Transportation</h3><p>Airport transfers, Sprinters, executive SUVs, group shuttles, and Strip transportation.</p></a>
           <a class="mini-card concierge-option reveal" href="#availability"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.8 3 8 7 10 4-2 7-5.2 7-10V6l-7-3Z"/></svg></span><h3>Security</h3><p>Private security planning for high-profile guests, productions, or larger events.</p></a>
           <a class="mini-card concierge-option reveal" href="#availability"><span class="gold-svg-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h10l-1 8a4 4 0 0 1-8 0L7 3ZM12 15v5M8 21h8"/></svg></span><h3>Bartender &amp; Service Staff</h3><p>Private bartender, cocktail service, wait staff, and event hospitality support.</p></a>
