@@ -2,12 +2,13 @@
    CASABLANCA MOBILE NAV FINAL OVERRIDE
    Purpose: Mobile-only standalone nav. Original site-header is hidden on
    mobile. The replacement uses no sticky bar background: centered logo only
-   with a custom gold-gradient hamburger at the right.
+   with the supplied SVG hamburger at the right.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
   const NAV_ID = "casaMobileNavFinalBar";
   const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eec33e2763b2eec1f94f4.svg";
+  const HAMBURGER_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a407a8b89d9cd8dc2f2565c.svg";
 
   function getDrawer() {
     return document.getElementById("drawer") || document.querySelector(".drawer");
@@ -53,11 +54,7 @@
           <img class="casa-mobile-logo-img" src="${LOGO_SVG_URL}" alt="Casablanca Las Vegas" width="512" height="512" decoding="async" />
         </a>
         <button class="casa-mobile-menu-button" id="casaMobileMenuButton" type="button" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
-          <span class="casa-mobile-menu-lines" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
+          <img class="casa-mobile-menu-icon" src="${HAMBURGER_SVG_URL}" alt="" aria-hidden="true" width="120" height="68" decoding="async" />
         </button>
       `;
       document.body.prepend(nav);
@@ -68,6 +65,9 @@
       logo.src = LOGO_SVG_URL;
       logo.alt = "Casablanca Las Vegas";
     }
+
+    const icon = nav.querySelector(".casa-mobile-menu-icon");
+    if (icon) icon.src = HAMBURGER_SVG_URL;
 
     const button = nav.querySelector("#casaMobileMenuButton");
     if (button && button.dataset.casaStandaloneReady !== "true") {
@@ -146,14 +146,13 @@
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 224px;
-          --casa-mobile-logo-size: 208px;
-          --casa-mobile-menu-width: 94px;
+          --casa-mobile-nav-height: 172px;
+          --casa-mobile-logo-size: 156px;
+          --casa-mobile-menu-width: 72px;
           --casa-mobile-menu-right: 18px;
-          --casa-mobile-menu-top: 36px;
-          --casa-mobile-menu-line-width: 84px;
-          --casa-mobile-menu-line-height: 10px;
-          --casa-mobile-menu-line-gap: 9px;
+          --casa-mobile-menu-top: 39px;
+          --casa-mobile-menu-icon-width: 62px;
+          --casa-mobile-menu-icon-height: 36px;
         }
 
         html { scroll-padding-top: 0 !important; }
@@ -242,7 +241,7 @@
           top: var(--casa-mobile-menu-top) !important;
           right: var(--casa-mobile-menu-right) !important;
           width: var(--casa-mobile-menu-width) !important;
-          height: calc((var(--casa-mobile-menu-line-height) * 3) + (var(--casa-mobile-menu-line-gap) * 2)) !important;
+          height: var(--casa-mobile-menu-icon-height) !important;
           display: grid !important;
           place-items: center !important;
           margin: 0 !important;
@@ -266,39 +265,28 @@
         .casa-mobile-menu-button::before,
         .casa-mobile-menu-button::after { content: none !important; display: none !important; }
 
-        .casa-mobile-menu-lines {
-          width: var(--casa-mobile-menu-line-width) !important;
-          height: calc((var(--casa-mobile-menu-line-height) * 3) + (var(--casa-mobile-menu-line-gap) * 2)) !important;
-          min-width: var(--casa-mobile-menu-line-width) !important;
-          min-height: calc((var(--casa-mobile-menu-line-height) * 3) + (var(--casa-mobile-menu-line-gap) * 2)) !important;
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: stretch !important;
-          justify-content: space-between !important;
-          gap: var(--casa-mobile-menu-line-gap) !important;
-          margin: 0 !important;
-          padding: 0 !important;
+        .casa-mobile-menu-lines,
+        .casa-mobile-menu-lines span {
+          display: none !important;
         }
 
-        .casa-mobile-menu-lines span {
+        .casa-mobile-menu-icon {
           display: block !important;
-          width: var(--casa-mobile-menu-line-width) !important;
-          height: var(--casa-mobile-menu-line-height) !important;
-          min-height: var(--casa-mobile-menu-line-height) !important;
-          border-radius: 999px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,.65) 0%, rgba(255,255,255,.22) 28%, rgba(255,255,255,0) 52%),
-            linear-gradient(180deg, #fff2a0 0%, #f6d462 20%, #c69124 46%, #6f4309 72%, #d2a236 100%) !important;
-          border: 1px solid rgba(62, 40, 9, .98) !important;
-          outline: 1px solid rgba(219, 177, 53, .72) !important;
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,.70),
-            inset 0 -1px 0 rgba(42,24,4,.90),
-            0 1px 0 rgba(0,0,0,.50),
-            0 0 10px rgba(238, 196, 72, .38) !important;
+          width: var(--casa-mobile-menu-icon-width) !important;
+          height: var(--casa-mobile-menu-icon-height) !important;
+          min-width: var(--casa-mobile-menu-icon-width) !important;
+          min-height: var(--casa-mobile-menu-icon-height) !important;
+          max-width: var(--casa-mobile-menu-icon-width) !important;
+          max-height: var(--casa-mobile-menu-icon-height) !important;
+          object-fit: contain !important;
+          object-position: center !important;
           margin: 0 !important;
           padding: 0 !important;
+          border: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
           transform: none !important;
+          filter: drop-shadow(0 6px 9px rgba(0,0,0,.24)) !important;
         }
 
         #drawerOverlay,
@@ -388,14 +376,13 @@
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 204px;
-          --casa-mobile-logo-size: 192px;
-          --casa-mobile-menu-width: 82px;
+          --casa-mobile-nav-height: 158px;
+          --casa-mobile-logo-size: 144px;
+          --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
-          --casa-mobile-menu-top: 36px;
-          --casa-mobile-menu-line-width: 72px;
-          --casa-mobile-menu-line-height: 9px;
-          --casa-mobile-menu-line-gap: 8px;
+          --casa-mobile-menu-top: 39px;
+          --casa-mobile-menu-icon-width: 56px;
+          --casa-mobile-menu-icon-height: 32px;
         }
       }
     `;
