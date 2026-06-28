@@ -186,8 +186,8 @@
       html body .footer-brand-block::before {
         background-image: url('${LOGO_URL}') !important;
         background-repeat: no-repeat !important;
-        background-position: 48% center !important;
-        background-size: 108% auto !important;
+        background-position: center center !important;
+        background-size: contain !important;
         border-radius: 50% !important;
         box-shadow: none !important;
         filter: none !important;
@@ -302,7 +302,7 @@
 
         .casa-mobile-logo-link {
           position: absolute !important;
-          top: 47svh !important;
+          top: 50svh !important;
           left: 50% !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
