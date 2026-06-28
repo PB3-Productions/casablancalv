@@ -196,8 +196,8 @@
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 340px;
-          --casa-mobile-logo-size: 312px;
+          --casa-mobile-nav-height: 100svh;
+          --casa-mobile-logo-size: 390px;
           --casa-mobile-menu-width: 72px;
           --casa-mobile-menu-right: 18px;
           --casa-mobile-menu-top: 44px;
@@ -251,12 +251,12 @@
 
         .casa-mobile-logo-link {
           position: absolute !important;
-          top: 20px !important;
+          top: 50svh !important;
           left: 50% !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
-          transform: translateX(-50%) translateY(var(--casa-logo-scroll-y)) scale(var(--casa-logo-scroll-scale)) !important;
-          transform-origin: center top !important;
+          transform: translateX(-50%) translateY(calc(-50% + var(--casa-logo-scroll-y))) scale(var(--casa-logo-scroll-scale)) !important;
+          transform-origin: center center !important;
           opacity: var(--casa-logo-scroll-opacity) !important;
           display: grid !important;
           place-items: center !important;
@@ -434,8 +434,8 @@
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 300px;
-          --casa-mobile-logo-size: 280px;
+          --casa-mobile-nav-height: 100svh;
+          --casa-mobile-logo-size: 350px;
           --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
           --casa-mobile-menu-top: 44px;
@@ -444,7 +444,7 @@
         }
 
         .casa-mobile-logo-link {
-          top: 18px !important;
+          top: 50svh !important;
         }
       }
     `;
