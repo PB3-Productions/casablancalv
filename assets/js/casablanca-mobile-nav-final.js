@@ -275,7 +275,7 @@
           display: block !important;
           width: clamp(252px, 18vw, 345px) !important;
           height: clamp(150px, 10.5vw, 200px) !important;
-          transform: translate(-50%, calc(-44% + 3px)) !important;
+          transform: translate(-50%, calc(-44% + 6px)) !important;
           transition: none !important;
           overflow: visible !important;
         }
