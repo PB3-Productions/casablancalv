@@ -1,14 +1,21 @@
 /* =========================================================
-   CASABLANCA MOBILE NAV FINAL OVERRIDE
-   Purpose: Mobile-only standalone nav. Original site-header is hidden on
-   mobile. The replacement uses no sticky bar background: centered logo only
-   with the supplied SVG hamburger at the right.
+   CASABLANCA MOBILE NAV + UNIVERSAL LOGO OVERRIDE
+   Purpose: Keep the final mobile nav behavior intact and force the latest
+   supplied logo across desktop, mobile, drawer, footer, and CSS-mask logos.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
   const NAV_ID = "casaMobileNavFinalBar";
-  const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a40929689d9cd8dc2f3df9c.png";
+  const LOGO_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a40c965c408020f97ee52e0.png";
   const HAMBURGER_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a407a8b89d9cd8dc2f2565c.svg";
+  const LOGO_IMAGE_SELECTOR = [
+    ".main-logo",
+    ".drawer-logo",
+    ".footer-brand-block img",
+    ".site-footer-luxury img",
+    ".logo-wrapper img",
+    ".casa-mobile-logo-img"
+  ].join(", ");
 
   function getDrawer() {
     return document.getElementById("drawer") || document.querySelector(".drawer");
@@ -16,6 +23,23 @@
 
   function getOverlay() {
     return document.getElementById("drawerOverlay") || document.querySelector(".overlay");
+  }
+
+  function syncLogoImages() {
+    document.querySelectorAll(LOGO_IMAGE_SELECTOR).forEach((image) => {
+      if (!(image instanceof HTMLImageElement)) return;
+      image.src = LOGO_URL;
+      image.srcset = `${LOGO_URL} 512w`;
+      image.sizes = image.classList.contains("casa-mobile-logo-img") ? "273px" : "(max-width: 1023px) 273px, 345px";
+      image.alt = "Casablanca Las Vegas";
+    });
+  }
+
+  function flipLogo(target) {
+    if (!target) return;
+    const currentRotation = Number(target.dataset.casaLogoRotation || "0") + 1080;
+    target.dataset.casaLogoRotation = String(currentRotation);
+    target.style.setProperty("--casa-logo-flip-rotation", `${currentRotation}deg`);
   }
 
   function closeDrawer() {
@@ -43,13 +67,6 @@
     if (button) button.setAttribute("aria-expanded", isOpening ? "true" : "false");
   }
 
-  function flipLogo(target) {
-    if (!target) return;
-    const currentRotation = Number(target.dataset.casaLogoRotation || "0") + 1080;
-    target.dataset.casaLogoRotation = String(currentRotation);
-    target.style.setProperty("--casa-logo-flip-rotation", `${currentRotation}deg`);
-  }
-
   function buildMobileNav() {
     let nav = document.getElementById(NAV_ID);
     if (!nav) {
@@ -58,7 +75,7 @@
       nav.setAttribute("aria-label", "Casablanca Las Vegas mobile navigation");
       nav.innerHTML = `
         <a class="casa-mobile-logo-link" href="#top" aria-label="Casablanca Las Vegas home">
-          <img class="casa-mobile-logo-img" src="${LOGO_SVG_URL}" alt="Casablanca Las Vegas" width="512" height="512" decoding="async" />
+          <img class="casa-mobile-logo-img" src="${LOGO_URL}" alt="Casablanca Las Vegas" width="512" height="512" decoding="async" />
         </a>
         <button class="casa-mobile-menu-button" id="casaMobileMenuButton" type="button" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
           <img class="casa-mobile-menu-icon" src="${HAMBURGER_SVG_URL}" alt="" aria-hidden="true" width="120" height="68" decoding="async" />
@@ -69,7 +86,8 @@
 
     const logo = nav.querySelector(".casa-mobile-logo-img");
     if (logo) {
-      logo.src = LOGO_SVG_URL;
+      logo.src = LOGO_URL;
+      logo.srcset = `${LOGO_URL} 512w`;
       logo.alt = "Casablanca Las Vegas";
     }
 
@@ -95,6 +113,27 @@
         toggleDrawer();
       });
     }
+  }
+
+  function bindDesktopAndFooterLogoFlip() {
+    document.querySelectorAll(".logo-wrapper, .footer-brand-block, .drawer-logo").forEach((target) => {
+      if (!target || target.dataset.casaLogoFlipReady === "true") return;
+      target.dataset.casaLogoFlipReady = "true";
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "0");
+      target.setAttribute("role", target.tagName.toLowerCase() === "a" ? "link" : "button");
+
+      const flip = (event) => {
+        if (target.classList.contains("logo-wrapper")) event.preventDefault();
+        flipLogo(target);
+      };
+
+      target.addEventListener("click", flip);
+      target.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        flip(event);
+      });
+    });
   }
 
   function bindCloseHandlers() {
@@ -145,8 +184,7 @@
       const heroHeight = Math.max(hero.offsetHeight || 0, window.innerHeight || 1);
       const start = heroTop + heroHeight * 0.18;
       const end = heroTop + heroHeight * 0.92;
-      const rawProgress = (window.scrollY - start) / Math.max(1, end - start);
-      const progress = clamp(rawProgress);
+      const progress = clamp((window.scrollY - start) / Math.max(1, end - start));
       const eased = easeOutCubic(progress);
 
       nav.style.setProperty("--casa-logo-scroll-y", `${Math.round(-96 * eased)}px`);
@@ -173,10 +211,46 @@
     if (!style) {
       style = document.createElement("style");
       style.id = STYLE_ID;
-      document.head.appendChild(style);
     }
 
     style.textContent = `
+      :root {
+        --casa-new-logo: url('${LOGO_URL}') !important;
+        --casa-new-badge: url('${LOGO_URL}') !important;
+      }
+
+      html body .logo-wrapper::before,
+      html body .footer-brand-block::before {
+        background-image: url('${LOGO_URL}') !important;
+        background-repeat: no-repeat !important;
+        background-position: 48% center !important;
+        background-size: 108% auto !important;
+        border-radius: 50% !important;
+        transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) !important;
+        transform-style: preserve-3d !important;
+        backface-visibility: hidden !important;
+        transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
+      }
+
+      html body .main-logo,
+      html body .drawer-logo,
+      html body .footer-brand-block img,
+      html body .site-footer-luxury img,
+      html body .logo-wrapper img,
+      html body .casa-mobile-logo-img {
+        content: var(--casa-new-logo) !important;
+        object-fit: contain !important;
+      }
+
+      html body .drawer-logo {
+        cursor: pointer !important;
+        border-radius: 50% !important;
+        transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) scale(1.08) translateX(-2%) !important;
+        transform-style: preserve-3d !important;
+        backface-visibility: hidden !important;
+        transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
+      }
+
       #${NAV_ID} { display: none; }
 
       @media (min-width: 1024px) {
@@ -207,8 +281,6 @@
         #site-header.site-header.is-scrolled .logo-wrapper::before {
           width: 100% !important;
           height: 100% !important;
-          background-position: center !important;
-          background-size: contain !important;
         }
       }
 
@@ -246,20 +318,11 @@
           z-index: 2147483000 !important;
           width: 100vw !important;
           height: var(--casa-mobile-nav-height) !important;
-          min-height: var(--casa-mobile-nav-height) !important;
           display: block !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          border: 0 !important;
-          background: transparent !important;
-          background-image: none !important;
-          box-shadow: none !important;
           pointer-events: none !important;
           overflow: visible !important;
-          transform: none !important;
-          animation: none !important;
-          transition: none !important;
-          box-sizing: border-box !important;
+          background: transparent !important;
+          box-shadow: none !important;
           -webkit-tap-highlight-color: transparent !important;
         }
 
@@ -279,20 +342,11 @@
           opacity: var(--casa-logo-scroll-opacity) !important;
           display: grid !important;
           place-items: center !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border: 0 !important;
-          background: transparent !important;
-          box-shadow: none !important;
           pointer-events: auto !important;
-          overflow: visible !important;
-          text-decoration: none !important;
-          will-change: transform, opacity !important;
           z-index: 2 !important;
           perspective: 1000px !important;
           cursor: pointer !important;
           outline: none !important;
-          -webkit-tap-highlight-color: transparent !important;
           -webkit-touch-callout: none !important;
           user-select: none !important;
           touch-action: manipulation !important;
@@ -316,20 +370,15 @@
           max-height: var(--casa-mobile-logo-size) !important;
           object-fit: cover !important;
           object-position: center !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border: 0 !important;
           border-radius: 50% !important;
           background: transparent !important;
           box-shadow: 0 15px 35px rgba(0,0,0,.38) !important;
-          clip-path: none !important;
           transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) scale(1.08) translateX(-2%) !important;
           transform-style: preserve-3d !important;
           backface-visibility: hidden !important;
           transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
           filter: drop-shadow(0 10px 18px rgba(0,0,0,.28)) !important;
           outline: none !important;
-          -webkit-tap-highlight-color: transparent !important;
           user-select: none !important;
         }
 
@@ -341,30 +390,21 @@
           height: var(--casa-mobile-menu-icon-height) !important;
           display: grid !important;
           place-items: center !important;
-          margin: 0 !important;
           padding: 0 !important;
           border: 0 !important;
-          border-radius: 0 !important;
           background: transparent !important;
-          background-image: none !important;
-          color: transparent !important;
-          font-size: 0 !important;
-          line-height: 0 !important;
-          box-shadow: none !important;
           cursor: pointer !important;
           appearance: none !important;
           -webkit-appearance: none !important;
           pointer-events: auto !important;
-          overflow: visible !important;
-          transform: none !important;
           z-index: 3 !important;
         }
 
         .casa-mobile-menu-button::before,
-        .casa-mobile-menu-button::after { content: none !important; display: none !important; }
-
+        .casa-mobile-menu-button::after,
         .casa-mobile-menu-lines,
         .casa-mobile-menu-lines span {
+          content: none !important;
           display: none !important;
         }
 
@@ -372,18 +412,7 @@
           display: block !important;
           width: var(--casa-mobile-menu-icon-width) !important;
           height: var(--casa-mobile-menu-icon-height) !important;
-          min-width: var(--casa-mobile-menu-icon-width) !important;
-          min-height: var(--casa-mobile-menu-icon-height) !important;
-          max-width: var(--casa-mobile-menu-icon-width) !important;
-          max-height: var(--casa-mobile-menu-icon-height) !important;
           object-fit: contain !important;
-          object-position: center !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          border: 0 !important;
-          background: transparent !important;
-          box-shadow: none !important;
-          transform: none !important;
           filter: drop-shadow(0 6px 9px rgba(0,0,0,.24)) !important;
         }
 
@@ -429,76 +458,62 @@
           transform: translate3d(0, 0, 0) scale(1) !important;
         }
 
-        #drawer .close-btn,
-        #drawer .drawer-close,
-        .drawer .close-btn,
-        .drawer .drawer-close,
-        .close-btn {
-          color: #1b1712 !important;
-          background: rgba(255, 250, 240, .96) !important;
-          border: 1px solid rgba(185, 138, 56, .36) !important;
-          box-shadow: 0 8px 20px rgba(58, 40, 18, .12) !important;
-          text-shadow: none !important;
-        }
-
         #lightboxClose,
-        .lightbox-close {
-          position: fixed !important;
-          top: 124px !important;
-          right: 18px !important;
-          z-index: 2147483003 !important;
-          color: #1b1712 !important;
-          background: rgba(255, 250, 240, .96) !important;
-          border: 1px solid rgba(185, 138, 56, .38) !important;
-          box-shadow: 0 10px 24px rgba(0, 0, 0, .18) !important;
-          text-shadow: none !important;
-        }
-
-        #availability .trust-strip .badge,
-        #availability .badge,
-        .trust-strip .badge {
-          color: #1b1712 !important;
-          background: rgba(255, 250, 240, .92) !important;
-          border: 1px solid rgba(185, 138, 56, .34) !important;
-          box-shadow: 0 10px 24px rgba(58, 40, 18, .10) !important;
-          text-shadow: none !important;
-        }
-
-        .site-footer-luxury .footer-links-card h3,
-        .site-footer-luxury .footer-links-card a,
-        .footer-links-card h3,
-        .footer-links-card a,
-        footer .footer-links-card h3,
-        footer .footer-links-card a {
-          color: #0d3a2f !important;
-          text-shadow: none !important;
-        }
+        .lightbox-close { z-index: 2147483003 !important; }
       }
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 100svh;
           --casa-mobile-logo-size: 245px;
           --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
-          --casa-mobile-menu-top: 44px;
           --casa-mobile-menu-icon-width: 56px;
           --casa-mobile-menu-icon-height: 32px;
         }
-
-        .casa-mobile-logo-link {
-          top: 47svh !important;
-        }
       }
     `;
+
+    document.head.appendChild(style);
+  }
+
+  function syncAllLogos() {
+    installStyles();
+    syncLogoImages();
+    bindDesktopAndFooterLogoFlip();
+  }
+
+  function scheduleLogoSyncs() {
+    [0, 50, 150, 300, 750, 1500, 3000, 5000].forEach((delay) => window.setTimeout(syncAllLogos, delay));
+    const interval = window.setInterval(syncAllLogos, 750);
+    window.setTimeout(() => window.clearInterval(interval), 12000);
+  }
+
+  function observeLogoChanges() {
+    if (!document.documentElement || document.documentElement.dataset.casaUniversalLogoObserverReady === "true") return;
+    document.documentElement.dataset.casaUniversalLogoObserverReady = "true";
+
+    let syncTimer = null;
+    const observer = new MutationObserver(() => {
+      window.clearTimeout(syncTimer);
+      syncTimer = window.setTimeout(syncAllLogos, 40);
+    });
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["src", "srcset", "style", "class"]
+    });
   }
 
   function run() {
     buildMobileNav();
     closeDrawer();
     bindCloseHandlers();
-    installStyles();
     bindMobileLogoScrollAnimation();
+    syncAllLogos();
+    observeLogoChanges();
+    scheduleLogoSyncs();
   }
 
   if (document.readyState === "loading") {
@@ -507,10 +522,5 @@
     run();
   }
 
-  window.addEventListener("load", () => {
-    buildMobileNav();
-    bindCloseHandlers();
-    installStyles();
-    bindMobileLogoScrollAnimation();
-  }, { once: true });
+  window.addEventListener("load", syncAllLogos, { once: true });
 })();
