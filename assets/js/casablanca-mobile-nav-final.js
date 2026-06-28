@@ -47,6 +47,28 @@
     if (button) button.setAttribute("aria-expanded", "false");
   }
 
+  function hideDesktopDrawerForRefresh() {
+    if (!window.matchMedia("(min-width: 1024px)").matches) return;
+
+    closeDrawer();
+    document.querySelectorAll("#drawer, .drawer, #drawerOverlay, .overlay").forEach((node) => {
+      node.classList.remove("open", "active");
+      node.setAttribute("aria-hidden", "true");
+      node.style.setProperty("display", "none", "important");
+      node.style.setProperty("visibility", "hidden", "important");
+      node.style.setProperty("opacity", "0", "important");
+      node.style.setProperty("pointer-events", "none", "important");
+    });
+  }
+
+  function bindDesktopRefreshGuard() {
+    if (document.documentElement.dataset.casaDesktopRefreshGuardReady === "true") return;
+    document.documentElement.dataset.casaDesktopRefreshGuardReady = "true";
+
+    window.addEventListener("beforeunload", hideDesktopDrawerForRefresh);
+    window.addEventListener("pagehide", hideDesktopDrawerForRefresh);
+  }
+
   function toggleDrawer() {
     const drawer = getDrawer();
     const overlay = getOverlay();
@@ -520,6 +542,7 @@
     buildMobileNav();
     closeDrawer();
     bindCloseHandlers();
+    bindDesktopRefreshGuard();
     bindMobileLogoScrollAnimation();
     syncAllLogos();
     applyRequestedTextTweaks();
