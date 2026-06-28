@@ -2,7 +2,7 @@
    CASABLANCA MOBILE NAV + UNIVERSAL LOGO OVERRIDE
    Purpose: Keep the final mobile nav behavior intact and force the latest
    supplied logo across desktop, mobile, drawer, footer, and CSS-mask logos.
-   Logo spin/flip interactions are intentionally disabled.
+   Logo spin/flip interactions and logo halo/shadow effects are disabled.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
@@ -189,6 +189,8 @@
         background-position: 48% center !important;
         background-size: 108% auto !important;
         border-radius: 50% !important;
+        box-shadow: none !important;
+        filter: none !important;
         transform: none !important;
         transform-style: flat !important;
         backface-visibility: visible !important;
@@ -203,10 +205,14 @@
       html body .casa-mobile-logo-img {
         content: var(--casa-new-logo) !important;
         object-fit: contain !important;
+        box-shadow: none !important;
+        filter: none !important;
       }
 
       html body .drawer-logo {
         border-radius: 50% !important;
+        box-shadow: none !important;
+        filter: none !important;
         transform: scale(1.08) translateX(-2%) !important;
         transform-style: flat !important;
         backface-visibility: visible !important;
@@ -243,6 +249,8 @@
         #site-header.site-header.is-scrolled .logo-wrapper::before {
           width: 100% !important;
           height: 100% !important;
+          box-shadow: none !important;
+          filter: none !important;
         }
       }
 
@@ -308,6 +316,8 @@
           outline: none !important;
           -webkit-touch-callout: none !important;
           user-select: none !important;
+          box-shadow: none !important;
+          filter: none !important;
         }
 
         .casa-mobile-logo-link:focus,
@@ -315,6 +325,7 @@
         .casa-mobile-logo-link:active {
           outline: none !important;
           box-shadow: none !important;
+          filter: none !important;
           -webkit-tap-highlight-color: transparent !important;
         }
 
@@ -330,12 +341,12 @@
           object-position: center !important;
           border-radius: 50% !important;
           background: transparent !important;
-          box-shadow: 0 15px 35px rgba(0,0,0,.38) !important;
+          box-shadow: none !important;
+          filter: none !important;
           transform: scale(1.08) translateX(-2%) !important;
           transform-style: flat !important;
           backface-visibility: visible !important;
           transition: none !important;
-          filter: drop-shadow(0 10px 18px rgba(0,0,0,.28)) !important;
           outline: none !important;
           user-select: none !important;
         }
