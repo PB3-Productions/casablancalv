@@ -101,6 +101,56 @@
     }
   }
 
+  function bindMobileLogoScrollAnimation() {
+    const nav = document.getElementById(NAV_ID);
+    const logoLink = nav?.querySelector(".casa-mobile-logo-link");
+    const hero = document.querySelector(".casa-webgl-hero");
+    const mobileQuery = window.matchMedia("(max-width: 1023px)");
+
+    if (!nav || !logoLink || !hero || nav.dataset.casaLogoScrollReady === "true") return;
+    nav.dataset.casaLogoScrollReady = "true";
+
+    let ticking = false;
+    const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+    const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3);
+
+    const updateLogoPosition = () => {
+      if (!mobileQuery.matches) {
+        nav.style.removeProperty("--casa-logo-scroll-y");
+        nav.style.removeProperty("--casa-logo-scroll-scale");
+        nav.style.removeProperty("--casa-logo-scroll-opacity");
+        logoLink.style.pointerEvents = "auto";
+        ticking = false;
+        return;
+      }
+
+      const heroTop = hero.offsetTop || 0;
+      const heroHeight = Math.max(hero.offsetHeight || 0, window.innerHeight || 1);
+      const start = heroTop + heroHeight * 0.18;
+      const end = heroTop + heroHeight * 0.92;
+      const rawProgress = (window.scrollY - start) / Math.max(1, end - start);
+      const progress = clamp(rawProgress);
+      const eased = easeOutCubic(progress);
+
+      nav.style.setProperty("--casa-logo-scroll-y", `${Math.round(-128 * eased)}px`);
+      nav.style.setProperty("--casa-logo-scroll-scale", `${(1 - 0.28 * eased).toFixed(3)}`);
+      nav.style.setProperty("--casa-logo-scroll-opacity", `${(1 - eased).toFixed(3)}`);
+      logoLink.style.pointerEvents = progress > 0.94 ? "none" : "auto";
+      ticking = false;
+    };
+
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateLogoPosition);
+    };
+
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+    requestUpdate();
+    window.setTimeout(requestUpdate, 300);
+  }
+
   function installStyles() {
     let style = document.getElementById(STYLE_ID);
     if (!style) {
@@ -146,13 +196,16 @@
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 172px;
-          --casa-mobile-logo-size: 156px;
+          --casa-mobile-nav-height: 260px;
+          --casa-mobile-logo-size: 208px;
           --casa-mobile-menu-width: 72px;
           --casa-mobile-menu-right: 18px;
-          --casa-mobile-menu-top: 39px;
+          --casa-mobile-menu-top: 44px;
           --casa-mobile-menu-icon-width: 62px;
           --casa-mobile-menu-icon-height: 36px;
+          --casa-logo-scroll-y: 0px;
+          --casa-logo-scroll-scale: 1;
+          --casa-logo-scroll-opacity: 1;
         }
 
         html { scroll-padding-top: 0 !important; }
@@ -198,11 +251,13 @@
 
         .casa-mobile-logo-link {
           position: absolute !important;
-          top: 8px !important;
+          top: 30px !important;
           left: 50% !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
-          transform: translateX(-50%) !important;
+          transform: translateX(-50%) translateY(var(--casa-logo-scroll-y)) scale(var(--casa-logo-scroll-scale)) !important;
+          transform-origin: center top !important;
+          opacity: var(--casa-logo-scroll-opacity) !important;
           display: grid !important;
           place-items: center !important;
           margin: 0 !important;
@@ -213,6 +268,7 @@
           pointer-events: auto !important;
           overflow: visible !important;
           text-decoration: none !important;
+          will-change: transform, opacity !important;
         }
 
         .casa-mobile-logo-img {
@@ -376,13 +432,17 @@
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 158px;
-          --casa-mobile-logo-size: 144px;
+          --casa-mobile-nav-height: 238px;
+          --casa-mobile-logo-size: 192px;
           --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
-          --casa-mobile-menu-top: 39px;
+          --casa-mobile-menu-top: 44px;
           --casa-mobile-menu-icon-width: 56px;
           --casa-mobile-menu-icon-height: 32px;
+        }
+
+        .casa-mobile-logo-link {
+          top: 28px !important;
         }
       }
     `;
@@ -393,6 +453,7 @@
     closeDrawer();
     bindCloseHandlers();
     installStyles();
+    bindMobileLogoScrollAnimation();
   }
 
   if (document.readyState === "loading") {
@@ -405,5 +466,6 @@
     buildMobileNav();
     bindCloseHandlers();
     installStyles();
+    bindMobileLogoScrollAnimation();
   }, { once: true });
 })();
