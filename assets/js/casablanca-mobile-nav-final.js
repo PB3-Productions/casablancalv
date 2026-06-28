@@ -7,7 +7,7 @@
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
   const NAV_ID = "casaMobileNavFinalBar";
-  const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eec33e2763b2eec1f94f4.svg";
+  const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a40929689d9cd8dc2f3df9c.png";
   const HAMBURGER_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a407a8b89d9cd8dc2f2565c.svg";
 
   function getDrawer() {
@@ -43,6 +43,13 @@
     if (button) button.setAttribute("aria-expanded", isOpening ? "true" : "false");
   }
 
+  function flipLogo(target) {
+    if (!target) return;
+    const currentRotation = Number(target.dataset.casaLogoRotation || "0") + 1080;
+    target.dataset.casaLogoRotation = String(currentRotation);
+    target.style.setProperty("--casa-logo-flip-rotation", `${currentRotation}deg`);
+  }
+
   function buildMobileNav() {
     let nav = document.getElementById(NAV_ID);
     if (!nav) {
@@ -64,6 +71,16 @@
     if (logo) {
       logo.src = LOGO_SVG_URL;
       logo.alt = "Casablanca Las Vegas";
+    }
+
+    const logoLink = nav.querySelector(".casa-mobile-logo-link");
+    if (logoLink && logoLink.dataset.casaLogoFlipReady !== "true") {
+      logoLink.dataset.casaLogoFlipReady = "true";
+      logoLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        flipLogo(logoLink);
+      });
     }
 
     const icon = nav.querySelector(".casa-mobile-menu-icon");
@@ -206,6 +223,7 @@
           --casa-logo-scroll-y: 0px;
           --casa-logo-scroll-scale: 1;
           --casa-logo-scroll-opacity: 1;
+          --casa-logo-flip-rotation: 0deg;
         }
 
         html { scroll-padding-top: 0 !important; }
@@ -245,8 +263,6 @@
 
         #${NAV_ID}, #${NAV_ID} *, #${NAV_ID} *::before, #${NAV_ID} *::after {
           box-sizing: border-box !important;
-          animation: none !important;
-          transition: none !important;
         }
 
         .casa-mobile-logo-link {
@@ -270,6 +286,8 @@
           text-decoration: none !important;
           will-change: transform, opacity !important;
           z-index: 2 !important;
+          perspective: 1000px !important;
+          cursor: pointer !important;
         }
 
         .casa-mobile-logo-img {
@@ -280,16 +298,19 @@
           min-height: var(--casa-mobile-logo-size) !important;
           max-width: var(--casa-mobile-logo-size) !important;
           max-height: var(--casa-mobile-logo-size) !important;
-          object-fit: contain !important;
+          object-fit: cover !important;
           object-position: center !important;
           margin: 0 !important;
           padding: 0 !important;
           border: 0 !important;
           border-radius: 50% !important;
           background: transparent !important;
-          box-shadow: none !important;
+          box-shadow: 0 15px 35px rgba(0,0,0,.38) !important;
           clip-path: none !important;
-          transform: none !important;
+          transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) scale(1.08) translateX(-2%) !important;
+          transform-style: preserve-3d !important;
+          backface-visibility: hidden !important;
+          transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
           filter: drop-shadow(0 10px 18px rgba(0,0,0,.28)) !important;
         }
 
