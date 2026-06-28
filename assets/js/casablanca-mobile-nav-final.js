@@ -2,6 +2,7 @@
    CASABLANCA MOBILE NAV + UNIVERSAL LOGO OVERRIDE
    Purpose: Keep the final mobile nav behavior intact and force the latest
    supplied logo across desktop, mobile, drawer, footer, and CSS-mask logos.
+   Logo spin/flip interactions are intentionally disabled.
    ========================================================= */
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
@@ -33,13 +34,6 @@
       image.sizes = image.classList.contains("casa-mobile-logo-img") ? "273px" : "(max-width: 1023px) 273px, 345px";
       image.alt = "Casablanca Las Vegas";
     });
-  }
-
-  function flipLogo(target) {
-    if (!target) return;
-    const currentRotation = Number(target.dataset.casaLogoRotation || "0") + 1080;
-    target.dataset.casaLogoRotation = String(currentRotation);
-    target.style.setProperty("--casa-logo-flip-rotation", `${currentRotation}deg`);
   }
 
   function closeDrawer() {
@@ -91,16 +85,6 @@
       logo.alt = "Casablanca Las Vegas";
     }
 
-    const logoLink = nav.querySelector(".casa-mobile-logo-link");
-    if (logoLink && logoLink.dataset.casaLogoFlipReady !== "true") {
-      logoLink.dataset.casaLogoFlipReady = "true";
-      logoLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        flipLogo(logoLink);
-      });
-    }
-
     const icon = nav.querySelector(".casa-mobile-menu-icon");
     if (icon) icon.src = HAMBURGER_SVG_URL;
 
@@ -113,27 +97,6 @@
         toggleDrawer();
       });
     }
-  }
-
-  function bindDesktopAndFooterLogoFlip() {
-    document.querySelectorAll(".logo-wrapper, .footer-brand-block, .drawer-logo").forEach((target) => {
-      if (!target || target.dataset.casaLogoFlipReady === "true") return;
-      target.dataset.casaLogoFlipReady = "true";
-      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "0");
-      target.setAttribute("role", target.tagName.toLowerCase() === "a" ? "link" : "button");
-
-      const flip = (event) => {
-        if (target.classList.contains("logo-wrapper")) event.preventDefault();
-        flipLogo(target);
-      };
-
-      target.addEventListener("click", flip);
-      target.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        flip(event);
-      });
-    });
   }
 
   function bindCloseHandlers() {
@@ -175,7 +138,7 @@
         nav.style.removeProperty("--casa-logo-scroll-y");
         nav.style.removeProperty("--casa-logo-scroll-scale");
         nav.style.removeProperty("--casa-logo-scroll-opacity");
-        logoLink.style.pointerEvents = "auto";
+        logoLink.style.pointerEvents = "none";
         ticking = false;
         return;
       }
@@ -190,7 +153,7 @@
       nav.style.setProperty("--casa-logo-scroll-y", `${Math.round(-96 * eased)}px`);
       nav.style.setProperty("--casa-logo-scroll-scale", `${(1 - 0.22 * eased).toFixed(3)}`);
       nav.style.setProperty("--casa-logo-scroll-opacity", `${(1 - eased).toFixed(3)}`);
-      logoLink.style.pointerEvents = progress > 0.94 ? "none" : "auto";
+      logoLink.style.pointerEvents = "none";
       ticking = false;
     };
 
@@ -226,10 +189,10 @@
         background-position: 48% center !important;
         background-size: 108% auto !important;
         border-radius: 50% !important;
-        transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) !important;
-        transform-style: preserve-3d !important;
-        backface-visibility: hidden !important;
-        transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
+        transform: none !important;
+        transform-style: flat !important;
+        backface-visibility: visible !important;
+        transition: none !important;
       }
 
       html body .main-logo,
@@ -243,12 +206,11 @@
       }
 
       html body .drawer-logo {
-        cursor: pointer !important;
         border-radius: 50% !important;
-        transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) scale(1.08) translateX(-2%) !important;
-        transform-style: preserve-3d !important;
-        backface-visibility: hidden !important;
-        transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
+        transform: scale(1.08) translateX(-2%) !important;
+        transform-style: flat !important;
+        backface-visibility: visible !important;
+        transition: none !important;
       }
 
       #${NAV_ID} { display: none; }
@@ -296,7 +258,6 @@
           --casa-logo-scroll-y: 0px;
           --casa-logo-scroll-scale: 1;
           --casa-logo-scroll-opacity: 1;
-          --casa-logo-flip-rotation: 0deg;
         }
 
         html { scroll-padding-top: 0 !important; }
@@ -342,14 +303,11 @@
           opacity: var(--casa-logo-scroll-opacity) !important;
           display: grid !important;
           place-items: center !important;
-          pointer-events: auto !important;
+          pointer-events: none !important;
           z-index: 2 !important;
-          perspective: 1000px !important;
-          cursor: pointer !important;
           outline: none !important;
           -webkit-touch-callout: none !important;
           user-select: none !important;
-          touch-action: manipulation !important;
         }
 
         .casa-mobile-logo-link:focus,
@@ -373,10 +331,10 @@
           border-radius: 50% !important;
           background: transparent !important;
           box-shadow: 0 15px 35px rgba(0,0,0,.38) !important;
-          transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) scale(1.08) translateX(-2%) !important;
-          transform-style: preserve-3d !important;
-          backface-visibility: hidden !important;
-          transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
+          transform: scale(1.08) translateX(-2%) !important;
+          transform-style: flat !important;
+          backface-visibility: visible !important;
+          transition: none !important;
           filter: drop-shadow(0 10px 18px rgba(0,0,0,.28)) !important;
           outline: none !important;
           user-select: none !important;
@@ -479,7 +437,6 @@
   function syncAllLogos() {
     installStyles();
     syncLogoImages();
-    bindDesktopAndFooterLogoFlip();
   }
 
   function scheduleLogoSyncs() {
