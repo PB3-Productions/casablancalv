@@ -196,8 +196,8 @@
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 160px;
-          --casa-mobile-logo-size: 116px;
+          --casa-mobile-nav-height: 340px;
+          --casa-mobile-logo-size: 312px;
           --casa-mobile-menu-width: 72px;
           --casa-mobile-menu-right: 18px;
           --casa-mobile-menu-top: 44px;
@@ -251,7 +251,7 @@
 
         .casa-mobile-logo-link {
           position: absolute !important;
-          top: 28px !important;
+          top: 20px !important;
           left: 50% !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
@@ -269,6 +269,7 @@
           overflow: visible !important;
           text-decoration: none !important;
           will-change: transform, opacity !important;
+          z-index: 2 !important;
         }
 
         .casa-mobile-logo-img {
@@ -316,6 +317,7 @@
           pointer-events: auto !important;
           overflow: visible !important;
           transform: none !important;
+          z-index: 3 !important;
         }
 
         .casa-mobile-menu-button::before,
@@ -432,8 +434,8 @@
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 150px;
-          --casa-mobile-logo-size: 108px;
+          --casa-mobile-nav-height: 300px;
+          --casa-mobile-logo-size: 280px;
           --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
           --casa-mobile-menu-top: 44px;
@@ -442,7 +444,7 @@
         }
 
         .casa-mobile-logo-link {
-          top: 28px !important;
+          top: 18px !important;
         }
       }
     `;
