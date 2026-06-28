@@ -7,7 +7,7 @@
 (function () {
   const STYLE_ID = "casablancaMobileNavFinalOverride";
   const NAV_ID = "casaMobileNavFinalBar";
-  const LOGO_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a40c965c408020f97ee52e0.png";
+  const LOGO_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a413e7fd50c4ff184301d24.svg";
   const HAMBURGER_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a407a8b89d9cd8dc2f2565c.svg";
   const LOGO_IMAGE_SELECTOR = [
     ".main-logo",
@@ -30,7 +30,7 @@
     document.querySelectorAll(LOGO_IMAGE_SELECTOR).forEach((image) => {
       if (!(image instanceof HTMLImageElement)) return;
       image.src = LOGO_URL;
-      image.srcset = `${LOGO_URL} 512w`;
+      image.srcset = `${LOGO_URL} 1024w`;
       image.sizes = image.classList.contains("casa-mobile-logo-img") ? "273px" : "(max-width: 1023px) 273px, 345px";
       image.alt = "Casablanca Las Vegas";
     });
@@ -81,7 +81,7 @@
     const logo = nav.querySelector(".casa-mobile-logo-img");
     if (logo) {
       logo.src = LOGO_URL;
-      logo.srcset = `${LOGO_URL} 512w`;
+      logo.srcset = `${LOGO_URL} 1024w`;
       logo.alt = "Casablanca Las Vegas";
     }
 
