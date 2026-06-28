@@ -5,7 +5,7 @@
    ========================================================= */
 (function () {
   const MOBILE_QUERY = window.matchMedia("(max-width: 768px)");
-  const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3eec33e2763b2eec1f94f4.svg";
+  const LOGO_SVG_URL = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a40929689d9cd8dc2f3df9c.png";
   const SOCIAL_HERO_IMAGE = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/6a3ea3fea24b71f0b2f265b2.png";
 
   const HERO_SLIDES = [
@@ -62,9 +62,37 @@
       .forEach((image) => {
         image.src = LOGO_SVG_URL;
         image.srcset = `${LOGO_SVG_URL} 512w`;
-        image.sizes = "(max-width: 1023px) 104px, 300px";
+        image.sizes = "(max-width: 1023px) 390px, 300px";
         image.alt = "Casablanca Las Vegas";
       });
+  }
+
+  function initLogoFlip() {
+    const targets = [
+      ...document.querySelectorAll(".logo-wrapper, .footer-brand-block"),
+      ...document.querySelectorAll(".drawer-logo")
+    ];
+
+    targets.forEach((target) => {
+      if (!target || target.dataset.casaLogoFlipReady === "true") return;
+      target.dataset.casaLogoFlipReady = "true";
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "0");
+      target.setAttribute("role", target.tagName.toLowerCase() === "a" ? "link" : "button");
+
+      const flip = (event) => {
+        if (target.classList.contains("logo-wrapper")) event.preventDefault();
+        const currentRotation = Number(target.dataset.casaLogoRotation || "0") + 1080;
+        target.dataset.casaLogoRotation = String(currentRotation);
+        target.style.setProperty("--casa-logo-flip-rotation", `${currentRotation}deg`);
+      };
+
+      target.addEventListener("click", flip);
+      target.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        flip(event);
+      });
+    });
   }
 
   function removePrivateMatterport() {
@@ -139,9 +167,37 @@
 
       html, body { background: var(--casa-cream) !important; color: var(--casa-ink) !important; }
 
+      .logo-wrapper,
+      .footer-brand-block {
+        perspective: 1000px !important;
+        cursor: pointer !important;
+      }
+
+      .logo-wrapper::before,
+      .footer-brand-block::before {
+        transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) !important;
+        transform-style: preserve-3d !important;
+        backface-visibility: hidden !important;
+        transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
+        border-radius: 50% !important;
+        background-image: var(--casa-new-logo) !important;
+        background-size: 108% auto !important;
+        background-position: 48% center !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,.28) !important;
+      }
+
       .main-logo, .drawer-logo, .footer-brand-block img, .site-footer-luxury img, .logo-wrapper img {
         content: var(--casa-new-logo) !important;
         object-fit: contain !important;
+      }
+
+      .drawer-logo {
+        cursor: pointer !important;
+        border-radius: 50% !important;
+        transform: rotateY(var(--casa-logo-flip-rotation, 0deg)) scale(1.08) translateX(-2%) !important;
+        transform-style: preserve-3d !important;
+        backface-visibility: hidden !important;
+        transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
       }
 
       .casa-webgl-hero .hero-text,
@@ -308,6 +364,7 @@
     syncMetaPreview();
     injectRefreshStyles();
     syncLogos();
+    initLogoFlip();
     removePrivateMatterport();
     removeHeroText();
     replaceTextNodes(document.body);
@@ -317,6 +374,7 @@
 
     window.setTimeout(() => {
       syncLogos();
+      initLogoFlip();
       removeHeroText();
       replaceTextNodes(document.body);
     }, 250);
@@ -330,7 +388,9 @@
 
   window.addEventListener("load", () => {
     syncMetaPreview();
+    injectRefreshStyles();
     syncLogos();
+    initLogoFlip();
     removePrivateMatterport();
     removeHeroText();
     replaceTextNodes(document.body);
