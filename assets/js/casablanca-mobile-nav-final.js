@@ -389,6 +389,7 @@
 
         #drawerOverlay,
         .overlay {
+          z-index: 2147483001 !important;
           opacity: 0 !important;
           visibility: hidden !important;
           pointer-events: none !important;
@@ -396,6 +397,7 @@
 
         #drawerOverlay.active,
         .overlay.active {
+          z-index: 2147483001 !important;
           opacity: 1 !important;
           visibility: visible !important;
           pointer-events: auto !important;
@@ -415,11 +417,12 @@
           pointer-events: none !important;
           transform: translate3d(0, -12px, 0) scale(.98) !important;
           transition: opacity .22s ease, transform .22s ease, visibility .22s ease !important;
-          z-index: 2147482999 !important;
+          z-index: 2147483002 !important;
         }
 
         #drawer.open,
         .drawer.open {
+          z-index: 2147483002 !important;
           opacity: 1 !important;
           visibility: visible !important;
           pointer-events: auto !important;
@@ -443,7 +446,7 @@
           position: fixed !important;
           top: 124px !important;
           right: 18px !important;
-          z-index: 2147483001 !important;
+          z-index: 2147483003 !important;
           color: #1b1712 !important;
           background: rgba(255, 250, 240, .96) !important;
           border: 1px solid rgba(185, 138, 56, .38) !important;
