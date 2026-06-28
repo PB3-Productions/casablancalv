@@ -169,6 +169,18 @@
     window.setTimeout(requestUpdate, 300);
   }
 
+  function applyRequestedTextTweaks() {
+    document.querySelectorAll("h1, h2, h3, .eyebrow").forEach((node) => {
+      const text = (node.textContent || "").trim();
+      if (/^Bedr?oom-by-Bedroom Layout$/i.test(text) || /^Bedroom-by-Bedroom Layout$/i.test(text)) {
+        node.textContent = "Room-By-Room Layout";
+      }
+      if (text === "Private Booking Support") {
+        node.textContent = "Booking Support";
+      }
+    });
+  }
+
   function installStyles() {
     let style = document.getElementById(STYLE_ID);
     if (!style) {
@@ -217,6 +229,29 @@
         transform-style: flat !important;
         backface-visibility: visible !important;
         transition: none !important;
+      }
+
+      section.bg-dark h1,
+      section.bg-dark h2,
+      .section.bg-dark h1,
+      .section.bg-dark h2 {
+        text-align: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+
+      .luxury-feature-list li:nth-child(2) .gold-svg-icon svg {
+        display: none !important;
+      }
+
+      .luxury-feature-list li:nth-child(2) .gold-svg-icon::before {
+        content: "" !important;
+        display: block !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        background-color: currentColor !important;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M3 14c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 19c3 0 3-2 6-2s3 2 6 2 3-2 6-2'/%3E%3C/svg%3E") center / contain no-repeat !important;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M3 14c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 19c3 0 3-2 6-2s3 2 6 2 3-2 6-2'/%3E%3C/svg%3E") center / contain no-repeat !important;
       }
 
       #${NAV_ID} { display: none; }
@@ -303,7 +338,7 @@
         .casa-mobile-logo-link {
           position: absolute !important;
           top: 50svh !important;
-          left: 50% !important;
+          left: calc(50% + 6px) !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
           transform: translateX(-50%) translateY(calc(-50% + var(--casa-logo-scroll-y))) scale(var(--casa-logo-scroll-scale)) !important;
@@ -428,7 +463,11 @@
         }
 
         #lightboxClose,
-        .lightbox-close { z-index: 2147483003 !important; }
+        .lightbox-close {
+          left: 18px !important;
+          right: auto !important;
+          z-index: 2147483003 !important;
+        }
       }
 
       @media (max-width: 360px) {
@@ -463,7 +502,10 @@
     let syncTimer = null;
     const observer = new MutationObserver(() => {
       window.clearTimeout(syncTimer);
-      syncTimer = window.setTimeout(syncAllLogos, 40);
+      syncTimer = window.setTimeout(() => {
+        syncAllLogos();
+        applyRequestedTextTweaks();
+      }, 40);
     });
 
     observer.observe(document.documentElement, {
@@ -480,8 +522,10 @@
     bindCloseHandlers();
     bindMobileLogoScrollAnimation();
     syncAllLogos();
+    applyRequestedTextTweaks();
     observeLogoChanges();
     scheduleLogoSyncs();
+    window.setTimeout(applyRequestedTextTweaks, 300);
   }
 
   if (document.readyState === "loading") {
@@ -490,5 +534,8 @@
     run();
   }
 
-  window.addEventListener("load", syncAllLogos, { once: true });
+  window.addEventListener("load", () => {
+    syncAllLogos();
+    applyRequestedTextTweaks();
+  }, { once: true });
 })();
