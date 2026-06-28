@@ -132,8 +132,8 @@
       const progress = clamp(rawProgress);
       const eased = easeOutCubic(progress);
 
-      nav.style.setProperty("--casa-logo-scroll-y", `${Math.round(-128 * eased)}px`);
-      nav.style.setProperty("--casa-logo-scroll-scale", `${(1 - 0.28 * eased).toFixed(3)}`);
+      nav.style.setProperty("--casa-logo-scroll-y", `${Math.round(-96 * eased)}px`);
+      nav.style.setProperty("--casa-logo-scroll-scale", `${(1 - 0.22 * eased).toFixed(3)}`);
       nav.style.setProperty("--casa-logo-scroll-opacity", `${(1 - eased).toFixed(3)}`);
       logoLink.style.pointerEvents = progress > 0.94 ? "none" : "auto";
       ticking = false;
@@ -196,8 +196,8 @@
 
       @media (max-width: 1023px) {
         :root {
-          --casa-mobile-nav-height: 260px;
-          --casa-mobile-logo-size: 208px;
+          --casa-mobile-nav-height: 160px;
+          --casa-mobile-logo-size: 116px;
           --casa-mobile-menu-width: 72px;
           --casa-mobile-menu-right: 18px;
           --casa-mobile-menu-top: 44px;
@@ -251,7 +251,7 @@
 
         .casa-mobile-logo-link {
           position: absolute !important;
-          top: 30px !important;
+          top: 28px !important;
           left: 50% !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
@@ -432,8 +432,8 @@
 
       @media (max-width: 360px) {
         :root {
-          --casa-mobile-nav-height: 238px;
-          --casa-mobile-logo-size: 192px;
+          --casa-mobile-nav-height: 150px;
+          --casa-mobile-logo-size: 108px;
           --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
           --casa-mobile-menu-top: 44px;
