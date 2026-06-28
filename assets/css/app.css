@@ -2,6 +2,17 @@
    BLOCK 1 START: CASABLANCA LAS VEGAS COMPILED SITE CSS
    Purpose: Production CSS output replacing Tailwind CDN usage.
    ========================================================= */
+@media (min-width: 1024px) {
+  #drawer,
+  .drawer,
+  #drawerOverlay,
+  .overlay {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
 :root {
   --bg-cream: #f7f2e8;
   --bg-ivory: #fffdf7;
