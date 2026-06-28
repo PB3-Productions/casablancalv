@@ -184,8 +184,8 @@
         #site-header.site-header.is-scrolled .brand-group {
           top: 50% !important;
           left: 50% !important;
-          width: clamp(220px, 15.5vw, 305px) !important;
-          height: clamp(108px, 7.4vw, 150px) !important;
+          width: clamp(250px, 17.5vw, 340px) !important;
+          height: clamp(124px, 8.7vw, 176px) !important;
           transform: translate(-50%, -50%) !important;
           transition: none !important;
         }
@@ -196,10 +196,11 @@
           top: 50% !important;
           left: 50% !important;
           display: block !important;
-          width: clamp(218px, 15.5vw, 300px) !important;
-          height: clamp(128px, 8.8vw, 170px) !important;
-          transform: translate(-50%, -50%) !important;
+          width: clamp(252px, 18vw, 345px) !important;
+          height: clamp(150px, 10.5vw, 200px) !important;
+          transform: translate(-50%, -44%) !important;
           transition: none !important;
+          overflow: visible !important;
         }
 
         #site-header .logo-wrapper::before,
@@ -214,7 +215,7 @@
       @media (max-width: 1023px) {
         :root {
           --casa-mobile-nav-height: 100svh;
-          --casa-mobile-logo-size: 390px;
+          --casa-mobile-logo-size: 273px;
           --casa-mobile-menu-width: 72px;
           --casa-mobile-menu-right: 18px;
           --casa-mobile-menu-top: 44px;
@@ -259,15 +260,17 @@
           animation: none !important;
           transition: none !important;
           box-sizing: border-box !important;
+          -webkit-tap-highlight-color: transparent !important;
         }
 
         #${NAV_ID}, #${NAV_ID} *, #${NAV_ID} *::before, #${NAV_ID} *::after {
           box-sizing: border-box !important;
+          -webkit-tap-highlight-color: transparent !important;
         }
 
         .casa-mobile-logo-link {
           position: absolute !important;
-          top: 50svh !important;
+          top: 47svh !important;
           left: 50% !important;
           width: var(--casa-mobile-logo-size) !important;
           height: var(--casa-mobile-logo-size) !important;
@@ -288,6 +291,19 @@
           z-index: 2 !important;
           perspective: 1000px !important;
           cursor: pointer !important;
+          outline: none !important;
+          -webkit-tap-highlight-color: transparent !important;
+          -webkit-touch-callout: none !important;
+          user-select: none !important;
+          touch-action: manipulation !important;
+        }
+
+        .casa-mobile-logo-link:focus,
+        .casa-mobile-logo-link:focus-visible,
+        .casa-mobile-logo-link:active {
+          outline: none !important;
+          box-shadow: none !important;
+          -webkit-tap-highlight-color: transparent !important;
         }
 
         .casa-mobile-logo-img {
@@ -312,6 +328,9 @@
           backface-visibility: hidden !important;
           transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) !important;
           filter: drop-shadow(0 10px 18px rgba(0,0,0,.28)) !important;
+          outline: none !important;
+          -webkit-tap-highlight-color: transparent !important;
+          user-select: none !important;
         }
 
         .casa-mobile-menu-button {
@@ -456,7 +475,7 @@
       @media (max-width: 360px) {
         :root {
           --casa-mobile-nav-height: 100svh;
-          --casa-mobile-logo-size: 350px;
+          --casa-mobile-logo-size: 245px;
           --casa-mobile-menu-width: 64px;
           --casa-mobile-menu-right: 14px;
           --casa-mobile-menu-top: 44px;
@@ -465,7 +484,7 @@
         }
 
         .casa-mobile-logo-link {
-          top: 50svh !important;
+          top: 47svh !important;
         }
       }
     `;
