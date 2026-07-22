@@ -6,6 +6,8 @@
    ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   const API_BASE_URL = "";
+  const PHONE_DISPLAY = "702.741.2489";
+  const PHONE_TEL = "tel:7027412489";
   const analyticsLayer = window.dataLayer || (window.dataLayer = []);
   const trackEvent = (eventName, params = {}) => {
     analyticsLayer.push({ event: eventName, ...params });
@@ -14,6 +16,23 @@ window.addEventListener("DOMContentLoaded", () => {
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const isMobileViewport = window.matchMedia("(max-width: 1023px)").matches;
+
+  const syncPhoneNumber = () => {
+    $$('a[href^="tel:"]').forEach((link) => {
+      link.setAttribute("href", PHONE_TEL);
+      if (/\b616[.\-\s]?745[.\-\s]?7148\b/.test(link.textContent || "")) {
+        link.textContent = PHONE_DISPLAY;
+      }
+    });
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const oldPhonePattern = /\b616[.\-\s]?745[.\-\s]?7148\b/g;
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (!oldPhonePattern.test(node.nodeValue || "")) continue;
+      node.nodeValue = (node.nodeValue || "").replace(oldPhonePattern, PHONE_DISPLAY);
+    }
+  };
 
   if (!document.getElementById("casablancaMobileNavFinalScript")) {
     const mobileHeroStabilizer = document.createElement("script");
@@ -77,10 +96,11 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   if (drawerButtons[1]) {
     drawerButtons[1].textContent = "Call Sales Agent";
-    drawerButtons[1].setAttribute("href", "tel:6167457148");
+    drawerButtons[1].setAttribute("href", PHONE_TEL);
     drawerButtons[1].removeAttribute("target");
     drawerButtons[1].removeAttribute("rel");
   }
+  syncPhoneNumber();
   /* BLOCK 2 END: HEADER + DRAWER */
 
   /* BLOCK 3 START: CONTENT CLEANUP */
